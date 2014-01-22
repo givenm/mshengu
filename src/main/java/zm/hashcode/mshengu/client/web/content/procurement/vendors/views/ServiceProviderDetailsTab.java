@@ -188,7 +188,6 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .yearsOfBusiness(serviceProviderBean.getYearsOfBus())
                 .registrationNum(serviceProviderBean.getRegistrationNum())
                 .vatNum(serviceProviderBean.getVatNum())
-//                .vendorNumber(serviceProviderBean.getVendorNumber())
                 .vendorNumber(serviceProviderUpdate.getVendorNumber())
                 .build();
         

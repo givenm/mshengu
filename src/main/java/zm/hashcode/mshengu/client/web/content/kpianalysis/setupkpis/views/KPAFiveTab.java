@@ -57,7 +57,7 @@ public class KPAFiveTab extends VerticalLayout implements
             return kpi;
         } else {
             List<KPIItem> items = getItems();
-            KPI newkpi = new KPI.Builder("empty")
+            KPI newkpi = new KPI.Builder("Chemical Usage")
                     .tab("five")
                     .items(items)
                     .build();
@@ -69,19 +69,60 @@ public class KPAFiveTab extends VerticalLayout implements
     private List<KPIItem> getItems() {
         List<KPIItem> items = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            int number = i + 1;
-            KPIItem kPIItem = new KPIItem.Builder("empty")
-                    .detailedDescription("empty")
-                    .measureType("empty")
-                    .uom("empty")
-                    .kpiNumber(number)
-                    .build();
+            KPIItem kPIItem = addKPIItems(i);
             KPIItemFacade.getKPIItemService().persist(kPIItem);
             items.add(kPIItem);
         }
         return items;
     }
-
+    
+    private KPIItem addKPIItems(int i) {
+        KPIItem kPIItem = null;
+        int number = i + 1;
+        if (i == 0) {
+            kPIItem = new KPIItem.Builder("Cost per Service")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("R/Service")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 1) {
+            kPIItem = new KPIItem.Builder("Sanitizer per Service")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("R/Service")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 2) {
+            kPIItem = new KPIItem.Builder("Deodorizer per Service")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("R/Service")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 3) {
+            kPIItem = new KPIItem.Builder("Spend per unit")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("R")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 4) {
+            kPIItem = new KPIItem.Builder("Chemical Spend")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("R")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        }
+        return null;
+    }
+    
     private List<KPIItem> getKPIItems(KPI kpi) {
         for (KPIItem item : kpi.getItems()) {
             if (!item.getShortDescription().equalsIgnoreCase("empty")) {

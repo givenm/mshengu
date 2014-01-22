@@ -23,7 +23,7 @@ public class CanvasTab extends VerticalLayout implements
     
     public CanvasTab(MshenguMain app) {
         main = app;
-        form = new CanvasForm();
+        form = new CanvasForm(app);
         setSizeFull();
         addComponent(form);
     }

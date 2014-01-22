@@ -56,7 +56,7 @@ public class EmployeeDatabaseTable extends Table {
         setImmediate(true);
     }
 
-    public void performRowStyling() {
+    public final void performRowStyling() {
         // cell style generator
         setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override

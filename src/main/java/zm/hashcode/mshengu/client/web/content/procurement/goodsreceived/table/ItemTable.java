@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.table;
 
 import com.vaadin.ui.Table;
+import java.math.BigDecimal;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.procurement.RequestPurchaseItem;
 
@@ -22,8 +23,8 @@ public class ItemTable extends Table {
         addContainerProperty("Quantity", String.class, null);
         addContainerProperty("Unit", String.class, null);
         addContainerProperty("Volume", String.class, null);
-        addContainerProperty("Unit Price", String.class, null);
-        addContainerProperty("Total", String.class, null);
+        addContainerProperty("Unit Price", BigDecimal.class, null);
+        addContainerProperty("Total", BigDecimal.class, null);
     }
 
     public void loadTable(Request request) {
@@ -36,7 +37,7 @@ public class ItemTable extends Table {
                         item.getQuantity(),
                         item.getProduct().getUnit(),
                         item.getProduct().getVolume(),
-                        item.getProduct().getPrice().toString(),
+                        item.getProduct().getPrice(),
                         item.getSubTotal(),}, item.getId());
                 }
             } else {

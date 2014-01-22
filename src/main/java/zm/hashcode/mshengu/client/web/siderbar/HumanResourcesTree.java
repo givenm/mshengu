@@ -32,8 +32,8 @@ public class HumanResourcesTree extends Tree implements ItemClickEvent.ItemClick
     public HumanResourcesTree(MshenguMain main) {
         this.main = main;
         addItem(HR_MANAGEMENT);
-        addItem(HSEQ);
-        addItem(POLICIES_REGULATIONS);
+//        addItem(HSEQ);
+//        addItem(POLICIES_REGULATIONS);
 //        addItem(MANAGE_USERS);
 
         //Add Listeners

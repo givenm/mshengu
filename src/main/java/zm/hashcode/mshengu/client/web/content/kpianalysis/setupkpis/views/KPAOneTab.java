@@ -46,8 +46,8 @@ public class KPAOneTab extends VerticalLayout implements
         addListeners();
         updateMessage();
     }
-    
-    public String getKPAName(){
+
+    public String getKPAName() {
         return kpi.getName();
     }
 
@@ -57,7 +57,7 @@ public class KPAOneTab extends VerticalLayout implements
             return k;
         } else {
             List<KPIItem> items = getItems();
-            KPI newkpi = new KPI.Builder("empty")
+            KPI newkpi = new KPI.Builder("Field Services (Contract)")
                     .tab("one")
                     .items(items)
                     .build();
@@ -69,17 +69,58 @@ public class KPAOneTab extends VerticalLayout implements
     private List<KPIItem> getItems() {
         List<KPIItem> items = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            int number = i + 1;
-            KPIItem kPIItem = new KPIItem.Builder("empty")
-                    .detailedDescription("empty")
-                    .measureType("empty")
-                    .uom("empty")
-                    .kpiNumber(number)
-                    .build();
+            KPIItem kPIItem = addKPIItems(i);
             KPIItemFacade.getKPIItemService().persist(kPIItem);
             items.add(kPIItem);
         }
         return items;
+    }
+
+    private KPIItem addKPIItems(int i) {
+        KPIItem kPIItem = null;
+        int number = i + 1;
+        if (i == 0) {
+            kPIItem = new KPIItem.Builder("No. Services Completed")
+                    .detailedDescription("empty")
+                    .measureType("A")
+                    .uom("#")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 1) {
+            kPIItem = new KPIItem.Builder("Completed Percentage")
+                    .detailedDescription("empty")
+                    .measureType("A")
+                    .uom("%")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 2) {
+            kPIItem = new KPIItem.Builder("No. Services Not Completed")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("#")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 3) {
+            kPIItem = new KPIItem.Builder("Uncompleted Percentage")
+                    .detailedDescription("empty")
+                    .measureType("B")
+                    .uom("%")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        } else if (i == 4) {
+            kPIItem = new KPIItem.Builder("Unit Deployment")
+                    .detailedDescription("empty")
+                    .measureType("A")
+                    .uom("#")
+                    .kpiNumber(number)
+                    .build();
+            return kPIItem;
+        }
+        return null;
     }
 
     private List<KPIItem> getKPIItems(KPI kpi) {

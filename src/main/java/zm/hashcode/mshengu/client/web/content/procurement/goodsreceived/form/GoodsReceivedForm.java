@@ -22,6 +22,7 @@ import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.GoodsReceivedMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.models.GoodsBean;
 import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.table.ItemTable;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -48,7 +49,7 @@ public class GoodsReceivedForm extends FormLayout implements
     private String vendorname;
     private String vendordate;
     private String personname;
-    private String requesttotal;
+    private BigDecimal requesttotal;
     private int keep = 0;
     private String requestId;
     private MshenguMain main;
@@ -58,10 +59,8 @@ public class GoodsReceivedForm extends FormLayout implements
         this.main = main;
         GridLayout gridlayout = new GridLayout(3, 4);
         gridlayout.setSizeFull();
-        orderNumber = UIComponent.getTextField("Enter Order Number: ", "orderNumber", GoodsBean.class, binder);
-        orderNumber.setConverter(Integer.class);
-
-        total = UIComponent.getTextField("Enter The Total: (e.g 10000.00) ", "total", GoodsBean.class, binder);
+        orderNumber = UIComponent.getTextField("Enter Purchase Order Number: ", "orderNumber", GoodsBean.class, binder);
+        total = UIComponent.getBigDecimalTextField("Enter The Total: (e.g 10000.00) ", "total", GoodsBean.class, binder);
 
         check = new Button("Compare Amounts");
         check.addClickListener((Button.ClickListener) this);
@@ -85,7 +84,7 @@ public class GoodsReceivedForm extends FormLayout implements
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
         layout.addComponent(deliveryDate, 0, 2);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
-        layout.addComponent(person, 0, 4);
+        layout.addComponent(person, 0, 4, 2, 4);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 5);
 
         table = new ItemTable();
@@ -111,8 +110,7 @@ public class GoodsReceivedForm extends FormLayout implements
                     if (orderNumber.getValue() != null) {
                         String order = orderNumber.getValue();
                         try {
-                            Integer convertedValue = Integer.parseInt(order);
-                            Request request = RequestFacade.getRequestService().findByOrderNumber(convertedValue.toString());
+                            Request request = RequestFacade.getRequestService().findByOrderNumber(order);
                             if (request != null) {
                                 if (request.getStatus() != null) {
                                     Notification.show("Invoice already processed");
@@ -128,13 +126,11 @@ public class GoodsReceivedForm extends FormLayout implements
                                     table.loadTable(request);
                                     check.setVisible(true);
                                     total.setVisible(true);
-                                    ordertotal = request.getTotal();
                                     total.setValue("");
-                                    DecimalFormat f = new DecimalFormat("### ###.00");
-                                    requesttotal = f.format(ordertotal).toString();
+                                    requesttotal = request.getTotal();
                                     vendor.setValue(vendorname + request.getServiceProviderName());
                                     deliveryDate.setValue(vendordate + getDelivery(request.getDeliveryDate()));
-                                    person.setValue(personname + request.getPerson().getFirstname() + " " + request.getPerson().getLastname());
+                                    person.setValue(personname + request.getPersonName());
                                 }
                             } else {
                                 Notification.show("Order Number Not Found");
@@ -181,49 +177,38 @@ public class GoodsReceivedForm extends FormLayout implements
         final Button source = event.getButton();
         if (source == check) {
             if (!total.getValue().isEmpty()) {
-                try {
-                    String order = total.getValue();
-                    Double convertedValue = Double.parseDouble(order);
-                    DecimalFormat f = new DecimalFormat("### ###.00");
-                    if (requesttotal.equalsIgnoreCase(f.format(convertedValue).toString()) && keep < 2) {
-                        Request request = RequestFacade.getRequestService().findById(requestId);
-                        if (request.getStatus() != null) {
-                            Notification.show("Invoice already processed");
-                        } else {
-                            Notification.show("Match!");
-                            InvoiceNumberForm form = new InvoiceNumberForm(main, requestId);
-                            this.removeAllComponents();
-                            this.addComponent(form);
-                        }
-                        check.setVisible(false);
-                        total.setVisible(false);
-                        table.removeAllItems();
-                        vendor.setValue(vendorname);
-                        deliveryDate.setValue(vendordate);
-                        person.setValue(personname);
+                DecimalFormat f = new DecimalFormat("### ###.00");
+                if (requesttotal.compareTo(new BigDecimal(total.getValue())) == 0 && keep < 2) {
+                    Request request = RequestFacade.getRequestService().findById(requestId);
+                    if (request.getStatus() != null) {
+                        Notification.show("Invoice already processed");
                     } else {
-                        if (keep <= 1) {
-                            Notification.show("Error! Mismatch of totals - Try Again");
-                            keep += 1;
-                        } else {
-                            Notification.show("Invoice has been moved to mismatched invoices");
-                            Request request = RequestFacade.getRequestService().findById(requestId);
-                            Request newRequest = new Request.Builder(request.getPerson())
-                                    .request(request)
-                                    .matchStatus("mismatch")
-                                    .build();
-                            RequestFacade.getRequestService().merge(newRequest);
-                            keep = 0;
-                            check.setVisible(false);
-                            total.setVisible(false);
-                            table.removeAllItems();
-                            vendor.setValue(vendorname);
-                            deliveryDate.setValue(vendordate);
-                            person.setValue(personname);
-                        }
+                        Notification.show("Match!");
+                        InvoiceNumberForm form = new InvoiceNumberForm(main, requestId);
+                        this.removeAllComponents();
+                        this.addComponent(form);
                     }
-                } catch (NumberFormatException e) {
-                    Notification.show("Please enter a number with two decimal places");
+                    check.setVisible(false);
+                    total.setVisible(false);
+                    table.removeAllItems();
+                    vendor.setValue(vendorname);
+                    deliveryDate.setValue(vendordate);
+                    person.setValue(personname);
+                } else {
+                    if (keep <= 1) {
+                        Notification.show("Error! Mismatch of totals - Try Again");
+                        keep += 1;
+                    } else {
+                        Notification.show("Invoice has been moved to mismatched invoices");
+                        Request request = RequestFacade.getRequestService().findById(requestId);
+                        Request newRequest = new Request.Builder(request.getPerson())
+                                .request(request)
+                                .misMatchDate(new Date())
+                                .matchStatus("mismatch")
+                                .build();
+                        RequestFacade.getRequestService().merge(newRequest);
+                        main.content.setSecondComponent(new GoodsReceivedMenu(main, "LANDING"));
+                    }
                 }
             } else {
                 Notification.show("Please enter the total");
