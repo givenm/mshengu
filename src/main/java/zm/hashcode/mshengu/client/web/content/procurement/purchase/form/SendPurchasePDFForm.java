@@ -73,7 +73,7 @@ public class SendPurchasePDFForm extends FormLayout {
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
                 try {
                     DataSource source = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
-                    emailHelper.sendToSupplier(source, "luckbliss@gmail.com", request.getOrderNumber(), "Mshengu Purchase Order");
+                    emailHelper.sendToSupplier(source, request.getServiceProviderEmail(), request.getOrderNumber(), "Mshengu Purchase Order");
                 } catch (IOException ex) {
                     Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
