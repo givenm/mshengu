@@ -23,11 +23,10 @@ public interface ServiceProviderService {
 
     public void delete(ServiceProvider serviceProvider);
 
-        public List<ServiceProvider> findAllServiceProvider();
-    
+    public List<ServiceProvider> findAllServiceProvider();
+
     public List<ServiceProvider> findAllPreferedVendors();
-    
-    
+
     public List<ServiceProvider> findAllSubcontractors();
 
     public List<ServiceProvider> findAllSuppliers();

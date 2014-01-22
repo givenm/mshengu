@@ -28,10 +28,8 @@ public class PreferedVendorPredicate implements Predicate<ServiceProvider> {
 
     private boolean getPrefered(ServiceProvider serviceProvider) {
         if (serviceProvider != null) {
-            return serviceProvider.isPreferedVendor();
+            return serviceProvider.isActive();
         }
         return false;
     }
-
-
 }

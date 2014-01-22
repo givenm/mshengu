@@ -198,7 +198,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
         form.costCategory.removeAllItems();
         if (centreType.getCategoryTypes() != null) {
             if ("fleet maintenance".equalsIgnoreCase(centreType.getName())) {
-                List<Truck> truckList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
+                List<Truck> truckList = TruckFacade.getTruckService().findAll();
                 for (Truck truck : truckList) {
                     String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
                     form.costCategory.addItem(truck.getId());

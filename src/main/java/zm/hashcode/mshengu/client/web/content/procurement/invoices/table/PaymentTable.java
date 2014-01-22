@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -44,6 +45,7 @@ public class PaymentTable extends Table {
                         if (request.getInvoiceNumber() != null) {
                             String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
                             String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
+                            JOptionPane.showMessageDialog(null, "Month: " + datemonth + month + " Year:" + dateyear + year);
                             if (datemonth.equals(month) && year.equals(dateyear)) {
                                 newlist.add(request);
                             }

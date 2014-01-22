@@ -10,6 +10,7 @@ import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.ComboBox;
 import java.io.Serializable;
+import java.text.DateFormatSymbols;
 import java.util.Collection;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.customer.ContractTypeFacade;
@@ -1105,30 +1106,11 @@ public class UIComboBoxHelper<T> implements Serializable {
     public ComboBox getMonthComboBox(String fieldText, String fieldName, Class<RequestBean> fieldClass, FieldGroup binder) {
         ComboBox comboBox = new ComboBox(fieldText);
 
-        comboBox.addItem("1");
-        comboBox.setItemCaption("1", "January");
-        comboBox.addItem("2");
-        comboBox.setItemCaption("2", "February");
-        comboBox.addItem("3");
-        comboBox.setItemCaption("3", "March");
-        comboBox.addItem("4");
-        comboBox.setItemCaption("4", "April");
-        comboBox.addItem("5");
-        comboBox.setItemCaption("5", "May");
-        comboBox.addItem("6");
-        comboBox.setItemCaption("6", "June");
-        comboBox.addItem("7");
-        comboBox.setItemCaption("7", "July");
-        comboBox.addItem("8");
-        comboBox.setItemCaption("8", "August");
-        comboBox.addItem("9");
-        comboBox.setItemCaption("9", "September");
-        comboBox.addItem("10");
-        comboBox.setItemCaption("10", "October");
-        comboBox.addItem("11");
-        comboBox.setItemCaption("11", "November");
-        comboBox.addItem("12");
-        comboBox.setItemCaption("12", "December");
+        String[] months = new DateFormatSymbols().getMonths();
+        for (int i = 0; i < months.length; i++) {
+            comboBox.addItem(months[i]);
+            comboBox.setItemCaption(months[i], months[i]);
+        }
 
         comboBox.addValidator(new BeanValidator(fieldClass, fieldName));
         comboBox.setImmediate(true);
@@ -1140,28 +1122,14 @@ public class UIComboBoxHelper<T> implements Serializable {
 
     public ComboBox getYearComboBox(String fieldText, String fieldName, Class<RequestBean> fieldClass, FieldGroup binder) {
         ComboBox comboBox = new ComboBox(fieldText);
-        comboBox.addItem("2010");
-        comboBox.setItemCaption("2010", "2010");
-        comboBox.addItem("2011");
-        comboBox.setItemCaption("2011", "2011");
-        comboBox.addItem("2012");
-        comboBox.setItemCaption("2012", "2012");
-        comboBox.addItem("2013");
-        comboBox.setItemCaption("2013", "2013");
-        comboBox.addItem("2014");
-        comboBox.setItemCaption("2014", "2014");
-        comboBox.addItem("2015");
-        comboBox.setItemCaption("2015", "2015");
-        comboBox.addItem("2016");
-        comboBox.setItemCaption("2016", "2016");
-        comboBox.addItem("2017");
-        comboBox.setItemCaption("2017", "2017");
-        comboBox.addItem("2018");
-        comboBox.setItemCaption("2018", "2018");
-        comboBox.addItem("2019");
-        comboBox.setItemCaption("2019", "2019");
-        comboBox.addItem("2020");
-        comboBox.setItemCaption("2020", "2020");
+
+        int thisYear = 2020;
+        int startYear = thisYear - 10;
+        for (int i = 0; i < 11; i++) {
+            String value = (startYear + i) + "";
+            comboBox.addItem(value);
+            comboBox.setItemCaption(value, value);
+        }
 
         comboBox.addValidator(new BeanValidator(fieldClass, fieldName));
         comboBox.setImmediate(true);
