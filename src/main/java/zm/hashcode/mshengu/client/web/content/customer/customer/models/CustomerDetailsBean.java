@@ -16,17 +16,16 @@ public final class CustomerDetailsBean implements Serializable {
 
     private String id;
     private String contactPersonId;
-    @NotNull
+    
     private String name;
-    @NotNull
+    
     private String firstName;
-    @NotNull
+    
     private String lastName;
-    @NotNull
-    @NumberFormat(style = NumberFormat.Style.NUMBER)
+    
     private String mainNumber;
     private String otherNumber;
-    @Email(message = "Please enter a valid email!")
+    
     private String emailAddress;
     private String address;
     private String position;
