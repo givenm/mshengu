@@ -4,11 +4,12 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.form;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import java.util.Random;
+import javax.swing.JOptionPane;
 import org.vaadin.hezamu.canvas.Canvas;
+import zm.hashcode.mshengu.client.web.MshenguMain;
 
 /**
  *
@@ -16,7 +17,8 @@ import org.vaadin.hezamu.canvas.Canvas;
  */
 public class CanvasForm extends FormLayout {
 
-    private Canvas canvas;
+    private final MshenguMain main;
+    private Canvas canvas = new Canvas();;
     //Big Pentagon
     private String topRightRectangleColorBigPentagon;
     private String topLeftRectangleColorBigPentagon;
@@ -30,8 +32,8 @@ public class CanvasForm extends FormLayout {
     private String bottomLeftCircleColorComponent;
     private String bottomRightCircleColorComponent;
 
-    public CanvasForm() {
-        canvas = new Canvas();
+    public CanvasForm(MshenguMain main) {
+        this.main = main;        
 
         canvas.setSizeFull();
         canvas.setGlobalAlpha(0.9);
@@ -179,7 +181,7 @@ public class CanvasForm extends FormLayout {
     private void drawComponent1Items() {
         //Top circle - No Services Completed
         canvas.beginPath();
-        canvas.arc(255, 22, 12, 0, 2 * Math.PI, false);
+        canvas.arc(255, 27, 12, 0, 2 * Math.PI, false);
         canvas.setFillStyle(topCircleColorComponent);
         canvas.fill();
         canvas.closePath();
@@ -313,7 +315,7 @@ public class CanvasForm extends FormLayout {
     private void drawComponent2Items() {
         //Top circle - Fuel Efficiency
         canvas.beginPath();
-        canvas.arc(555, 22, 12, 0, 2 * Math.PI, false);
+        canvas.arc(555, 27, 12, 0, 2 * Math.PI, false);
         canvas.closePath();
         canvas.stroke();
 
@@ -808,35 +810,128 @@ public class CanvasForm extends FormLayout {
     //Component 1
     private void addTextToComponent1() {
         setTextFont();
-        canvas.fillText("Field", 237, 95, 100);
-        canvas.fillText("Services", 225, 110, 100);
+        canvas.fillText("Field", 237, 90, 100);
+        canvas.fillText("Services", 225, 105, 100);
+        canvas.fillText("(Contract)", 222, 120, 100);
+        addTextToSmallCirclesComponent1();
+    }
+
+    private void addTextToSmallCirclesComponent1() {
+        setSmallTextFont();
+        canvas.fillText("No. Services Completed", 197, 10, 150);
+
+        canvas.fillText("Completed", 330, 50, 100);
+        canvas.fillText("Percentage", 330, 65, 100);
+
+        canvas.fillText("No. Services", 313, 167, 100);
+        canvas.fillText("Not Completed", 313, 182, 100);
+
+        canvas.fillText("Uncompleted", 117, 167, 100);
+        canvas.fillText("Percentage", 117, 182, 100);
+
+        canvas.fillText("Unit", 115, 50, 100);
+        canvas.fillText("Deployment", 115, 65, 100);
     }
 
     //Component 2
     private void addTextToComponent2() {
         setTextFont();
-        canvas.fillText("Fleet", 537, 95, 100);
-        canvas.fillText("Management", 514, 110, 100);
+        canvas.fillText("Field", 537, 90, 100);
+        canvas.fillText("Services", 525, 105, 100);
+        canvas.fillText("(Private)", 526, 120, 100);
+        addTextToSmallCirclesComponent2();
+    }
+
+    private void addTextToSmallCirclesComponent2() {
+        setSmallTextFont();
+        canvas.fillText("No. Services Completed", 497, 10, 150);
+
+        canvas.fillText("Completed", 631, 50, 100);
+        canvas.fillText("Percentage", 631, 65, 100);
+
+        canvas.fillText("No. Services", 613, 167, 100);
+        canvas.fillText("Not Completed", 613, 182, 100);
+
+        canvas.fillText("Uncompleted", 417, 167, 100);
+        canvas.fillText("Percentage", 417, 182, 100);
+
+        canvas.fillText("Private", 415, 50, 100);
+        canvas.fillText("Contribution", 415, 65, 100);
     }
 
     //Component 3
     private void addTextToComponent3() {
         setTextFont();
-        canvas.fillText("Chemical", 624, 350, 100);
-        canvas.fillText("Usage", 633, 365, 100);
+        canvas.fillText("Fuel", 638, 345, 100);
+        canvas.fillText("Management", 614, 360, 100);
+        addTextToSmallCirclesComponent3();
+    }
+
+    private void addTextToSmallCirclesComponent3() {
+        setSmallTextFont();
+        canvas.fillText("Fuel Efficiency", 625, 255, 150);
+
+        canvas.fillText("Spend per", 735, 302, 100);
+        canvas.fillText("Service", 735, 317, 100);
+
+        canvas.fillText("Spend per", 710, 430, 100);
+        canvas.fillText("Unit", 710, 445, 100);
+
+        canvas.fillText("Vehicles Above", 507, 430, 100);
+        canvas.fillText("Specifications", 507, 445, 100);
+
+        canvas.fillText("Fuel", 540, 302, 100);
+        canvas.fillText("Spend", 540, 317, 100); 
     }
 
     //Component 4
     private void addTextToComponent4() {
         setTextFont();
-        canvas.fillText("Procurement", 113, 350, 100);
+        canvas.fillText("Maintenance", 363, 517, 100);
+        canvas.fillText("Management", 363, 532, 100);
+        addTextToSmallCirclesComponent4();
+    }
+
+    private void addTextToSmallCirclesComponent4() {
+        setSmallTextFont();
+        canvas.fillText("Maintenance   Efficiency", 337, 420, 150);
+
+        canvas.fillText("Spend per", 500, 515, 100);
+        canvas.fillText("Service", 500, 530, 100);
+
+        canvas.fillText("Spend per", 462, 605, 100);
+        canvas.fillText("Unit", 462, 620, 100);
+
+        canvas.fillText("Vehicles Above", 255, 605, 100);
+        canvas.fillText("Specifications", 255, 620, 100);
+
+        canvas.fillText("Maintenance", 235, 515, 100);
+        canvas.fillText("Spend", 235, 530, 100);
     }
 
     //Component 5
     private void addTextToComponent5() {
         setTextFont();
-        canvas.fillText("Inventory", 375, 517, 100);
-        canvas.fillText("Management", 363, 532, 100);
+        canvas.fillText("Chemical", 123, 345, 100);
+        canvas.fillText("Usage", 131, 360, 100);
+        addTextToSmallCirclesComponent5();
+    }
+
+    private void addTextToSmallCirclesComponent5() {
+        setSmallTextFont();
+        canvas.fillText("Cost per Service", 115, 255, 150);
+
+        canvas.fillText("Sanitizer per", 235, 302, 100);
+        canvas.fillText("Service", 235, 317, 100);
+
+        canvas.fillText("Deodorize per", 210, 430, 100);
+        canvas.fillText("Unit", 210, 445, 100);
+
+        canvas.fillText("Spend per", 35, 430, 100);
+        canvas.fillText("Unit", 35, 445, 100);
+
+        canvas.fillText("Chemical", 35, 302, 100);
+        canvas.fillText("Spend", 35, 317, 100);
     }
 
     //Small Pentagon
@@ -862,6 +957,11 @@ public class CanvasForm extends FormLayout {
 
     private void setTextFont() {
         canvas.setFont("normal bold 12px sans-serif");
+        canvas.setFillStyle("black");
+    }
+
+    private void setSmallTextFont() {
+        canvas.setFont("normal 11px sans-serif");
         canvas.setFillStyle("black");
     }
 

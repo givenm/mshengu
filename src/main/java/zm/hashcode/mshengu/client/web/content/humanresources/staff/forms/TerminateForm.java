@@ -32,12 +32,10 @@ public class TerminateForm extends FormLayout {
     // Define Buttons
     public Button save = new Button("Save");
     public Button cancel = new Button("Cancel");
-    public ComboBox terminateReason = null;
-    public DateField endDate = null;
 
     public TerminateForm() {
-        terminateReason = UIComboBox.getTerminateReasonsAndCodes("Terminating Reason: ", "terminateReason", StaffDetailsBean.class, binder);
-        endDate = UIComponent.getDateField("Leave End Date :", "endDate", StaffDetailsBean.class, binder);
+        ComboBox terminateReason = UIComboBox.getTerminateReasonsAndCodes("Terminating Reason: ", "terminateReason", StaffDetailsBean.class, binder);
+        DateField endDate = UIComponent.getDateField("Leave End Date :", "endDate", StaffDetailsBean.class, binder);
 
         GridLayout grid = new GridLayout(3, 10);
         grid.setSizeFull();

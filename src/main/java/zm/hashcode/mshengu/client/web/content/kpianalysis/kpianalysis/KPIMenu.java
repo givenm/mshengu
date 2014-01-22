@@ -6,8 +6,9 @@ package zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis;
 
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.views.PKILoadKPIResultsTab;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.views.PKILoadKPIResultsTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.views.CanvasTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.views.PKIScorecardTrendTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.settargets.views.PKISetTargetTab;
@@ -43,21 +44,27 @@ public class KPIMenu extends VerticalLayout {
         tab.addTab(canvasTab, "Scorecard", null);
         tab.addTab(pkiSetUpKPITab, "Setup KPIs", null);
         tab.addTab(pkiSetTargetTab, "Set Targets", null);
-        tab.addTab(pkiScorecardTrendTab, "Scorecard Trend", null);
+//        tab.addTab(pkiScorecardTrendTab, "Scorecard Trend", null);
         tab.addTab(pkiLoadKPIResultsTab, "Load KPI Results", null);
-
-
-            if (selectedTab.equals("LANDING")) {
+        
+        switch (selectedTab) {
+            case "LANDING":
                 tab.setSelectedTab(canvasTab);
-            } else if (selectedTab.equals("SETUP")) {
+                break;
+            case "SETUP":
+                JOptionPane.showMessageDialog(null, "test");
                 tab.setSelectedTab(pkiSetUpKPITab);
-            } else if (selectedTab.equals("TARGET")) {
+                break;
+            case "TARGET":
                 tab.setSelectedTab(pkiSetTargetTab);
-            } else if (selectedTab.equals("TREND")) {
+                break;
+            case "TREND":
                 tab.setSelectedTab(pkiScorecardTrendTab);
-            } else if (selectedTab.equals("LOAD_KPI")) {
+                break;
+            case "LOAD_KPI":
                 tab.setSelectedTab(pkiLoadKPIResultsTab);
-            }
+                break;
+        }
         
         addComponent(tab);
     }

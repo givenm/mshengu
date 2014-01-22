@@ -40,8 +40,8 @@ public class KPITable extends Table {
         addContainerProperty("KPI Description", String.class, null);
         addContainerProperty("UOM", String.class, null);
         addContainerProperty("Measure Type", String.class, null);
-        addContainerProperty("Edit", Button.class, null);
-        addContainerProperty("Delete", Button.class, null);
+//        addContainerProperty("Edit", Button.class, null);
+//        addContainerProperty("Delete", Button.class, null);
 
         loadTable(items);
     }
@@ -69,9 +69,7 @@ public class KPITable extends Table {
             addItem(new Object[]{
                 item.getShortDescription(),
                 item.getUom(),
-                item.getMeasureType(),
-                edit,
-                delete,}, item.getId());
+                item.getMeasureType(),}, item.getId());
         }
     }
 
@@ -118,19 +116,19 @@ public class KPITable extends Table {
             kPIItemForm = new KPIItemForm(main, item, oneTab.getKPAName());
             oneTab.removeAllComponents();
             oneTab.addComponent(kPIItemForm);
-        } else if (twoTab != null){
+        } else if (twoTab != null) {
             kPIItemForm = new KPIItemForm(main, item, twoTab.getKPAName());
             twoTab.removeAllComponents();
             twoTab.addComponent(kPIItemForm);
-        } else if (threeTab != null){
+        } else if (threeTab != null) {
             kPIItemForm = new KPIItemForm(main, item, threeTab.getKPAName());
             threeTab.removeAllComponents();
             threeTab.addComponent(kPIItemForm);
-        } else if (fourTab != null){
+        } else if (fourTab != null) {
             kPIItemForm = new KPIItemForm(main, item, fourTab.getKPAName());
             fourTab.removeAllComponents();
             fourTab.addComponent(kPIItemForm);
-        } else if (fiveTab != null){
+        } else if (fiveTab != null) {
             kPIItemForm = new KPIItemForm(main, item, fiveTab.getKPAName());
             fiveTab.removeAllComponents();
             fiveTab.addComponent(kPIItemForm);
