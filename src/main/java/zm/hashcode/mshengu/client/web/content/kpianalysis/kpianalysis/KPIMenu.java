@@ -4,13 +4,14 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis;
 
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.views.PKILoadKPIResultsTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.views.CanvasTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.views.PKIScorecardTrendTab;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.views.PKILoadKPIResultsTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.settargets.views.PKISetTargetTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.views.PKISetUpKPITab;
 
@@ -48,11 +49,12 @@ public class KPIMenu extends VerticalLayout {
         tab.addTab(pkiLoadKPIResultsTab, "Load KPI Results", null);
         
         switch (selectedTab) {
+            
             case "LANDING":
                 tab.setSelectedTab(canvasTab);
                 break;
             case "SETUP":
-                JOptionPane.showMessageDialog(null, "test");
+//                JOptionPane.showMessageDialog(null, "test");
                 tab.setSelectedTab(pkiSetUpKPITab);
                 break;
             case "TARGET":
@@ -66,6 +68,7 @@ public class KPIMenu extends VerticalLayout {
                 break;
         }
         
+            Notification.show("Selected Tab !" +  selectedTab, Notification.Type.WARNING_MESSAGE);
         addComponent(tab);
     }
 
