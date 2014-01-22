@@ -1,0 +1,19 @@
+@mixin dashboard-select {
+
+    /* Lay the options horizontally */
+    .v-select-optiongroup-optiongrouphorizontal .v-select-option {
+        display: inline-block;
+    }
+
+    /* Avoid wrapping if the layout is too tight */
+    .v-select-optiongroup-optiongrouphorizontal {
+        white-space: nowrap;
+    }
+
+    /* Some extra spacing is needed */
+    .v-select-optiongroup-optiongrouphorizontal
+      .v-select-option.v-radiobutton {
+        padding-right: 10px;
+    }
+
+}

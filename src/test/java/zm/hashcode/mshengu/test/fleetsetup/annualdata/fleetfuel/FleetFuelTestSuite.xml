@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Fleetfuel_Suite">
+
+    <test name="zm.hashcode.mshengu.test.fleetsetup.annualdata.fleetfuel suite">
+        <classes>
+            <class name="Setup_Annual_Data_Sheet_One" />
+            <class name="Setup_Annual_Data_Sheet_Two" />
+            <class name="Setup_Annual_Data_Sheet_Three" />
+            <class name="Setup_Annual_Data_Sheet_Four" />
+            <class name="Setup_Annual_Data_Sheet_Five" />
+            <class name="Setup_Annual_Data_Sheet_Six" />
+            <class name="Setup_Annual_Data_Sheet_Seven" />
+            <class name="Setup_Annual_Data_Sheet_Eight" />
+            <class name="Setup_Annual_Data_Sheet_Nine" />
+            <class name="Setup_Annual_Data_Sheet_Ten" />
+            <class name="Setup_Annual_Data_Sheet_Eleven" />
+            <class name="Setup_Annual_Data_Sheet_Twelve" />
+            <class name="Setup_Annual_Data_Sheet_Thirteen" />
+            <class name="Setup_Annual_Data_Sheet_Fourteen" />
+            <class name="Setup_Annual_Data_Sheet_Fifteen" />
+            <class name="Setup_Annual_Data_Sheet_Sixteen" />
+            <class name="Setup_Annual_Data_Sheet_Seventeen" />
+            <class name="Setup_Annual_Data_Sheet_Eighteen" />
+            <class name="Setup_Annual_Data_Sheet_Nineteen" />
+            <class name="Setup_Annual_Data_Sheet_Twenty" />
+            <class name="Setup_Annual_Data_Sheet_TwentyOne" />
+            <class name="Setup_Annual_Data_Sheet_TwentyTwo" />
+            <class name="Setup_Annual_Data_Sheet_TwentyThree" />
+        </classes>
+
+    </test>
+
+</suite>

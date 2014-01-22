@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="zm.hashcode_mshengu_war_1.0-SNAPSHOT">
+
+    <!--
+    see examples at http://testng.org/doc/documentation-main.html#testng-xml
+
+    <suite-files>
+        <suite-file path="./junit-suite.xml" />
+    </suite-files>
+
+    <test name="TimeOut">
+        <classes>
+            <class name="test.timeout.TimeOutTest" />
+            <class name="test.timeout.TimeOutFromXmlTest"/>
+            <class name="test.timeout.TimeOutThreadLocalSampleTest"/>
+        </classes>
+    </test>
+    -->
+
+    <test name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs suite">
+        <packages>
+            <package name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs"/>
+        </packages>
+        <classes>
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetOne" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetTwo" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetThree" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetFour" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetFive" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetSix" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetSeven" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetEight" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetNine" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputSheetTen" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputsSheetEleven" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputsSheetTwelve" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputsSheetThirteen" />
+            <class name="zm.hashcode.mshengu.test.fleetsetup.dailyinputs.Setup_DailyInputsSheetFourteen" />
+
+        </classes>
+    </test>
+
+</suite>

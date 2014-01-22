@@ -1,0 +1,45 @@
+@mixin dashboard-layout {
+
+    /* For the title bar and blue border around the view */
+    .v-verticallayout-chartLayout {
+        background: rgb(75, 178, 197); // blue
+        width:auto;
+
+    }
+
+    /* Padding to create a border around the view */
+    .v-verticallayout-chartLayout.v-margin-top,
+    .v-verticallayout-chartLayout.v-margin-bottom,
+    .v-verticallayout-chartLayout.v-margin-left,
+    .v-verticallayout-chartLayout.v-margin-right {
+       /* padding: 3px; */
+    }
+
+    /* The main title */
+    .chartLayout .v-label-title {
+        font-size: 13pt;
+        font:arial;
+        font-weight: bold;
+        color: white;
+        line-height:20pt;
+       background: rgb(75, 178, 197); // blue
+        text-align:center;
+    }
+
+    /* The horizontal Layout */
+
+  .chartLayout .v-horizontallayout {
+        background: white;
+    }
+
+/* The Vertical Layout */
+
+ .chartLayout .v-verticallayout-detailLayout {
+        background: white;
+        padding-left: 2px;
+        padding-right: 2px;
+        padding-bottom: 2px;
+       /*  margin:2px */
+    }
+
+}
