@@ -68,7 +68,7 @@ public class KPIMenu extends VerticalLayout {
                 break;
         }
         
-            Notification.show("Selected Tab !" +  selectedTab, Notification.Type.WARNING_MESSAGE);
+//            Notification.show("Selected Tab !" +  selectedTab, Notification.Type.WARNING_MESSAGE);
         addComponent(tab);
     }
 
