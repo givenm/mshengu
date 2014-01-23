@@ -45,7 +45,7 @@ public class SupplierProductTab extends VerticalLayout implements
         tab.setWidth("100%");
         tab.addTab(suppilerProductDatabaseTab, "Supplier Product Database", null);
         tab.addTab(serviceProviderProductTab, "Add Product", null);
-        tab.addTab(serviceProviderProductCategoryTab, "Add Product Category", null);
+        tab.addTab(serviceProviderProductCategoryTab, "Product Category", null);
         switch (selectedTab) {
             case "LANDING":
                 tab.setSelectedTab(suppilerProductDatabaseTab);
