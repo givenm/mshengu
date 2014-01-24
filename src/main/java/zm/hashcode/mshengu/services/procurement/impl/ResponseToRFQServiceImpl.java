@@ -44,7 +44,11 @@ public class ResponseToRFQServiceImpl implements ResponseToRFQService {
 
     @Override
     public ResponseToRFQ findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

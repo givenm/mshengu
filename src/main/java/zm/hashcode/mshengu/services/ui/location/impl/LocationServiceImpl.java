@@ -58,7 +58,11 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Location findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

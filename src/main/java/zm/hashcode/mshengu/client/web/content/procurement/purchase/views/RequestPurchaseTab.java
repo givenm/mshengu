@@ -24,6 +24,8 @@ import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFac
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreCategoryTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.ItemCategoryTypeFacade;
+import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
+import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.RequestForm;
@@ -39,6 +41,7 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
+import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -52,9 +55,11 @@ public class RequestPurchaseTab extends VerticalLayout implements
     private PurchaseItemsTable table;
     private String productId;
     private String keep = null;
-    private BigDecimal total = new BigDecimal("0");
+    private BigDecimal total = BigDecimal.ZERO;
     private DecimalFormat f = new DecimalFormat("###.00");
 
+    private SequenceHelper sequenceHelper = new SequenceHelper();
+    
     public RequestPurchaseTab(MshenguMain app) {
         setSizeFull();
         main = app;
@@ -248,6 +253,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
         } catch (FieldGroup.CommitException e) {
             e.printStackTrace();
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+        }catch (Exception e) {
+            e.printStackTrace();
+            Notification.show("Values MISSING .. !", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -327,6 +335,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
     }
 
     private Request getRequestEntity(FieldGroup binder) {
+        
+        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
+        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
+        
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         Set<RequestPurchaseItem> items = new HashSet<>();
         for (Object id : table.getItemIds()) {
@@ -337,16 +349,30 @@ public class RequestPurchaseTab extends VerticalLayout implements
         ServiceProvider provider = ServiceProviderFacade.getServiceProviderService().findById(bean.getCompanyName());
         Person person = PersonFacade.getPersonService().findById(bean.getRequestingPerson());
         DecimalFormat f = new DecimalFormat("### ###.00");
+        CostCentreType costCentreType = null;
+        ItemCategoryType itemCategoryType = null;
+        CostCentreCategoryType costCentreCategoryType =  null;
+        if (bean.getCostCentre() != null) {
+            costCentreType = CostCentreTypeFacade.getCostCentreTypeService().findById(bean.getCostCentre());
+        }
+
+        if (bean.getItemCategory() != null) {
+            itemCategoryType = ItemCategoryTypeFacade.getItemCategoryTypeService().findById(bean.getItemCategory());
+        }
+        if (bean.getCostCategory() != null) {
+            costCentreCategoryType = CostCentreCategoryTypeFacade.getCostCentreCategoryTypeService().findById(bean.getCostCategory());
+        }
+
         CostCentreType centreType = CostCentreTypeFacade.getCostCentreTypeService().findById(form.costCentre.getValue().toString());
         if ("fleet maintenance".equalsIgnoreCase(centreType.getName()) && bean.getItemCategory() != null) {
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(null)
+                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
-                    .costCentreType(CostCentreTypeFacade.getCostCentreTypeService().findById(bean.getCostCentre()))
-                    .itemCategoryType(ItemCategoryTypeFacade.getItemCategoryTypeService().findById(bean.getItemCategory()))
+                    .costCentreType(costCentreType)
+                    .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .total(total)
                     .build();
@@ -355,10 +381,11 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(null)
+                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
-                    .costCentreType(CostCentreTypeFacade.getCostCentreTypeService().findById(bean.getCostCentre()))
+                    .costCentreType(costCentreType)
+                    .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .total(total)
                     .build();
@@ -367,11 +394,11 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(null)
+                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
-                    .categoryType(CostCentreCategoryTypeFacade.getCostCentreCategoryTypeService().findById(bean.getCostCategory()))
-                    .costCentreType(CostCentreTypeFacade.getCostCentreTypeService().findById(bean.getCostCentre()))
-                    .itemCategoryType(ItemCategoryTypeFacade.getItemCategoryTypeService().findById(bean.getItemCategory()))
+                    .categoryType(costCentreCategoryType)
+                    .costCentreType(costCentreType)
+                    .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .total(total)
                     .build();
@@ -380,10 +407,11 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(null)
+                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
-                    .categoryType(CostCentreCategoryTypeFacade.getCostCentreCategoryTypeService().findById(bean.getCostCategory()))
-                    .costCentreType(CostCentreTypeFacade.getCostCentreTypeService().findById(bean.getCostCentre()))
+                    .categoryType(costCentreCategoryType)
+                    .costCentreType(costCentreType)
+                    .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .total(total)
                     .build();

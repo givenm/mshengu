@@ -79,7 +79,11 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public Site findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
@@ -107,7 +111,7 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public SiteServiceContractLifeCycle getSitetCurrentContract(String id) {
-        Site site = repository.findOne(id);
+        Site site = findById(id);
         Set<SiteServiceContractLifeCycle> siteServiceContractLifeCycles = site.getSiteServiceContractLifeCycle();
 
         return getLatestLifeCycle(siteServiceContractLifeCycles);

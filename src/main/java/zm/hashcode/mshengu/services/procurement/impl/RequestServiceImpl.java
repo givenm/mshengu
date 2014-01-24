@@ -49,7 +49,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Request findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

@@ -48,6 +48,7 @@ public class ApproveRequestsForm extends FormLayout implements
         GridLayout layout = new GridLayout(3, 15);
         layout.setSizeFull();
         Label requesterInfo = new Label("Requester Information");
+        requesterInfo.addStyleName("h4");
         Label person = new Label("Person Requesting: " + request.getPersonName());
 
         Label account = new Label("Cost Centre: " + returnCostCentre(request.getCostCentreType()));
@@ -59,6 +60,7 @@ public class ApproveRequestsForm extends FormLayout implements
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
 
         Label vendorInfo = new Label("Vendor Information");
+        vendorInfo.addStyleName("h4");
         Label vendor = new Label("Vendor: " + request.getServiceProvider().getName());
         Label address = new Label("Address: " + request.getServiceProvider().getContactAddress1());
         Label phoneNumber = new Label("Phone Number: " + request.getServiceProvider().getContactPersonMainNumber());

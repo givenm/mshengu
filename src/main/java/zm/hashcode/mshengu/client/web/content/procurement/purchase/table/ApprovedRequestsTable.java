@@ -27,7 +27,8 @@ public class ApprovedRequestsTable extends Table {
     public ApprovedRequestsTable(ApprovedRequestsTab tab) {
         ApprovedRequestsTable.main = tab;
 
-        addContainerProperty("PO Number", String.class, null);
+
+        addContainerProperty("P.O Number", String.class, null);
         addContainerProperty("Purchasing Person", String.class, null);
         addContainerProperty("Company Name", String.class, null);
         addContainerProperty("Total", BigDecimal.class, null);

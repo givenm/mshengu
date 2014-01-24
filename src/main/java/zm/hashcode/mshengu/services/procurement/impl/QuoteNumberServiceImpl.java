@@ -42,7 +42,11 @@ public class QuoteNumberServiceImpl implements QuoteNumberService {
 
     @Override
     public QuoteNumber findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

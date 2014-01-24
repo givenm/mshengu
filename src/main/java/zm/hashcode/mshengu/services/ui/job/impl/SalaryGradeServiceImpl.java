@@ -50,7 +50,11 @@ public class SalaryGradeServiceImpl implements SalaryGradeService {
 
     @Override
     public SalaryGrade findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

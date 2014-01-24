@@ -50,7 +50,11 @@ public class JobClassificationServiceImpl implements JobClassificationService {
 
     @Override
     public JobClassification findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

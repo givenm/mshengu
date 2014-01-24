@@ -45,7 +45,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

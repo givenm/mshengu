@@ -32,16 +32,16 @@ public class SiteServiceLogTaskTest extends AppTest {
 //        dtfwh.resetDayOfWeek();
     }
 
-    @Test
-    private void createLogs(Date date) {
+//    @Test
+    public void createLogs() {
         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         setTodaysDate(calendar.getTime());
-        logSheduledSiteServices.createTodaysSiteServicesLogs(date);
+        logSheduledSiteServices.createTodaysSiteServicesLogs(calendar.getTime());
     }
 
-    private void updateLogs(Date date) {       
+    public void updateLogs(Date date) {       
         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -50,7 +50,7 @@ public class SiteServiceLogTaskTest extends AppTest {
         logSheduledSiteServices.updateOpensSiteServicesLogs(date);
     }
 
-    private void closeLogs(Date date) {        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+    public void closeLogs(Date date) {        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         setTodaysDate(calendar.getTime());

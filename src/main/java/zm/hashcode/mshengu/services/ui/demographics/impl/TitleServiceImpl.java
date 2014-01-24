@@ -45,7 +45,11 @@ public class TitleServiceImpl implements TitleService{
 
     @Override
     public Title findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

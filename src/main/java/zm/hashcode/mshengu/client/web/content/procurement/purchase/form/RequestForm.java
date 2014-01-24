@@ -16,10 +16,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
+import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.models.RequestBean;
+import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -56,6 +59,7 @@ public class RequestForm extends FormLayout {
     public TextField total = new TextField();
     public GridLayout itemPurchaseLayout = new GridLayout(3, 9);
     public TextField description = new TextField();
+    private SequenceHelper sequenceHelper = new SequenceHelper();
 
     public RequestForm(final MshenguMain main) {
         this.main = main;
@@ -63,8 +67,13 @@ public class RequestForm extends FormLayout {
         setSizeFull();
         GridLayout generalPanel = new GridLayout(3, 10);
         generalPanel.setSizeFull();
-        Label requesterInfo = new Label("Requester Information");
+        
+        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
+        String orderNum  = sequenceHelper.getSequenceInitialNumber(sequence);
+        Label requesterInfo = new Label("Requester Information");        
+        requesterInfo.addStyleName("h4");
         ordernumber = UIComponent.getTextField("Purchase Order Number:", "orderNumber", RequestBean.class, binder);
+        ordernumber.setValue(orderNum);
         personRequesting = UIComboBox.getRequestingPersonComboBox("Person Requesting Item(s):", "requestingPerson", RequestBean.class, binder);
         costCentre = UIComboBox.getCostCentreType("Cost Centre Type:", "costCentre", RequestBean.class, binder);
         costCategory = UIComboBox.getCostCentreCategoryType("Cost Category Type:", "costCategory", RequestBean.class, binder);
@@ -85,6 +94,7 @@ public class RequestForm extends FormLayout {
         GridLayout vendorPanel = new GridLayout(3, 5);
         vendorPanel.setSizeFull();
         Label vendorInfo = new Label("Vendor Information");
+        vendorInfo.addStyleName("h4");
         name = UIComboBox.getVendorsComboBox("Vendor:", "companyName", RequestBean.class, binder);
         address = UIComponent.getTextField("Address:", "address", RequestBean.class, binder);
         postalCode = UIComponent.getTextField("Suburb/Postal Code:", "postalCode", RequestBean.class, binder);
@@ -108,7 +118,8 @@ public class RequestForm extends FormLayout {
 
         itemPurchaseLayout.setSizeFull();
 
-        Label details = new Label("Items Information");
+        Label details = new Label("Items Information");        
+        details.addStyleName("h4");
         description = UIComponent.getTextField("Item Description:", "description", RequestBean.class, binder);
         itemDescription = UIComboBox.getProductDescriptionComboBox("Item Description:", "itemDescription", RequestBean.class, binder);
         itemNumber = UIComponent.getTextField("Item Number:", "itemNumber", RequestBean.class, binder);

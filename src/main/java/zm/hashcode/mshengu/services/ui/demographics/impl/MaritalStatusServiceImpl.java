@@ -44,7 +44,11 @@ public class MaritalStatusServiceImpl implements MaritalStatusService{
 
     @Override
     public MaritalStatus findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

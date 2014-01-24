@@ -45,7 +45,11 @@ public class AnnualDataFleetMaintenanceMileageServiceImpl implements AnnualDataF
 
     @Override
     public AnnualDataFleetMaintenanceMileage findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
