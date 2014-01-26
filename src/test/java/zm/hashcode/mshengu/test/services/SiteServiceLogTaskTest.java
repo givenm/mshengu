@@ -34,7 +34,7 @@ public class SiteServiceLogTaskTest extends AppTest {
 
 //    @Test
     public void createLogs() {
-        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         setTodaysDate(calendar.getTime());
