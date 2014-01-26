@@ -148,8 +148,6 @@ public class StatusTab extends VerticalLayout implements
         table.addValueChangeListener((Property.ValueChangeListener) this);
     }
 
-    
-    
     private StatusBean getBean(Status status) {
         StatusBean bean = new StatusBean();
         bean.setName(status.getName());
