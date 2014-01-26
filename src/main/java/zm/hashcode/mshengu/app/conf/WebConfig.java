@@ -9,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -28,6 +30,8 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {"zm.hashcode"})
 @EnableWebMvc
 @Profile("container")
+@EnableScheduling
+@EnableAsync
 @Import({RepositoryConfig.class, CacheConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
