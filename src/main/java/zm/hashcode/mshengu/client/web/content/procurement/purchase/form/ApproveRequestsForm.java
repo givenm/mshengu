@@ -125,36 +125,43 @@ public class ApproveRequestsForm extends FormLayout implements
         if (source == approve) {
             Request request = RequestFacade.getRequestService().findById(requestId);
             Person user = new GetUserCredentials().getLoggedInPerson();
-            if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
-                if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
-                    approve(request, user.getFirstname() + " " + user.getLastname());
-                } else {
-                    Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+            if (!request.getPerson().equals(user)) {
+                if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
+                    if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
+                        approve(request, user.getFirstname() + " " + user.getLastname());
+                    } else {
+                        Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                    }
+                } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
+                    if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
+                        approve(request, user.getFirstname() + " " + user.getLastname());
+                    } else {
+                        Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                    }
                 }
-            } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
-                if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
-                    approve(request, user.getFirstname() + " " + user.getLastname());
-                } else {
-                    Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
-                }
+            } else {
+                Notification.show("You cannot approve your own request!", Notification.Type.TRAY_NOTIFICATION);
             }
         } else if (source == disapprove) {
             Request request = RequestFacade.getRequestService().findById(requestId);
             Person user = new GetUserCredentials().getLoggedInPerson();
-            if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
-                if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
-                    disapprove();
-                } else {
-                    Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+            if (!request.getPerson().equals(user)) {
+                if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
+                    if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
+                        disapprove();
+                    } else {
+                        Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                    }
+                } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
+                    if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
+                        disapprove();
+                    } else {
+                        Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                    }
                 }
-            } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
-                if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
-                    disapprove();
-                } else {
-                    Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
-                }
+            } else {
+                Notification.show("You cannot disapprove your own request!", Notification.Type.TRAY_NOTIFICATION);
             }
-
         } else if (source == back) {
             main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
         }

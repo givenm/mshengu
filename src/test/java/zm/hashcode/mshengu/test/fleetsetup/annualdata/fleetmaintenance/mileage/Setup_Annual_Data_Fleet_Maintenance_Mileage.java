@@ -49,7 +49,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
     private static String vehicleNumber;
     private static String employeeNumber;
 
-    @Test
+//    @Test
     public void testSheet() {
         try {
             truckService = ctx.getBean(TruckService.class);
@@ -151,7 +151,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
         return annualDataFleetMaintenanceMileage;
     }
 
-    @Test(dependsOnMethods = {"testSheet"})
+//    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetMaintenanceMileage> annualDataFleetMaintenanceMileageList = annualDataFleetMaintenanceMileageService.findAll();
         if (annualDataFleetMaintenanceMileageList.isEmpty()) {
