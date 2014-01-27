@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface LogSheduledSiteServices {
 
-    public void createTodaysSiteServicesLogs(Date date);
+    public void createTodaysSiteServicesLogs(Date date);    
+    public void createTodaysSiteServicesLogs2(Date date);
 
     public void updateOpensSiteServicesLogs(Date date);
 
