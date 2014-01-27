@@ -336,8 +336,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
 
     private Request getRequestEntity(FieldGroup binder) {
         
-        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
-        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
+//        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
+//        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
         
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         Set<RequestPurchaseItem> items = new HashSet<>();
@@ -368,7 +368,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(orderNumber)
+//                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                     .costCentreType(costCentreType)
@@ -381,7 +381,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(orderNumber)
+//                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                     .costCentreType(costCentreType)
@@ -394,7 +394,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(orderNumber)
+//                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
@@ -407,7 +407,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    .orderNumber(orderNumber)
+//                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)

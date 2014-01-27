@@ -68,12 +68,12 @@ public class RequestForm extends FormLayout {
         GridLayout generalPanel = new GridLayout(3, 10);
         generalPanel.setSizeFull();
         
-        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
-        String orderNum  = sequenceHelper.getSequenceInitialNumber(sequence);
+//        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
+//        String orderNum  = sequenceHelper.getSequenceInitialNumber(sequence);
         Label requesterInfo = new Label("Requester Information");        
         requesterInfo.addStyleName("h4");
         ordernumber = UIComponent.getTextField("Purchase Order Number:", "orderNumber", RequestBean.class, binder);
-        ordernumber.setValue(orderNum);
+//        ordernumber.setValue(orderNum);
         personRequesting = UIComboBox.getRequestingPersonComboBox("Person Requesting Item(s):", "requestingPerson", RequestBean.class, binder);
         costCentre = UIComboBox.getCostCentreType("Cost Centre Type:", "costCentre", RequestBean.class, binder);
         costCategory = UIComboBox.getCostCentreCategoryType("Cost Category Type:", "costCategory", RequestBean.class, binder);
