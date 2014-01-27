@@ -51,6 +51,16 @@ public class RequestBean implements Serializable {
     @NotNull
     private Date deliveryDate;
     private String description;
+    @NotNull
+    private Date orderDate;
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
 
     public String getCostCategory() {
         return costCategory;

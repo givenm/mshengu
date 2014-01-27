@@ -8,6 +8,7 @@ import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.domain.kpianalysis.KPIValues;
 import zm.hashcode.mshengu.repository.kpianalysis.KPIValuesRepository;
 import zm.hashcode.mshengu.services.kpianalysis.KPIValuesService;
@@ -16,6 +17,7 @@ import zm.hashcode.mshengu.services.kpianalysis.KPIValuesService;
  *
  * @author Luckbliss
  */
+@Service
 public class KPIValuesServiceImpl implements KPIValuesService {
 
     @Autowired

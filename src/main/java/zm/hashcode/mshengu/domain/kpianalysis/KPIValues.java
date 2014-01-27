@@ -17,7 +17,7 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
     private String id;
     private double value;
     private String month;
-    private String year;
+    private int year;
 
     private KPIValues() {
     }
@@ -28,12 +28,12 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
         this.year = builder.year;
         this.month = builder.month;
     }
-    
+
     @Override
     public int compareTo(KPIValues o) {
         return month.compareToIgnoreCase(o.month);
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -59,7 +59,7 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
         private String id;
         private double value;
         private final String month;
-        private String year;
+        private int year;
 
         public Builder(String value) {
             this.month = value;
@@ -75,7 +75,7 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
             return this;
         }
 
-        public Builder year(String value) {
+        public Builder year(int value) {
             this.year = value;
             return this;
         }
@@ -104,7 +104,7 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
         return month;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 }
