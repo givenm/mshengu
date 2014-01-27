@@ -51,6 +51,7 @@ public final class Request implements Serializable, Comparable<Request> {
     private BigDecimal total;
     private String matchStatus;
     private String invoiceNumber;
+    private String approver;
 
     private Request() {
     }
@@ -73,6 +74,7 @@ public final class Request implements Serializable, Comparable<Request> {
         this.truck = builder.truck;
         this.orderNumber = builder.orderNumber;
         this.misMatchDate = builder.misMatchDate;
+        this.approver = builder.approver;
     }
 
     @Override
@@ -121,6 +123,7 @@ public final class Request implements Serializable, Comparable<Request> {
         private Truck truck;
         private String orderNumber;
         private Date misMatchDate;
+        private String approver;
 
         public Builder(Person value) {
             this.person = value;
@@ -142,11 +145,17 @@ public final class Request implements Serializable, Comparable<Request> {
             this.categoryType = request.getCategoryType();
             this.itemCategoryType = request.getItemCategoryType();
             this.misMatchDate = request.getMisMatchDate();
+            this.approver = request.getApprover();
             return this;
         }
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder approver(String value) {
+            this.approver = value;
             return this;
         }
 
@@ -228,6 +237,10 @@ public final class Request implements Serializable, Comparable<Request> {
         public Request build() {
             return new Request(this);
         }
+    }
+
+    public String getApprover() {
+        return approver;
     }
 
     public Date getMisMatchDate() {
