@@ -26,6 +26,7 @@ public class DisapproveRequestsTable extends Table {
         this.tab = tab;
         setSizeFull();
 
+        addContainerProperty("Disapprover", String.class, null);
         addContainerProperty("Purchasing Person", String.class, null);
         addContainerProperty("Company Name", String.class, null);
         addContainerProperty("Total", BigDecimal.class, null);
@@ -57,6 +58,7 @@ public class DisapproveRequestsTable extends Table {
                         }
                     });
                     addItem(new Object[]{
+                        request.getApprover(),
                         request.getPersonName(),
                         request.getServiceProviderName(),
                         request.getTotal(),

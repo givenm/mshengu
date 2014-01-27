@@ -4,13 +4,14 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.settargets.models;
 
+import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Luckbliss
  */
-public class TargetBean {
+public class TargetBean  implements Serializable {
 
     private String id;
     @NotNull

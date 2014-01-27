@@ -79,7 +79,11 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public Site findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
@@ -107,7 +111,7 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public SiteServiceContractLifeCycle getSitetCurrentContract(String id) {
-        Site site = repository.findOne(id);
+        Site site = findById(id);
         Set<SiteServiceContractLifeCycle> siteServiceContractLifeCycles = site.getSiteServiceContractLifeCycle();
 
         return getLatestLifeCycle(siteServiceContractLifeCycles);
@@ -246,6 +250,8 @@ public class SiteServiceImpl implements SiteService {
 //        Date date = new Date();
         calendar.setTime(date);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                System.out.println("Calendar.DAY_OF_WEEK " + dayOfWeek);
+        System.out.println("Calendar.DATE " + calendar.getTime());
         List<Site> siteList;
         switch (dayOfWeek) {
             case 1:

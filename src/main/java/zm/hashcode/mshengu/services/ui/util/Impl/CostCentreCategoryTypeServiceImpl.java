@@ -46,7 +46,11 @@ public class CostCentreCategoryTypeServiceImpl implements CostCentreCategoryType
 
     @Override
     public CostCentreCategoryType findById(String id) {
+        try{
         return repository.findOne(id);
+        }catch(IllegalArgumentException iaEx){
+            return null;
+        }
     }
 
     @Override

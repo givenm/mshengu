@@ -32,7 +32,7 @@ public class PurchaseItemsTable extends Table {
         addContainerProperty("Quantity", String.class, null);
         addContainerProperty("Unit", String.class, null);
         addContainerProperty("Volume", String.class, null);
-        addContainerProperty("Unit Price", String.class, null);
+        addContainerProperty("Unit Price", BigDecimal.class, null);
         addContainerProperty("Total", BigDecimal.class, null);
         addContainerProperty("Delete", Button.class, null);
 
@@ -67,7 +67,7 @@ public class PurchaseItemsTable extends Table {
                 item.getQuantity(),
                 serviceProviderProduct.getUnit(),
                 serviceProviderProduct.getVolume(),
-                serviceProviderProduct.getPrice().toString(),
+                serviceProviderProduct.getPrice(),
                 item.getSubTotal(),
                 showDetails,}, item.getId());
         } else {

@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.humanresources.staff.tables;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.Reindeer;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.util.UITableIconHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 
@@ -41,7 +42,7 @@ public class AddFilesTable extends Table {
         showDetails.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-//                JOptionPane.showMessageDialog(null, "delete");
+                JOptionPane.showMessageDialog(null, "delete");
             }
         });
 

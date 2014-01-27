@@ -49,9 +49,13 @@ public class QuoteControl {
                     quoteItem.setQuantity(item.getQuantity());
                     if (item.getVolume() != null) {
                         quoteItem.setVolume(item.getVolume());
+                    } else {
+                        quoteItem.setVolume("");
                     }
                     if (item.getUnit() != null) {
                         quoteItem.setUnit(item.getUnit());
+                    } else {
+                        quoteItem.setUnit("");
                     }
                 }
                 items.add(quoteItem);

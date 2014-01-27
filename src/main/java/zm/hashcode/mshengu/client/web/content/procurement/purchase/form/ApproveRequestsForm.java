@@ -10,16 +10,19 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import java.math.BigDecimal;
 import java.util.Date;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
+import zm.hashcode.mshengu.app.security.GetUserCredentials;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
-import zm.hashcode.mshengu.client.web.content.procurement.purchase.table.ApproveRequestsTable;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.table.DisplayItemsTable;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.ApproveRequestsTab;
+import zm.hashcode.mshengu.domain.people.Person;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.Sequence;
@@ -48,6 +51,7 @@ public class ApproveRequestsForm extends FormLayout implements
         GridLayout layout = new GridLayout(3, 15);
         layout.setSizeFull();
         Label requesterInfo = new Label("Requester Information");
+        requesterInfo.addStyleName("h4");
         Label person = new Label("Person Requesting: " + request.getPersonName());
 
         Label account = new Label("Cost Centre: " + returnCostCentre(request.getCostCentreType()));
@@ -59,6 +63,7 @@ public class ApproveRequestsForm extends FormLayout implements
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
 
         Label vendorInfo = new Label("Vendor Information");
+        vendorInfo.addStyleName("h4");
         Label vendor = new Label("Vendor: " + request.getServiceProvider().getName());
         Label address = new Label("Address: " + request.getServiceProvider().getContactAddress1());
         Label phoneNumber = new Label("Phone Number: " + request.getServiceProvider().getContactPersonMainNumber());
@@ -118,21 +123,58 @@ public class ApproveRequestsForm extends FormLayout implements
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
         if (source == approve) {
-            Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
             Request request = RequestFacade.getRequestService().findById(requestId);
-            Request newRequest = new Request.Builder(request.getPerson())
-                    .request(request)
-                    .approvalStatus(true)
-                    .orderNumber(helper.getRefNumber(sequence))
-                    .build();
-            RequestFacade.getRequestService().merge(newRequest);
-            main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
+            Person user = new GetUserCredentials().getLoggedInPerson();
+            if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
+                if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
+                    approve(request, user.getFirstname() + " " + user.getLastname());
+                } else {
+                    Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                }
+            } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
+                if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
+                    approve(request, user.getFirstname() + " " + user.getLastname());
+                } else {
+                    Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                }
+            }
         } else if (source == disapprove) {
-            tab.removeAllComponents();
-            DisapproveRequestsForm form = new DisapproveRequestsForm(RequestFacade.getRequestService().findById(requestId), tab.main);
-            tab.addComponent(form);
+            Request request = RequestFacade.getRequestService().findById(requestId);
+            Person user = new GetUserCredentials().getLoggedInPerson();
+            if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
+                if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
+                    disapprove();
+                } else {
+                    Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                }
+            } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
+                if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
+                    disapprove();
+                } else {
+                    Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                }
+            }
+
         } else if (source == back) {
             main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
         }
+    }
+
+    private void approve(Request request, String user) {
+        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
+        Request newRequest = new Request.Builder(request.getPerson())
+                .request(request)
+                .approver(user)
+                .approvalStatus(true)
+                .orderNumber(helper.getRefNumber(sequence))
+                .build();
+        RequestFacade.getRequestService().merge(newRequest);
+        main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
+    }
+
+    private void disapprove() {
+        tab.removeAllComponents();
+        DisapproveRequestsForm form = new DisapproveRequestsForm(RequestFacade.getRequestService().findById(requestId), tab.main);
+        tab.addComponent(form);
     }
 }

@@ -10,7 +10,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.forms.LandingPage;
+//import zm.hashcode.mshengu.client.web.content.dashboard.kpianalysis.forms.LandingPage;
 import zm.hashcode.mshengu.client.web.content.assets.AssetsMenu;
 
 /**
@@ -21,12 +21,12 @@ public class ChemicalsTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
-    private final LandingPage landingPage;
+//    private final LandingPage landingPage;
     private final Embedded logo = new Embedded("", new ThemeResource("scorecard.png"));
 
     public ChemicalsTab(MshenguMain app) {
         main = app;
-        landingPage = new LandingPage(main);
+//        landingPage = new LandingPage(main);
 
 
         setSizeFull();

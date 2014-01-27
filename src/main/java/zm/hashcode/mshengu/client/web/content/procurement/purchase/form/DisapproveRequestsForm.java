@@ -15,10 +15,12 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
+import zm.hashcode.mshengu.app.security.GetUserCredentials;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.models.RequestBean;
+import zm.hashcode.mshengu.domain.people.Person;
 import zm.hashcode.mshengu.domain.procurement.Request;
 
 /**
@@ -27,7 +29,7 @@ import zm.hashcode.mshengu.domain.procurement.Request;
  */
 public class DisapproveRequestsForm extends VerticalLayout implements
         Button.ClickListener {
-
+    
     private Request request;
     private Button save = new Button("Save");
     private Button cancel = new Button("Cancel");
@@ -37,12 +39,12 @@ public class DisapproveRequestsForm extends VerticalLayout implements
     public final BeanItem<RequestBean> item = new BeanItem<>(bean);
     public final FieldGroup binder = new FieldGroup(item);
     private TextArea reason = new TextArea();
-
+    
     public DisapproveRequestsForm(Request request, MshenguMain main) {
         this.main = main;
         setSizeFull();
         this.request = request;
-
+        
         GridLayout layout = new GridLayout(3, 5);
         layout.setSizeFull();
         reason = UIComponent.getTextArea("Reason For Disapproval", "reason", RequestBean.class, binder);
@@ -51,25 +53,25 @@ public class DisapproveRequestsForm extends VerticalLayout implements
         buttons.setSizeFull();
         save.setSizeFull();
         cancel.setSizeFull();
-
+        
         buttons.addComponent(save);
         buttons.addComponent(cancel);
-
+        
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 0);
         layout.addComponent(reason, 0, 1, 1, 1);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 2);
         layout.addComponent(buttons, 0, 3, 2, 3);
-
+        
         addListeners();
         addComponent(layout);
     }
-
+    
     private void addListeners() {
         //Register Button Listeners
         save.addClickListener((Button.ClickListener) this);
         cancel.addClickListener((Button.ClickListener) this);
     }
-
+    
     @Override
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
@@ -77,25 +79,27 @@ public class DisapproveRequestsForm extends VerticalLayout implements
             if (reason.getValue() != null) {
                 disapprove(binder);
                 getHome();
-            } else{
+            } else {
                 Notification.show("Enter The Reason!", Notification.Type.TRAY_NOTIFICATION);
             }
         } else if (source == cancel) {
             getHome();
         }
     }
-
+    
     private void getHome() {
         main.content.setSecondComponent(new PurchaseMenu(main, "DISSAPPROVED_REQUESTS"));
     }
-
+    
     private void disapprove(FieldGroup binder) {
         try {
             binder.commit();
             RequestBean requestBean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
+            Person user = new GetUserCredentials().getLoggedInPerson();
             Request newRequest = new Request.Builder(request.getPerson())
                     .request(request)
                     .reasonForDisapproval(requestBean.getReason())
+                    .approver(user.getFirstname() + " " + user.getLastname())
                     .build();
             RequestFacade.getRequestService().merge(newRequest);
             getHome();

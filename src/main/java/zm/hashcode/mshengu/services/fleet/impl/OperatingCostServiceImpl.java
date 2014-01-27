@@ -51,7 +51,11 @@ public class OperatingCostServiceImpl implements OperatingCostService {
 
     @Override
     public OperatingCost findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
@@ -94,8 +98,16 @@ public class OperatingCostServiceImpl implements OperatingCostService {
         boolean isTrigger = false;
         List<OperatingCost> operatingCosts = new ArrayList<>();
         DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        Truck truckk = truckRepository.findOne(truck.getId());
-        List<OperatingCost> operatingCostList = truckk.getOperatingCosts();
+        List<OperatingCost> operatingCostList = new ArrayList<>() ;
+        
+        Truck truckk = null;
+        if (truck.getId() != null) {
+            truckk = truckRepository.findOne(truck.getId());
+        }
+        
+        if(truckk != null){
+            operatingCostList.addAll(truckk.getOperatingCosts());
+        }
 
         String filteredMonthNumber = dateTimeFormatHelper.getMonthNumber(month);
         String filteredYearNumber = dateTimeFormatHelper.getYearNumber(month);

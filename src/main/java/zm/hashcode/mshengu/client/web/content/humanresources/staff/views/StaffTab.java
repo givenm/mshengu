@@ -82,12 +82,7 @@ public final class StaffTab extends VerticalLayout implements
         } else if (source == form.terminate) {
             terminateForm(form.binder);
         } else if (source == terminateForm.save) {
-            if (terminateForm.endDate.getValue() != null && terminateForm.terminateReason.getValue() != null) {
-                saveTerminateForm(terminateForm.binder);
-            } else {
-                Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            }
-
+            saveTerminateForm(terminateForm.binder);
         } else if (source == terminateForm.cancel) {
             getHome();
         }
@@ -147,11 +142,11 @@ public final class StaffTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            getHome();
         } catch (DuplicateKeyException dp) {
-            dp.printStackTrace();
             Notification.show("Username is already taken!", Notification.Type.TRAY_NOTIFICATION);
+            getHome();
         }
     }
 
@@ -162,11 +157,11 @@ public final class StaffTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            getHome();
         } catch (DuplicateKeyException dp) {
-            dp.printStackTrace();
             Notification.show("Username is already taken!", Notification.Type.TRAY_NOTIFICATION);
+            getHome();
         }
     }
 
@@ -177,11 +172,11 @@ public final class StaffTab extends VerticalLayout implements
             getHome();
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            getHome();
         } catch (DuplicateKeyException dp) {
-            dp.printStackTrace();
             Notification.show("Username is already taken!", Notification.Type.TRAY_NOTIFICATION);
+            getHome();
         }
     }
 
@@ -248,7 +243,6 @@ public final class StaffTab extends VerticalLayout implements
         Terminate terminate = TerminateFacade.getTerminateService().findById(bean.getTerminateReason());
         EmployeeDetail mewEmployeeDetail = new EmployeeDetail.Builder(employeeDetail.getIdNumber())
                 .EmployeeDetails(employeeDetail)
-                .drivesCompanyCar(false)
                 .endDate(bean.getEndDate())
                 .terminate(terminate)
                 .employementStatus(null)

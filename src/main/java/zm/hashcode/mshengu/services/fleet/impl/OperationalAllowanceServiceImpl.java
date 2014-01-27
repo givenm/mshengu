@@ -42,7 +42,11 @@ public class OperationalAllowanceServiceImpl implements OperationalAllowanceServ
 
     @Override
     public OperationalAllowance findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

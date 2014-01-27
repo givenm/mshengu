@@ -56,7 +56,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
@@ -71,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
          
              @Override
     public Contract getSitetCurrentContract(String customerId) {
-         Customer customer = repository.findOne(customerId);
+         Customer customer = findById(customerId);
         Set<Contract> contractList = customer.getContracts();
 
         return getLatestLifeCycle(contractList);

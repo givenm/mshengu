@@ -6,11 +6,15 @@ package zm.hashcode.mshengu.test.services;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
+import zm.hashcode.mshengu.domain.products.Site;
+import zm.hashcode.mshengu.services.fieldservices.CreateSiteServiceLogsService;
 import zm.hashcode.mshengu.services.fieldservices.LogSheduledSiteServices;
+import zm.hashcode.mshengu.services.products.SiteService;
 import zm.hashcode.mshengu.test.AppTest;
 
 /**
@@ -21,6 +25,10 @@ public class SiteServiceLogTaskTest extends AppTest {
 
     @Autowired
     private LogSheduledSiteServices logSheduledSiteServices;
+    @Autowired
+    private CreateSiteServiceLogsService createSiteServiceLogsService;
+    @Autowired
+    private SiteService siteService;
     private DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
 //    private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
     private DateTimeFormatHelper dtfh = new DateTimeFormatHelper();
@@ -32,16 +40,16 @@ public class SiteServiceLogTaskTest extends AppTest {
 //        dtfwh.resetDayOfWeek();
     }
 
-    @Test
-    private void createLogs(Date date) {
+//    @Test
+    public void createLogs() {
         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         setTodaysDate(calendar.getTime());
-        logSheduledSiteServices.createTodaysSiteServicesLogs(date);
+//        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
     }
 
-    private void updateLogs(Date date) {       
+    public void updateLogs(Date date) {
         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -50,11 +58,33 @@ public class SiteServiceLogTaskTest extends AppTest {
         logSheduledSiteServices.updateOpensSiteServicesLogs(date);
     }
 
-    private void closeLogs(Date date) {        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+    public void closeLogs(Date date) {
+        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         setTodaysDate(calendar.getTime());
         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         logSheduledSiteServices.closeOutdatedSiteServicesLogs(date);
+    }
+
+    @Test
+    public void createLogsDirectly() {
+        createSiteServiceLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
+        siteService = ctx.getBean(SiteService.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        setTodaysDate(calendar.getTime());
+
+        List<Site> sitesList = siteService.findAllWithVisitToday(calendar.getTime());
+        int count = 0;
+        int size = sitesList.size();
+        System.out.println("\n\n================= TEST VISIT DATE : " + calendar.getTime());
+        for (Site site : sitesList) {
+            count++;
+            System.out.println("\n\n --- Site No" + count + "/" + size + "---");
+            System.out.println("Site :" + site.getName());
+
+            createSiteServiceLogsService.createSiteServiceLog(site, calendar.getTime());
+        }
     }
 }

@@ -24,7 +24,7 @@ public final class StaffDetailsBean implements Serializable {
     private Date dateofbirth;
     private String email;
     @NotNull
-    private String idNumber;  
+    private String idNumber;
     @NotNull
     private String mainNumber;
     private String otherNumber;
@@ -39,7 +39,9 @@ public final class StaffDetailsBean implements Serializable {
     private String driversLicenceNo;
     private Date driversLicenceExpireDate;
     private Date pdpExpireDate;
+    @NotNull
     private Date endDate;
+    @NotNull
     private String terminateReason;
     private String terminateCode;
     private String terminateDate;

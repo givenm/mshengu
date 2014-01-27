@@ -44,7 +44,11 @@ public class ServiceProviderProductCategoryServiceImpl implements ServiceProvide
 
     @Override
     public ServiceProviderProductCategory findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

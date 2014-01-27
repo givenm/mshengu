@@ -47,7 +47,11 @@ public class SequenceServiceImpl implements SequenceService {
 
     @Override
     public Sequence findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
