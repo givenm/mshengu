@@ -41,7 +41,6 @@ public class RequestBean implements Serializable {
     private String volume;
     private BigDecimal unitPrice;
     private BigDecimal subTotal;
-    @NotNull
     private String itemDescription;
     @NotNull
     private String reason;
