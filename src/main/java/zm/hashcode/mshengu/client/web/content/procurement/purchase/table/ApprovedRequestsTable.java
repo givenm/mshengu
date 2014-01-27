@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
+import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.SendPurchasePDFForm;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.ApprovedRequestsTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -22,10 +23,12 @@ import zm.hashcode.mshengu.domain.procurement.RequestPurchaseItem;
  */
 public class ApprovedRequestsTable extends Table {
 
-    private static ApprovedRequestsTab main;
+    private static ApprovedRequestsTab tab;
+    private final MshenguMain main;
 
-    public ApprovedRequestsTable(ApprovedRequestsTab tab) {
-        ApprovedRequestsTable.main = tab;
+    public ApprovedRequestsTable(MshenguMain main, ApprovedRequestsTab tab) {
+        ApprovedRequestsTable.tab = tab;
+        this.main = main;
 
         addContainerProperty("Approver", String.class, null);
         addContainerProperty("PO Number", String.class, null);
@@ -71,9 +74,9 @@ public class ApprovedRequestsTable extends Table {
 
     private void displayPDF(Object object) {
         Request requestt = (Request) object;
-        main.removeAllComponents();
-        SendPurchasePDFForm form = new SendPurchasePDFForm(requestt, main);
-        main.setImmediate(true);
-        main.addComponent(form);
+        tab.removeAllComponents();
+        SendPurchasePDFForm form = new SendPurchasePDFForm(main, requestt, tab);
+        tab.setImmediate(true);
+        tab.addComponent(form);
     }
 }

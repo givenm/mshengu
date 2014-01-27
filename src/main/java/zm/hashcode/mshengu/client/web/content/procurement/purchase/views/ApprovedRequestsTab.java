@@ -18,18 +18,18 @@ import zm.hashcode.mshengu.client.web.content.procurement.purchase.table.Approve
 public class ApprovedRequestsTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
-    private static MshenguMain main;
+    private final MshenguMain main;
     private ApprovedRequestsTable table;
 
     public ApprovedRequestsTab(MshenguMain app) {
-        table = new ApprovedRequestsTable(this);
-        ApprovedRequestsTab.main = app;
+        table = new ApprovedRequestsTable(app, this);
+        this.main = app;
         setSizeFull();
         addComponent(table);
     }
 
     public void clearTab() {
-        table = new ApprovedRequestsTable(this);
+        table = new ApprovedRequestsTable(main, this);
         setSizeFull();
         addComponent(table);
         getHome();
