@@ -54,11 +54,11 @@ public class CustomerContractForm  extends FormLayout {
 //        ComboBox customerId = UIComboBox.getCustomerComboBox("Customer", "customerId", ContractBean.class, binder);
         DateField startDate = UIComponent.getDateField("Start Date", "startDate", CustomerContractBean.class, binder);
         startDate = UIValidatorHelper.setRequiredDateField(startDate, "Start Date");
-        //startDate.addValidator(UIValidatorHelper.dateValidator());
+        
         DateField endDate = UIComponent.getDateField("End Date", "endDate", CustomerContractBean.class, binder);
         endDate = UIValidatorHelper.setRequiredDateField(endDate, "End Date");
         DateField dateofAction = UIComponent.getDateField("Date of Action", "dateofAction", CustomerContractBean.class, binder);
-        //dateofAction = UIValidatorHelper.setRequiredDateField(dateofAction, "Date of Action");
+        dateofAction = UIValidatorHelper.setRequiredDateField(dateofAction, "Date of Action");
         
         TextField numberOfUnits = UIComponent.getTextField("Number of Units:", "numberOfUnits", CustomerContractBean.class, binder);
         numberOfUnits = UIValidatorHelper.setRequiredTextField(numberOfUnits, "Number of Units");
@@ -82,8 +82,8 @@ public class CustomerContractForm  extends FormLayout {
         grid.addComponent(pricePerUnit, 0, 3);
 //        grid.addComponent(status, 1, 1);
         grid.addComponent(contractTypeId, 1, 3);
+        
 
-     
 
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
         grid.addComponent(buttons, 0, 6, 2, 6);

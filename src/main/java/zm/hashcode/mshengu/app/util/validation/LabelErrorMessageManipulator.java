@@ -5,14 +5,12 @@
  */
 package zm.hashcode.mshengu.app.util.validation;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Label;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -41,7 +39,7 @@ public class LabelErrorMessageManipulator implements FocusListener, BlurListener
                 this.errorLabel.setValue(this.errorMessage);
                 this.errorField.validate(); ///revalidate
                 this.errorField.removeStyleName("invalid");
-            } catch (Exception e) {
+            } catch (Validator.InvalidValueException e) {
                 reInit("Validation: " + e.getMessage());
                 this.errorLabel.setValue(this.errorMessage);
                 this.errorField.setStyleName("invalid");
@@ -57,7 +55,7 @@ public class LabelErrorMessageManipulator implements FocusListener, BlurListener
             this.errorLabel.setValue(this.errorMessage);
             this.errorField.validate(); ///revalidate
             this.errorField.removeStyleName("invalid");
-        } catch (Exception e) {
+        } catch (Validator.InvalidValueException e) {
             reInit("Validation: " + e.getMessage());
             this.errorLabel.setValue(this.errorMessage);
             this.errorField.setStyleName("invalid");
