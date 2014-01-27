@@ -43,8 +43,12 @@ public class IncidentTypeServiceImpl implements IncidentTypeService {
     }
 
     @Override
-    public IncidentType findById(String id) {
-        return repository.findOne(id);
+    public IncidentType findById(String id) {        
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

@@ -4,12 +4,14 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis;
 
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.views.PKILoadKPIResultsTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.views.CanvasTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.views.PKIScorecardTrendTab;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.views.PKILoadKPIResultsTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.settargets.views.PKISetTargetTab;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.views.PKISetUpKPITab;
 
@@ -43,22 +45,30 @@ public class KPIMenu extends VerticalLayout {
         tab.addTab(canvasTab, "Scorecard", null);
         tab.addTab(pkiSetUpKPITab, "Setup KPIs", null);
         tab.addTab(pkiSetTargetTab, "Set Targets", null);
-        tab.addTab(pkiScorecardTrendTab, "Scorecard Trend", null);
+//        tab.addTab(pkiScorecardTrendTab, "Scorecard Trend", null);
         tab.addTab(pkiLoadKPIResultsTab, "Load KPI Results", null);
-
-
-            if (selectedTab.equals("LANDING")) {
-                tab.setSelectedTab(canvasTab);
-            } else if (selectedTab.equals("SETUP")) {
-                tab.setSelectedTab(pkiSetUpKPITab);
-            } else if (selectedTab.equals("TARGET")) {
-                tab.setSelectedTab(pkiSetTargetTab);
-            } else if (selectedTab.equals("TREND")) {
-                tab.setSelectedTab(pkiScorecardTrendTab);
-            } else if (selectedTab.equals("LOAD_KPI")) {
-                tab.setSelectedTab(pkiLoadKPIResultsTab);
-            }
         
+        switch (selectedTab) {
+            
+            case "LANDING":
+                tab.setSelectedTab(canvasTab);
+                break;
+            case "SETUP":
+//                JOptionPane.showMessageDialog(null, "test");
+                tab.setSelectedTab(pkiSetUpKPITab);
+                break;
+            case "TARGET":
+                tab.setSelectedTab(pkiSetTargetTab);
+                break;
+            case "TREND":
+                tab.setSelectedTab(pkiScorecardTrendTab);
+                break;
+            case "LOAD_KPI":
+                tab.setSelectedTab(pkiLoadKPIResultsTab);
+                break;
+        }
+        
+//            Notification.show("Selected Tab !" +  selectedTab, Notification.Type.WARNING_MESSAGE);
         addComponent(tab);
     }
 

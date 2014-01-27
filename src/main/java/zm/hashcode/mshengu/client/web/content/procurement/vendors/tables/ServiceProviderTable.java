@@ -24,8 +24,7 @@ public class ServiceProviderTable extends Table {
         setSizeFull();
 
 
-        addContainerProperty("Vendor Name", String.class, null);   
-        addContainerProperty("Vendor Number", String.class, null);
+        addContainerProperty("Vendor Name", String.class, null);
         addContainerProperty("Vendor Category", String.class, null);
         addContainerProperty("Contact Person Name", String.class, null);
         addContainerProperty("Main Number", String.class, null);
@@ -44,7 +43,6 @@ public class ServiceProviderTable extends Table {
                 cPersonEmailAddress = serviceProvider.getContactPersonEmail();
             }
             addItem(new Object[]{serviceProvider.getName(),
-                serviceProvider.getVendorNumber(),
                 getServiceProviderCategory(serviceProvider.getServiceProviderCategory()),
                 cPersonName,
                 cPersonMainNumber,

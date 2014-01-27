@@ -50,7 +50,11 @@ public class BenefitFrequencyServiceImpl implements BenefitFrequencyService {
 
     @Override
     public BenefitFrequency findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

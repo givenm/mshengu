@@ -50,7 +50,11 @@ public class LocationTypeServiceImpl implements LocationTypeService {
 
     @Override
     public LocationType findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

@@ -18,7 +18,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
-import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -31,7 +30,7 @@ public final class Request implements Serializable, Comparable<Request> {
     private String id;
     @DBRef
     private Person person;
-    private String orderNumber = null;
+    private String orderNumber;
     @DBRef
     private CostCentreType costCentreType;
     @DBRef
@@ -48,9 +47,11 @@ public final class Request implements Serializable, Comparable<Request> {
     private String reasonForDisapproval;
     private String deliveryInstructions;
     private Date deliveryDate;
+    private Date misMatchDate;
     private BigDecimal total;
     private String matchStatus;
     private String invoiceNumber;
+    private String approver;
 
     private Request() {
     }
@@ -72,6 +73,8 @@ public final class Request implements Serializable, Comparable<Request> {
         this.itemCategoryType = builder.itemCategoryType;
         this.truck = builder.truck;
         this.orderNumber = builder.orderNumber;
+        this.misMatchDate = builder.misMatchDate;
+        this.approver = builder.approver;
     }
 
     @Override
@@ -110,15 +113,17 @@ public final class Request implements Serializable, Comparable<Request> {
         private boolean approvalStatus;
         private String reasonForDisapproval;
         private String deliveryInstructions;
-        private Date deliveryDate = null;
+        private Date deliveryDate;
         private BigDecimal total;
         private String matchStatus;
-        private String invoiceNumber = null;
+        private String invoiceNumber;
         private CostCentreType costCentreType;
         private CostCentreCategoryType categoryType;
         private ItemCategoryType itemCategoryType;
         private Truck truck;
         private String orderNumber;
+        private Date misMatchDate;
+        private String approver;
 
         public Builder(Person value) {
             this.person = value;
@@ -139,11 +144,23 @@ public final class Request implements Serializable, Comparable<Request> {
             this.costCentreType = request.getCostCentreType();
             this.categoryType = request.getCategoryType();
             this.itemCategoryType = request.getItemCategoryType();
+            this.misMatchDate = request.getMisMatchDate();
+            this.approver = request.getApprover();
             return this;
         }
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder approver(String value) {
+            this.approver = value;
+            return this;
+        }
+
+        public Builder misMatchDate(Date value) {
+            this.misMatchDate = value;
             return this;
         }
 
@@ -220,6 +237,14 @@ public final class Request implements Serializable, Comparable<Request> {
         public Request build() {
             return new Request(this);
         }
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public Date getMisMatchDate() {
+        return misMatchDate;
     }
 
     public CostCentreType getCostCentreType() {

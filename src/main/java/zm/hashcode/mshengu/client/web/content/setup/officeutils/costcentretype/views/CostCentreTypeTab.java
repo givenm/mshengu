@@ -21,12 +21,12 @@ import zm.hashcode.mshengu.client.web.MshenguMain;
  */
 public class CostCentreTypeTab extends VerticalLayout  {
 
-    private final MshenguMain main;
+    private final MshenguMain app;
     private final SetupCostCentreTab tab;
 
     public CostCentreTypeTab(MshenguMain app) {
-        main = app;
-        tab = new SetupCostCentreTab(main, "LANDING");
+        this.app = app;
+        tab = new SetupCostCentreTab(app, "LANDING");
         setSizeFull();
         addComponent(tab);
     }

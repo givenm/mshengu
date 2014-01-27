@@ -65,7 +65,7 @@ public final class UpdateInvoiceTable extends Table {
                     }
                 });
                 addItem(new Object[]{
-                    getDelivery(request.getDeliveryDate()),
+                    getDelivery(request.getMisMatchDate()),
                     request.getOrderNumber(),
                     request.getServiceProviderName(),
                     f.format(request.getTotal()),

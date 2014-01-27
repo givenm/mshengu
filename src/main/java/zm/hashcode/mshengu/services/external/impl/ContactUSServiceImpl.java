@@ -48,7 +48,11 @@ public class ContactUSServiceImpl implements ContactUSService {
 
     @Override
     public ContactUS findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
 public class GoodsBean implements Serializable {
 
     private String orderNumber;
-    private String total;
+    private BigDecimal total;
     private String invoiceNumber;
     private Date deliveryDate;
 
@@ -42,11 +43,11 @@ public class GoodsBean implements Serializable {
         this.orderNumber = orderNumber;
     }
 
-    public String getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 }

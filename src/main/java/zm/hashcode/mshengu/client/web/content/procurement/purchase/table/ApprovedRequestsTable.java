@@ -27,6 +27,7 @@ public class ApprovedRequestsTable extends Table {
     public ApprovedRequestsTable(ApprovedRequestsTab tab) {
         ApprovedRequestsTable.main = tab;
 
+        addContainerProperty("Approver", String.class, null);
         addContainerProperty("PO Number", String.class, null);
         addContainerProperty("Purchasing Person", String.class, null);
         addContainerProperty("Company Name", String.class, null);
@@ -57,6 +58,7 @@ public class ApprovedRequestsTable extends Table {
                         }
                     });
                     addItem(new Object[]{
+                        request.getApprover(),
                         request.getOrderNumber(),
                         request.getPersonName(),
                         request.getServiceProviderName(),

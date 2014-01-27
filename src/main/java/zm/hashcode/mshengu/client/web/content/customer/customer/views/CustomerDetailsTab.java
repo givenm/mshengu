@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
 import zm.hashcode.mshengu.app.facade.people.ContactPersonFacade;
 import zm.hashcode.mshengu.app.util.validation.LabelErrorMessageManipulator;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.customer.customer.CustomerMenu;
 import zm.hashcode.mshengu.client.web.content.customer.customer.forms.CustomerDetailsForm;
@@ -97,32 +98,10 @@ public class CustomerDetailsTab extends VerticalLayout implements
 //            main.content.
         } catch (FieldGroup.CommitException e) {
             Collection<Field<?>> fields = binder.getFields();
-            
-//            TextField t = null;
-
-            for (Field o : fields) {
-                TextField t = new TextField();
-                String currentMessage = "";
-                try {
-                    if (o instanceof TextField) {
-                        t = (TextField) o;
-                        t.validate();
-                    } else {
-                        TextArea textArea = (TextArea) o;
-                    }
-
-                } catch (Exception x) { //works with vaadin required
-                    currentMessage = x.getMessage();
-                    t.setStyleName("invalid");                    
-                } finally {
-                    t.addFocusListener(new LabelErrorMessageManipulator(t, form.errorMessage, currentMessage)); //custom focus handler for displaying error message on a labe when you focus on an errored Textfield
-                }
-                t.addBlurListener(new LabelErrorMessageManipulator(t, form.errorMessage, currentMessage)); //custom focus handler for displaying error message on a labe when you focus on an errored Textfield                        
-            }
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
             Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
-        } catch (MongoException.DuplicateKey e) {
-            Notification.show("Customer Name Already Exists!", Notification.Type.HUMANIZED_MESSAGE);
-        } catch (DuplicateKeyException e) {
+        } catch (MongoException.DuplicateKey | DuplicateKeyException e) {
             Notification.show("Customer Name Already Exists!", Notification.Type.HUMANIZED_MESSAGE);
         }
     }

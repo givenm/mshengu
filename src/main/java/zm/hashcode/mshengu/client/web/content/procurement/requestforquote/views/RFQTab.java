@@ -77,7 +77,7 @@ public class RFQTab extends VerticalLayout implements
             binder.commit();
             RequestForQuote request = getRequestForQuoteEntity(binder);
             RequestForQuoteFacade.getRequestForQuoteService().persist(request);
-            Sequence sequence = SequenceFacade.getSequenceListService().findByName("MSHENGU_REQUEST_QUOTE");
+            Sequence sequence = SequenceFacade.getSequenceListService().findByName("MSHENGU_RFQ");
             helper.getRefNumber(sequence);
             setReadOnlyFalse();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);

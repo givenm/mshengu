@@ -52,7 +52,11 @@ public class IncidentServiceImpl implements IncidentService {
 
     @Override
     public Incident findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
@@ -72,7 +76,7 @@ public class IncidentServiceImpl implements IncidentService {
 
     @Override
     public UserAction getLatestIncidentAction(String id) {
-        Incident incident = repository.findOne(id);
+        Incident incident = findById(id);
         Set<UserAction> incidentActionList = incident.getUserAction();
 
         return getLatestIncidentCation(incidentActionList);

@@ -71,6 +71,7 @@ public class CostCentreItemTab extends VerticalLayout implements
             form.binder.setItemDataSource(new BeanItem<>(getBean(itemCategoryType)));
             setReadFormProperties();
         } else if (property == form.costCentreName) {
+            form.costCentreCategory.removeAllItems();
             CostCentreType centreType = CostCentreTypeFacade.getCostCentreTypeService().findById(form.costCentreName.getValue().toString());
             addItemsToCostCentreCategoryCombobox(centreType);
         } else if (property == form.costCentreCategory) {
@@ -80,8 +81,7 @@ public class CostCentreItemTab extends VerticalLayout implements
     }
 
     private void addItemsToCostCentreCategoryCombobox(CostCentreType centreType) {
-        form.costCentreCategory.removeAllItems();
-        if (centreType.getCategoryTypes() != null) {            
+        if (centreType.getCategoryTypes() != null) {
             for (CostCentreCategoryType categoryType : centreType.getCategoryTypes()) {
                 form.costCentreCategory.addItem(categoryType.getId());
                 form.costCentreCategory.setItemCaption(categoryType.getId(), categoryType.getName());

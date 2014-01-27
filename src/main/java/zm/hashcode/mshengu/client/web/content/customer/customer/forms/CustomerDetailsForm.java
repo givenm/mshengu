@@ -60,7 +60,7 @@ public class CustomerDetailsForm extends FormLayout {
         lastName = UIValidatorHelper.setRequiredTextField(lastName, "Contact Person Surname");        
         
         TextField mainNumber = UIComponent.getTextField("Office Number :", "mainNumber", CustomerDetailsBean.class, binder);
-        mainNumber.addValidator(new MobileNumberValidator());
+        mainNumber.addValidator(UIValidatorHelper.phoneNumberValidation());
         mainNumber = UIValidatorHelper.setRequiredTextField(mainNumber, "Office Number");
 
         TextField otherNumber = UIComponent.getTextField("Mobile Number :", "otherNumber", CustomerDetailsBean.class, binder);
@@ -72,7 +72,7 @@ public class CustomerDetailsForm extends FormLayout {
         emailAddress.addValidator(UIValidatorHelper.emailValidation());        
         
         TextArea address = UIComponent.getTextArea("Office Adress :", "address", CustomerDetailsBean.class, binder);
-        address.addValidator(new BeanValidator(CustomerDetailsBean.class,  "address"));
+        address = UIValidatorHelper.setRequiredTextArea(address, "Office Adress");
         
         TextField position = UIComponent.getTextField("Contact Person Position :", "position", CustomerDetailsBean.class, binder);
         
@@ -81,7 +81,7 @@ public class CustomerDetailsForm extends FormLayout {
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        grid.addComponent(errorMessage, 1, 0);
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
         
         grid.addComponent(name, 0, 1);
         grid.addComponent(firstName, 1, 1);

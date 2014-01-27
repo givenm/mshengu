@@ -43,7 +43,7 @@ public class KPIForm extends FormLayout {
         HorizontalLayout buttons = getButtons();
         buttons.setSizeFull();
 
-        name = UIComponent.getTextField("Enter KPA Title: ", "name", KPIBean.class, binder);
+        name = UIComponent.getTextField("KPA Title: ", "name", KPIBean.class, binder);
         name.setValue(kpiName(kpi));
         name.setReadOnly(true);
 
@@ -59,7 +59,7 @@ public class KPIForm extends FormLayout {
 
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3, 2, 3);
 
-        layout.addComponent(buttons, 0, 4, 2, 4);
+//        layout.addComponent(buttons, 0, 4, 2, 4);
 
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 5, 2, 5);
 

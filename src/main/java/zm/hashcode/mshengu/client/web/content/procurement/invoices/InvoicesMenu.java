@@ -31,8 +31,8 @@ public class InvoicesMenu extends VerticalLayout {
         tab = new TabSheet();
         tab.setHeight("100%");
         tab.setWidth("100%");
-        tab.addTab(invoicesTab, "Invoices For Payment", null);
-        tab.addTab(paymentTab, "Payments Due", null);
+        tab.addTab(paymentTab, "Suppliers Payments Due", null);
+        tab.addTab(invoicesTab, "Invoices For Payment", null);        
         tab.addTab(invoiceMismatchTab, "Mismatched Invoices", null);
         addComponent(tab);
     }

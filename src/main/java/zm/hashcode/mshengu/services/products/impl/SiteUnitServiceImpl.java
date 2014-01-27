@@ -64,7 +64,11 @@ public class SiteUnitServiceImpl implements SiteUnitService {
 
     @Override
     public SiteUnit findById(String id) {
-        return repository.findOne(id);
+        try {
+            return repository.findOne(id);
+        } catch (IllegalArgumentException iaEx) {
+            return null;
+        }
     }
 
     @Override
@@ -87,7 +91,7 @@ public class SiteUnitServiceImpl implements SiteUnitService {
 
     @Override
     public UnitLocationLifeCycle getUnitCurrentLocation(String id) {
-        SiteUnit siteUnit = repository.findOne(id);
+        SiteUnit siteUnit = findById(id);
         List<UnitLocationLifeCycle> unitLocationLifeCycles = siteUnit.getUnitLocationLifeCycle();
 
         return getLatestLifeCycle(unitLocationLifeCycles);

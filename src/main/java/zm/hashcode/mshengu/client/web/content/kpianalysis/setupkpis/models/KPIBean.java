@@ -4,13 +4,14 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.models;
 
+import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Luckbliss
  */
-public class KPIBean {
+public class KPIBean  implements Serializable {
 
     @NotNull
     private String name;
