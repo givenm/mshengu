@@ -5,11 +5,17 @@
 package zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.view;
 
 import com.vaadin.data.Property;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import org.springframework.util.StringUtils;
 import org.vaadin.haijian.ExcelExporter;
 import org.vaadin.haijian.PdfExporter;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.WorkSchedulingMenu;
 import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.forms.VehicleSheduleForm;
@@ -28,6 +34,7 @@ public class VehicleSchedulingTab extends VerticalLayout implements Property.Val
 //    private final VehicleInfoForm vehicleInfoForm;
     private final VehicleSchedulingTable table;
     private final ExcelExporter export;
+    private final Button exportPdf;
 
     public VehicleSchedulingTab(MshenguMain app) {
         main = app;
@@ -37,12 +44,28 @@ public class VehicleSchedulingTab extends VerticalLayout implements Property.Val
         setSizeFull();
 //        addComponent(vehicleInfoForm);
         export = new ExcelExporter(table);
-        export.setCaption("Export PDF");
+        exportPdf = new Button("Export to Excel");
+        export.setCaption("Export to Excel");
         addComponent(form);
+        addComponent(exportPdf);
         addComponent(export);
+        export.setVisible(false);
         addComponent(table);
 
-//        form.binder.setReadOnly(true);
+        exportPdf.addClickListener(new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                try {
+                    form.binder.commit(); //check for validation before downloading the PDF.
+                } catch (FieldGroup.CommitException ex) {
+                    Collection<Field<?>> fields = form.binder.getFields();
+                    OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+                    helper.doValidation();
+                    Notification.show("Please Correct Red Colored Inputs\nThen try again.", Notification.Type.TRAY_NOTIFICATION);                    
+                }
+            }
+        });
 
         form.vehicleNumber.addValueChangeListener((Property.ValueChangeListener) this);
     }
@@ -64,6 +87,10 @@ public class VehicleSchedulingTab extends VerticalLayout implements Property.Val
                     form.setPrivateTotals(table.getPrivateSites(), table.getPrivateFrequency(), table.getPrivateUnits(), table.getPrivateServices());
                     form.setOtherTotals(table.getOtherSites(), table.getOtherFrequency(), table.getOtherUnits(), table.getOtherServices());
                     form.setGlobalTotals(table.getTotalSites(), table.getTotalFrequency(), table.getTotalUnits(), table.getTotalServices());
+                    form.vehicleNumber.removeStyleName("invalid");
+                    form.errorMessage.setValue("");
+                    exportPdf.setVisible(false);
+                    export.setVisible(true);
                 } else {
                     table.removeAllItems();
                     form.setContractTotals(0, 0, 0, 0);

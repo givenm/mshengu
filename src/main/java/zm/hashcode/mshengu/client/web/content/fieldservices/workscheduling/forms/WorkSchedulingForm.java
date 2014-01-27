@@ -64,10 +64,10 @@ public class WorkSchedulingForm extends FormLayout {
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        grid.addComponent(errorMessage, 1, 0, 2, 0);
+        grid.addComponent(errorMessage, 0, 0, 2, 0);
         
-        grid.addComponent(truckId , 0, 1);
-        grid.addComponent(driverName, 2, 1);
+        grid.addComponent(truckId , 0, 2);
+        grid.addComponent(driverName, 2, 2);
         
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
         grid.addComponent(buttons, 0, 8, 2, 8);
