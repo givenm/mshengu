@@ -14,6 +14,8 @@ import com.vaadin.ui.Label;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
+import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.setup.user.util.CustomerSiteUnitBean;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
@@ -25,6 +27,7 @@ import zm.hashcode.mshengu.domain.products.Site;
  */
 public class CustomerSiteFiledServicesForm extends FormLayout {
 
+    private UIComponentHelper UIComponent = new UIComponentHelper();
     private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
     private final CustomerSiteUnitBean bean;
     public final BeanItem<CustomerSiteUnitBean> item;
@@ -32,6 +35,7 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
     public ComboBox comboBoxSelectContractType;;
     public ComboBox comboBoxSelectSite;
     public ComboBox comboBoxSelectCustomer;
+    public Label errorMessage;
 
     public CustomerSiteFiledServicesForm() {
         bean = new CustomerSiteUnitBean();
@@ -44,22 +48,27 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         heading.addStyleName("h4");
         
         comboBoxSelectContractType = UIComboBox.getContractTypeComboBox("Select Hire Type", "contractType", CustomerSiteUnitBean.class, binder);
-
+        comboBoxSelectContractType = UIValidatorHelper.setRequiredComboBox(comboBoxSelectContractType, "Select Hire Type");
         comboBoxSelectSite = new ComboBox("Select Site");
         comboBoxSelectCustomer = new ComboBox("Select Customer");
         comboBoxSelectSite.setImmediate(true);
         comboBoxSelectCustomer.setImmediate(true);
+        
+        errorMessage = UIComponent.getErrorLabel();
+        
         GridLayout grid = new GridLayout(4, 10);
 
         grid.setSizeFull();
+        
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(heading, 1, 0);
-        grid.addComponent(comboBoxSelectContractType, 0, 1);
-        grid.addComponent(comboBoxSelectCustomer, 1, 1);
-        grid.addComponent(comboBoxSelectSite, 2, 1);
+        grid.addComponent(heading, 1, 1);
+        grid.addComponent(comboBoxSelectContractType, 0, 2);
+        grid.addComponent(comboBoxSelectCustomer, 1, 2);
+        grid.addComponent(comboBoxSelectSite, 2, 2);
 
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
         addComponent(grid);
     }
 

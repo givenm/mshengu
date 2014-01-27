@@ -20,11 +20,11 @@ public final class CustomerContractBean implements Serializable{
     
     //@NotNull
    // private String customerId;
-    @NotNull
+    
     private Date startDate;
-    @NotNull
+    
     private Date endDate;
-    @NotNull
+    
     private int numberOfUnits;
     private BigDecimal pricePerUnit = new BigDecimal(BigInteger.ZERO);
             
@@ -34,7 +34,7 @@ public final class CustomerContractBean implements Serializable{
      private String parentId;
     
    
-    @NotNull
+    
     private String contractTypeId;
     
     
