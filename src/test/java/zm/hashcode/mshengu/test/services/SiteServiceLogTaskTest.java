@@ -46,7 +46,7 @@ public class SiteServiceLogTaskTest extends AppTest {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         setTodaysDate(calendar.getTime());
-        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
+//        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
     }
 
     public void updateLogs(Date date) {
