@@ -20,6 +20,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.contactus.models.ContactUSBean;
 
 /**
@@ -39,6 +40,7 @@ public class ContactUSForm extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public ContactUSForm() {
         bean = new ContactUSBean();
@@ -53,41 +55,66 @@ public class ContactUSForm extends FormLayout {
         // UIComponent
 //          private String id;
         TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", ContactUSBean.class, binder);
+        refNumber = UIValidatorHelper.setRequiredTextField(refNumber, "Reference Number");
+
         DateField dateOfAction = UIComponent.getDateField("Reported On:", "dateOfAction", ContactUSBean.class, binder);
+        dateOfAction = UIValidatorHelper.setRequiredDateField(dateOfAction, "Reported On");
+
         TextField contactPersonFirstname = UIComponent.getTextField("Contact Person Firstname:", "contactPersonFirstname", ContactUSBean.class, binder);
+        contactPersonFirstname = UIValidatorHelper.setRequiredTextField(contactPersonFirstname, "Contact Person Firstname");
+
         TextField contactPersonLastname = UIComponent.getTextField("Contact Person Lastname:", "contactPersonLastname", ContactUSBean.class, binder);
+        contactPersonLastname = UIValidatorHelper.setRequiredTextField(contactPersonLastname, "Contact Person Lastname");
+
         TextField company = UIComponent.getTextField("Company", "company", ContactUSBean.class, binder);
+
         TextField email = UIComponent.getTextField("Email:", "email", ContactUSBean.class, binder);
+        email.addValidator(UIValidatorHelper.emailValidator());
+        email = UIValidatorHelper.setRequiredTextField(email, "Email");
+
         TextField phone = UIComponent.getTextField("Phone:", "phone", ContactUSBean.class, binder);
+        phone.addValidator(UIValidatorHelper.phoneNumberValidator());
+
         TextField faxNumber = UIComponent.getTextField("Fax:", "faxNumber", ContactUSBean.class, binder);
-        TextField hearAboutUs = UIComponent.getTextField("Heard About Us:", "hearAboutUs", ContactUSBean.class, binder);
+        faxNumber.addValidator(UIValidatorHelper.faxNumberValidator());
+
+        TextArea hearAboutUs = UIComponent.getTextArea("Heard About Us:", "hearAboutUs", ContactUSBean.class, binder);
+
         TextArea message = UIComponent.getTextArea("Message:", "message", ContactUSBean.class, binder);
         message.addValidator(new BeanValidator(ContactUSBean.class, "message"));
+        message = UIValidatorHelper.setRequiredTextArea(message, "Message");
 
         CheckBox closed = UIComponent.getCheckBox("Closed:", "closed", ContactUSBean.class, binder);
 
 //        ComboBox status = UIComboBox.getContactUSStatusComboBox("Status :", "status", ContactUSBean.class, binder);
         ComboBox mailNotifications = UIComboBox.getMailNotificationComboBox("Notification Name:", "mailNotifications", ContactUSBean.class, binder);
+        mailNotifications = UIValidatorHelper.setRequiredComboBox(mailNotifications, "Notification Name");
 //        mailNotifications
+
+        errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        grid.addComponent(refNumber, 0, 0);
-        grid.addComponent(contactPersonFirstname, 1, 0);
-        grid.addComponent(contactPersonLastname, 2, 0);
-        grid.addComponent(company, 0, 1);
-        grid.addComponent(email, 0, 2);
-        grid.addComponent(phone, 1, 1);
-        grid.addComponent(faxNumber, 2, 1);
-        grid.addComponent(mailNotifications, 0, 3);
-        grid.addComponent(hearAboutUs, 1, 2);
-        grid.addComponent(closed, 2, 2);
-        grid.addComponent(message, 0, 4);
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
+
+        grid.addComponent(refNumber, 0, 1);
+        grid.addComponent(contactPersonFirstname, 1, 1);
+        grid.addComponent(contactPersonLastname, 2, 1);
+
+        grid.addComponent(company, 0, 2);
+        grid.addComponent(email, 0, 3);
+        grid.addComponent(phone, 1, 2);
+
+        grid.addComponent(faxNumber, 2, 2);
+        grid.addComponent(mailNotifications, 0, 4);
+        grid.addComponent(hearAboutUs, 1, 3, 1, 4);
+        grid.addComponent(closed, 2, 3);
+        grid.addComponent(message, 0, 5);
 //        grid.addComponent(closed, 1, 3);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
-        grid.addComponent(buttons, 0, 6, 2, 6);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
+        grid.addComponent(buttons, 0, 7, 2, 7);
 
         addComponent(grid);
 

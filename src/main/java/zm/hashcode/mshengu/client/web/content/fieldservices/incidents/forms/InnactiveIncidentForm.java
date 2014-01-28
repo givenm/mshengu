@@ -20,6 +20,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.incidents.models.IncidentBean;
 
 /**
@@ -39,6 +40,7 @@ public class InnactiveIncidentForm extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public InnactiveIncidentForm() {
         bean = new IncidentBean();
@@ -53,47 +55,67 @@ public class InnactiveIncidentForm extends FormLayout {
         // UIComponent
 //          private String id;
         DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", IncidentBean.class, binder);
+
         TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", IncidentBean.class, binder);
+        refNumber = UIValidatorHelper.setRequiredTextField(refNumber, "Reference Number");
+
         TextField customer = UIComponent.getTextField("Client Name:", "customer", IncidentBean.class, binder);
+        customer = UIValidatorHelper.setRequiredTextField(customer, "Client Name");
+
         TextField contactPerson = UIComponent.getTextField("Contact Person:", "contactPerson", IncidentBean.class, binder);
+        contactPerson = UIValidatorHelper.setRequiredTextField(contactPerson, "Contact Person");
+
         TextField contactNumber = UIComponent.getTextField("Contact Number:", "contactNumber", IncidentBean.class, binder);
+        contactNumber = UIValidatorHelper.setRequiredTextField(contactNumber, "Contact Number");
+        contactNumber.addValidator(UIValidatorHelper.phoneNumberValidator());
+
         TextField site = UIComponent.getTextField("Site Name:", "site", IncidentBean.class, binder);
+
         TextField suburb = UIComponent.getTextField("Suburb:", "suburb", IncidentBean.class, binder);
+
         ComboBox toiletType = UIComboBox.getUnitTypeComboBox("Toilet Type:", "toiletType", IncidentBean.class, binder);
+        toiletType = UIValidatorHelper.setRequiredComboBox(toiletType, "Toilet Type");
+
         ComboBox incidentType = UIComboBox.getIncidentTypeComboBox("Incident Type:", "incidentType", IncidentBean.class, binder);
+        incidentType = UIValidatorHelper.setRequiredComboBox(incidentType, "Incident Type");
+
         CheckBox closed = UIComponent.getCheckBox("Closed:", "closed", IncidentBean.class, binder);
         ComboBox serviceProvider = UIComboBox.getSubcontractorsComboBox("Service Provider:", "serviceProvider", IncidentBean.class, binder);
 
 //        ComboBox status = UIComboBox.getIncidentStatusComboBox("Status :", "status", IncidentBean.class, binder);
         ComboBox mailNotifications = UIComboBox.getMailNotificationComboBox("Notification Name:", "mailNotifications", IncidentBean.class, binder);
+        mailNotifications = UIValidatorHelper.setRequiredComboBox(mailNotifications, "Notification Name");
+
         TextArea comment = UIComponent.getTextArea("Remarks:", "comment", IncidentBean.class, binder);
         comment.addValidator(new BeanValidator(IncidentBean.class, "comment"));
 
-
-
+        errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(refNumber, 0, 0);
-        grid.addComponent(customer, 1, 0);
-        grid.addComponent(mailNotifications, 2, 0);
-        grid.addComponent(contactPerson, 0, 1);
-        grid.addComponent(contactNumber, 1, 1);
-        grid.addComponent(incidentType, 2, 1);
+        grid.addComponent(refNumber, 0, 1);
+        grid.addComponent(customer, 1, 1);
+        grid.addComponent(mailNotifications, 2, 1);
+        
+        grid.addComponent(contactPerson, 0, 2);
+        grid.addComponent(contactNumber, 1, 2);
+        grid.addComponent(incidentType, 2, 2);
 
-        grid.addComponent(site, 0, 2);
-        grid.addComponent(suburb, 1, 2);
-        grid.addComponent(toiletType, 2, 2);
-        grid.addComponent(serviceProvider, 0, 3);
-        grid.addComponent(closed, 1, 3);
-        grid.addComponent(comment, 2, 3);
+        grid.addComponent(site, 0, 3);
+        grid.addComponent(suburb, 1, 3);
+        grid.addComponent(toiletType, 2, 3);
+        
+        grid.addComponent(serviceProvider, 0, 4);
+        grid.addComponent(closed, 1, 4);
+        grid.addComponent(comment, 2, 4);
 //        grid.addComponent(status, 0, 4);
 //        grid.addComponent(closed, 1, 4);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
-        grid.addComponent(buttons, 0, 6, 2, 6);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
+        grid.addComponent(buttons, 0, 7, 2, 7);
 
         addComponent(grid);
 
@@ -112,7 +134,6 @@ public class InnactiveIncidentForm extends FormLayout {
         cancel.setStyleName("default");
         update.setStyleName("default");
         delete.setStyleName("default");
-
 
         buttons.addComponent(save);
         buttons.addComponent(edit);

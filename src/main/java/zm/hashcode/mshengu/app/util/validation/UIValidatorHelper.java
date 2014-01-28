@@ -30,6 +30,10 @@ public class UIValidatorHelper implements Serializable {
     public static Validator phoneNumberValidator() {
         return new RegexpValidator("[0-9][0-9]{9}", "Phone number must be 10 digits only"); // Postal code that must be digits).
     }
+    
+    public static Validator faxNumberValidator() {
+        return new RegexpValidator("[0-9][0-9]{9}", "Phone number must be 10 digits only"); // Postal code that must be digits).
+    }
 
     public static Validator mobileNumberValidator() {
         return new RegexpValidator("[0-9][0-9]{9}", "Mobile number must be 10 digits only"); // Postal code that must be digits).

@@ -67,7 +67,7 @@ public class SiteServiceLogTaskTest extends AppTest {
         logSheduledSiteServices.closeOutdatedSiteServicesLogs(date);
     }
 
-    @Test
+    //@Test
     public void createLogsDirectly() {
         createSiteServiceLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
         siteService = ctx.getBean(SiteService.class);
