@@ -18,6 +18,7 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
+import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
