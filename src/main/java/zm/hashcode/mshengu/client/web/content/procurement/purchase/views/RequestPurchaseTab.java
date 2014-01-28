@@ -24,7 +24,6 @@ import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFac
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreCategoryTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.ItemCategoryTypeFacade;
-import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
@@ -41,7 +40,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
-import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
