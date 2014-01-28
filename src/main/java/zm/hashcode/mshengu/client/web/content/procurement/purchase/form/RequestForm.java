@@ -16,13 +16,11 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.models.RequestBean;
-import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
