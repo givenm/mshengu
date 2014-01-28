@@ -18,6 +18,15 @@ public class GoodsBean implements Serializable {
     private BigDecimal total;
     private String invoiceNumber;
     private Date deliveryDate;
+    private String override;
+
+    public String getOverride() {
+        return override;
+    }
+
+    public void setOverride(String override) {
+        this.override = override;
+    }
 
     public Date getDeliveryDate() {
         return deliveryDate;

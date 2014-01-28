@@ -12,6 +12,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
@@ -57,14 +58,17 @@ public class GoodsReceivedForm extends FormLayout implements
     public GoodsReceivedForm(MshenguMain main) {
         setSizeFull();
         this.main = main;
-        GridLayout gridlayout = new GridLayout(3, 4);
+        GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
         orderNumber = UIComponent.getTextField("Enter Purchase Order Number: ", "orderNumber", GoodsBean.class, binder);
-        total = UIComponent.getBigDecimalTextField("Enter The Total: (e.g 10000.00) ", "total", GoodsBean.class, binder);
+        total = UIComponent.getBigDecimalTextField("Enter Invoice Total: (Incl.VAT) ", "total", GoodsBean.class, binder);
 
         check = new Button("Compare Amounts");
-        check.addClickListener((Button.ClickListener) this);
-        check.setWidth("250px");
+
+        HorizontalLayout buttons = new HorizontalLayout();
+        buttons.setSizeFull();
+        check.setSizeFull();
+        buttons.addComponent(check);
 
         gridlayout.addComponent(orderNumber, 0, 0);
         gridlayout.addComponent(total, 1, 0);
@@ -77,15 +81,16 @@ public class GoodsReceivedForm extends FormLayout implements
         person = new Label("Requesting Person: ");
         personname = person.getValue();
 
-        GridLayout layout = new GridLayout(3, 6);
+        GridLayout layout = new GridLayout(3, 10);
         layout.setSizeFull();
-        layout.addComponent(vendor, 0, 0, 1, 0);
-        layout.addComponent(check, 2, 0);
+        layout.addComponent(buttons, 0, 0, 1, 0);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
-        layout.addComponent(deliveryDate, 0, 2);
+        layout.addComponent(vendor, 0, 2);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
-        layout.addComponent(person, 0, 4, 2, 4);
+        layout.addComponent(deliveryDate, 0, 4);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 5);
+        layout.addComponent(person, 0, 6, 2, 6);
+        layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 7);
 
         table = new ItemTable();
 
@@ -100,6 +105,11 @@ public class GoodsReceivedForm extends FormLayout implements
         total.setVisible(false);
 
         getOrderNumber();
+        addListeners();
+    }
+
+    private void addListeners() {
+        check.addClickListener((Button.ClickListener) this);
     }
 
     public final void getOrderNumber() {
@@ -178,7 +188,7 @@ public class GoodsReceivedForm extends FormLayout implements
         if (source == check) {
             if (!total.getValue().isEmpty()) {
                 DecimalFormat f = new DecimalFormat("### ###.00");
-                if (requesttotal.compareTo(new BigDecimal(total.getValue())) == 0 && keep < 2) {
+                if (requesttotal.compareTo(new BigDecimal(total.getValue())) >= 0 && keep < 1) {
                     Request request = RequestFacade.getRequestService().findById(requestId);
                     if (request.getStatus() != null) {
                         Notification.show("Invoice already processed");

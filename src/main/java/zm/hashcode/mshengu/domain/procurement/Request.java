@@ -53,6 +53,7 @@ public final class Request implements Serializable, Comparable<Request> {
     private String invoiceNumber;
     private String approver;
     private Date orderDate;
+    private boolean emailstatus;
 
     private Request() {
     }
@@ -77,6 +78,7 @@ public final class Request implements Serializable, Comparable<Request> {
         this.orderNumber = builder.orderNumber;
         this.misMatchDate = builder.misMatchDate;
         this.approver = builder.approver;
+        this.emailstatus = builder.emailstatus;
     }
 
     @Override
@@ -127,6 +129,7 @@ public final class Request implements Serializable, Comparable<Request> {
         private Date misMatchDate;
         private String approver;
         private Date orderDate;
+        private boolean emailstatus;
 
         public Builder(Person value) {
             this.person = value;
@@ -150,11 +153,17 @@ public final class Request implements Serializable, Comparable<Request> {
             this.misMatchDate = request.getMisMatchDate();
             this.orderDate = request.getOrderDate();
             this.approver = request.getApprover();
+            this.emailstatus = request.isEmailstatus();
             return this;
         }
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder emailstatus(boolean value) {
+            this.emailstatus = value;
             return this;
         }
 
@@ -246,6 +255,10 @@ public final class Request implements Serializable, Comparable<Request> {
         public Request build() {
             return new Request(this);
         }
+    }
+
+    public boolean isEmailstatus() {
+        return emailstatus;
     }
 
     public Date getOrderDate() {

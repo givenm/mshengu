@@ -61,11 +61,21 @@ public class PaymentTable extends Table {
             List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
                 List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+                List<Request> newlist = new ArrayList<>();
                 if (list.size() > 0) {
-                    addItem(new Object[]{
-                        serviceProvider.getName(),
-                        f.format(getSupplierTotal(list)),}, serviceProvider.getId());
-                    grandTotal = grandTotal.add(getSupplierTotal(list));
+                    if (list != null) {
+                        for (Request request : list) {
+                            if (request.getInvoiceNumber() != null) {
+                                newlist.add(request);
+                            }
+                        }
+                        if (newlist.size() > 0) {
+                            addItem(new Object[]{
+                                serviceProvider.getName(),
+                                f.format(getSupplierTotal(newlist)),}, serviceProvider.getId());
+                            grandTotal = grandTotal.add(getSupplierTotal(newlist));
+                        }
+                    }
                 }
             }
         }

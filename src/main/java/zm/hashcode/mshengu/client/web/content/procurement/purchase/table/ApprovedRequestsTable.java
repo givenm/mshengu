@@ -35,6 +35,7 @@ public class ApprovedRequestsTable extends Table {
         addContainerProperty("Purchasing Person", String.class, null);
         addContainerProperty("Company Name", String.class, null);
         addContainerProperty("Total", BigDecimal.class, null);
+        addContainerProperty("Email Status", String.class, null);
         addContainerProperty("More Details", Button.class, null);
 
         setNullSelectionAllowed(false);
@@ -46,11 +47,12 @@ public class ApprovedRequestsTable extends Table {
     }
 
     private void displayRequests(final ApprovedRequestsTab tab) {
+        String message;
         if (RequestFacade.getRequestService().findAll() != null) {
             List<Request> requests = RequestFacade.getRequestService().findAll();
             for (Request request : requests) {
                 if (request.isApprovalStatus()) {
-                    Button showDetails = new Button("More Details");
+                    Button showDetails = new Button("View PO");
                     showDetails.setData(request);
                     showDetails.setStyleName(Reindeer.BUTTON_LINK);
                     showDetails.setImmediate(true);
@@ -60,13 +62,20 @@ public class ApprovedRequestsTable extends Table {
                             displayPDF(event.getButton().getData());
                         }
                     });
+                    if(request.isEmailstatus()){
+                        message = "sent";
+                    } else{
+                        message = "not sent";
+                    }
                     addItem(new Object[]{
                         request.getApprover(),
                         request.getOrderNumber(),
                         request.getPersonName(),
                         request.getServiceProviderName(),
                         request.getTotal(),
+                        message,
                         showDetails,}, request.getId());
+                    message = "";
                 }
             }
         }

@@ -33,7 +33,7 @@ public class InvoicesMenu extends VerticalLayout {
         tab.setWidth("100%");
         tab.addTab(paymentTab, "Suppliers Payments Due", null);
         tab.addTab(invoicesTab, "Invoices For Payment", null);        
-        tab.addTab(invoiceMismatchTab, "Mismatched Invoices", null);
+//        tab.addTab(invoiceMismatchTab, "Mismatched Invoices", null);
         addComponent(tab);
     }
 }
