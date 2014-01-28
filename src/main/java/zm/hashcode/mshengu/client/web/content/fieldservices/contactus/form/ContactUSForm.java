@@ -54,8 +54,7 @@ public class ContactUSForm extends FormLayout {
 
         // UIComponent
 //          private String id;
-        TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", ContactUSBean.class, binder);
-        refNumber = UIValidatorHelper.setRequiredTextField(refNumber, "Reference Number");
+        TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", ContactUSBean.class, binder);        
 
         DateField dateOfAction = UIComponent.getDateField("Reported On:", "dateOfAction", ContactUSBean.class, binder);
         dateOfAction = UIValidatorHelper.setRequiredDateField(dateOfAction, "Reported On");

@@ -57,7 +57,6 @@ public class IncidentForm extends FormLayout {
         DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", IncidentBean.class, binder);
 
         TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", IncidentBean.class, binder);
-        refNumber = UIValidatorHelper.setRequiredTextField(refNumber, "Reference Number");
 
         TextField customer = UIComponent.getTextField("Client Name:", "customer", IncidentBean.class, binder);
         customer = UIValidatorHelper.setRequiredTextField(customer, "Client Name");
