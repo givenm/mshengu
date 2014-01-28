@@ -142,6 +142,7 @@ public class RFQTab extends VerticalLayout implements
                 .deliveryInstructions(bean.getDeliveryInstructions())
                 .rfqNumber(bean.getRfqNumber())
                 .deliveryDate(bean.getDeliveryDate())
+                .closingDate(bean.getClosingDate())
                 .build();
         return request;
     }

@@ -50,9 +50,19 @@ public class RequestBean implements Serializable {
     private String deliveryInstructions;
     @NotNull
     private Date deliveryDate;
+    @NotNull
+    private Date closingDate;
     private String description;
     @NotNull
     private Date orderDate;
+
+    public Date getClosingDate() {
+        return closingDate;
+    }
+
+    public void setClosingDate(Date closingDate) {
+        this.closingDate = closingDate;
+    }
 
     public Date getOrderDate() {
         return orderDate;

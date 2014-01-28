@@ -19,7 +19,7 @@ public class UpdateInvoiceTab extends VerticalLayout {
 
     public UpdateInvoiceTab(MshenguMain main) {
         setSizeFull();
-        table = new UpdateInvoiceTable(main);
+        table = new UpdateInvoiceTable(main, this);
         this.main = main;
         addComponent(table);
     }

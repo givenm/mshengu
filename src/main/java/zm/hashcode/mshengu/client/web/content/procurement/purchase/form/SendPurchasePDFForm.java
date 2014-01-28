@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
+import javax.swing.JOptionPane;
+import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
@@ -75,19 +77,29 @@ public class SendPurchasePDFForm extends FormLayout {
         email.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
-                try {
-                    DataSource source = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
-                    emailHelper.sendToSupplier(source, request.getServiceProviderEmail(), request.getOrderNumber(), "Mshengu Purchase Order");
-                    Notification.show("Email sent to vendor contact person!", Notification.Type.TRAY_NOTIFICATION);
-                    getHome();
-                } catch (IOException ex) {
-                    Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//                if (!request.isEmailstatus()) {
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
+                    try {
+                        DataSource source = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
+                        emailHelper.sendToSupplier(source, "peterd@marginmentor.co.za", request.getOrderNumber(), "Mshengu Purchase Order");
+                        Request newRequest = new Request.Builder(request.getPerson())
+                                .request(request)
+                                .emailstatus(true)
+                                .build();
+                        RequestFacade.getRequestService().merge(newRequest);
+                        getHome();
+                        Notification.show("Email sent to vendor contact person!", Notification.Type.TRAY_NOTIFICATION);
+                    } catch (IOException ex) {
+                        Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+//                } else {
+//                    getHome();
+//                    Notification.show("Email already sent to vendor contact person!", Notification.Type.TRAY_NOTIFICATION);
+//                }
             }
         });
     }
-    
+
     private void getHome() {
         main.content.setSecondComponent(new PurchaseMenu(main, "APPROVED_REQUESTS"));
     }

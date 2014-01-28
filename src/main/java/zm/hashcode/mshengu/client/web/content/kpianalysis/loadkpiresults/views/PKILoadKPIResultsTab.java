@@ -50,6 +50,7 @@ public class PKILoadKPIResultsTab extends VerticalLayout implements
             String fromyear = form.fromyear.getValue().toString();
             String tomonth = form.tomonth.getValue().toString();
             String toyear = form.toyear.getValue().toString();
+            table.loadTable(getKPIItems(frommonth, fromyear, tomonth, toyear));
         } else {
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
         }
@@ -57,14 +58,69 @@ public class PKILoadKPIResultsTab extends VerticalLayout implements
 
     private List<KPI> getKPIItems(String frommonth, String fromyear, String tomonth, String toyear) {
         List<KPI> items = KPIFacade.getKPIService().findAll();
-        for(KPI kpi: items){
+        List<KPI> newItems = new ArrayList<>();
+        for (KPI kpi : items) {
             List<KPIItem> kPIItems = kpi.getItems();
-            for(KPIItem kPIItem: kPIItems){
+            List<KPIItem> kpiis = new ArrayList<>();
+            for (KPIItem kPIItem : kPIItems) {
                 List<KPIValues> values = kPIItem.getValues();
-//                Range
+                List<KPIValues> kpivs = new ArrayList<>();
+                for (KPIValues value : values) {
+                    if (Integer.parseInt(fromyear) >= value.getYear() && Integer.parseInt(toyear) <= value.getYear()) {
+                        for (int i = Integer.parseInt(fromyear); i <= Integer.parseInt(toyear); i++) {
+                            if (i == Integer.parseInt(fromyear)) {
+                                if (getMonthNumber(frommonth) >= getMonthNumber(value.getMonth())) {
+                                    kpivs.add(value);
+                                }
+                            } else if (i > Integer.parseInt(fromyear) && i < Integer.parseInt(fromyear)) {
+                                kpivs.add(value);
+                            } else if (i == Integer.parseInt(toyear)) {
+                                if(getMonthNumber(value.getMonth()) < getMonthNumber(tomonth)){
+                                    kpivs.add(value);
+                                }
+                            }
+                        }
+                    }
+                }
+                if(!kpivs.isEmpty()){
+                    kpiis.add(kPIItem);
+                }
+            }
+            if(!kpiis.isEmpty()){
+                newItems.add(kpi);
             }
         }
-        return items;
+        return newItems;
+    }
+
+    private int getMonthNumber(String month) {
+        int number = 0;
+        if (month.equals("January")) {
+            number = 1;
+        } else if (month.equals("February")) {
+            number = 2;
+        } else if (month.equals("March")) {
+            number = 3;
+        } else if (month.equals("April")) {
+            number = 4;
+        } else if (month.equals("May")) {
+            number = 5;
+        } else if (month.equals("June")) {
+            number = 6;
+        } else if (month.equals("July")) {
+            number = 7;
+        } else if (month.equals("August")) {
+            number = 8;
+        } else if (month.equals("Septenber")) {
+            number = 9;
+        } else if (month.equals("October")) {
+            number = 10;
+        } else if (month.equals("November")) {
+            number = 11;
+        } else if (month.equals("December")) {
+            number = 12;
+        }
+        return number;
     }
 
     private void addListeners() {
