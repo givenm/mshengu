@@ -14,13 +14,13 @@ public final class SiteContactPersonBean implements Serializable {
 
     private String id;
     private String parentId;
-    @NotNull
+    
     private String name;
-    @NotNull
+    
     private String firstName;
-    @NotNull
+    
     private String lastName;
-    @NotNull
+    
     private String mainNumber;
     private String otherNumber;
     private String emailAddress;

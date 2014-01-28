@@ -15,25 +15,27 @@ public class ContactUSBean {
     
     
     private String id;
-    @NotNull
+    
     private String contactPersonFirstname;
-    @NotNull
+    
     private String contactPersonLastname;
+    
     private String refNumber;  
     private String company;
-    @NotNull
+    
     private String email;
     private String phone;
     private String faxNumber;
     private String hearAboutUs;
-    @NotNull
+    
     private String message;
     private String reason;
+    
     private Date dateOfAction;
     private boolean closed;
-    @NotNull
+    
     private String mailNotifications;
-    @NotNull
+    
     private String status;
 
     /**

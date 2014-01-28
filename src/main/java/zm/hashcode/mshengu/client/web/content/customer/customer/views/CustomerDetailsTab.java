@@ -114,14 +114,12 @@ public class CustomerDetailsTab extends VerticalLayout implements
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
             main.content.setSecondComponent(new CustomerMenu(main, "CONTRACTS"));
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
-        } catch (MongoException.DuplicateKey e) {
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);            
+        } catch (MongoException.DuplicateKey | DuplicateKeyException e) {
             Notification.show("Customer Name Already Exists!", Notification.Type.HUMANIZED_MESSAGE);
-            getHome();
-        } catch (DuplicateKeyException e) {
-            Notification.show("Customer Name Already Exists!", Notification.Type.HUMANIZED_MESSAGE);
-            getHome();
         }
     }
 

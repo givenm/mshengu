@@ -8,8 +8,10 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +22,7 @@ import zm.hashcode.mshengu.app.facade.products.UnitTypeFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.app.util.UtilMethods;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.incidents.IncidentMenu;
 import zm.hashcode.mshengu.client.web.content.fieldservices.incidents.forms.IncidentForm;
@@ -90,8 +93,10 @@ public class ActiveIncidentsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -102,8 +107,10 @@ public class ActiveIncidentsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 

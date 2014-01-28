@@ -17,26 +17,27 @@ public class IncidentBean {
     private Date actionDate;
     private Date resolvedDate;
     private Date qualityAssuranceDate;
+    
     private String refNumber;
-    @NotNull
+    
     private String customer;//(ongoing outstanding, resolved) 
-    @NotNull
+    
     private String contactPerson;
-    @NotNull
+    
     private String contactNumber;
     private String site;
     private String suburb;
-    @NotNull
+    
     private String toiletType;
     private boolean closed;
-    @NotNull
+    
     private String incidentType;
 //    private Set<IncidentAction> incidentAction = new HashSet<>();
     private String serviceProvider;
     private String comment;
-    @NotNull
+    
     private String mailNotifications;
-    @NotNull
+    
     private String status;
 
     /**

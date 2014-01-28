@@ -17,17 +17,17 @@ public final class SiteDetailsBean implements Serializable {
     @NotNull
     private String id;
     private String parentId;
-    @NotNull
+    
     private String name;
-    @NotNull
+    
     private String regionId;
-    @NotNull
+    
     private String locationId;
     
     private String streetAddress;
     private String postalCode;
     private Date dateofAction;
-    @NotNull
+    
     private int expectedNumberOfUnits;
     private int numberOfUnits;
     

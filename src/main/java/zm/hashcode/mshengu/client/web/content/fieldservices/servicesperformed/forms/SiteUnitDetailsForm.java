@@ -17,6 +17,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.models.SiteUnitsDetailsBean;
 
 /**
@@ -36,6 +37,7 @@ public class SiteUnitDetailsForm  extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public SiteUnitDetailsForm() {
         super();
@@ -53,27 +55,30 @@ public class SiteUnitDetailsForm  extends FormLayout {
         TextField description = UIComponent.getTextField("Description :", "description", SiteUnitsDetailsBean.class, binder);
         TextField operationalStatus = UIComponent.getTextField("Operational Status:", "operationalStatus", SiteUnitsDetailsBean.class, binder);
         ComboBox unitTypeId = uIComboBoxHelper.getUnitTypeComboBox("Unit Type :", "unitTypeId", SiteUnitsDetailsBean.class, binder);
-        
+        unitTypeId = UIValidatorHelper.setRequiredComboBox(unitTypeId, "Unit Type");
        /* DateField dateofAction = UIComponent.getDateField("Contact Person Adress :", "dateofAction", SiteUnitDetailsBean.class, binder);
         TextField latitude = UIComponent.getTextField("Latitude", "latitude", SiteUnitDetailsBean.class, binder);
         TextField longitude = UIComponent.getTextField("Longitude", "longitude", SiteUnitDetailsBean.class, binder);
 */
+        errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
+        
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(unitId, 0, 0);
-        grid.addComponent(unitTypeId, 1, 0);
+        grid.addComponent(unitId, 0, 1);
+        grid.addComponent(unitTypeId, 1, 1);
 
-        grid.addComponent(description, 0, 1);
-        grid.addComponent(operationalStatus, 1, 1);
+        grid.addComponent(description, 0, 2);
+        grid.addComponent(operationalStatus, 1, 2);
 //        grid.addComponent(dateofAction, 2, 1);
 //
 //        grid.addComponent(latitude, 0, 2);
 //        grid.addComponent(longitude, 1, 2, 2, 2);
         //grid.addComponent(position, 2, 2);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
        // grid.addComponent(buttons, 0, 5, 2, 5);
 
         addComponent(grid);
