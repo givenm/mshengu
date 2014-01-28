@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import zm.hashcode.mshengu.client.rest.api.MobileResponseMessage;
 import zm.hashcode.mshengu.client.rest.api.resources.GeoplotResource;
 import zm.hashcode.mshengu.client.rest.api.resources.SiteReource;
+import zm.hashcode.mshengu.client.rest.api.resources.TruckResources;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitDeliveryResource;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitServiceResource;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.UnitServiceLog;
 import zm.hashcode.mshengu.services.fieldservices.ServiceSiteUnits;
+import zm.hashcode.mshengu.services.fleet.TruckService;
 import zm.hashcode.mshengu.services.products.SiteService;
 import zm.hashcode.mshengu.services.products.SiteUnitService;
 import zm.hashcode.mshengu.services.products.UnitServiceLogService;
@@ -35,6 +38,8 @@ import zm.hashcode.mshengu.services.products.impl.MobileAppServiceImpl;
 @RequestMapping("api")
 public class MobileRestController {
 
+    @Autowired
+    private TruckService truckService;
     @Autowired
     private MobileAppServiceImpl mobileAppServices;
     @Autowired
@@ -65,6 +70,24 @@ public class MobileRestController {
         return sitesReources;
     }
 
+    @RequestMapping("trucks")
+    @ResponseBody
+    public List<TruckResources> getTrucks() {
+
+        List<TruckResources> trucksResources = new ArrayList<>();
+        List<Truck> trucks = truckService.findAll();
+
+        for (Truck truck : trucks) {
+            TruckResources tr = new TruckResources();
+            tr.setId(truck.getId());
+            tr.setNumberPlate(truck.getNumberPlate());
+            tr.setVehicleNumber(truck.getVehicleNumber());
+            trucksResources.add(tr);
+        }
+
+        return trucksResources;
+    }
+
     @RequestMapping(value = "tagunit", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
     public MobileResponseMessage deployUnit(@RequestBody UnitDeliveryResource unitDelivery) {
@@ -86,7 +109,6 @@ public class MobileRestController {
                 message = isValid + " " + serviceSiteUnits.serviceFirstUnit(unitService);
                 mobileResponseMessage.setMessage(message);
             } else {
-                System.out.println("LAST UNIT PROCESS STARTED ");
                 message = isValid + " " + serviceSiteUnits.serviceLastUnit(unitService);
                 mobileResponseMessage.setMessage(message);
             }

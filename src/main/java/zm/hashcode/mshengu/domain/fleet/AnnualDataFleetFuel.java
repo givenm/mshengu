@@ -28,7 +28,6 @@ public class AnnualDataFleetFuel implements Serializable {
 
     private AnnualDataFleetFuel() {
     }
-
     private AnnualDataFleetFuel(Builder builder) {
         this.id = builder.id;
         this.transactionDate = builder.transactionDate;
