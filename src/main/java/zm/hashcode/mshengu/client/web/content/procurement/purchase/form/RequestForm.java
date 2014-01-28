@@ -9,6 +9,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -16,11 +17,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.models.RequestBean;
+import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -77,7 +80,7 @@ public class RequestForm extends FormLayout {
         costCategory = UIComboBox.getCostCentreCategoryType("Cost Category Type:", "costCategory", RequestBean.class, binder);
         itemCategory = UIComboBox.getCostCentreCategoryType("Item Category Type:", "itemCategory", RequestBean.class, binder);
         TextArea deliveryInstructions = UIComponent.getTextArea("Delivery Instructions:", "deliveryInstructions", RequestBean.class, binder);
-//        DateField deliveryDate = UIComponent.getDateField("Delivery Date:", "deliveryDate", RequestBean.class, binder);
+        DateField orderDate = UIComponent.getDateField("Delivery Date:", "orderDate", RequestBean.class, binder);
         generalPanel.addComponent(requesterInfo, 0, 0);
         generalPanel.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
         generalPanel.addComponent(ordernumber, 0, 2);
@@ -87,7 +90,7 @@ public class RequestForm extends FormLayout {
         generalPanel.addComponent(itemCategory, 2, 3);
         deliveryInstructions.setSizeFull();
         generalPanel.addComponent(deliveryInstructions, 0, 4, 1, 4);
-//        generalPanel.addComponent(deliveryDate, 2, 3);
+        generalPanel.addComponent(orderDate, 0, 5);
 
         GridLayout vendorPanel = new GridLayout(3, 5);
         vendorPanel.setSizeFull();

@@ -24,6 +24,7 @@ import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFac
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreCategoryTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.ItemCategoryTypeFacade;
+import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
@@ -40,6 +41,7 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
+import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -55,9 +57,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
     private String keep = null;
     private BigDecimal total = BigDecimal.ZERO;
     private DecimalFormat f = new DecimalFormat("###.00");
-
     private SequenceHelper sequenceHelper = new SequenceHelper();
-    
+
     public RequestPurchaseTab(MshenguMain app) {
         setSizeFull();
         main = app;
@@ -251,7 +252,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
         } catch (FieldGroup.CommitException e) {
             e.printStackTrace();
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Notification.show("Values MISSING .. !", Notification.Type.TRAY_NOTIFICATION);
         }
@@ -333,10 +334,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
     }
 
     private Request getRequestEntity(FieldGroup binder) {
-        
+
 //        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
 //        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
-        
+
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         Set<RequestPurchaseItem> items = new HashSet<>();
         for (Object id : table.getItemIds()) {
@@ -349,7 +350,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
         DecimalFormat f = new DecimalFormat("### ###.00");
         CostCentreType costCentreType = null;
         ItemCategoryType itemCategoryType = null;
-        CostCentreCategoryType costCentreCategoryType =  null;
+        CostCentreCategoryType costCentreCategoryType = null;
         if (bean.getCostCentre() != null) {
             costCentreType = CostCentreTypeFacade.getCostCentreTypeService().findById(bean.getCostCentre());
         }
@@ -366,12 +367,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-//                    .orderNumber(orderNumber)
+                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
+                    .orderDate(bean.getOrderDate())
                     .total(total)
                     .build();
             return request;
@@ -379,12 +381,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-//                    .orderNumber(orderNumber)
+                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
+                    .orderDate(bean.getOrderDate())
                     .total(total)
                     .build();
             return request;
@@ -392,12 +395,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-//                    .orderNumber(orderNumber)
+                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
+                    .orderDate(bean.getOrderDate())
                     .total(total)
                     .build();
             return request;
@@ -405,12 +409,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-//                    .orderNumber(orderNumber)
+                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
+                    .orderDate(bean.getOrderDate())
                     .total(total)
                     .build();
             return request;

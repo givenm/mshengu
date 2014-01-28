@@ -40,7 +40,7 @@ public class PurchaseControl {
         try {
             Purchase purchase = new Purchase();
             purchase.setCostCentre(returnCostCentre(request.getCostCentreType()));
-            purchase.setDate(getDate(request.getDeliveryDate()));
+            purchase.setDate(getDate(request.getOrderDate()));
             purchase.setFirstName(request.getPerson().getFirstname());
             purchase.setLastName(request.getPerson().getLastname());
             purchase.setOrderNumber(request.getOrderNumber());

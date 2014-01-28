@@ -18,7 +18,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
-import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -53,12 +52,14 @@ public final class Request implements Serializable, Comparable<Request> {
     private String matchStatus;
     private String invoiceNumber;
     private String approver;
+    private Date orderDate;
 
     private Request() {
     }
 
     private Request(Builder builder) {
         this.id = builder.id;
+        this.orderDate = builder.orderDate;
         this.person = builder.person;
         this.serviceProvider = builder.serviceProvider;
         this.items = builder.items;
@@ -125,6 +126,7 @@ public final class Request implements Serializable, Comparable<Request> {
         private String orderNumber;
         private Date misMatchDate;
         private String approver;
+        private Date orderDate;
 
         public Builder(Person value) {
             this.person = value;
@@ -146,12 +148,18 @@ public final class Request implements Serializable, Comparable<Request> {
             this.categoryType = request.getCategoryType();
             this.itemCategoryType = request.getItemCategoryType();
             this.misMatchDate = request.getMisMatchDate();
+            this.orderDate = request.getOrderDate();
             this.approver = request.getApprover();
             return this;
         }
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder orderDate(Date value) {
+            this.orderDate = value;
             return this;
         }
 
@@ -238,6 +246,10 @@ public final class Request implements Serializable, Comparable<Request> {
         public Request build() {
             return new Request(this);
         }
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
     }
 
     public String getApprover() {

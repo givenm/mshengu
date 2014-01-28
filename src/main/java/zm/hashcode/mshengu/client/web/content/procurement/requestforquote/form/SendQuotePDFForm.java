@@ -39,7 +39,7 @@ import zm.hashcode.mshengu.domain.procurement.RequestForQuote;
  *
  * @author Luckbliss
  */
-public class SendQuotePDFForm extends FormLayout  {
+public class SendQuotePDFForm extends FormLayout {
 
     public Button back = new Button("Cancel");
     public Button email = new Button("E-mail RFQ");
@@ -83,14 +83,14 @@ public class SendQuotePDFForm extends FormLayout  {
         buttons.addComponent(email);
 
         addComponent(buttons);
-        
+
         back.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 getHome();
             }
         });
-        
+
         email.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -100,6 +100,8 @@ public class SendQuotePDFForm extends FormLayout  {
                     QuoteBean bean = ((BeanItem<QuoteBean>) binder.getItemDataSource()).getBean();
                     DataSource sendsource = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
                     emailHelper.sendToSupplier(sendsource, bean.getEmail(), request.getRfqNumber(), "Mshengu Request For Quote");
+                    Notification.show("Email sent to" + bean.getEmail(), Notification.Type.TRAY_NOTIFICATION);
+                    getHome();
                 } catch (IOException ex) {
                     Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (FieldGroup.CommitException ex) {
@@ -118,7 +120,7 @@ public class SendQuotePDFForm extends FormLayout  {
         StreamResource.StreamSource streamSource = new StreamResource.StreamSource() {
             @Override
             public InputStream getStream() {
-                byte  byteArray[] = control.processFormDataToPDF(request).toByteArray();
+                byte byteArray[] = control.processFormDataToPDF(request).toByteArray();
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
 //                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
                 byteArrInputStream = byteArrayInputStream;
