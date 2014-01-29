@@ -117,7 +117,7 @@ public class CustomerDetailsTab extends VerticalLayout implements
             Collection<Field<?>> fields = binder.getFields();
             OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
             helper.doValidation();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);            
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (MongoException.DuplicateKey | DuplicateKeyException e) {
             Notification.show("Customer Name Already Exists!", Notification.Type.HUMANIZED_MESSAGE);
         }
