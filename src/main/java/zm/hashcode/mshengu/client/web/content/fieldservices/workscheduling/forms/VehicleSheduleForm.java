@@ -15,6 +15,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.models.VehicleScheduleBean;
 
 /**
@@ -53,6 +54,7 @@ public class VehicleSheduleForm extends FormLayout {
     private Label totalServices;
     private Label lblNumberPlate;
     private Label lblDriver;
+    public Label errorMessage;
 
     public VehicleSheduleForm() {
         bean = new VehicleScheduleBean();
@@ -85,39 +87,44 @@ public class VehicleSheduleForm extends FormLayout {
 
 
         vehicleNumber = UIComboBox.getServiceAndUtilityVehicles("Vehicle Number ", "vehicleNumber", VehicleScheduleBean.class, binder);
+        vehicleNumber = UIValidatorHelper.setRequiredComboBox(vehicleNumber, "Driver");
         // UIComponent
 
 
+        errorMessage = UIComponent.getErrorLabel();
+        
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        grid.addComponent(vehicleNumber, 0, 0);
-        grid.addComponent(lblNumberPlate, 1, 0);
-        grid.addComponent(lblDriver, 2, 0);
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
+        
+        grid.addComponent(vehicleNumber, 0, 1);
+        grid.addComponent(lblNumberPlate, 1, 1);
+        grid.addComponent(lblDriver, 2, 1);
 
-        grid.addComponent(privateSites, 0, 2);
-        grid.addComponent(privateFrequency, 1, 2);
-        grid.addComponent(privateUnits, 2, 2);
-        grid.addComponent(privateServices, 3, 2);
+        grid.addComponent(privateSites, 0, 3);
+        grid.addComponent(privateFrequency, 1, 3);
+        grid.addComponent(privateUnits, 2, 3);
+        grid.addComponent(privateServices, 3, 3);
 
-        grid.addComponent(contractSites, 0, 3);
-        grid.addComponent(contractFrequency, 1, 3);
-        grid.addComponent(contractUnits, 2, 3);
-        grid.addComponent(contractServices, 3, 3);
+        grid.addComponent(contractSites, 0, 4);
+        grid.addComponent(contractFrequency, 1, 4);
+        grid.addComponent(contractUnits, 2, 4);
+        grid.addComponent(contractServices, 3, 4);
 
-        grid.addComponent(otherSites, 0, 4);
-        grid.addComponent(otherFrequency, 1, 4);
-        grid.addComponent(otherUnits, 2, 4);
-        grid.addComponent(otherServices, 3, 4);
+        grid.addComponent(otherSites, 0, 5);
+        grid.addComponent(otherFrequency, 1, 5);
+        grid.addComponent(otherUnits, 2, 5);
+        grid.addComponent(otherServices, 3, 5);
 
 
-        grid.addComponent(totalSites, 0, 5);
-        grid.addComponent(totalFrequency, 1, 5);
-        grid.addComponent(totalUnits, 2, 5);
-        grid.addComponent(totalServices, 3, 5);
+        grid.addComponent(totalSites, 0, 6);
+        grid.addComponent(totalFrequency, 1, 6);
+        grid.addComponent(totalUnits, 2, 6);
+        grid.addComponent(totalServices, 3, 6);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 1, 2, 1);
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 2, 2, 2);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
 //                  grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
 
         addComponent(grid);

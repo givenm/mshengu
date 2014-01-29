@@ -5,9 +5,6 @@
 package zm.hashcode.mshengu.client.web.content.customer.customer.models;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Email;
-import org.springframework.format.annotation.NumberFormat;
 /**
  *
  * @author Ferox

@@ -15,6 +15,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.models.AssignDriversBean;
 
 /**
@@ -35,6 +36,7 @@ public class AssignDriverForm extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public AssignDriverForm() {
         bean = new AssignDriversBean();
@@ -49,20 +51,25 @@ public class AssignDriverForm extends FormLayout {
 
         
         truckId = UIComboBox.getVehicleComboBox("Select Vehicle:", "truckId", AssignDriversBean.class, binder);
+        truckId = UIValidatorHelper.setRequiredComboBox(truckId, "Select Vehicle");
         ComboBox driverId = UIComboBox.getDriversComboBox("Driver:", "driverId", AssignDriversBean.class, binder);
+        driverId = UIValidatorHelper.setRequiredComboBox(driverId, "Driver");
+        errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        grid.addComponent(truckId , 0, 0);
-        grid.addComponent(driverId, 2, 0);
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
+        
+        grid.addComponent(truckId , 0, 1);
+        grid.addComponent(driverId, 2, 1);
         
        
 
 
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
-        grid.addComponent(buttons, 0, 7, 2, 7);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
+        grid.addComponent(buttons, 0, 8, 2, 8);
 
         addComponent(grid);
 

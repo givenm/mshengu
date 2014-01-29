@@ -17,6 +17,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.customer.customer.models.CustomerContractBean;
 
 /**
@@ -36,7 +37,8 @@ public class CustomerContractForm  extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
-
+    public Label errorMessage;
+    
     public CustomerContractForm() {
         bean = new CustomerContractBean();
         item = new BeanItem<>(bean);
@@ -51,33 +53,40 @@ public class CustomerContractForm  extends FormLayout {
         
 //        ComboBox customerId = UIComboBox.getCustomerComboBox("Customer", "customerId", ContractBean.class, binder);
         DateField startDate = UIComponent.getDateField("Start Date", "startDate", CustomerContractBean.class, binder);
+        startDate = UIValidatorHelper.setRequiredDateField(startDate, "Start Date");
+        
         DateField endDate = UIComponent.getDateField("End Date", "endDate", CustomerContractBean.class, binder);
+        endDate = UIValidatorHelper.setRequiredDateField(endDate, "End Date");
         DateField dateofAction = UIComponent.getDateField("Date of Action", "dateofAction", CustomerContractBean.class, binder);
+        dateofAction = UIValidatorHelper.setRequiredDateField(dateofAction, "Date of Action");
         
         TextField numberOfUnits = UIComponent.getTextField("Number of Units:", "numberOfUnits", CustomerContractBean.class, binder);
+        numberOfUnits = UIValidatorHelper.setRequiredTextField(numberOfUnits, "Number of Units");
         TextField pricePerUnit = UIComponent.getBigDecimalTextField("Price per Unit :", "pricePerUnit", CustomerContractBean.class, binder);
         TextField status = UIComponent.getTextField("Status :", "status", CustomerContractBean.class, binder);
         ComboBox contractTypeId = UIComboBox.getContractTypeComboBox("Contract Type :", "contractTypeId", CustomerContractBean.class, binder);
+        contractTypeId = UIValidatorHelper.setRequiredComboBox(contractTypeId, "Contract Type");
         
-
+        errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
         
-        grid.addComponent(startDate, 0, 0);
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
         
-        grid.addComponent(endDate, 1, 0);
-        grid.addComponent(numberOfUnits, 2, 0);
+        grid.addComponent(startDate, 0, 2);        
+        grid.addComponent(endDate, 1, 2);
+        grid.addComponent(numberOfUnits, 2, 2);
 
-        grid.addComponent(pricePerUnit, 0, 1);
+        grid.addComponent(pricePerUnit, 0, 3);
 //        grid.addComponent(status, 1, 1);
-        grid.addComponent(contractTypeId, 1, 1);
+        grid.addComponent(contractTypeId, 1, 3);
+        
 
-     
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
-        grid.addComponent(buttons, 0, 5, 2, 5);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
+        grid.addComponent(buttons, 0, 6, 2, 6);
 
         addComponent(grid);
 

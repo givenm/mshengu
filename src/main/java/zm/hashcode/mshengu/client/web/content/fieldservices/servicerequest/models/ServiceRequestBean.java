@@ -6,7 +6,6 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.mode
 
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.validation.constraints.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -28,21 +27,21 @@ public class ServiceRequestBean {
     private boolean closed;
     private String userActionId; 
     private String contactPersonId;
-    @NotNull
+    
     private String paymentMethodId;
     private BigDecimal paymentAmout;
-    @NotNull
+    
     private String contractTypeId;
-    @NotNull
+    
     private String mailNotificationsId;
-    @NotNull
+    
     private String customerId;
-    @NotNull
+    
     private String siteId;
-    @NotNull
+    
     private String deliveryAddress;
     private String deliveryInstruction; 
-    @NotNull
+    
     private String serviceRequestTypeId;
     
     private int basicAtlasQty;
@@ -52,11 +51,11 @@ public class ServiceRequestBean {
     private int wheelChairQty;
     private int builderAtlasQty;
     
-    @NotNull
+    
     private String firstName;
-    @NotNull
+    
     private String lastName;
-    @NotNull
+    
     private String mainNumber;
     private String otherNumber;
     private String emailAddress;

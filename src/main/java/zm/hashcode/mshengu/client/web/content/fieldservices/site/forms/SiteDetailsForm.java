@@ -22,6 +22,7 @@ import zm.hashcode.mshengu.app.facade.ui.location.LocationFacade;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.predicates.location.ChildLocationIdPredicate;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.models.SiteDetailsBean;
 import zm.hashcode.mshengu.domain.ui.location.Location;
 
@@ -49,6 +50,7 @@ public class SiteDetailsForm extends FormLayout {
     private Label lblCustomerSites;
     private Label lblTotalUnits;
     private Label lblInvisible;
+    public Label errorMessage;
 
     public SiteDetailsForm() {
         bean = new SiteDetailsBean();
@@ -68,11 +70,16 @@ public class SiteDetailsForm extends FormLayout {
 
 
         TextField name = UIComponent.getTextField("Site Name", "name", SiteDetailsBean.class, binder);
+        name = UIValidatorHelper.setRequiredTextField(name, "Site Name");
+        
         TextField streetAddress = UIComponent.getTextField("Street Address", "streetAddress", SiteDetailsBean.class, binder);
         regionId = UIComboBox.getRegionsLocationComboBox("Region ", "regionId", SiteDetailsBean.class, binder);
+        regionId = UIValidatorHelper.setRequiredComboBox(regionId, "Region");
         locationId = UIComboBox.getEmptyComboBox("Site Suburb", "locationId", SiteDetailsBean.class, binder);
-
+        locationId = UIValidatorHelper.setRequiredComboBox(locationId, "Site Suburb");
+        
         TextField expectedNumberOfUnits = UIComponent.getTextField("Expected number of units", "expectedNumberOfUnits", SiteDetailsBean.class, binder);
+        expectedNumberOfUnits = UIValidatorHelper.setRequiredTextField(expectedNumberOfUnits, "Expected number of units");
         CheckBox monday = UIComponent.getCheckBox("Monday", "monday", SiteDetailsBean.class, binder);
         CheckBox tuesday = UIComponent.getCheckBox("Tuesday", "tuesday", SiteDetailsBean.class, binder);
         CheckBox wednesday = UIComponent.getCheckBox("Wednesday", "wednesday", SiteDetailsBean.class, binder);
@@ -84,41 +91,44 @@ public class SiteDetailsForm extends FormLayout {
 //        ComboBox customerId = UIComboBox.getCustomerComboBox("Customer", "customerId", SiteBean.class, binder);
         // UIComponent
 
-
-        GridLayout grid = new GridLayout(4, 10);
+        errorMessage = UIComponent.getErrorLabel();
+        
+        GridLayout grid = new GridLayout(4, 11);
         grid.setSizeFull();
 
-        grid.addComponent(name, 0, 0);
-        grid.addComponent(expectedNumberOfUnits, 1, 0);
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
+        
+        grid.addComponent(name, 0, 1);
+        grid.addComponent(expectedNumberOfUnits, 1, 1);
 
 
-        grid.addComponent(regionId, 0, 1);
-        grid.addComponent(locationId, 1, 1);
-        grid.addComponent(streetAddress, 2, 1);
+        grid.addComponent(regionId, 0, 2);
+        grid.addComponent(locationId, 1, 2);
+        grid.addComponent(streetAddress, 2, 2);
 
-        grid.addComponent(monday, 0, 2);
-        grid.addComponent(tuesday, 0, 3);
-        grid.addComponent(wednesday, 0, 4);
+        grid.addComponent(monday, 0, 3);
+        grid.addComponent(tuesday, 0, 4);
+        grid.addComponent(wednesday, 0, 5);
 
-        grid.addComponent(thursday, 1, 2);
-        grid.addComponent(friday, 1, 3);
-        grid.addComponent(saturday, 1, 4);
-
-
-        grid.addComponent(sunday, 2, 2);
-        grid.addComponent(active, 2, 3);
+        grid.addComponent(thursday, 1, 3);
+        grid.addComponent(friday, 1, 4);
+        grid.addComponent(saturday, 1, 5);
 
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
-        grid.addComponent(buttons, 0, 6, 2, 6);
+        grid.addComponent(sunday, 2, 3);
+        grid.addComponent(active, 2, 4);
+
+
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
+        grid.addComponent(buttons, 0, 7, 2, 7);
 
 
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
-        grid.addComponent(lblCustomerSites, 0, 9);
-        grid.addComponent(lblTotalUnits, 1, 9);
-        grid.addComponent(lblWeeklyService, 2, 9);
-        grid.addComponent(lblMonthlyService, 3, 9);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 8, 2, 8);
+        grid.addComponent(lblCustomerSites, 0, 10);
+        grid.addComponent(lblTotalUnits, 1, 10);
+        grid.addComponent(lblWeeklyService, 2, 10);
+        grid.addComponent(lblMonthlyService, 3, 10);
 
         addComponent(grid);
 

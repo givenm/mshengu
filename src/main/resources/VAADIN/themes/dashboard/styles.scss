@@ -16,14 +16,25 @@
 }
 
 
-.dashboard .v-textfield-invalid{
+.dashboard .v-textfield-invalid{ //textfield
+    border-color: #ff3333;
+}
+.dashboard .invalid{
     border-color: #ff3333;
 }
 
-.dashboard .v-textarea-invalid{
+.dashboard .v-textarea-invalid{ //textarea
     border-color: #ff3333;
 }
 
-.dashboard .v-label-errorstyle{
+.dashboard .v-filterselect-input-invalid{ //combobox
+    border-color: #ff3333;
+}
+
+.dashboard .invalid .v-datefield-textfield { //datefield
+    border-color: #ff3333;
+}
+
+.dashboard .v-label-errorstyle{ //label for validation messages
     color: #ff3333;
 }

@@ -21,6 +21,7 @@ import zm.hashcode.mshengu.app.facade.ui.location.LocationFacade;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.predicates.location.ChildLocationIdPredicate;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.models.SiteDetailsBean;
 import zm.hashcode.mshengu.domain.ui.location.Location;
 
@@ -67,10 +68,12 @@ public class AllSitesDetailsForm extends FormLayout {
 
 
         TextField name = UIComponent.getTextField("Site Name", "name", SiteDetailsBean.class, binder);
+        name = UIValidatorHelper.setRequiredTextField(name, "Site Name");
         TextField streetAddress = UIComponent.getTextField("Street Address", "streetAddress", SiteDetailsBean.class, binder);
         regionId = UIComboBox.getRegionsLocationComboBox("Region ", "regionId", SiteDetailsBean.class, binder);
+        regionId = UIValidatorHelper.setRequiredComboBox(regionId, "Region");
         locationId = UIComboBox.getEmptyComboBox("Site Suburb", "locationId", SiteDetailsBean.class, binder);
-
+        locationId = UIValidatorHelper.setRequiredComboBox(locationId, "Site Suburb");
         // UIComponent
 
 

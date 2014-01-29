@@ -27,7 +27,7 @@ import zm.hashcode.mshengu.client.web.content.customer.customer.models.CustomerD
  */
 public class CustomerDetailsForm extends FormLayout {
 
-    private UIComponentHelper UIComponent = new UIComponentHelper(); 
+    private final UIComponentHelper UIComponent = new UIComponentHelper(); 
     private final CustomerDetailsBean bean;
     public final BeanItem<CustomerDetailsBean> item;
     public final FieldGroup binder;
@@ -60,19 +60,19 @@ public class CustomerDetailsForm extends FormLayout {
         lastName = UIValidatorHelper.setRequiredTextField(lastName, "Contact Person Surname");        
         
         TextField mainNumber = UIComponent.getTextField("Office Number :", "mainNumber", CustomerDetailsBean.class, binder);
-        mainNumber.addValidator(UIValidatorHelper.phoneNumberValidation());
+        mainNumber.addValidator(UIValidatorHelper.phoneNumberValidator());
         mainNumber = UIValidatorHelper.setRequiredTextField(mainNumber, "Office Number");
 
-        TextField otherNumber = UIComponent.getTextField("Mobile Number :", "otherNumber", CustomerDetailsBean.class, binder);
-        otherNumber = UIValidatorHelper.setRequiredTextField(otherNumber, "Mobile Number");
-        otherNumber.addValidator(UIValidatorHelper.mobileNumberValidation());
+        TextField mobileNumber = UIComponent.getTextField("Mobile Number :", "otherNumber", CustomerDetailsBean.class, binder);
+        mobileNumber = UIValidatorHelper.setRequiredTextField(mobileNumber, "Mobile Number");
+        mobileNumber.addValidator(UIValidatorHelper.mobileNumberValidator());
         
         
         TextField emailAddress = UIComponent.getTextField("Contact Person Email :", "emailAddress", CustomerDetailsBean.class, binder);
-        emailAddress.addValidator(UIValidatorHelper.emailValidation());        
+        emailAddress.addValidator(UIValidatorHelper.emailValidator());        
         
         TextArea address = UIComponent.getTextArea("Office Adress :", "address", CustomerDetailsBean.class, binder);
-        address = UIValidatorHelper.setRequiredTextArea(address, "Office Adress");
+        //address = UIValidatorHelper.setRequiredTextArea(address, "Office Adress");
         
         TextField position = UIComponent.getTextField("Contact Person Position :", "position", CustomerDetailsBean.class, binder);
         
@@ -89,7 +89,7 @@ public class CustomerDetailsForm extends FormLayout {
 
         grid.addComponent(position, 0, 2);
         grid.addComponent(mainNumber, 1, 2);
-        grid.addComponent(otherNumber, 2, 2);
+        grid.addComponent(mobileNumber, 2, 2);
 
         grid.addComponent(emailAddress, 0, 3);
         grid.addComponent(address, 1, 3, 2, 3);

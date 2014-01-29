@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.models;
 
 import java.util.Date;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -13,13 +12,13 @@ import javax.validation.constraints.NotNull;
  */
 public class QuoteRequestBean {
 
-    @NotNull
+    
     private String id;
     private Date actionDate;
     private String companyNameNonRequired;
-    @NotNull
+    
     private String contactPersonFirstname;
-    @NotNull
+    
     private String contactPersonLastname;
     private String telephoneNumberNonRequired;
     private String contactNumber;

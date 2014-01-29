@@ -17,6 +17,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.models.WorkScheduleBeanBean;
 import zm.hashcode.mshengu.domain.people.Person;
 
@@ -39,6 +40,7 @@ public class WorkSchedulingForm extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public WorkSchedulingForm() {
         bean = new WorkScheduleBeanBean();
@@ -53,17 +55,22 @@ public class WorkSchedulingForm extends FormLayout {
 
         
         truckId = UIComboBox.getServiceAndUtilityVehicles("Select Vehicle:", "truckId", WorkScheduleBeanBean.class, binder);        
+        truckId = UIValidatorHelper.setRequiredComboBox(truckId, "Select Vehicle");
         truckId.setWidth(350, Sizeable.Unit.PIXELS);
         driverName = UIComponent.getTextField("Driver:", "driverName", WorkScheduleBeanBean.class, binder);
-
+        driverName = UIValidatorHelper.setRequiredTextField(driverName, "Driver");
+        
+        errorMessage = UIComponent.getErrorLabel();
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        grid.addComponent(truckId , 0, 0);
-        grid.addComponent(driverName, 2, 0);
+        grid.addComponent(errorMessage, 0, 0, 2, 0);
         
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
-        grid.addComponent(buttons, 0, 7, 2, 7);
+        grid.addComponent(truckId , 0, 2);
+        grid.addComponent(driverName, 2, 2);
+        
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
+        grid.addComponent(buttons, 0, 8, 2, 8);
 
         addComponent(grid);
 

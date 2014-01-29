@@ -8,8 +8,10 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +19,7 @@ import zm.hashcode.mshengu.app.facade.customer.ContractFacade;
 import zm.hashcode.mshengu.app.facade.customer.ContractTypeFacade;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.customer.customer.CustomerMenu;
 import zm.hashcode.mshengu.client.web.content.customer.customer.forms.CustomerContractForm;
@@ -113,8 +116,10 @@ public class CustomerContractsTab extends VerticalLayout implements
             selectedCustomerId = selectCustomerBean.getCustomerId();
             isCustomerSelected = true;
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Please select customer!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } finally {
             return isCustomerSelected;
         }
@@ -122,8 +127,7 @@ public class CustomerContractsTab extends VerticalLayout implements
 
     private void saveForm(FieldGroup binder) {
         if (checkIfCustomerWasSelected(binder)) {
-            saveContract(binder);
-            Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
+            saveContract(binder);            
         }
     }
 
@@ -137,8 +141,10 @@ public class CustomerContractsTab extends VerticalLayout implements
                 Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
             }
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -149,9 +155,12 @@ public class CustomerContractsTab extends VerticalLayout implements
             ContractFacade.getContractService().persist(contract);
             updateCustomerContracts(contract);
             getHome();
+            Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
 
     }

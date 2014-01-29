@@ -18,7 +18,9 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.fieldservices.incidents.models.IncidentFollowUpBean;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.models.ServiceRequestFollowUpBean;
 
 /**
@@ -40,6 +42,7 @@ public class ServiceRequestFollowUpForm extends FormLayout{
     public Button update = new Button("Update");
     public Button back = new Button("Back");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public ServiceRequestFollowUpForm(MshenguMain app) {
         setSizeFull();
@@ -55,31 +58,38 @@ public class ServiceRequestFollowUpForm extends FormLayout{
 
         // UIComponent
 
-        ComboBox status = UIComboBox.getServiceRequesttatusComboBox("Status :", "status", ServiceRequestFollowUpBean.class, binder);
-        DateField resolvedDate = UIComponent.getDateField("Resolved Date:", "resolvedDate", ServiceRequestFollowUpBean.class, binder);
-        TextArea comment = UIComponent.getTextArea("Remarks:", "comment", ServiceRequestFollowUpBean.class, binder);
-        comment.addValidator(new BeanValidator(ServiceRequestFollowUpBean.class, "comment"));
-        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", ServiceRequestFollowUpBean.class, binder);
-        DateField qualityAssuranceDate = UIComponent.getDateField("Quality Assurance Date:", "qualityAssuranceDate", ServiceRequestFollowUpBean.class, binder);
+        ComboBox status = UIComboBox.getIncidentStatusComboBox("Status :", "status", IncidentFollowUpBean.class, binder);
+        status = UIValidatorHelper.setRequiredComboBox(status, "Status");
+        
+        DateField resolvedDate = UIComponent.getDateField("Resolved Date:", "resolvedDate", IncidentFollowUpBean.class, binder);
+        resolvedDate = UIValidatorHelper.setRequiredDateField(resolvedDate, "Resolved Date");
+        
+        TextArea comment = UIComponent.getTextArea("Remarks:", "comment", IncidentFollowUpBean.class, binder);
+        comment = UIValidatorHelper.setRequiredTextArea(comment, "Remarks");
+        
+        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", IncidentFollowUpBean.class, binder);
+        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Reported On");
+        
+        DateField qualityAssuranceDate = UIComponent.getDateField("Quality Assurance Date:", "qualityAssuranceDate", IncidentFollowUpBean.class, binder);
+        qualityAssuranceDate = UIValidatorHelper.setRequiredDateField(qualityAssuranceDate, "Quality Assurance Date");
 
-
-
+        errorMessage = UIComponent.getErrorLabel();
 
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
+        
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
+
+        grid.addComponent(status, 0, 1);
+        grid.addComponent(resolvedDate, 1, 1);
+        grid.addComponent(comment, 0, 2);
+        grid.addComponent(qualityAssuranceDate, 1, 2);
 
 
-        grid.addComponent(status, 0, 0);
-        grid.addComponent(resolvedDate, 1, 0);
-        grid.addComponent(comment, 0, 1);
-        grid.addComponent(qualityAssuranceDate, 1, 1);
-
-
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
-        grid.addComponent(buttons, 0, 6, 2, 6);
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
-
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
+        grid.addComponent(buttons, 0, 7, 2, 7);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 8, 2, 8);
 
         addComponent(grid);
     }

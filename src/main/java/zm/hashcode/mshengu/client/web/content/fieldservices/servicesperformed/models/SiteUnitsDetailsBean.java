@@ -20,7 +20,7 @@ public final class SiteUnitsDetailsBean implements Serializable{
     private boolean deployed; // YES OR NO
     private String description;
     private String operationalStatus; // OUT ORDER
-    @NotNull
+    
     private String unitTypeId;
     private Date dateofAction;
     private String latitude;

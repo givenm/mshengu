@@ -16,6 +16,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.models.SiteContactPersonBean;
 
 /**
@@ -35,6 +36,7 @@ public class SiteContactPersonForm extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public SiteContactPersonForm() {
         bean = new SiteContactPersonBean();
@@ -48,31 +50,40 @@ public class SiteContactPersonForm extends FormLayout {
 
         // UIComponent
         TextField firstName = UIComponent.getTextField("Contact Person Name :", "firstName", SiteContactPersonBean.class, binder);
+        firstName = UIValidatorHelper.setRequiredTextField(firstName, "Contact Person Name");
         TextField lastName = UIComponent.getTextField("Contact Person Surname :", "lastName", SiteContactPersonBean.class, binder);
+        lastName = UIValidatorHelper.setRequiredTextField(lastName, "Contact Person Surname");
         TextField mainNumber = UIComponent.getTextField("Office Number :", "mainNumber", SiteContactPersonBean.class, binder);
-        TextField otherNumber = UIComponent.getTextField("Mobile Number :", "otherNumber", SiteContactPersonBean.class, binder);
-        TextField emailAddress = UIComponent.getTextField("Contact Person Email :", "emailAddress", SiteContactPersonBean.class, binder);
+        mainNumber = UIValidatorHelper.setRequiredTextField(mainNumber, "Office Number");
+        mainNumber.addValidator(UIValidatorHelper.phoneNumberValidator());
+        TextField mobileNumber = UIComponent.getTextField("Mobile Number :", "otherNumber", SiteContactPersonBean.class, binder);
+        mobileNumber.addValidator(UIValidatorHelper.mobileNumberValidator());
+        TextField emailAddress = UIComponent.getTextField("Contact Person Email.. :", "emailAddress", SiteContactPersonBean.class, binder);
+        emailAddress.addValidator(UIValidatorHelper.emailValidator());  
         TextArea address = UIComponent.getTextArea("Office Adress :", "address", SiteContactPersonBean.class, binder);
         address.addValidator(new BeanValidator(SiteContactPersonBean.class,  "address"));
         TextField position = UIComponent.getTextField("Contact Person Position :", "position", SiteContactPersonBean.class, binder);
-
+        
+        errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
+        
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(firstName, 0, 0);
-        grid.addComponent(lastName, 1, 0);
-        grid.addComponent(position, 2, 0);
+        grid.addComponent(firstName, 0, 1);
+        grid.addComponent(lastName, 1, 1);
+        grid.addComponent(position, 2, 1);
         
-        grid.addComponent(mainNumber, 0, 1);
-        grid.addComponent(otherNumber, 1, 1);
-        grid.addComponent(emailAddress, 2, 1);
+        grid.addComponent(mainNumber, 0, 2);
+        grid.addComponent(mobileNumber, 1, 2);
+        grid.addComponent(emailAddress, 2, 2);
         
-        grid.addComponent(address, 0, 3);
+        grid.addComponent(address, 0, 4);
         //grid.addComponent(position, 2, 2);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
-        grid.addComponent(buttons, 0, 5, 2, 5);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
+        grid.addComponent(buttons, 0, 6, 2, 6);
 
         addComponent(grid);
 

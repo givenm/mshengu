@@ -4,7 +4,6 @@
  */
 package zm.hashcode.mshengu.client.web.content.fieldservices.incidents.forms;
 
-
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -16,13 +15,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.fieldservices.incidents.models.IncidentActionStatusBean;
 
 /**
  *
  * @author Ferox
  */
-public class IncidentActionStatusForm  extends FormLayout {
+public class IncidentActionStatusForm extends FormLayout {
 
     private UIComponentHelper UIComponent = new UIComponentHelper();
     private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
@@ -35,6 +35,7 @@ public class IncidentActionStatusForm  extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public IncidentActionStatusForm() {
         bean = new IncidentActionStatusBean();
@@ -47,21 +48,20 @@ public class IncidentActionStatusForm  extends FormLayout {
         delete.setVisible(false);
 
         // UIComponent
-        
         TextField categoryName = UIComponent.getTextField("Incident Action Status:", "name", IncidentActionStatusBean.class, binder);
-      
+        categoryName = UIValidatorHelper.setRequiredTextField(categoryName, "Incident Action Status");
+
+        errorMessage = UIComponent.getErrorLabel();
         
-
-
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
+        grid.addComponent(errorMessage, 0, 0, 1, 0); 
         
-        grid.addComponent(categoryName, 0, 0);
-            
+        grid.addComponent(categoryName, 0, 1);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
-        grid.addComponent(buttons, 0, 5, 2, 5);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
+        grid.addComponent(buttons, 0, 6, 2, 6);
 
         addComponent(grid);
 
@@ -74,13 +74,12 @@ public class IncidentActionStatusForm  extends FormLayout {
         cancel.setSizeFull();
         update.setSizeFull();
         delete.setSizeFull();
-        
+
         save.setStyleName("default");
         edit.setStyleName("default");
         cancel.setStyleName("default");
         update.setStyleName("default");
         delete.setStyleName("default");
-        
 
         buttons.addComponent(save);
         buttons.addComponent(edit);
