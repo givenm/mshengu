@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
+import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.SendPurchasePDFForm;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.ApprovedRequestsTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -22,16 +23,19 @@ import zm.hashcode.mshengu.domain.procurement.RequestPurchaseItem;
  */
 public class ApprovedRequestsTable extends Table {
 
-    private static ApprovedRequestsTab main;
+    private static ApprovedRequestsTab tab;
+    private final MshenguMain main;
 
-    public ApprovedRequestsTable(ApprovedRequestsTab tab) {
-        ApprovedRequestsTable.main = tab;
+    public ApprovedRequestsTable(MshenguMain main, ApprovedRequestsTab tab) {
+        ApprovedRequestsTable.tab = tab;
+        this.main = main;
 
         addContainerProperty("Approver", String.class, null);
         addContainerProperty("PO Number", String.class, null);
         addContainerProperty("Purchasing Person", String.class, null);
         addContainerProperty("Company Name", String.class, null);
         addContainerProperty("Total", BigDecimal.class, null);
+        addContainerProperty("Email Status", String.class, null);
         addContainerProperty("More Details", Button.class, null);
 
         setNullSelectionAllowed(false);
@@ -43,11 +47,12 @@ public class ApprovedRequestsTable extends Table {
     }
 
     private void displayRequests(final ApprovedRequestsTab tab) {
+        String message;
         if (RequestFacade.getRequestService().findAll() != null) {
             List<Request> requests = RequestFacade.getRequestService().findAll();
             for (Request request : requests) {
                 if (request.isApprovalStatus()) {
-                    Button showDetails = new Button("More Details");
+                    Button showDetails = new Button("View PO");
                     showDetails.setData(request);
                     showDetails.setStyleName(Reindeer.BUTTON_LINK);
                     showDetails.setImmediate(true);
@@ -57,13 +62,20 @@ public class ApprovedRequestsTable extends Table {
                             displayPDF(event.getButton().getData());
                         }
                     });
+                    if(request.isEmailstatus()){
+                        message = "sent";
+                    } else{
+                        message = "not sent";
+                    }
                     addItem(new Object[]{
                         request.getApprover(),
                         request.getOrderNumber(),
                         request.getPersonName(),
                         request.getServiceProviderName(),
                         request.getTotal(),
+                        message,
                         showDetails,}, request.getId());
+                    message = "";
                 }
             }
         }
@@ -71,9 +83,9 @@ public class ApprovedRequestsTable extends Table {
 
     private void displayPDF(Object object) {
         Request requestt = (Request) object;
-        main.removeAllComponents();
-        SendPurchasePDFForm form = new SendPurchasePDFForm(requestt, main);
-        main.setImmediate(true);
-        main.addComponent(form);
+        tab.removeAllComponents();
+        SendPurchasePDFForm form = new SendPurchasePDFForm(main, requestt, tab);
+        tab.setImmediate(true);
+        tab.addComponent(form);
     }
 }

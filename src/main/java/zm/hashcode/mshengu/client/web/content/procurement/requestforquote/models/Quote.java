@@ -17,11 +17,20 @@ public class Quote {
 
     private String rfqNumber;
     private String date;
+    private String closingDate;
     private String firstName;
     private String lastName;
     private String mshengu;
     private String instructions;
     private List<PurchaseItem> list = new ArrayList<>();
+
+    public String getClosingDate() {
+        return closingDate;
+    }
+
+    public void setClosingDate(String closingDate) {
+        this.closingDate = closingDate;
+    }
 
     public String getRfqNumber() {
         return rfqNumber;

@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.app.util;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.springframework.util.StringUtils;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
@@ -14,7 +15,7 @@ import zm.hashcode.mshengu.domain.ui.util.Sequence;
  *
  * @author Ferox
  */
-public class SequenceHelper {
+public class SequenceHelper implements Serializable {
 
     private String formatNotificationNumber(int refNumber) {
         //100000

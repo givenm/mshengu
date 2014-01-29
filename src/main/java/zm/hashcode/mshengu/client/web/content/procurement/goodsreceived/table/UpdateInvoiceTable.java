@@ -15,6 +15,7 @@ import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.GoodsReceivedMenu;
+import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.form.OverrideForm;
 import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.views.UpdateInvoiceTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
 
@@ -25,9 +26,11 @@ import zm.hashcode.mshengu.domain.procurement.Request;
 public final class UpdateInvoiceTable extends Table {
 
     private MshenguMain main;
+    private final UpdateInvoiceTab tab;
 
-    public UpdateInvoiceTable(MshenguMain tab) {
-        this.main = tab;
+    public UpdateInvoiceTable(MshenguMain main, final UpdateInvoiceTab tab) {
+        this.main = main;
+        this.tab = tab;
         setSizeFull();
 
         addContainerProperty("Date", String.class, null);
@@ -56,12 +59,9 @@ public final class UpdateInvoiceTable extends Table {
                     public void buttonClick(Button.ClickEvent event) {
                         String itemId = event.getButton().getData().toString();
                         Request request = RequestFacade.getRequestService().findById(itemId);
-                        Request newRequest = new Request.Builder(request.getPerson())
-                                .request(request)
-                                .matchStatus(null)
-                                .build();
-                        RequestFacade.getRequestService().merge(newRequest);
-                        getHome();
+                        tab.removeAllComponents();
+                        OverrideForm form = new OverrideForm(main, request);
+                        tab.addComponent(form);
                     }
                 });
                 addItem(new Object[]{

@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.domain.kpianalysis;
 
 import java.io.Serializable;
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,6 +25,7 @@ public class KPIItem implements Serializable, Comparable<KPIItem> {
     private String editTargets;
     private String weighting;
     private int kpiNumber;
+    private List<KPIValues> values;
 
     private KPIItem() {
     }
@@ -37,6 +39,7 @@ public class KPIItem implements Serializable, Comparable<KPIItem> {
         this.kpiNumber = builder.kpiNumber;
         this.editTargets = builder.editTargets;
         this.weighting = builder.weighting;
+        this.values = builder.values;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class KPIItem implements Serializable, Comparable<KPIItem> {
         private int kpiNumber;
         private String editTargets;
         private String weighting;
+        private List<KPIValues> values;
 
         public Builder(String value) {
             this.shortDescription = value;
@@ -61,6 +65,11 @@ public class KPIItem implements Serializable, Comparable<KPIItem> {
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder values(List<KPIValues> value) {
+            this.values = value;
             return this;
         }
 
@@ -168,5 +177,9 @@ public class KPIItem implements Serializable, Comparable<KPIItem> {
 
     public void setWeighting(String weighting) {
         this.weighting = weighting;
+    }
+
+    public List<KPIValues> getValues() {
+        return values;
     }
 }
