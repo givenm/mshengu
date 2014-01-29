@@ -20,7 +20,7 @@ import zm.hashcode.mshengu.app.facade.ui.util.StatusFacade;
 import zm.hashcode.mshengu.app.security.GetUserCredentials;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.ServiceRequestMenu;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.forms.ServiceRequestFollowUpForm;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.forms.ServiceRequestFollowUpFormTwo;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.models.ServiceRequestFollowUpBean;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.tables.ServiceRequestFollowUpTable;
 import zm.hashcode.mshengu.domain.customer.ServiceRequest;
@@ -36,14 +36,14 @@ public class ServiceRequestFollowUpTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
-    private final ServiceRequestFollowUpForm form;
+    private final ServiceRequestFollowUpFormTwo form;
     private final ServiceRequestFollowUpTable table;
     private final String serviceRequestId;
 
     public ServiceRequestFollowUpTab(MshenguMain app, final String id) {
         serviceRequestId = id;
         this.main = app;
-        form = new ServiceRequestFollowUpForm(app);
+        form = new ServiceRequestFollowUpFormTwo(app);
         table = new ServiceRequestFollowUpTable(app, serviceRequestId);
         setSizeFull();
         addComponent(form);

@@ -4,28 +4,11 @@
  */
 package zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.forms;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.BeanValidator;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextArea;
-import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
-import zm.hashcode.mshengu.app.util.UIComponentHelper;
-import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.models.ServiceRequestFollowUpBean;
-
 /**
  *
  * @author Luckbliss
- */
-public class ServiceRequestFollowUpForm extends FormLayout{
+ *//**
+public class ServiceRequestFollowUpForm extends FormLayout {
 
     private UIComponentHelper UIComponent = new UIComponentHelper();
     private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
@@ -76,9 +59,9 @@ public class ServiceRequestFollowUpForm extends FormLayout{
         grid.addComponent(qualityAssuranceDate, 1, 1);
 
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
-        grid.addComponent(buttons, 0, 6, 2, 6);
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
+//        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
+//        grid.addComponent(buttons, 0, 6, 2, 6);
+//        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
 
 
         addComponent(grid);
@@ -110,4 +93,4 @@ public class ServiceRequestFollowUpForm extends FormLayout{
         buttons.addComponent(back);
         return buttons;
     }
-}
+}*/

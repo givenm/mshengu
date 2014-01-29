@@ -37,8 +37,8 @@ public class ActiveServiceRequestForm extends FormLayout {
     private final ServiceRequestBean bean;
     public final BeanItem<ServiceRequestBean> item;
     public final FieldGroup binder;
-   public ComboBox customerId;
-  public  ComboBox siteId;
+    public ComboBox customerId;
+    public ComboBox siteId;
     // Define Buttons
     public Button save = new Button("Save");
     public Button edit = new Button("Edit");
@@ -131,12 +131,12 @@ public class ActiveServiceRequestForm extends FormLayout {
 
         grid.addComponent(contractTypeId, 0, 5);
         grid.addComponent(mailNotificationsId, 1, 5);
-        grid.addComponent( serviceRequestType , 2, 5);
+        grid.addComponent(serviceRequestType, 2, 5);
 
 
         grid.addComponent(basicAtlasQty, 0, 6);
-        grid.addComponent(standardNonFlushQty , 1, 6);
-        grid.addComponent(wheelChairQty , 2, 6);
+        grid.addComponent(standardNonFlushQty, 1, 6);
+        grid.addComponent(wheelChairQty, 2, 6);
 
 
         grid.addComponent(executiveFlsuhQty, 0, 7);
@@ -192,8 +192,8 @@ public class ActiveServiceRequestForm extends FormLayout {
                 siteId.setWidth(250, Sizeable.Unit.PIXELS);
 //                binder.bind(siteId, "siteId");
             }
-        setReadOnly(isReadOnly);
-        siteId.setReadOnly(isReadOnly);
+            setReadOnly(isReadOnly);
+            siteId.setReadOnly(isReadOnly);
         }
     }
 }

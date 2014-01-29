@@ -25,7 +25,7 @@ import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.model
  *
  * @author Luckbliss
  */
-public class ServiceRequestFollowUpForm extends FormLayout{
+public class ServiceRequestFollowUpFormTwo extends FormLayout {
 
     private UIComponentHelper UIComponent = new UIComponentHelper();
     private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
@@ -41,7 +41,7 @@ public class ServiceRequestFollowUpForm extends FormLayout{
     public Button back = new Button("Back");
     public Button delete = new Button("Delete");
 
-    public ServiceRequestFollowUpForm(MshenguMain app) {
+    public ServiceRequestFollowUpFormTwo(MshenguMain app) {
         setSizeFull();
         this.main = app;
         bean = new ServiceRequestFollowUpBean();
