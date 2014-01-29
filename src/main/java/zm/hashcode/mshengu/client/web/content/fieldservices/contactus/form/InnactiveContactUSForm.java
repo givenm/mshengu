@@ -55,7 +55,7 @@ public class InnactiveContactUSForm extends FormLayout {
         TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", ContactUSBean.class, binder);        
         
         DateField dateOfAction = UIComponent.getDateField("Reported On:", "dateOfAction", ContactUSBean.class, binder);
-        dateOfAction = UIValidatorHelper.setRequiredDateField(dateOfAction, "Reported On");
+//        dateOfAction = UIValidatorHelper.setRequiredDateField(dateOfAction, "Reported On");
         
         TextField contactPersonFirstname = UIComponent.getTextField("Contact Person Firstname:", "contactPersonFirstname", ContactUSBean.class, binder);
         contactPersonFirstname = UIValidatorHelper.setRequiredTextField(contactPersonFirstname, "Contact Person Firstname");

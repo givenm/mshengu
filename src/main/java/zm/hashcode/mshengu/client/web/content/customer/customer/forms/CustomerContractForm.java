@@ -58,7 +58,7 @@ public class CustomerContractForm  extends FormLayout {
         DateField endDate = UIComponent.getDateField("End Date", "endDate", CustomerContractBean.class, binder);
         endDate = UIValidatorHelper.setRequiredDateField(endDate, "End Date");
         DateField dateofAction = UIComponent.getDateField("Date of Action", "dateofAction", CustomerContractBean.class, binder);
-        dateofAction = UIValidatorHelper.setRequiredDateField(dateofAction, "Date of Action");
+        //dateofAction = UIValidatorHelper.setRequiredDateField(dateofAction, "Date of Action");
         
         TextField numberOfUnits = UIComponent.getTextField("Number of Units:", "numberOfUnits", CustomerContractBean.class, binder);
         numberOfUnits = UIValidatorHelper.setRequiredTextField(numberOfUnits, "Number of Units");
