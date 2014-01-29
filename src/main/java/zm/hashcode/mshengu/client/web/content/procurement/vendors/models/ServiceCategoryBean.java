@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
  */
 public final class ServiceCategoryBean implements Serializable {
 
-
     private String id;
     @NotNull
     private String name;
@@ -45,5 +44,4 @@ public final class ServiceCategoryBean implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
 }

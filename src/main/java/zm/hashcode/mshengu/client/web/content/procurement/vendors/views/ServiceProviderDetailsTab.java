@@ -35,13 +35,13 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
  */
 public class ServiceProviderDetailsTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
-    
+
     private final MshenguMain main;
     private final ServiceProviderForm form;
     private final ServiceProviderTable table;
     private SendEmailHelper sendEmailHelper = new SendEmailHelper();
     private UtilMethods utilMethods = new UtilMethods();
-    
+
     public ServiceProviderDetailsTab(MshenguMain app) {
         main = app;
         form = new ServiceProviderForm();
@@ -51,7 +51,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         addComponent(table);
         addListeners();
     }
-    
+
     @Override
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
@@ -67,7 +67,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             deleteForm(form.binder);
         }
     }
-    
+
     @Override
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
@@ -77,7 +77,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             setReadFormProperties();
         }
     }
-    
+
     private void saveForm(FieldGroup binder) {
         try {
             binder.commit();
@@ -89,7 +89,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
-    
+
     private void saveEditedForm(FieldGroup binder) {
         try {
             binder.commit();
@@ -100,20 +100,20 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
-    
+
     private void deleteForm(FieldGroup binder) {
         ServiceProviderFacade.getServiceProviderService().delete(getUpdatedEntity(binder));
         getHome();
     }
-    
+
     private ServiceProvider getEntity(FieldGroup binder) {
-        
+
         MailNotifications mailNotifications = MailNotificationsFacade.getMailNotificationsService().findByName("VENDOR_NOTIFICATION");
-        
+
         final ServiceProviderBean serviceProviderBean = ((BeanItem<ServiceProviderBean>) binder.getItemDataSource()).getBean();
         final Set<ServiceProviderProduct> serviceProviderProductList = new HashSet<>();
         final ServiceProviderCategory serviceProviderCategory = ServiceProviderCategoryFacade.getServiceProviderCategoryService().findById(serviceProviderBean.getServiceProviderCategoryId());
-        
+
         final ContactPerson contactPerson = new ContactPerson.Builder(serviceProviderBean.getFirstName(), serviceProviderBean.getLastName())
                 .address1(serviceProviderBean.getAddress1())
                 .address2(serviceProviderBean.getAddress2())
@@ -124,7 +124,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .faxNumber(serviceProviderBean.getFaxNumber())
                 .city(serviceProviderBean.getCity())
                 .build();
-        
+
         ContactPersonFacade.getContactPersonService().persist(contactPerson);
         final ServiceProvider serviceProvider = new ServiceProvider.Builder(serviceProviderBean.getName())
                 .id(serviceProviderBean.getId())
@@ -147,29 +147,29 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .vendorNumber(utilMethods.getRefNumber(mailNotifications))
                 .build();
         ServiceProviderFacade.getServiceProviderService().persist(serviceProvider);
-        
+
         sendEmailHelper.vendoRegistration(serviceProvider, mailNotifications);
         return serviceProvider;
     }
-    
+
     private ServiceProvider getUpdatedEntity(FieldGroup binder) {
-        
+
         final Set<ServiceProviderProduct> serviceProviderProductList = new HashSet<>();
-        
+
         final ServiceProviderBean serviceProviderBean = ((BeanItem<ServiceProviderBean>) binder.getItemDataSource()).getBean();
-        
+
         final ServiceProviderCategory serviceProviderCategory = ServiceProviderCategoryFacade.getServiceProviderCategoryService().findById(serviceProviderBean.getServiceProviderCategoryId());
-        
+
         ServiceProvider serviceProviderUpdate = ServiceProviderFacade.getServiceProviderService().findById(serviceProviderBean.getId());
         if (serviceProviderUpdate != null) {
             if (serviceProviderUpdate.getServiceProviderProduct() != null) {
                 serviceProviderProductList.addAll(serviceProviderUpdate.getServiceProviderProduct());
             }
         }
-        
+
         final ContactPerson person = serviceProviderUpdate.getContactPerson();
         ContactPerson contactPerson = getContactPerson(person, serviceProviderBean);
-        
+
         final ServiceProvider serviceProvider = new ServiceProvider.Builder(serviceProviderBean.getName())
                 .id(serviceProviderBean.getId())
                 .bankName(serviceProviderBean.getBankName())
@@ -190,10 +190,10 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .vatNum(serviceProviderBean.getVatNum())
                 .vendorNumber(serviceProviderUpdate.getVendorNumber())
                 .build();
-        
+
         return serviceProvider;
     }
-    
+
     private ContactPerson getContactPerson(ContactPerson person, ServiceProviderBean serviceProviderBean) {
         ContactPerson contactPerson;
         if (person != null) {
@@ -208,7 +208,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                     .faxNumber(serviceProviderBean.getFaxNumber())
                     .city(serviceProviderBean.getCity())
                     .build();
-            
+
             ContactPersonFacade.getContactPersonService().merge(contactPerson);
         } else {
             contactPerson = new ContactPerson.Builder(serviceProviderBean.getFirstName(), serviceProviderBean.getLastName())
@@ -221,16 +221,16 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                     .faxNumber(serviceProviderBean.getFaxNumber())
                     .city(serviceProviderBean.getCity())
                     .build();
-            
+
             ContactPersonFacade.getContactPersonService().persist(contactPerson);
         }
         return contactPerson;
     }
-    
+
     private void getHome() {
         main.content.setSecondComponent(new ServiceProviderMenu(main, "VENDOR"));
     }
-    
+
     private void setEditFormProperties() {
         form.binder.setReadOnly(false);
         form.save.setVisible(false);
@@ -239,7 +239,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         form.delete.setVisible(false);
         form.update.setVisible(true);
     }
-    
+
     private void setReadFormProperties() {
         form.binder.setReadOnly(true);
         //Buttons Behaviour
@@ -249,7 +249,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         form.delete.setVisible(true);
         form.update.setVisible(false);
     }
-    
+
     private void addListeners() {
         //Register Button Listeners
         form.save.addClickListener((Button.ClickListener) this);
@@ -260,7 +260,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         //Register Table Listerners
         table.addValueChangeListener((Property.ValueChangeListener) this);
     }
-    
+
     private ServiceProviderBean getBean(ServiceProvider serviceProvider) {
         ServiceProviderBean bean = new ServiceProviderBean();
         bean.setName(serviceProvider.getName());

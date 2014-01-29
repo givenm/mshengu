@@ -29,7 +29,7 @@ import zm.hashcode.mshengu.domain.procurement.Request;
  */
 public class DisapproveRequestsForm extends VerticalLayout implements
         Button.ClickListener {
-    
+
     private Request request;
     private Button save = new Button("Save");
     private Button cancel = new Button("Cancel");
@@ -39,12 +39,12 @@ public class DisapproveRequestsForm extends VerticalLayout implements
     public final BeanItem<RequestBean> item = new BeanItem<>(bean);
     public final FieldGroup binder = new FieldGroup(item);
     private TextArea reason = new TextArea();
-    
+
     public DisapproveRequestsForm(Request request, MshenguMain main) {
         this.main = main;
         setSizeFull();
         this.request = request;
-        
+
         GridLayout layout = new GridLayout(3, 5);
         layout.setSizeFull();
         reason = UIComponent.getTextArea("Reason For Disapproval", "reason", RequestBean.class, binder);
@@ -53,25 +53,25 @@ public class DisapproveRequestsForm extends VerticalLayout implements
         buttons.setSizeFull();
         save.setSizeFull();
         cancel.setSizeFull();
-        
+
         buttons.addComponent(save);
         buttons.addComponent(cancel);
-        
+
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 0);
         layout.addComponent(reason, 0, 1, 1, 1);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 2);
         layout.addComponent(buttons, 0, 3, 2, 3);
-        
+
         addListeners();
         addComponent(layout);
     }
-    
+
     private void addListeners() {
         //Register Button Listeners
         save.addClickListener((Button.ClickListener) this);
         cancel.addClickListener((Button.ClickListener) this);
     }
-    
+
     @Override
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
@@ -86,11 +86,11 @@ public class DisapproveRequestsForm extends VerticalLayout implements
             getHome();
         }
     }
-    
+
     private void getHome() {
         main.content.setSecondComponent(new PurchaseMenu(main, "DISSAPPROVED_REQUESTS"));
     }
-    
+
     private void disapprove(FieldGroup binder) {
         try {
             binder.commit();

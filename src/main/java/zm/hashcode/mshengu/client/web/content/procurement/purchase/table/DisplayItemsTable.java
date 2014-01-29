@@ -26,25 +26,31 @@ public class DisplayItemsTable extends Table {
         addContainerProperty("Unit Price", BigDecimal.class, null);
         addContainerProperty("Total", BigDecimal.class, null);
 
-        for (RequestPurchaseItem item : items) {
-            if (item.getProduct() != null) {
-                addItem(new Object[]{
-                    item.getProduct().getProductName(),
-                    item.getProduct().getItemNumber(),
-                    item.getQuantity(),
-                    item.getProduct().getUnit(),
-                    item.getProduct().getVolume(),
-                    item.getProduct().getPrice(),
-                    item.getSubTotal()}, item.getId());
-            } else {
-                addItem(new Object[]{
-                    item.getItemDescription(),
-                    item.getItemNumber(),
-                    item.getQuantity(),
-                    item.getUnit(),
-                    item.getVolume(),
-                    item.getUnitPrice(),
-                    item.getSubTotal()}, item.getId());
+        loadTable(items);
+    }
+
+    private void loadTable(Set<RequestPurchaseItem> items) {
+        if (items != null) {
+            for (RequestPurchaseItem item : items) {
+                if (item.getProduct() != null) {
+                    addItem(new Object[]{
+                        item.getProduct().getProductName(),
+                        item.getProduct().getItemNumber(),
+                        item.getQuantity(),
+                        item.getProduct().getUnit(),
+                        item.getProduct().getVolume(),
+                        item.getProduct().getPrice(),
+                        item.getSubTotal()}, item.getId());
+                } else {
+                    addItem(new Object[]{
+                        item.getItemDescription(),
+                        item.getItemNumber(),
+                        item.getQuantity(),
+                        item.getUnit(),
+                        item.getVolume(),
+                        item.getUnitPrice(),
+                        item.getSubTotal()}, item.getId());
+                }
             }
         }
     }

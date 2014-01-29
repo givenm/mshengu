@@ -106,7 +106,7 @@ public class ServiceProviderForm extends FormLayout {
         grid.addComponent(yearOfBus, 1, 4);
         grid.addComponent(website, 2, 4);
 
-        grid.addComponent(active, 0, 5); 
+        grid.addComponent(active, 0, 5);
         grid.addComponent(vehicleMaintenance, 1, 5);
 
         grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 6, 2, 6);

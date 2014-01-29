@@ -48,7 +48,9 @@ public final class Request implements Serializable, Comparable<Request> {
     private String deliveryInstructions;
     private Date deliveryDate;
     private Date misMatchDate;
+    private Date paymentDate;
     private BigDecimal total;
+    private BigDecimal paymentAmount;
     private String matchStatus;
     private String invoiceNumber;
     private String approver;
@@ -70,6 +72,7 @@ public final class Request implements Serializable, Comparable<Request> {
         this.deliveryInstructions = builder.deliveryInstructions;
         this.deliveryDate = builder.deliveryDate;
         this.total = builder.total;
+        this.paymentAmount = builder.paymentAmount;
         this.invoiceNumber = builder.invoiceNumber;
         this.costCentreType = builder.costCentreType;
         this.categoryType = builder.categoryType;
@@ -77,6 +80,7 @@ public final class Request implements Serializable, Comparable<Request> {
         this.truck = builder.truck;
         this.orderNumber = builder.orderNumber;
         this.misMatchDate = builder.misMatchDate;
+        this.paymentDate = builder.paymentDate;
         this.approver = builder.approver;
         this.emailstatus = builder.emailstatus;
     }
@@ -118,7 +122,9 @@ public final class Request implements Serializable, Comparable<Request> {
         private String reasonForDisapproval;
         private String deliveryInstructions;
         private Date deliveryDate;
+        private Date paymentDate;
         private BigDecimal total;
+        private BigDecimal paymentAmount;
         private String matchStatus;
         private String invoiceNumber;
         private CostCentreType costCentreType;
@@ -146,12 +152,14 @@ public final class Request implements Serializable, Comparable<Request> {
             this.deliveryInstructions = request.getDeliveryInstructions();
             this.deliveryDate = request.getDeliveryDate();
             this.total = request.getTotal();
+            this.paymentAmount = request.getPaymentAmount();
             this.invoiceNumber = request.getInvoiceNumber();
             this.costCentreType = request.getCostCentreType();
             this.categoryType = request.getCategoryType();
             this.itemCategoryType = request.getItemCategoryType();
             this.misMatchDate = request.getMisMatchDate();
             this.orderDate = request.getOrderDate();
+            this.paymentDate = request.getPaymentDate();
             this.approver = request.getApprover();
             this.emailstatus = request.isEmailstatus();
             return this;
@@ -159,6 +167,16 @@ public final class Request implements Serializable, Comparable<Request> {
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder paymentDate(Date value) {
+            this.paymentDate = value;
+            return this;
+        }
+
+        public Builder paymentAmount(BigDecimal value) {
+            this.paymentAmount = value;
             return this;
         }
 
@@ -255,6 +273,14 @@ public final class Request implements Serializable, Comparable<Request> {
         public Request build() {
             return new Request(this);
         }
+    }
+
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public BigDecimal getPaymentAmount() {
+        return paymentAmount;
     }
 
     public boolean isEmailstatus() {

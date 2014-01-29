@@ -38,8 +38,8 @@ public class ServiceProviderMenu extends VerticalLayout {
         VerticalLayout serviceCategoryTab = new VerticalLayout();
         serviceCategoryTab.setMargin(true);
         serviceCategoryTab.addComponent(new ServiceCategoryTab(main));
-        
-                VerticalLayout serviceProviderCategoryTab = new VerticalLayout();
+
+        VerticalLayout serviceProviderCategoryTab = new VerticalLayout();
         serviceProviderCategoryTab.setMargin(true);
         serviceProviderCategoryTab.addComponent(new ServiceProviderCategoryTab(main));
 

@@ -7,13 +7,18 @@ package zm.hashcode.mshengu.client.web.content.procurement.requestforquote.table
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.Reindeer;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestForQuoteFacade;
+import zm.hashcode.mshengu.app.facade.procurement.ResponseToRFQFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.form.SendQuotePDFForm;
+import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.form.ViewResponseForm;
 import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.views.RFQListTab;
 import zm.hashcode.mshengu.domain.procurement.RequestForQuote;
+import zm.hashcode.mshengu.domain.procurement.ResponseToRFQ;
 
 /**
  *
@@ -39,6 +44,7 @@ public class ViewQuoteTable extends Table {
         // Send changes in selection immediately to server.
         setImmediate(true);
         for (RequestForQuote requestForQuote : RequestForQuoteFacade.getRequestForQuoteService().findAll()) {
+
             if (requestForQuote != null) {
                 Button showDetails = new Button("Details");
                 showDetails.setData(requestForQuote.getId());
@@ -59,8 +65,8 @@ public class ViewQuoteTable extends Table {
                         @Override
                         public void buttonClick(Button.ClickEvent event) {
                             tab.removeAllComponents();
-                            ViewResponseTable table = new ViewResponseTable(main, tab, (String) event.getButton().getData());
-                            tab.addComponent(table);
+                            ViewResponseForm form = new ViewResponseForm(main, tab, (String) event.getButton().getData());
+                            tab.addComponent(form);
                         }
                     });
                     addItem(new Object[]{

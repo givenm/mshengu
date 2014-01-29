@@ -17,8 +17,7 @@ public final class ServiceProviderBean implements Serializable {
     private String id;
     @NotNull
     private String name;
-    
-    private String vendorNumber;    
+    private String vendorNumber;
     private MailNotifications mailNotifications;
     @NotNull
     private String registrationNum;

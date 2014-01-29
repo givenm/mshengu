@@ -49,9 +49,7 @@ public class ServiceProviderProductBean {
     public void setVolume(String volume) {
         this.volume = volume;
     }
-    
-    
-    
+
     /**
      * @return the id
      */

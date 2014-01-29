@@ -99,7 +99,7 @@ public class ServiceProviderCategoryTab extends VerticalLayout implements
         final ServiceProviderCategory serviceProviderCategory = new ServiceProviderCategory.Builder(serviceProviderCategoryBean.getCategoryName())
                 .id(serviceProviderCategoryBean.getId())
                 .build();
-        
+
         return serviceProviderCategory;
     }
 
@@ -143,6 +143,4 @@ public class ServiceProviderCategoryTab extends VerticalLayout implements
         bean.setId(serviceProviderCategory.getId());
         return bean;
     }
-
-
 }

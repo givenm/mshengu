@@ -14,6 +14,9 @@ import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.UpdatePaymentForm;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.InvoicesTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
 
 /**
@@ -24,9 +27,13 @@ public class InvoiceTable extends Table {
 
     private DecimalFormat f = new DecimalFormat("###,###.00");
     private BigDecimal grandTotal;
+    private final InvoicesTab tab;
+    private final MshenguMain main;
 
-    public InvoiceTable() {
+    public InvoiceTable(InvoicesTab tab, final MshenguMain main) {
         setSizeFull();
+        this.tab = tab;
+        this.main = main;
         addContainerProperty("PO Date", String.class, null);
         addContainerProperty("Delivery Date", String.class, null);
         addContainerProperty("Order Number", String.class, null);
@@ -34,7 +41,7 @@ public class InvoiceTable extends Table {
         addContainerProperty("Invoice", String.class, null);
         addContainerProperty("Total", String.class, null);
         addContainerProperty("Payment Date", String.class, null);
-        addContainerProperty("Payment Amount", String.class, null);
+        addContainerProperty("Payment Amount", BigDecimal.class, null);
         addContainerProperty("Update", Button.class, null);
         loadTable(RequestFacade.getRequestService().findAll(), null, null);
     }
@@ -54,6 +61,11 @@ public class InvoiceTable extends Table {
                             update.addClickListener(new Button.ClickListener() {
                                 @Override
                                 public void buttonClick(Button.ClickEvent event) {
+                                    String itemId = event.getButton().getData().toString();
+                                    Request request = RequestFacade.getRequestService().findById(itemId);
+                                    UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
+                                    tab.removeAllComponents();
+                                    tab.addComponent(form);
                                 }
                             });
                             addItem(new Object[]{
@@ -63,8 +75,8 @@ public class InvoiceTable extends Table {
                                 request.getServiceProviderName(),
                                 request.getInvoiceNumber(),
                                 f.format(request.getTotal()),
-                                "N/A",
-                                "N/A",
+                                getDelivery(request.getPaymentDate()),
+                                request.getPaymentAmount(),
                                 update,}, request.getId());
                             grandTotal = grandTotal.add(request.getTotal());
                         }
@@ -79,6 +91,11 @@ public class InvoiceTable extends Table {
                         update.addClickListener(new Button.ClickListener() {
                             @Override
                             public void buttonClick(Button.ClickEvent event) {
+                                String itemId = event.getButton().getData().toString();
+                                Request request = RequestFacade.getRequestService().findById(itemId);
+                                UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
+                                tab.removeAllComponents();
+                                tab.addComponent(form);
                             }
                         });
                         addItem(new Object[]{
@@ -88,8 +105,8 @@ public class InvoiceTable extends Table {
                             request.getServiceProviderName(),
                             request.getInvoiceNumber(),
                             f.format(request.getTotal()),
-                            "N/A",
-                            "N/A",
+                            getDelivery(request.getPaymentDate()),
+                            request.getPaymentAmount(),
                             update,}, request.getId());
                         grandTotal = grandTotal.add(request.getTotal());
                     }

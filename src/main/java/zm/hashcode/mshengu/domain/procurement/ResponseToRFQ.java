@@ -34,6 +34,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
     @DBRef
     private Set<RequestPurchaseItem> items;
     private String refNumber;
+    private boolean accepted;
 //    @DBRef
 //    private MailNotifications mailNotifications;
 
@@ -66,7 +67,6 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
 
     private ResponseToRFQ() {
     }
-    
 
     private ResponseToRFQ(ResponseToRFQ.Builder builder) {
         this.id = builder.id;
@@ -82,6 +82,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
         this.email = builder.email;
         this.legalForm = builder.legalForm;
         this.refNumber = builder.refNumber;
+        this.accepted = builder.accepted;
     }
 
     /**
@@ -106,6 +107,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
         private String email;
         private String legalForm;
         private String refNumber;
+        private boolean accepted;
 
         public Builder(String value) {
             this.companyName = value;
@@ -124,11 +126,17 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
             this.email = request.getEmail();
             this.legalForm = request.getLegalForm();
             this.refNumber = request.getRefNumber();
+            this.accepted = request.isAccepted();
             return this;
         }
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder accepted(boolean value) {
+            this.accepted = value;
             return this;
         }
 
@@ -190,6 +198,10 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
         public ResponseToRFQ build() {
             return new ResponseToRFQ(this);
         }
+    }
+
+    public boolean isAccepted() {
+        return accepted;
     }
 
     public String getLegalForm() {

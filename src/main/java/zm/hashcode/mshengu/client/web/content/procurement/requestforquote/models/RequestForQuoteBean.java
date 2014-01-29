@@ -11,8 +11,9 @@ import javax.validation.constraints.NotNull;
  *
  * @author Luckbliss
  */
-public class RequestForQuoteBean implements Serializable{
-     private String id;
+public class RequestForQuoteBean implements Serializable {
+
+    private String id;
     @NotNull
     private String account;
     private String itemNumber;

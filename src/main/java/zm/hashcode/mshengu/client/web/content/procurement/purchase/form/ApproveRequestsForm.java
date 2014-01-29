@@ -13,15 +13,18 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.security.GetUserCredentials;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.humanresources.staff.tables.EmployeeDatabaseTable;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.table.DisplayItemsTable;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.ApproveRequestsTab;
+import zm.hashcode.mshengu.domain.people.EmployeeDetail;
 import zm.hashcode.mshengu.domain.people.Person;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
@@ -125,15 +128,15 @@ public class ApproveRequestsForm extends FormLayout implements
         if (source == approve) {
             Request request = RequestFacade.getRequestService().findById(requestId);
             Person user = new GetUserCredentials().getLoggedInPerson();
-            if (!request.getPerson().equals(user)) {
-                if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
-                    if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
+            if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
+                if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
+                    if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
                         approve(request, user.getFirstname() + " " + user.getLastname());
                     } else {
                         Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
                     }
-                } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
-                    if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
+                } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
+                    if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
                         approve(request, user.getFirstname() + " " + user.getLastname());
                     } else {
                         Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
@@ -145,15 +148,15 @@ public class ApproveRequestsForm extends FormLayout implements
         } else if (source == disapprove) {
             Request request = RequestFacade.getRequestService().findById(requestId);
             Person user = new GetUserCredentials().getLoggedInPerson();
-            if (!request.getPerson().equals(user)) {
-                if (request.getTotal().compareTo(new BigDecimal(3000)) <= 1) {
-                    if (user.getUsername().equalsIgnoreCase("sydney@mshengutoilethire.co.za") || user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
+            if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
+                if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
+                    if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
                         disapprove();
                     } else {
                         Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
                     }
-                } else if (request.getTotal().compareTo(new BigDecimal(3000)) > 1) {
-                    if ((user.getUsername().equalsIgnoreCase("haroldmanus@iafrica.com") || user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com"))) {
+                } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
+                    if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
                         disapprove();
                     } else {
                         Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
@@ -183,5 +186,19 @@ public class ApproveRequestsForm extends FormLayout implements
         tab.removeAllComponents();
         DisapproveRequestsForm form = new DisapproveRequestsForm(RequestFacade.getRequestService().findById(requestId), tab.main);
         tab.addComponent(form);
+    }
+
+    private EmployeeDetail getDetail(Person person) {
+        if (person != null) {
+            return person.getEmployeeDetails();
+        }
+        return null;
+    }
+
+    private String getEmail(EmployeeDetail detail) {
+        if (detail != null) {
+            return detail.getEmail();
+        }
+        return null;
     }
 }

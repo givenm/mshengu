@@ -62,9 +62,9 @@ public class ApprovedRequestsTable extends Table {
                             displayPDF(event.getButton().getData());
                         }
                     });
-                    if(request.isEmailstatus()){
+                    if (request.isEmailstatus()) {
                         message = "sent";
-                    } else{
+                    } else {
                         message = "not sent";
                     }
                     addItem(new Object[]{

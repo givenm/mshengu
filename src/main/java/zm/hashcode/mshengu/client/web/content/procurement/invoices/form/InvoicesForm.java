@@ -43,7 +43,7 @@ public class InvoicesForm extends FormLayout {
         gridlayout.addComponent(supplier, 0, 0);
         gridlayout.addComponent(month, 1, 0);
         gridlayout.addComponent(year, 2, 0);
-        
+
         gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
 
         gridlayout.addComponent(mtdTotal, 0, 2);
