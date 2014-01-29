@@ -65,6 +65,8 @@ public class RFQForm extends FormLayout {
         companyName.setReadOnly(true);
         instructions = UIComponent.getTextArea("Notes/Instructions:", "deliveryInstructions", RequestBean.class, binder);
 
+        DateField closingDate = UIComponent.getDateField("Closing Date:", "closingDate", RequestBean.class, binder);
+
         layout.addComponent(deliveryDate, 0, 0);
         layout.addComponent(rfqNumber, 1, 0);
 
@@ -72,6 +74,7 @@ public class RFQForm extends FormLayout {
         layout.addComponent(companyName, 1, 1);
 
         layout.addComponent(instructions, 0, 2);
+        layout.addComponent(closingDate, 1, 2);
 
         itemPurchaseLayout.setSizeFull();
         HorizontalLayout buttons = new HorizontalLayout();

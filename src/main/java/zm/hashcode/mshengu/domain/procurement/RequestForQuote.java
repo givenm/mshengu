@@ -30,6 +30,7 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
     @DBRef
     private Set<RequestPurchaseItem> items;
     private Date deliveryDate;
+    private Date closingDate;
     private String total;
     private String deliveryInstructions;
     @DBRef
@@ -75,6 +76,7 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
         this.total = builder.total;
         this.deliveryInstructions = builder.deliveryInstructions;
         this.responseToRFQ = builder.responseToRFQ;
+        this.closingDate = builder.closingDate;
     }
 
     public static class Builder {
@@ -88,6 +90,7 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
         private String total;
         private String deliveryInstructions;
         private List<ResponseToRFQ> responseToRFQ;
+        private Date closingDate;
 
         public Builder(Person value) {
             this.person = value;
@@ -99,8 +102,14 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
             this.rfqNumber = request.getRfqNumber();
             this.items = request.getItems();
             this.deliveryDate = request.getDeliveryDate();
+            this.closingDate = request.getClosingDate();
             this.deliveryInstructions = request.getDeliveryInstructions();
             this.responseToRFQ = request.getResponseToRFQ();
+            return this;
+        }
+
+        public Builder closingDate(Date value) {
+            this.closingDate = value;
             return this;
         }
 
@@ -147,6 +156,10 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
         public RequestForQuote build() {
             return new RequestForQuote(this);
         }
+    }
+
+    public Date getClosingDate() {
+        return closingDate;
     }
 
     public List<ResponseToRFQ> getResponseToRFQ() {

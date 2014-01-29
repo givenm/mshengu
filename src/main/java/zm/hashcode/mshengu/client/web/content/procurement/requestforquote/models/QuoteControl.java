@@ -39,6 +39,7 @@ public class QuoteControl {
             quote.setLastName(request.getPerson().getLastname());
             quote.setInstructions(request.getDeliveryInstructions());
             quote.setMshengu(request.getAccount());
+            quote.setClosingDate(getDate(request.getClosingDate()));
 
             List<QuoteItem> items = new ArrayList<>();
 
