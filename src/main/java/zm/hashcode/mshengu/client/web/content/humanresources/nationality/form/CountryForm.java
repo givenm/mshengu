@@ -16,6 +16,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.humanresources.nationality.models.CountryBean;
 
 /**
@@ -35,6 +36,7 @@ public class CountryForm  extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public CountryForm() {
         bean = new CountryBean();
@@ -49,20 +51,22 @@ public class CountryForm  extends FormLayout {
         // UIComponent
         
         TextField countryName = UIComponent.getTextField("Country Name:", "name", CountryBean.class, binder);
+        countryName = UIValidatorHelper.setRequiredTextField(countryName, "Country Name");
         TextField nationality = UIComponent.getTextField("Nationality:", "nationality", CountryBean.class, binder);
-      
+        nationality = UIValidatorHelper.setRequiredTextField(nationality, "Nationality");
         
-
-
+        errorMessage = UIComponent.getErrorLabel();
+        
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        
-        grid.addComponent(countryName, 0, 0);
-        grid.addComponent(nationality, 1, 0);     
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
-        grid.addComponent(buttons, 0, 5, 2, 5);
+        grid.addComponent(countryName, 0, 1);
+        grid.addComponent(nationality, 1, 1);     
+
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
+        grid.addComponent(buttons, 0, 6, 2, 6);
 
         addComponent(grid);
 

@@ -12,8 +12,10 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +29,7 @@ import zm.hashcode.mshengu.app.facade.ui.util.JobPositionFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.StatusFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.TerminateFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.humanresources.staff.HRMenu;
 import zm.hashcode.mshengu.client.web.content.humanresources.staff.forms.StaffDetailsForm;
@@ -142,8 +145,10 @@ public final class StaffTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (DuplicateKeyException dp) {
             Notification.show("Username is already taken!", Notification.Type.TRAY_NOTIFICATION);
             getHome();
@@ -157,8 +162,10 @@ public final class StaffTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (DuplicateKeyException dp) {
             Notification.show("Username is already taken!", Notification.Type.TRAY_NOTIFICATION);
             getHome();
@@ -172,8 +179,10 @@ public final class StaffTab extends VerticalLayout implements
             getHome();
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (DuplicateKeyException dp) {
             Notification.show("Username is already taken!", Notification.Type.TRAY_NOTIFICATION);
             getHome();
