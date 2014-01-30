@@ -4,7 +4,6 @@
  */
 package zm.hashcode.mshengu.client.web.content.humanresources.jobposition.forms;
 
-
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -16,13 +15,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.humanresources.jobposition.models.JobPositionBean;
 
 /**
  *
  * @author Ferox
  */
-public class JobPositionForm  extends FormLayout {
+public class JobPositionForm extends FormLayout {
 
     private UIComponentHelper UIComponent = new UIComponentHelper();
     private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
@@ -35,6 +35,7 @@ public class JobPositionForm  extends FormLayout {
     public Button cancel = new Button("Cancel");
     public Button update = new Button("Update");
     public Button delete = new Button("Delete");
+    public Label errorMessage;
 
     public JobPositionForm() {
         bean = new JobPositionBean();
@@ -47,21 +48,19 @@ public class JobPositionForm  extends FormLayout {
         delete.setVisible(false);
 
         // UIComponent
+        TextField categoryName = UIComponent.getTextField("Position: ", "name", JobPositionBean.class, binder);
+        categoryName = UIValidatorHelper.setRequiredTextField(categoryName, "Position");
+        errorMessage = UIComponent.getErrorLabel();
         
-        TextField categoryName = UIComponent.getTextField("Position:", "name", JobPositionBean.class, binder);
-      
-        
-
-
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
+        grid.addComponent(errorMessage, 0, 0, 1, 0);
         
-        grid.addComponent(categoryName, 0, 0);
-            
+        grid.addComponent(categoryName, 0, 1);
 
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
-        grid.addComponent(buttons, 0, 5, 2, 5);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
+        grid.addComponent(buttons, 0, 6, 2, 6);
 
         addComponent(grid);
 

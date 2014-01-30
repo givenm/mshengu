@@ -16,6 +16,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.content.humanresources.staff.models.StaffDetailsBean;
 
 /**
@@ -32,22 +33,28 @@ public class TerminateForm extends FormLayout {
     // Define Buttons
     public Button save = new Button("Save");
     public Button cancel = new Button("Cancel");
+    public Label errorMessage;
 
     public TerminateForm() {
         ComboBox terminateReason = UIComboBox.getTerminateReasonsAndCodes("Terminating Reason: ", "terminateReason", StaffDetailsBean.class, binder);
+        terminateReason = UIValidatorHelper.setRequiredComboBox(terminateReason, "Terminating Reason");
         DateField endDate = UIComponent.getDateField("Leave End Date :", "endDate", StaffDetailsBean.class, binder);
 
+        errorMessage = UIComponent.getErrorLabel();
+        
         GridLayout grid = new GridLayout(3, 10);
         grid.setSizeFull();
+        
+        grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(terminateReason, 0, 0);
-        grid.addComponent(endDate, 1, 0);
+        grid.addComponent(terminateReason, 0, 1);
+        grid.addComponent(endDate, 1, 1);
 
         HorizontalLayout buttons = getButtons();
         buttons.setSizeFull();
 
-        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 1, 2, 1);
-        grid.addComponent(buttons, 0, 2, 2, 2);
+        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 2, 2, 2);
+        grid.addComponent(buttons, 0, 3, 2, 3);
 
         addComponent(grid);
     }

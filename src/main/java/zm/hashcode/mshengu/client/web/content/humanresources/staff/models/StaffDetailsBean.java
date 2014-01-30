@@ -16,32 +16,32 @@ import javax.validation.constraints.NotNull;
 public final class StaffDetailsBean implements Serializable {
 
     private String id;
-    @NotNull
+    
     private String firstname;
-    @NotNull
+    
     private String lastname;
     private String othername;
     private Date dateofbirth;
     private String email;
-    @NotNull
+    
     private String idNumber;
-    @NotNull
+    
     private String mainNumber;
     private String otherNumber;
     private String streetAddress;
     private String postalCode;
     private boolean enabled;
     private Date permitExpire;
-    @NotNull
+    
     private String countryId;
-    @NotNull
+    
     private String jobPositionId;
     private String driversLicenceNo;
     private Date driversLicenceExpireDate;
     private Date pdpExpireDate;
-    @NotNull
+    
     private Date endDate;
-    @NotNull
+    
     private String terminateReason;
     private String terminateCode;
     private String terminateDate;
@@ -52,10 +52,10 @@ public final class StaffDetailsBean implements Serializable {
     private String profileImage;
     private Set<String> files;
     private boolean requestor;
-    @NotNull
+    
     private String employeeNumber;
     private boolean drivesCompanyCar;
-    @NotNull
+    
     private String employementStatusId;
     private Date leaveEndDate;
     private Date leaveStartDate;
