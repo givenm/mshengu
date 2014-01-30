@@ -40,8 +40,8 @@ public class ServiceProviderProductTable extends Table {
 
                 for (ServiceProviderProduct ServiceProviderProduct : supplier.getServiceProviderProduct()) {
                     addItem(new Object[]{ServiceProviderProduct.getProductName(),
-                                ServiceProviderProduct.getPrice(),
-                                getCategory(ServiceProviderProduct),}, ServiceProviderProduct.getId());
+                        ServiceProviderProduct.getPrice(),
+                        getCategory(ServiceProviderProduct),}, ServiceProviderProduct.getId());
                 }
                 // Allow selecting items from the table.
                 setNullSelectionAllowed(false);

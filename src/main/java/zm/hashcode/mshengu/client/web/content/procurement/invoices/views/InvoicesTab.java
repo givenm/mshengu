@@ -27,7 +27,7 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
     public InvoicesTab(MshenguMain main) {
         setSizeFull();
         form = new InvoicesForm();
-        table = new InvoiceTable();
+        table = new InvoiceTable(this, main);
         this.main = main;
         addComponent(form);
         addComponent(table);

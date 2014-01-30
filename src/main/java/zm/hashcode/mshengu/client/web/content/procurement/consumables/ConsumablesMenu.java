@@ -20,8 +20,7 @@ public class ConsumablesMenu extends VerticalLayout {
     private TabSheet tab;
     private ChemicalsTab chemicalsTab;
     private UniformsTab uniformsTab;
-    
-    
+
     public ConsumablesMenu(MshenguMain app, String selectedTab) {
         main = app;
 
@@ -36,13 +35,12 @@ public class ConsumablesMenu extends VerticalLayout {
         tab.addTab(uniformsTab, "Uniforms", null);
 
 
-            if (selectedTab.equals("LANDING")) {
-                tab.setSelectedTab(chemicalsTab);
-            } else if (selectedTab.equals("UNIFORMS")) {
-                tab.setSelectedTab(uniformsTab);
-            } 
-        
+        if (selectedTab.equals("LANDING")) {
+            tab.setSelectedTab(chemicalsTab);
+        } else if (selectedTab.equals("UNIFORMS")) {
+            tab.setSelectedTab(uniformsTab);
+        }
+
         addComponent(tab);
     }
-
 }

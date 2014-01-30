@@ -21,7 +21,7 @@ import zm.hashcode.mshengu.client.web.content.procurement.vendors.models.Service
  *
  * @author Ferox
  */
-public class ServiceCategoryForm  extends FormLayout {
+public class ServiceCategoryForm extends FormLayout {
 
     private UIComponentHelper UIComponent = new UIComponentHelper();
     private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
@@ -53,9 +53,9 @@ public class ServiceCategoryForm  extends FormLayout {
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
-        
+
         grid.addComponent(name, 0, 0);
-      
+
 
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
         grid.addComponent(buttons, 0, 5, 2, 5);

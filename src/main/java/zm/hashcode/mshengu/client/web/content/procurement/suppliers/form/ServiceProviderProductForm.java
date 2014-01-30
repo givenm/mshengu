@@ -56,7 +56,7 @@ public class ServiceProviderProductForm extends FormLayout {
         TextField itemNumber = UIComponent.getTextField("Item Number:", "itemNumber", ServiceProviderProductBean.class, binder);
         TextField unit = UIComponent.getTextField("Unit:", "unit", ServiceProviderProductBean.class, binder);
         TextField volume = UIComponent.getTextField("Volume :", "volume", ServiceProviderProductBean.class, binder);
-        
+
         GridLayout grid = new GridLayout(4, 10);
         grid.setSizeFull();
 
@@ -64,11 +64,11 @@ public class ServiceProviderProductForm extends FormLayout {
         grid.addComponent(name, 0, 0);
         grid.addComponent(price, 1, 0);
         grid.addComponent(productCategoryId, 2, 0);
-        
+
         grid.addComponent(itemNumber, 0, 1);
         grid.addComponent(unit, 1, 1);
         grid.addComponent(volume, 2, 1);
-        
+
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
         grid.addComponent(buttons, 0, 5, 2, 5);
 

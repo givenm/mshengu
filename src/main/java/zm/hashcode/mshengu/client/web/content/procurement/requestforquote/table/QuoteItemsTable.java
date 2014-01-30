@@ -16,7 +16,8 @@ import zm.hashcode.mshengu.domain.procurement.RequestPurchaseItem;
  *
  * @author Luckbliss
  */
-public class QuoteItemsTable extends Table{
+public class QuoteItemsTable extends Table {
+
     private final MshenguMain main;
 
     public QuoteItemsTable(MshenguMain main) {

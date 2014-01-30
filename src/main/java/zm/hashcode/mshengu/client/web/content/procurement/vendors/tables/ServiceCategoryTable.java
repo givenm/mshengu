@@ -23,13 +23,12 @@ public class ServiceCategoryTable extends Table {
         setSizeFull();
 
         addContainerProperty("Category Name", String.class, null);
-        
+
 
         // Add Data Columns
         List<ServiceCategory> serviceCategoryList = ServiceCategoryFacade.getServiceCategoryService().findAll();
         for (ServiceCategory serviceCategory : serviceCategoryList) {
-            addItem(new Object[]{serviceCategory.getName(),
-                                }, serviceCategory.getId());
+            addItem(new Object[]{serviceCategory.getName(),}, serviceCategory.getId());
         }
         // Allow selecting items from the table.
         setNullSelectionAllowed(false);
@@ -42,6 +41,4 @@ public class ServiceCategoryTable extends Table {
 
 
     }
-
-
-    }
+}

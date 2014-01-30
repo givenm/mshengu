@@ -35,7 +35,7 @@ import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
  * @author Luckbliss
  */
 public class PurchaseControl {
-    
+
     public ByteArrayOutputStream processFormDataToPDF(Request request) {
         try {
             Purchase purchase = new Purchase();
@@ -47,9 +47,9 @@ public class PurchaseControl {
             purchase.setTotal(request.getTotal());
             purchase.setVendor(request.getServiceProviderName());
             purchase.setInstructions(request.getDeliveryInstructions());
-            
+
             List<PurchaseItem> items = new ArrayList<>();
-            
+
             for (RequestPurchaseItem item : request.getRequestPurchaseItems()) {
                 PurchaseItem purchaseItem = new PurchaseItem();
                 if (item.getItemDescription() != null) {
@@ -58,7 +58,7 @@ public class PurchaseControl {
                     purchaseItem.setPrice(item.getUnitPrice().toString());
                     purchaseItem.setQuantity(item.getQuantity());
                     purchaseItem.setUnit(item.getUnit());
-                    
+
                 } else {
                     ServiceProviderProduct product = ServiceProviderProductFacade.getServiceProviderProductService().findById(item.getServiceProviderProductId());
                     purchaseItem.setDescription(product.getProductName());
@@ -76,7 +76,7 @@ public class PurchaseControl {
             URL url = this.getClass().getResource("/procurementpdf/");
             System.out.println("getResource() PATH " + url.getPath());
             FileInputStream in = new FileInputStream(url.getFile() + fileName);
-            
+
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);
             IContext context = report.createContext();
             context.put("purchase", purchase);
@@ -87,18 +87,18 @@ public class PurchaseControl {
 //            OutputStream out = new FileOutputStream(new File("C:\\Users\\Boniface\\Documents\\" + request.getOrderNumber() + ".pdf"));
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             report.convert(context, options, os);
-            
+
             try {
                 // return to be displayed on screen
 //                FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\Boniface\\Documents\\" + request.getOrderNumber() + ".pdf"));
                 return os;
-                
+
             } catch (Exception e) {
                 System.out.println("\n\n" + e.getMessage());
 //            throw new XDocConverterException( e );
                 Notification.show("Could not create the PDF file!", Notification.Type.TRAY_NOTIFICATION);
             }
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {
@@ -106,14 +106,14 @@ public class PurchaseControl {
         }
         return null;
     }
-    
+
     private String getDate(Date date) {
         if (date != null) {
             return new DateTimeFormatHelper().getDayMonthYear(date);
         }
         return null;
     }
-    
+
     private String returnCostCentre(CostCentreType costCentre) {
         if (costCentre != null) {
             return costCentre.getName();

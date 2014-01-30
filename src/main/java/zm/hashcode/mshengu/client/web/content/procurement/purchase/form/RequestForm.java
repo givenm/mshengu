@@ -68,10 +68,10 @@ public class RequestForm extends FormLayout {
         setSizeFull();
         GridLayout generalPanel = new GridLayout(3, 10);
         generalPanel.setSizeFull();
-        
+
 //        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
 //        String orderNum  = sequenceHelper.getSequenceInitialNumber(sequence);
-        Label requesterInfo = new Label("Requester Information");        
+        Label requesterInfo = new Label("Requester Information");
         requesterInfo.addStyleName("h4");
         ordernumber = UIComponent.getTextField("Purchase Order Number:", "orderNumber", RequestBean.class, binder);
 //        ordernumber.setValue(orderNum);
@@ -119,7 +119,7 @@ public class RequestForm extends FormLayout {
 
         itemPurchaseLayout.setSizeFull();
 
-        Label details = new Label("Items Information");        
+        Label details = new Label("Items Information");
         details.addStyleName("h4");
         description = UIComponent.getTextField("Item Description:", "description", RequestBean.class, binder);
         itemDescription = UIComboBox.getProductDescriptionComboBox("Item Description:", "itemDescription", RequestBean.class, binder);

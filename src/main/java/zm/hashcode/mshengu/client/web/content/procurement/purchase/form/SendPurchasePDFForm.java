@@ -78,20 +78,20 @@ public class SendPurchasePDFForm extends FormLayout {
             @Override
             public void buttonClick(Button.ClickEvent event) {
 //                if (!request.isEmailstatus()) {
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
-                    try {
-                        DataSource source = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
-                        emailHelper.sendToSupplier(source, "peterd@marginmentor.co.za", request.getOrderNumber(), "Mshengu Purchase Order");
-                        Request newRequest = new Request.Builder(request.getPerson())
-                                .request(request)
-                                .emailstatus(true)
-                                .build();
-                        RequestFacade.getRequestService().merge(newRequest);
-                        getHome();
-                        Notification.show("Email sent to vendor contact person!", Notification.Type.TRAY_NOTIFICATION);
-                    } catch (IOException ex) {
-                        Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
+                try {
+                    DataSource source = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
+                    emailHelper.sendToSupplier(source, "peterd@marginmentor.co.za", request.getOrderNumber(), "Mshengu Purchase Order");
+                    Request newRequest = new Request.Builder(request.getPerson())
+                            .request(request)
+                            .emailstatus(true)
+                            .build();
+                    RequestFacade.getRequestService().merge(newRequest);
+                    getHome();
+                    Notification.show("Email sent to vendor contact person!", Notification.Type.TRAY_NOTIFICATION);
+                } catch (IOException ex) {
+                    Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
 //                } else {
 //                    getHome();
 //                    Notification.show("Email already sent to vendor contact person!", Notification.Type.TRAY_NOTIFICATION);

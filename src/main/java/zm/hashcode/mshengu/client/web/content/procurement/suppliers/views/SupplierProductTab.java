@@ -73,4 +73,3 @@ public class SupplierProductTab extends VerticalLayout implements
         }
     }
 }
-

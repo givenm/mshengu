@@ -16,6 +16,5 @@ public class RequestPurchaseTable extends Table {
     private MshenguMain main;
 
     public RequestPurchaseTable(MshenguMain main) {
-        
     }
 }

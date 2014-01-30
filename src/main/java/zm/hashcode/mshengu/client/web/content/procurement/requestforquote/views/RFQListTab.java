@@ -4,21 +4,18 @@
  */
 package zm.hashcode.mshengu.client.web.content.procurement.requestforquote.views;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.RFQMenu;
-import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.form.SendQuotePDFForm;
 import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.table.ViewQuoteTable;
 
 /**
  *
  * @author Luckbliss
  */
-public class RFQListTab extends VerticalLayout  {
+public class RFQListTab extends VerticalLayout {
 
     private ViewQuoteTable table;
-    private MshenguMain main;
+    public MshenguMain main;
 
     public RFQListTab(MshenguMain main) {
         this.main = main;

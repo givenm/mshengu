@@ -143,6 +143,4 @@ public class ServiceCategoryTab extends VerticalLayout implements
         bean.setId(serviceCategory.getId());
         return bean;
     }
-
-
 }

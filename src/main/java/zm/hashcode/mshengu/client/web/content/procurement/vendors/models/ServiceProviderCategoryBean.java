@@ -10,10 +10,8 @@ import java.io.Serializable;
  *
  * @author Ferox
  */
-
 public class ServiceProviderCategoryBean implements Serializable {
 
-    
     private String id;
     private String categoryName;
 
@@ -44,5 +42,4 @@ public class ServiceProviderCategoryBean implements Serializable {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
 }

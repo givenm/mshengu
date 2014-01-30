@@ -236,5 +236,4 @@ public class ServiceProviderProductTab extends VerticalLayout implements
     public String getSupplierId() {
         return supplierId;
     }
-
 }
