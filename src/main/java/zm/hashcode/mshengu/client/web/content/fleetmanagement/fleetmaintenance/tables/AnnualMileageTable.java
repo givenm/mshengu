@@ -42,7 +42,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
         addContainerProperty("RowHead", String.class, null, "", null, Table.Align.RIGHT); // SHORT DATE e.g. Jun-2013
     }
 
-    public void populateAnnualMileageTable(List<MonthlyMileageData> totalMonthlyMileageDataList, int annualDataMonthCount) {
+    public void populateAnnualMileageTable(List<MonthlyMileageData> totalMonthlyMileageDataList, int annualDataMonthCount, Date startDate) {
         this.annualDataMonthCount = annualDataMonthCount;
         // Sort in Ascending Order of VehicleNumber happened in TruckService's  findAllServiceAndUtilityVehicles
         List<Truck> serviceUtilityTrucksList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
@@ -53,7 +53,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
         createTruckColumns(serviceUtilityTrucksList, serviceUtilityTrucksList.size());
 
         this.removeAllItems();
-        populateTable(totalMonthlyMileageDataList, rowSize, columnSize, serviceUtilityTrucksList);
+        populateTable(totalMonthlyMileageDataList, rowSize, columnSize, serviceUtilityTrucksList, startDate);
 
         /*
          super.resetColumnWidths();
@@ -71,7 +71,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
         addContainerProperty("Total", Integer.class, 0, "Total", null, Table.Align.RIGHT);
     }
 
-    public void populateTable(List<MonthlyMileageData> totalMonthlyMileageDataList, int rowSize, int columnSize, List<Truck> serviceUtilityTrucksList) {
+    public void populateTable(List<MonthlyMileageData> totalMonthlyMileageDataList, int rowSize, int columnSize, List<Truck> serviceUtilityTrucksList, Date startDate) {
 //        // unHide Column Header
 //        setColumnHeaderMode(Table.ColumnHeaderMode.EXPLICIT);
 //        this.setRowHeaderMode(Table.RowHeaderMode.ID);
@@ -84,6 +84,11 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
 
         createRows(rowSize);
 
+        // INCREMENT the Date. Keep track of Months without Data and enter Zero Rows for them
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+//        calendar.add(Calendar.MONTH, 1);
+
 //        System.out.println("\nIn Populate MILEAGE Table Method the ff data was found");
         int i = 1; // Table row counter, Row 0 is Total Row
         Date transactDate = totalMonthlyMileageDataList.get(0).getTransactDate();
@@ -94,12 +99,26 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
 
             // NB The last Record in the totalMonthlyMileageDataList will not enter this IF Statement
             if (dateTimeFormatHelper.resetTimeAndMonthStart(monthlyMileageData.getTransactDate()).compareTo(dateTimeFormatHelper.resetTimeAndMonthStart(transactDate)) > 0) {
-                getItem(i).getItemProperty("RowHead").setValue(totalMonthlyMileageDataList.get(totalMonthlyMileageDataList.indexOf(monthlyMileageData) - 1).getTransactionDate());
-                getItem(i).getItemProperty("Total").setValue(monthTotal);
-                // Reset
-                monthTotal = 0;
-                transactDate = monthlyMileageData.getTransactDate();
-                i++;
+                // INCREMENT the Date. Keep track of Months without Data and enter Zero Rows for them
+                if (!transactDate.equals(calendar.getTime())) {
+                    getItem(i).getItemProperty("RowHead").setValue(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+                    getItem(i).getItemProperty("Total").setValue(0);
+
+                    // truckTotal must be base on Truck Vehicle Number
+                    // Total, msv-01, msv-02, ... muv-04, GrandTotal // MSV-01 is 1
+                    for (int z = 0; z < truckVehicleNumberArray.length; z++) {
+                        getItem(i).getItemProperty(monthlyMileageData.getVehicleNumber()).setValue(0);
+                    }
+
+                } else {
+                    getItem(i).getItemProperty("RowHead").setValue(totalMonthlyMileageDataList.get(totalMonthlyMileageDataList.indexOf(monthlyMileageData) - 1).getTransactionDate());
+                    getItem(i).getItemProperty("Total").setValue(monthTotal);
+                    // Reset
+                    monthTotal = 0;
+                    transactDate = monthlyMileageData.getTransactDate();
+                    i++;
+                }
+                calendar.add(Calendar.MONTH, 1);
             }
 //
             if (monthlyMileageData.getTruckMonthlyMileageTotal() > 0) {
@@ -117,7 +136,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
                 grandTotal += monthlyMileageData.getTruckMonthlyMileageTotal();
             }
 
-            // Test if this is the last recored in the List totalMonthlyMileageDataList
+            // Test if this is the last record in the List totalMonthlyMileageDataList
             if (totalMonthlyMileageDataList.indexOf(monthlyMileageData) == totalMonthlyMileageDataList.size() - 1) {
                 getItem(i).getItemProperty("RowHead").setValue(monthlyMileageData.getTransactionDate());
                 getItem(i).getItemProperty("Total").setValue(monthTotal);
@@ -126,6 +145,13 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
                 transactDate = monthlyMileageData.getTransactDate();
 //                i++;
             }
+
+
+
+
+
+
+            ///////////////////////////////////////////////////////
         }
 
         if (i < annualDataMonthCount) {

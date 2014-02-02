@@ -97,9 +97,9 @@ public class DashBoardTab extends VerticalLayout implements
                 maintenanceCostList = getMaintenanceCostList();
                 maintenanceMileageList = getMaintenanceMileageList();
                 if (!maintenanceCostList.isEmpty()) {
-                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 3);
-                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 3);
-                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 3);
+                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 3);
+                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 3);
+                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 3);
                     performSpendKmTravelledChart();
                     displayCharts();
                 } else {
@@ -110,9 +110,9 @@ public class DashBoardTab extends VerticalLayout implements
                 maintenanceCostList = getMaintenanceCostList();
                 maintenanceMileageList = getMaintenanceMileageList();
                 if (!maintenanceCostList.isEmpty()) {
-                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 6);
-                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 6);
-                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 6);
+                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 6);
+                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 6);
+                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 6);
                     performSpendKmTravelledChart();
                     displayCharts();
                 } else {
@@ -124,9 +124,9 @@ public class DashBoardTab extends VerticalLayout implements
 
                 maintenanceMileageList = getMaintenanceMileageList();
                 if (!maintenanceCostList.isEmpty()) {
-                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 12);
+                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 12);
+                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 12);
+                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 12);
                     performSpendKmTravelledChart();
                     displayCharts();
                 } else {
@@ -159,11 +159,11 @@ public class DashBoardTab extends VerticalLayout implements
     }
 
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
-        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     public void performSpendMonthlyChart(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {
