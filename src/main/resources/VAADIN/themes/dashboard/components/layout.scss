@@ -2,7 +2,7 @@
 
     /* For the title bar and blue border around the view */
     .v-verticallayout-chartLayout {
-        background: rgb(75, 178, 197); // blue
+       // background: rgb(75, 178, 197); // blue
         width:auto;
 
     }
@@ -12,7 +12,7 @@
     .v-verticallayout-chartLayout.v-margin-bottom,
     .v-verticallayout-chartLayout.v-margin-left,
     .v-verticallayout-chartLayout.v-margin-right {
-       /* padding: 3px; */
+       // padding: 3px;
     }
 
     /* The main title */
@@ -26,7 +26,7 @@
         text-align:center;
     }
 
-    /* The horizontal Layout */
+/* The horizontal Layout */
 
   .chartLayout .v-horizontallayout {
         background: white;

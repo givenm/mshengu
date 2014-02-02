@@ -26,7 +26,7 @@ public class Clean_up_DailyInputs extends AppTest {
     @Autowired
     private TruckService truckService; //
 
-//    @Test
+    @Test
     public void testSheet() {
 
         operatingCostService = ctx.getBean(OperatingCostService.class);
@@ -72,7 +72,7 @@ public class Clean_up_DailyInputs extends AppTest {
         }
     }
 
-//    @Test(dependsOnMethods = {"testSheet"})
+    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
 
         // cHECK IF operatingCosts exist for each Truck AFTER CLEAN-UP

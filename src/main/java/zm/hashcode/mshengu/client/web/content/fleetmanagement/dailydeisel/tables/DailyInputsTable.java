@@ -25,8 +25,7 @@ public class DailyInputsTable extends Table {
 // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-//        DecimalFormat df = new DecimalFormat("#.00", new DecimalFormatSymbols(Locale.ENGLISH));
-    DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
+    DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
     public DailyInputsTable(MshenguMain main) {
         this.main = main;

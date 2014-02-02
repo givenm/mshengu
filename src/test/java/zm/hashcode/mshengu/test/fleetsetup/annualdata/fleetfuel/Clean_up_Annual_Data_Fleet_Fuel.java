@@ -21,7 +21,7 @@ public class Clean_up_Annual_Data_Fleet_Fuel extends AppTest {
     @Autowired
     private AnnualDataFleetFuelService annualDataService;
 
-//    @Test
+    @Test
     public void testSheet() {
         annualDataService = ctx.getBean(AnnualDataFleetFuelService.class);
         List<AnnualDataFleetFuel> annualDataFleetFuelList = annualDataService.findAll();
@@ -32,7 +32,7 @@ public class Clean_up_Annual_Data_Fleet_Fuel extends AppTest {
         }
     }
 
-//    @Test(dependsOnMethods = {"testSheet"})
+    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetFuel> annualDataFleetFuelList = annualDataService.findAll();
         if (annualDataFleetFuelList.isEmpty()) {
