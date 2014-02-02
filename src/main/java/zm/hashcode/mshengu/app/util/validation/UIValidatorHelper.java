@@ -52,7 +52,7 @@ public class UIValidatorHelper implements Serializable {
         field.setRequiredError(labelName + " is required.");
         return field;
     }
-
+    
     public static ComboBox setRequiredComboBox(ComboBox field, String labelName) {
         field.setRequired(true);
         field.setRequiredError(labelName + " must have a selected option!");
