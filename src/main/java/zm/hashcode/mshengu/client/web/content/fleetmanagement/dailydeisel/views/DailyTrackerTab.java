@@ -36,7 +36,7 @@ public class DailyTrackerTab extends VerticalLayout implements
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-    final DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
     private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public DailyTrackerTab(MshenguMain app) {

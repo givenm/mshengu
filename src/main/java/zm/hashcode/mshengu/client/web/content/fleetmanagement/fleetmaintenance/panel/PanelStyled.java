@@ -19,4 +19,12 @@ public class PanelStyled extends Panel {
         setStyleName("panelorange");
         setSizeUndefined(); // Shrink to fit content
     }
+
+    public PanelStyled() {
+//        setCaption(caption);
+        setWidth("100%");
+        setHeight("100%");
+        setStyleName("panelorange");
+        setSizeUndefined(); // Shrink to fit content
+    }
 }

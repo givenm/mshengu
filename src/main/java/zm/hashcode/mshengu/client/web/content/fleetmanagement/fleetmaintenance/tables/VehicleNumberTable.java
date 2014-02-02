@@ -4,17 +4,10 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables;
 
-import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.List;
-import java.util.Locale;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
-import zm.hashcode.mshengu.domain.fleet.OperatingCost;
-import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
  *
@@ -49,15 +42,30 @@ public class VehicleNumberTable extends Table {
 //        table.removeValueChangeListener((Property.ValueChangeListener) this);
 //
         this.removeAllItems();
-        Integer i = 0;
+        initializeRows(spendByKmTravelledChartDataList);
+
+        // NB NB The order of Trucks in the Chart has been flipped bc of the nature of the chart.
+        // in ArrayList, the index of zero begins from bottom in the chart.
+        Integer i = spendByKmTravelledChartDataList.size() - 1;
         for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : spendByKmTravelledChartDataList) {
-            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getVehicleNumber()}, i);
-            i++;
+            getItem(i).getItemProperty("").setValue(totalMaintenanceSpendKmTraveled.getVehicleNumber());
+
+//            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getVehicleNumber()}, i);
+//            System.out.println("In VehicleNumberTable: " + totalMaintenanceSpendKmTraveled.getVehicleNumber() + ", " + totalMaintenanceSpendKmTraveled.getNumberPlate() + ", " + totalMaintenanceSpendKmTraveled.getRandPerKilometre());
+            i--;
         }
 //        table.addValueChangeListener((Property.ValueChangeListener) this);
         // NB NB NB Autofit cells after populating data in table
 //        setSizeFull();
         resetColumnWidths();
+    }
+
+    public void initializeRows(List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList) {
+        int i = 0;
+        for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : spendByKmTravelledChartDataList) {
+            addItem(new Object[]{""}, i);
+            i++;
+        }
     }
 
     public void performTableCellStyling() {

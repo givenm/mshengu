@@ -261,7 +261,7 @@ public class TrackerUtil implements Serializable {
     public Integer calculatePreviousMonthClosingMileage(Truck truck) {
         //
         Integer previousMonth = Integer.parseInt(dateTimeFormatHelper.getPreviousMonthNumber(queriedDate)); // Why "-1" ? bc Jan =0, Dec = 11
-        Integer previousYear = Integer.parseInt(dateTimeFormatHelper.getPreviousMonthYearNumber(queriedDate)); // Jan wc is 0 -1 would be Dec of previous year
+        Integer previousYear = Integer.parseInt(dateTimeFormatHelper.getPreviousMonthYearNumber(queriedDate)); // Jan = 0, Jan -1 would be Dec of previous year
 
 //        Date previousMonthDate = dateTimeFormatHelper.getDate(previousYear, previousMonth);
 ////        System.out.println("\n\nPrev Month " + previousMonthDate + "\n\n");
@@ -417,6 +417,10 @@ public class TrackerUtil implements Serializable {
         Embedded yellowImage = new Embedded("", new ThemeResource("images/yellow_flag.png"));
         Double val = value.doubleValue();
 
+        if (val.compareTo(new Double("0.0")) == 0) {
+            return new Embedded();
+        }
+
         if (val.compareTo(new Double("7.9")) > 0) {
             return redImage;
         } else if (val.compareTo(new Double("6.0")) > 0) {
@@ -439,6 +443,10 @@ public class TrackerUtil implements Serializable {
         Image redImage = new Image("", new ThemeResource("images/red_flag.png"));
         Image yellowImage = new Image("", new ThemeResource("images/yellow_flag.png"));
         Double val = value.doubleValue();
+
+        if (val.compareTo(new Double("0.0")) == 0) {
+            return new Image();
+        }
 
         if (val.compareTo(new Double("7.9")) > 0) {
             return redImage;

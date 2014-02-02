@@ -34,6 +34,16 @@ public class TotalMaintenanceSpendKmTraveled implements Serializable, Comparable
             // return spendKmTraveled1.getRandPerKilometre().compareTo(spendKmTraveled2.getRandPerKilometre());
         }
     };
+    public static Comparator<TotalMaintenanceSpendKmTraveled> AscendingOrderComparator = new Comparator<TotalMaintenanceSpendKmTraveled>() {
+        @Override
+        public int compare(TotalMaintenanceSpendKmTraveled spendKmTraveled1, TotalMaintenanceSpendKmTraveled spendKmTraveled2) {
+//            //descending order
+//            return spendKmTraveled2.getRandPerKilometre().compareTo(spendKmTraveled1.getRandPerKilometre());
+
+            // ascending order
+            return spendKmTraveled1.getRandPerKilometre().compareTo(spendKmTraveled2.getRandPerKilometre());
+        }
+    };
 
     @Override
     public int hashCode() {

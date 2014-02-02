@@ -42,18 +42,32 @@ public class TotalMileageTable extends Table {
 //        table.removeValueChangeListener((Property.ValueChangeListener) this);
 //
         this.removeAllItems();
-        Integer i = 0;
+        initializeRows(totalMaintenanceSpendKmTraveledList);
+
+        // NB NB The order of Trucks in the Chart has been flipped bc of the nature of the chart.
+        // in ArrayList, the index of zero begins from bottom in the chart.
+        Integer i = totalMaintenanceSpendKmTraveledList.size() - 1;
         for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
             for (TotalMaintenanceMileage totalMaintenanceMileage : totalMaintenanceMileageList) {
                 if (totalMaintenanceSpendKmTraveled.getVehicleNumber().equals(totalMaintenanceMileage.getVehicleNumber())) {
-                    addItem(new Object[]{totalMaintenanceMileage.getTruckMileagetotal()}, i);
-                    i++;
+                    getItem(i).getItemProperty("").setValue(totalMaintenanceMileage.getTruckMileagetotal());
+//                    addItem(new Object[]{totalMaintenanceMileage.getTruckMileagetotal()}, i);
+                    break;
                 }
             }
+            i--; // counter of totalMaintenanceSpendKmTraveledList to match Ids created by method initializeRows
         }
 //        table.addValueChangeListener((Property.ValueChangeListener) this);
 //        setSizeFull();
         resetColumnWidths();
+    }
+
+    public void initializeRows(List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList) {
+        int i = 0;
+        for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
+            addItem(new Object[]{new Integer("0")}, i);
+            i++;
+        }
     }
 
     public void performTableCellStyling() {

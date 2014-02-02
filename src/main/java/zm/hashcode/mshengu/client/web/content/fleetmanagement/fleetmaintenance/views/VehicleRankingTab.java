@@ -4,22 +4,18 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.views;
 
-import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.chemicals.DashboardChemicalsMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.FleetMaintenanceMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.VehicleRankingChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.VehicleRankingForm;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
@@ -40,8 +36,7 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
  *
  * @author ColinWa
  */
-public class VehicleRankingTab extends VerticalLayout implements
-        Button.ClickListener, Property.ValueChangeListener {
+public class VehicleRankingTab extends VerticalLayout implements Button.ClickListener {
 
     private final MshenguMain main;
     private final VehicleNumberTable vehicleNumberTable;
@@ -50,11 +45,12 @@ public class VehicleRankingTab extends VerticalLayout implements
     private final RandPerKmTable randPerKmTable;
     private final RatingTable ratingTable;
     private final MonthSpendTable monthSpendTable;
-//    private final VehicleRankingForm form;
+    private final VehicleRankingForm form;
     public final VehicleRankingChart chart;
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
     private static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
     private static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
+    private static List<MonthlySpendData> monthlySpendDataList = null; // 6th PANEL 5th Table
     private static List<TotalMaintenanceSpendMonthly> spendMonthlyChartDataList = null;
     private static List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList = null; // Total Spend Per Vehicle - 3rd Panel 2nd Table
     private static List<TotalMaintenanceMileage> spendMaintenanceMileageList = null; // 4th Panel 3rd Table
@@ -71,79 +67,63 @@ public class VehicleRankingTab extends VerticalLayout implements
         randPerKmTable = new RandPerKmTable(main);
         ratingTable = new RatingTable(main);
         monthSpendTable = new MonthSpendTable(main);
-//        form = new VehicleRankingForm();
+        form = new VehicleRankingForm();
         chart = new VehicleRankingChart(main);
 
-//        addComponent(form);
+        addComponent(form);
         addComponent(chart);
         addListeners();
         setSizeFull();
-
-
-        fleetMaintenanceUtil.determineDateRange(new Date(), 12);
-        maintenanceCostList = getMaintenanceCostList();
-        maintenanceMileageList = getMaintenanceMileageList();
-
-        if (!maintenanceCostList.isEmpty()) {
-            performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-            performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-            getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 12);
-            performSpendKmTravelledChart();
-            displayCharts();
-        } else {
-            Notification.show("No Maintenance Cost found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
-        }
 
     }
 
     @Override
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
-    }
-
-    @Override
-    public void valueChange(Property.ValueChangeEvent event) {
-        final Property property = event.getProperty();
-    }
-
-    private void getHome() {
-        main.content.setSecondComponent(new DashboardChemicalsMenu(main, "VEHILCE_RANKING"));
+        if (source == form.generateButton) {
+            generateData();
+        }
     }
 
     private void addListeners() {
 //        //Register Button Listeners
-//        form.save.addClickListener((Button.ClickListener) this);
-//        form.edit.addClickListener((Button.ClickListener) this);
-//        form.cancel.addClickListener((Button.ClickListener) this);
-//        form.update.addClickListener((Button.ClickListener) this);
-//        form.delete.addClickListener((Button.ClickListener) this);
-        //
-//        form.startDate.addValueChangeListener((Property.ValueChangeListener) this);
-//        form.endDate.addValueChangeListener((Property.ValueChangeListener) this);
-//        form.optionGroup.addValueChangeListener((Property.ValueChangeListener) this);
-        //Register Table Listerners
-//        table.addValueChangeListener((Property.ValueChangeListener) this);
+        form.generateButton.addClickListener((Button.ClickListener) this);
     }
 
-//    public void doSomething() {
-//        fleetMaintenanceUtil.determineDateRange(new Date(), 12);
-//        maintenanceCostList = getMaintenanceCostList();
-//        maintenanceMileageList = getMaintenanceMileageList();
-//
-//        if (!maintenanceCostList.isEmpty()) {
-//            performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-//            performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-//            getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 12);
-//            performSpendKmTravelledChart();
-//            displayCharts();
-//        } else {
-//            Notification.show("No Maintenance Cost found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
-//        }
-//    }
+    public void generateData() {
+        fleetMaintenanceUtil.determineDateRange(new Date(), 12);
+//        fleetMaintenanceUtil.determineDateRange(getDate(1, 10, 2013), 12); Testing the for months with DATA
+        maintenanceCostList = getMaintenanceCostList();
+        maintenanceMileageList = getMaintenanceMileageList();
+
+        if (!maintenanceCostList.isEmpty() /* || !maintenanceMileageList.isEmpty() */) {
+            performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
+            getSpendByVehicleList(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
+            getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 12);
+            getSpendKmTravelledList();
+            performMonthlySpendList();
+            displayChartAndTables();
+        } else {
+            Notification.show("No Maintenance Cost OR Mileage Data found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
+        }
+    }
+
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
         return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
     }
 
+//    public Date getDate(int day, int month, int year) {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.YEAR, year);
+//        calendar.set(Calendar.MONTH, month);
+//        calendar.set(Calendar.DAY_OF_MONTH, day);
+//// Set time fields to zero
+//        calendar.set(Calendar.HOUR_OF_DAY, 0);
+//        calendar.set(Calendar.MINUTE, 0);
+//        calendar.set(Calendar.SECOND, 0);
+//        calendar.set(Calendar.MILLISECOND, 0);
+//        return calendar.getTime();
+//    }
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
         return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
     }
@@ -160,7 +140,7 @@ public class VehicleRankingTab extends VerticalLayout implements
 //        }
     }
 
-    private void performSpendByVehicleChart(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {
+    private void getSpendByVehicleList(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {
         spendByVehicleChartDataList = fleetMaintenanceUtil.getMaintenanceSpendByVehicleChartData(maintenanceCostList, date, period);
 
 //        // TESTING
@@ -179,19 +159,9 @@ public class VehicleRankingTab extends VerticalLayout implements
             grandTotalMaintenanceMileage = grandTotalMaintenanceMileage.add(new BigDecimal(totalMaintenanceMileage.getTruckMileagetotal()));
         }
         System.out.println(" = " + grandTotalMaintenanceMileage);
-
-//        // TESTING
-//        System.out.println("\n Total Maintenance Mileage Total by Vehicle Data");
-//        for (TotalMaintenanceMileage totalMaintenanceMileage : spendMaintenanceMileageList) {
-//            System.out.println(totalMaintenanceMileage.getNumberPlate() + " = " + totalMaintenanceMileage.getTruckMileagetotal());
-//        }
-//
-//        // next calculate the chart data using data in spendMaintenanceMileageList and spendByVehicleChartDataList
-//        // Do this by Dividing SpendByVehicle (spendByVehicleChartDataList) over vehicle Mileage Total (spendMaintenanceMileageList)
-//        // See performSpendKmTravelledChart() Method below
     }
 
-    private void performSpendKmTravelledChart() {
+    private void getSpendKmTravelledList() {
         spendByKmTravelledChartDataList = fleetMaintenanceUtil.getMaintenanceMileageChartData(spendMaintenanceMileageList, spendByVehicleChartDataList);
         // TESTING
         System.out.println("\n Maintenance SPend KM Travelled (R/Km) Chart");
@@ -200,15 +170,20 @@ public class VehicleRankingTab extends VerticalLayout implements
         }
     }
 
-    private void displayCharts() {
+    private void performMonthlySpendList() {
+        monthlySpendDataList = fleetMaintenanceUtil.buildTwelvethMonthMaintenanceSpend(maintenanceCostList);
+        // TESTING
+        System.out.println("\n 12th MONTHLY SPEND");
+        for (MonthlySpendData monthlySpendData : monthlySpendDataList) {
+            System.out.println(monthlySpendData.getNumberPlate() + " = " + monthlySpendData.getTruckMonthlySpendTotal());
+        }
+    }
+
+    private void displayChartAndTables() {
         chartPeriod = spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear();
         chart.removeAllComponents(); // fleetMaintenanceMenu.vehicleRankingTab.chart.chartRootVerticalLayout.removeAllComponents();
-//        fleetMaintenanceMenu.vehicleRankingTab.chart.chartRootVerticalLayout.addComponent(kmTravelledVehicleMenuPanel); // fleetMaintenanceMenu.vehicleRankingTab.chart.chartRootVerticalLayout.addComponent(kmTravelledVehicleMenuPanel);
 
-        DCharts dKmTravelledVehicleMenuChart = displayMaintenanceSpendByKmTravelledChart("vehicleMenu");
-        // use sort order in spendByKmTravelledChartDataList which is sorted by Total
-        //  extract data from 1)spendByVehicleChartDataList 2) spendMaintenanceMileageList 3) spendByKmTravelledChartDataList
-        // 4) Perform flagging based on spendByKmTravelledChartDataList
+        DCharts dKmTravelledVehicleMenuChart = createMaintenanceSpendByKmTravelledChart("vehicleMenu");
 
         // DYNAMIC HEIGHT depending on Number of Service Trucks, to match height of Comparison Tables
         int numberOfTrucks = spendByKmTravelledChartDataList.size();
@@ -230,9 +205,6 @@ public class VehicleRankingTab extends VerticalLayout implements
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Create a vehicleNumberTable table AND pass spendByKmTravelledChartDataList
-
-        // NB we have to flip the list in DESC by Rand per Km b/c the chart was flipped in DESC
-        Collections.sort(spendByKmTravelledChartDataList, TotalMaintenanceSpendKmTraveled.DescendingOrderComparator);
 
         vehicleNumberTable.populateVehicleNumberTable(spendByKmTravelledChartDataList);
         vehicleNumberTable.performTableCellStyling();
@@ -259,18 +231,14 @@ public class VehicleRankingTab extends VerticalLayout implements
         ratingTable.setPageLength(ratingTable.size()); // Adjust the table height a bit
 
 //// Create a MonthSpendTable table AND pass Maintenance Cost for the Month before current Month(The last month of THE lIST)
-//        monthSpendTable.populateMonthSpendTable(spendByKmTravelledChartDataList);
-//        monthSpendTable .performTableCellStyling();
-//        monthSpendTable.setPageLength(monthSpendTable.size()); // Adjust the table height a bit
+        monthSpendTable.populateMonthSpendTable(spendByKmTravelledChartDataList, monthlySpendDataList);
+        monthSpendTable.performTableCellStyling();
+        monthSpendTable.setPageLength(monthSpendTable.size()); // Adjust the table height a bit
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ADD Charts and (Layout &) Tables to Panels
 
         kmTravelledVehicleChartPanel.setContent(dKmTravelledVehicleMenuChart); // prev. kmTravelledVehicleMenuPanelLayout
-//        // Adjust the panels default layout (a VerticalLayout)
-//        VerticalLayout layout = (VerticalLayout) kmTravelledVehicleChartPanel.getContent();
-//        layout.setMargin(true); // we don't want a margin
-//        layout.setSpacing(true); // and no spacing between components
 
         // Add vehicleNumberTable to Layout then to the Panel
         VerticalLayout vehicleNumberLayout = new VerticalLayout();
@@ -305,16 +273,16 @@ public class VehicleRankingTab extends VerticalLayout implements
 
         // Add monthSpendTable to Layout then to the Panel
         VerticalLayout monthSpendLayout = new VerticalLayout();
-//        monthSpendLayout.addComponent(monthSpendTable);
+        monthSpendLayout.addComponent(monthSpendTable);
         monthSpendPanel.setContent(monthSpendLayout);
-//        monthSpendPanel.setWidth(monthSpendTable.getWidth() + "px");
+        monthSpendPanel.setWidth(monthSpendTable.getWidth() + "px");
 
         // ADD Panels to VehicleRankingChart.java
         chart.defineAndAddLayouts(kmTravelledVehicleChartPanel, vehicleNumberPanel, totalMaintenanceCostPanel, totalMileagePanel, randsPerKmPanel, ratingPanel, monthSpendPanel);
 
     }
 
-    public DCharts displayMaintenanceSpendByKmTravelledChart(String chartType) {
+    public DCharts createMaintenanceSpendByKmTravelledChart(String chartType) {
         MaintenanceSpendByKmTravelledChart maintenanceSpendByKmTravelledChart = new MaintenanceSpendByKmTravelledChart();
         return maintenanceSpendByKmTravelledChart.createChart(spendByKmTravelledChartDataList, chartPeriod, chartType);
     }

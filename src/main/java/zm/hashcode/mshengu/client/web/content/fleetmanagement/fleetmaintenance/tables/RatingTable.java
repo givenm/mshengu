@@ -44,14 +44,28 @@ public class RatingTable extends Table {
 //        table.removeValueChangeListener((Property.ValueChangeListener) this);
 //
         this.removeAllItems();
-        Integer i = 0;
+        initializeRows(totalMaintenanceSpendKmTraveledList);
+
+        // NB NB The order of Trucks in the Chart has been flipped bc of the nature of the chart.
+        // in ArrayList, the index of zero begins from bottom in the chart.
+        Integer i = totalMaintenanceSpendKmTraveledList.size() - 1;
+
         for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
-            addItem(new Object[]{fleetMaintenanceUtil.determineFlag(totalMaintenanceSpendKmTraveled.getRandPerKilometre())}, i);
-            i++;
+            getItem(i).getItemProperty("").setValue(fleetMaintenanceUtil.determineFlag(totalMaintenanceSpendKmTraveled.getRandPerKilometre()));
+//            addItem(new Object[]{fleetMaintenanceUtil.determineFlag(totalMaintenanceSpendKmTraveled.getRandPerKilometre())}, i);
+            i--;
         }
 //        table.addValueChangeListener((Property.ValueChangeListener) this); // TotalMaintenanceSpendKmTraveled spendByKmTravelledChartDataList
 //        setSizeFull();
         resetColumnWidths();
+    }
+
+    public void initializeRows(List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList) {
+        int i = 0;
+        for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : spendByKmTravelledChartDataList) {
+            addItem(new Object[]{new Embedded()}, i);
+            i++;
+        }
     }
 
     public void performTableCellStyling() {

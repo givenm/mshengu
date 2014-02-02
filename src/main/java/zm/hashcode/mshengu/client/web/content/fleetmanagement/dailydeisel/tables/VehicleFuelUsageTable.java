@@ -47,6 +47,7 @@ public class VehicleFuelUsageTable extends Table {
     public BigDecimal mtdActAverageCalc = new BigDecimal("0.00");
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
+    DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
     public VehicleFuelUsageTable(MshenguMain main) {
         this.main = main;
@@ -85,8 +86,6 @@ public class VehicleFuelUsageTable extends Table {
 
     public void loadVehiclceFuelUsageData(Date date) {
         trackerUtil.setQueriedDate(date);
-        // Format a decimal value for a specific locale
-        DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
         // Add Data Columns
         List<Truck> truckList = TruckFacade.getTruckService().findAll();
         vehicleFuelUsageDataList.clear();
@@ -129,8 +128,6 @@ public class VehicleFuelUsageTable extends Table {
 
     public void loadVehiclceFuelUsageData(Date date, String truckId) {
         trackerUtil.setQueriedDate(date);
-        // Format a decimal value for a specific locale
-        DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
         // Add Data Columns
         List<Truck> truckList = TruckFacade.getTruckService().findAll();
         vehicleFuelUsageDataList.clear();

@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.domain.procurement;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
@@ -77,6 +78,29 @@ public class AnnualDataFleetMaintenanceCost implements Serializable, Comparable<
     public int compareTo(AnnualDataFleetMaintenanceCost o) {
         return truckId.compareTo(o.truckId);
     }
+    public static Comparator<AnnualDataFleetMaintenanceCost> DescOrderDateAscOrderTruckComparator = new Comparator<AnnualDataFleetMaintenanceCost>() {
+        @Override
+        public int compare(AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost1, AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost2) {
+
+            //descending order by Date
+            int compareOne = annualDataFleetMaintenanceCost2.getTransactionMonth().compareTo(annualDataFleetMaintenanceCost1.getTransactionMonth());
+            // Ascending Order by Truck
+            int compareTwo = annualDataFleetMaintenanceCost1.getTruckId().compareTo(annualDataFleetMaintenanceCost2.getTruckId());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
+    public static Comparator<AnnualDataFleetMaintenanceCost> AscOrderTruckAscOrderDateComparator = new Comparator<AnnualDataFleetMaintenanceCost>() {
+        @Override
+        public int compare(AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost1, AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost2) {
+            // Ascending Order by Truck
+            int compareOne = annualDataFleetMaintenanceCost1.getTruckId().compareTo(annualDataFleetMaintenanceCost2.getTruckId());
+            // Ascending order by Date
+            int compareTwo = annualDataFleetMaintenanceCost1.getTransactionMonth().compareTo(annualDataFleetMaintenanceCost2.getTransactionMonth());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
 
     @Override
     public int hashCode() {

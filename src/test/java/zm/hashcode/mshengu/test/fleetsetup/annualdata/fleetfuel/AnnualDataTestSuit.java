@@ -15,7 +15,7 @@ import org.junit.runners.Suite;
  *
  * @author Ferox
  */
-//@RunWith(Suite.class)
+@RunWith(Suite.class)
 @Suite.SuiteClasses(
         { 
             

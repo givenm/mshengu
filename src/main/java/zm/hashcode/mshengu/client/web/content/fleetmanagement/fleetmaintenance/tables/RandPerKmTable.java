@@ -23,7 +23,7 @@ public class RandPerKmTable extends Table {
 // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-    final DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
     public RandPerKmTable(MshenguMain main) {
         this.main = main;
@@ -48,15 +48,27 @@ public class RandPerKmTable extends Table {
 //        table.removeValueChangeListener((Property.ValueChangeListener) this);
 //
         this.removeAllItems();
-        Integer i = 0;
+        initializeRows(totalMaintenanceSpendKmTraveledList);
+
+        // NB NB The order of Trucks in the Chart has been flipped bc of the nature of the chart.
+        // in ArrayList, the index of zero begins from bottom in the chart.
+        Integer i = totalMaintenanceSpendKmTraveledList.size() - 1;
         for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
-//            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getRandPerKilometre()}, i);
-            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getRandPerKilometre().compareTo(BigDecimal.ZERO) == 0 ? "0.00" : df.format(Double.parseDouble(totalMaintenanceSpendKmTraveled.getRandPerKilometre().toString()))}, i);
-            i++;
+            getItem(i).getItemProperty("").setValue(totalMaintenanceSpendKmTraveled.getRandPerKilometre().compareTo(BigDecimal.ZERO) == 0 ? "0.00" : df.format(Double.parseDouble(totalMaintenanceSpendKmTraveled.getRandPerKilometre().toString())));
+//            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getRandPerKilometre().compareTo(BigDecimal.ZERO) == 0 ? "0.00" : df.format(Double.parseDouble(totalMaintenanceSpendKmTraveled.getRandPerKilometre().toString()))}, i);
+            i--; // counter of totalMaintenanceSpendKmTraveledList to match Ids created by method initializeRows
         }
 //        table.addValueChangeListener((Property.ValueChangeListener) this);
 //        setSizeFull();
         resetColumnWidths();
+    }
+
+    public void initializeRows(List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList) {
+        int i = 0;
+        for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
+            addItem(new Object[]{"0.00"}, i);
+            i++;
+        }
     }
 
     public void performTableCellStyling() {
