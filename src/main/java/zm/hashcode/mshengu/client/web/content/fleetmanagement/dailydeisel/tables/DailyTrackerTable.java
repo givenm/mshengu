@@ -34,7 +34,7 @@ public class DailyTrackerTable extends Table {
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-    final DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
     //
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private final TrackerUtil trackerUtil = new TrackerUtil();
@@ -105,9 +105,10 @@ public class DailyTrackerTable extends Table {
         this.truck = truck;
         trackerUtil.setQueriedDate(date);
 
+        List<OperatingCost> truckOperatingCostList = truck.getOperatingCosts();
         // Add Data Columns
-        trackerUtil.setOperatingCostList(truck.getOperatingCosts());
-        List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(truck.getOperatingCosts(), date);
+        trackerUtil.setOperatingCostList(truckOperatingCostList);
+        List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(truckOperatingCostList, date); // truck.getOperatingCosts()
 
 // -- =============================================================================================================================
         if (!queriedMonthOperatingCostList.isEmpty()) {

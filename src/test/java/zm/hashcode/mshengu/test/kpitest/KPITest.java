@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.test.kpitest;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -76,32 +77,11 @@ public class KPITest extends AppTest {
     }
 
     private String getMonth(int j) {
-        String month = "";
-        if (j == 0) {
-            month = "January";
-        } else if (j == 1) {
-            month = "February";
-        } else if (j == 2) {
-            month = "March";
-        } else if (j == 3) {
-            month = "April";
-        } else if (j == 4) {
-            month = "May";
-        } else if (j == 5) {
-            month = "June";
-        } else if (j == 6) {
-            month = "July";
-        } else if (j == 7) {
-            month = "August";
-        } else if (j == 8) {
-            month = "Septenber";
-        } else if (j == 9) {
-            month = "Octobetr";
-        } else if (j == 10) {
-            month = "November";
-        } else if (j == 11) {
-            month = "December";
+        String[] months = new DateFormatSymbols().getMonths();
+        for (int i = 0; i < months.length; i++) {
+            if(j == i);
+            return months[i];
         }
-        return month;
+        return null;
     }
 }

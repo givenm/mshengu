@@ -31,7 +31,6 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
     private SiteService siteService;
     @Autowired
     private CreateSiteServiceLogsService siteServiceScheduleLogsService;
-
     private DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
 //    private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
     private final DateTimeFormatHelper dtfh = new DateTimeFormatHelper();
@@ -43,7 +42,7 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
 //        dtfwh.resetDayOfWeek();
     }
 
-    @Test
+//    @Test
     public void createLogs() {
         siteService = ctx.getBean(SiteService.class);
         siteServiceScheduleLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
@@ -66,6 +65,4 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
 
 //        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
     }
-
-
 }

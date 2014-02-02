@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.List;
 import java.util.Set;
@@ -104,6 +105,13 @@ public class Truck implements Serializable, Comparable<Truck> {
     public int compareTo(Truck o) {
         return vehicleNumber.compareTo(o.vehicleNumber);
     }
+    public static Comparator<Truck> AscendingOrderVehicleNumberComparator = new Comparator<Truck>() {
+        @Override
+        public int compare(Truck truck1, Truck truck2) {
+            //ascending order
+            return truck1.getVehicleNumber().compareTo(truck2.getVehicleNumber());
+        }
+    };
 
     @Override
     public int hashCode() {

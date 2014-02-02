@@ -78,8 +78,8 @@ public class StaffDetailsForm extends FormLayout {
         TextField employeeNumber = UIComponent.getTextField("Employee Number :", "employeeNumber", StaffDetailsBean.class, binder);
         employeeNumber = UIValidatorHelper.setRequiredTextField(employeeNumber, "Employee Number ");
         
-        TextField emailAddress = UIComponent.getTextField("Email :", "email", StaffDetailsBean.class, binder);
-        emailAddress.addValidator(UIValidatorHelper.emailValidator());
+//        TextField emailAddress = UIComponent.getTextField("Email :", "email", StaffDetailsBean.class, binder);
+//        emailAddress.addValidator(UIValidatorHelper.emailValidator());
         
         TextField mainNumber = UIComponent.getTextField("Mobile Number :", "mainNumber", StaffDetailsBean.class, binder);
         mainNumber.addValidator(UIValidatorHelper.mobileNumberValidator()); 
@@ -92,7 +92,6 @@ public class StaffDetailsForm extends FormLayout {
         //streetAddress.addValidator(new BeanValidator(StaffDetailsBean.class, "streetAddress"));
 
         TextField postalCode = UIComponent.getTextField("Postal Code :", "postalCode", StaffDetailsBean.class, binder);
-//        postalCode.addValidator(UIValidatorHelper.postalCodeValidator());
         
         CheckBox requestor = UIComponent.getCheckBox("Allow To Request Purchase", "requestor", StaffDetailsBean.class, binder);
         
@@ -115,7 +114,6 @@ public class StaffDetailsForm extends FormLayout {
         DateField pdpExpireDate = UIComponent.getDateField("PDP Expire :", "pdpExpireDate", StaffDetailsBean.class, binder);
         
         DateField endDate = UIComponent.getDateField("Leave End Date :", "endDate", StaffDetailsBean.class, binder);
-//        endDate = UIValidatorHelper.setRequiredDateField(endDate, "Leave End Date");
         
         DateField startDate = UIComponent.getDateField("Comencement Date :", "startDate", StaffDetailsBean.class, binder);        
 

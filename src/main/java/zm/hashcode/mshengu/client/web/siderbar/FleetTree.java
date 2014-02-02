@@ -26,7 +26,7 @@ public class FleetTree extends Tree implements ItemClickEvent.ItemClickListener 
     public FleetTree(MshenguMain main) {
         this.main = main;
 
-        addItem(FLEET_FUEL);
+//        addItem(FLEET_FUEL);
         addItem(FLEET_MAINTENANCE);
         addItem(DAILY_DIESEL_TRACKER);
         //Add Listeners

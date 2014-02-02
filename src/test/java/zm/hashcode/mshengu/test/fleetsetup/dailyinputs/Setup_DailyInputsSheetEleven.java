@@ -71,7 +71,7 @@ public class Setup_DailyInputsSheetEleven extends AppTest {
             simpleFormat.applyPattern("dd-MMM-yyyy");
 
             // Open the Excel File
-            URL url = this.getClass().getResource("/setupfleet/fleet_data_Mfg_Spec.xls");
+            URL url = this.getClass().getResource("/setupfleet/daily_inputs.xls");
             FileInputStream fileInputStream = new FileInputStream(url.getFile());
             HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream); //Open Spreadsheet Work book
 

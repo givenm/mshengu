@@ -5,12 +5,11 @@
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.dussan.vaadin.dcharts.ChartImageFormat;
 import org.dussan.vaadin.dcharts.DCharts;
-import org.dussan.vaadin.dcharts.DownloadButtonLocation;
 import org.dussan.vaadin.dcharts.base.elements.PointLabels;
 import org.dussan.vaadin.dcharts.base.elements.XYaxis;
 import org.dussan.vaadin.dcharts.base.elements.XYseries;
@@ -43,6 +42,21 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.m
 public class MaintenanceSpendByKmTravelledChart implements Serializable {
 
     public DCharts createChart(List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList, String chartPeriod, String chartType) {
+        // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
+        float tickInterval = Float.parseFloat("2.0");
+        BigDecimal highestRandPerKm = BigDecimal.ZERO;
+        for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
+            if (totalMaintenanceSpendKmTraveled.getRandPerKilometre().compareTo(highestRandPerKm) > 0) {
+                highestRandPerKm = totalMaintenanceSpendKmTraveled.getRandPerKilometre();
+            }
+        }
+
+        if (highestRandPerKm.compareTo(new BigDecimal("0.50")) < 0) {
+            tickInterval = Float.parseFloat("0.25");
+        } else if (highestRandPerKm.compareTo(BigDecimal.ONE) < 0) {
+            tickInterval = Float.parseFloat("0.5");
+        }
+
 
         List<Object> randPerKilometreList = new ArrayList<>();
         List<Object> numberPlateList = new ArrayList<>();
@@ -95,7 +109,7 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                     new XYaxis(XYaxes.Y)
                     .setPad(1.05f)
                     .setMin(0)
-                    .setTickInterval(2)
+                    .setTickInterval(tickInterval)
                     .setTickOptions(
                     new AxisTickRenderer().setFormatString("R %.2f")));
 //        }
@@ -124,7 +138,7 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                     new XYaxis(XYaxes.X)
                     .setPad(1.05f)
                     .setMin(0)
-                    .setTickInterval(2)
+                    .setTickInterval(tickInterval)
                     .setTickOptions(
                     new AxisTickRenderer().setFormatString("R %.2f"))); // 	.setFormatString("$%d") // .setFormatString("R %.1f") // .setFormatString("R %.0f")
         }

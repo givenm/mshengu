@@ -20,8 +20,7 @@ public class TotalMaintenanceMileage implements Serializable, Comparable<TotalMa
 
     @Override
     public int compareTo(TotalMaintenanceMileage o) {  // CompareTo for int and Integer types
-        Integer compareTruckMileageTotal = ((TotalMaintenanceMileage) o).getTruckMileagetotal();
-        return this.truckMileagetotal - compareTruckMileageTotal;
+        return this.truckMileagetotal - o.getTruckMileagetotal();
     }
 
     @Override

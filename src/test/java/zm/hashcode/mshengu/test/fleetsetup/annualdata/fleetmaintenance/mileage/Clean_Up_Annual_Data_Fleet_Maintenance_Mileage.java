@@ -20,7 +20,7 @@ public class Clean_Up_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
     @Autowired
     private AnnualDataFleetMaintenanceMileageService annualDataFleetMaintenanceMileageService;
 
-//    @Test
+    @Test
     public void testSheet() {
         annualDataFleetMaintenanceMileageService = ctx.getBean(AnnualDataFleetMaintenanceMileageService.class);
         List<AnnualDataFleetMaintenanceMileage> annualDataFleetMaintenanceMileageList = annualDataFleetMaintenanceMileageService.findAll();
@@ -30,7 +30,7 @@ public class Clean_Up_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
         }
     }
 
-//    @Test(dependsOnMethods = {"testSheet"})
+    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetMaintenanceMileage> annualDataFleetMaintenanceMileageList = annualDataFleetMaintenanceMileageService.findAll();
         if (annualDataFleetMaintenanceMileageList.isEmpty()) {
