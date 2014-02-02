@@ -97,9 +97,9 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
         maintenanceMileageList = getMaintenanceMileageList();
 
         if (!maintenanceCostList.isEmpty() /* || !maintenanceMileageList.isEmpty() */) {
-            performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-            getSpendByVehicleList(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-            getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 12);
+            performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 12);
+            getSpendByVehicleList(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 12);
+            getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 12);
             getSpendKmTravelledList();
             performMonthlySpendList();
             displayChartAndTables();
@@ -109,7 +109,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     }
 
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
-        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
 //    public Date getDate(int day, int month, int year) {
@@ -125,7 +125,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
 //        return calendar.getTime();
 //    }
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     private void performSpendMonthlyChart(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {

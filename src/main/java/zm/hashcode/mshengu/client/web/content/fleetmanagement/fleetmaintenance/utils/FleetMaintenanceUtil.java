@@ -41,10 +41,38 @@ import zm.hashcode.mshengu.domain.procurement.Request;
  */
 public class FleetMaintenanceUtil implements Serializable {
 
+    /**
+     * @return the startDate
+     */
+    public static Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param aStartDate the startDate to set
+     */
+    public static void setStartDate(Date aStartDate) {
+        startDate = aStartDate;
+    }
+
+    /**
+     * @return the endDate
+     */
+    public static Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param aEndDate the endDate to set
+     */
+    public static void setEndDate(Date aEndDate) {
+        endDate = aEndDate;
+    }
+
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private TrackerUtil trackerUtil = new TrackerUtil();
-    public static Date startDate = null;
-    public static Date endDate = null;
+    private static Date startDate = null;
+    private static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
     public static BigDecimal grandTotalMonthlySpend = BigDecimal.ZERO;
     public static List<Truck> serviceTrucks;
@@ -69,11 +97,11 @@ public class FleetMaintenanceUtil implements Serializable {
 
         calendarEndDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
         calendarEndDate.add(Calendar.MONTH, -1);
-        FleetMaintenanceUtil.endDate = resetMonthToLastDay(calendarEndDate.getTime());
+        FleetMaintenanceUtil.setEndDate(resetMonthToLastDay(calendarEndDate.getTime()));
 
         calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
         calendarStartDate.add(Calendar.MONTH, -dateRange);
-        startDate = resetMonthToFirstDay(calendarStartDate.getTime());
+        setStartDate(resetMonthToFirstDay(calendarStartDate.getTime()));
     }
 
     /**

@@ -110,7 +110,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     }
 
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
-        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
 //    public Date getDate(int day, int month, int year) {
@@ -130,7 +130,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     }
 
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     public void grabMileageAnnualData(List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList) {
@@ -148,14 +148,14 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
 ////        totalMileagePanel.setContent(costHeadingTableLayout);
 //////        totalMileagePanel.setWidth(totalMileageTable.getWidth() + "px");
 
-        annualMaintenanceCostTable.populateAnnualMaintenanceCostTable(maintenanceCostDataList, annualDataMonthCount);
+        annualMaintenanceCostTable.populateAnnualMaintenanceCostTable(maintenanceCostDataList, annualDataMonthCount, fleetMaintenanceUtil.getStartDate());
         // Size the table Height to the number of Rows u want or to autofit the rows in it
         annualMaintenanceCostTable.setPageLength(annualMaintenanceCostTable.size()); // Adjust the table height a bit
     }
 
     public void createMileageAndHeadingTable() {
         // No Table with Headings before Table with Annual Mileage
-        annualMileageTable.populateAnnualMileageTable(mileageList, annualDataMonthCount);
+        annualMileageTable.populateAnnualMileageTable(mileageList, annualDataMonthCount, fleetMaintenanceUtil.getStartDate());
         // Size the table Height to the number of Rows u want or to autofit the rows in it
         annualMileageTable.setPageLength(annualMileageTable.size()); // Adjust the table height a bit
 

@@ -45,7 +45,7 @@ public class AnnualMaintenanceCostTable extends AnnualDataSuperTable {
         addContainerProperty("RowHead", String.class, null, "", null, Table.Align.RIGHT); // SHORT DATE e.g. Jun-2013
     }
 
-    public void populateAnnualMaintenanceCostTable(List<MonthlySpendData> totalMonthlySpendDataList, int annualDataMonthCount) {
+    public void populateAnnualMaintenanceCostTable(List<MonthlySpendData> totalMonthlySpendDataList, int annualDataMonthCount, Date startDate) {
         this.annualDataMonthCount = annualDataMonthCount;
         // Sort in Ascending Order of VehicleNumber happened in TruckService's  findAllServiceAndUtilityVehicles
         List<Truck> serviceUtilityTrucksList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
