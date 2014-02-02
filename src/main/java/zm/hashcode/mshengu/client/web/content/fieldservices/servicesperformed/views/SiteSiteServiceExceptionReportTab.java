@@ -15,24 +15,20 @@ import java.util.HashSet;
 import java.util.Set;
 import org.springframework.util.StringUtils;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
-import zm.hashcode.mshengu.app.facade.people.ContactPersonFacade;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
 import zm.hashcode.mshengu.app.facade.products.SiteServiceContractLifeCycleFacade;
-import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.app.facade.ui.location.AddressFacade;
 import zm.hashcode.mshengu.app.facade.ui.location.LocationFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.ServicePerformedMenu;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.SiteServiceLogTable;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.SiteServiceLogExceptionTable;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.forms.SiteDetailsForm;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.models.SiteDetailsBean;
 import zm.hashcode.mshengu.domain.customer.Customer;
-import zm.hashcode.mshengu.domain.people.ContactPerson;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceContractLifeCycle;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
 import zm.hashcode.mshengu.domain.products.SiteUnit;
-import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.domain.ui.location.Address;
 import zm.hashcode.mshengu.domain.ui.location.Location;
 
@@ -45,13 +41,13 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
 
     private final MshenguMain main;
     private final SiteDetailsForm form;
-    private final SiteServiceLogTable table;
+    private final SiteServiceLogExceptionTable table;
     private String parentId = null;
 
     public SiteSiteServiceExceptionReportTab(MshenguMain app) {
         main = app;
         form = new SiteDetailsForm();
-        table = new SiteServiceLogTable(main);
+        table = new SiteServiceLogExceptionTable(main);
         setCaption("Site Units");
         setSizeFull();
 //        addComponent(form);
@@ -379,5 +375,12 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
             //  table.loadCustomerSites(customer.getSites());
         }
         table.addValueChangeListener((Property.ValueChangeListener) this);
+    }
+    
+        
+    
+     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate){
+         table.loadServiceLogDetails(siteId, startDate, endDate);
+//        table
     }
 }

@@ -109,4 +109,37 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
         return siteServiceLog;
 
     }
+    
+       @Override
+    public List<SiteServiceLog> getServiceLogs(String siteName, Date startDate, Date endDate, String serviceStatus) {
+//        dtfwh.setDate(date);
+        Query query = new Query(Criteria
+                .where("parentId").is(siteName)
+                .andOperator(
+                Criteria.where("serviceDate").gte(startDate),
+                Criteria.where("serviceDate").lte(endDate),
+                Criteria.where("serviceStatus").is(serviceStatus)));
+//                Criteria.where("statusMessage").is("WITHIN")));
+//        query.with(new Sort(Sort.Direction.DESC, "date"));
+        List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog;
+
+    }
+    
+    
+         @Override
+    public List<SiteServiceLog> getAllServiceLogs(String siteName, Date startDate, Date endDate) {
+//        dtfwh.setDate(date);
+        Query query = new Query(Criteria
+                .where("parentId").is(siteName)
+                .andOperator(
+                Criteria.where("serviceDate").gte(startDate),
+                Criteria.where("serviceDate").lte(endDate)));
+//                Criteria.where("serviceStatus").is(serviceStatus)));
+//                Criteria.where("statusMessage").is("WITHIN")));
+//        query.with(new Sort(Sort.Direction.DESC, "date"));
+        List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog;
+
+    }
 }

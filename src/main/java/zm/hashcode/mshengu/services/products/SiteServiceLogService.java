@@ -44,5 +44,9 @@ public interface SiteServiceLogService {
  */
     public List<SiteServiceLog> getOutdatedOpenLogs(Date date);
     
+    
+    public List<SiteServiceLog> getServiceLogs(String siteName, Date startDate, Date endDate, String serviceStatus);
+    
+    public List<SiteServiceLog> getAllServiceLogs(String siteName, Date startDate, Date endDate);
   
 }
