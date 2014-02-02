@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 public class QuoteBean {
 
-    @NotNull
+    
     private String email;
 
     public String getEmail() {

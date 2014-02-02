@@ -62,7 +62,7 @@ public class OnSubmitValidationHelper {
                 } else if (o instanceof ComboBox) {
                     comboBox.setStyleName("invalid");
                 }
-
+                  
             } finally {
                 if (o instanceof TextField) {
                     textField.addFocusListener(new LabelErrorMessageManipulator(textField, errorLabel, currentMessage)); //custom focus handler for displaying error message on a labe when you focus on an errored Textfield                       
