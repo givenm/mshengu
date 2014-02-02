@@ -122,20 +122,62 @@ public class DailyInputsTab extends VerticalLayout implements
             if (form.filterTruckId.getValue() != null) {
                 Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
                 List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
-//                if (!dailyInputList.isEmpty()) {
+
                 populateDailyInputsTable(dailyInputList, truck);
-//                }
+                resetDailyInputBean();
             }
         } else if (property == form.filterTruckId) {
             filteredTruckId = form.filterTruckId.getValue().toString();
             if (form.filterTransactionDate.getValue() != null) {
                 Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
                 List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
-//                if (!dailyInputList.isEmpty()) {
+
                 populateDailyInputsTable(dailyInputList, truck);
-//                }
+                resetDailyInputBean();
             }
         }
+
+    }
+
+    private void resetDailyInputBean() {
+        //
+        form.fuelCost.setReadOnly(false);
+        form.fuelLitres.setReadOnly(false);
+        form.oilCost.setReadOnly(false);
+        form.oilLitres.setReadOnly(false);
+        form.randPerLitreCalc.setReadOnly(false);
+        form.slipNo.setReadOnly(false);
+        form.speedometer.setReadOnly(false);
+        form.transactionDate.setReadOnly(false);
+        form.truckId.setReadOnly(false);
+        form.driverId.setReadOnly(false);
+
+        form.truckId.removeValueChangeListener((Property.ValueChangeListener) this);
+
+        form.fuelCost.setValue("0.00");
+        form.fuelLitres.setValue("0");
+        form.oilCost.setValue("0.00");
+        form.oilLitres.setValue("0");
+        form.randPerLitreCalc.setValue("0.00");
+        form.slipNo.setValue(null);
+        form.speedometer.setValue("0");
+        form.transactionDate.setValue(new Date());
+        form.truckId.setValue(null);
+        form.driverId.setValue(null);
+
+//        form.fuelCost.setReadOnly(true);
+//        form.fuelLitres.setReadOnly(true);
+//        form.oilCost.setReadOnly(true);
+//        form.oilLitres.setReadOnly(true);
+//        form.randPerLitreCalc.setReadOnly(true);
+//        form.slipNo.setReadOnly(true);
+//        form.speedometer.setReadOnly(true);
+        //
+
+
+        form.truckId.addValueChangeListener((Property.ValueChangeListener) this);
+//        form.fuelLitres.addValueChangeListener((Property.ValueChangeListener) this);
+//        form.fuelCost.addValueChangeListener((Property.ValueChangeListener) this);
 
     }
 

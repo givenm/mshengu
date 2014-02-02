@@ -49,7 +49,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
     private static String vehicleNumber;
     private static String employeeNumber;
 
-//    @Test
+    @Test
     public void testSheet() {
         try {
             truckService = ctx.getBean(TruckService.class);
@@ -61,7 +61,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
             simpleFormat.applyPattern("dd-MMM-yyyy");
 
             // Open the Excel File
-            URL url = this.getClass().getResource("/setupfleet/Fleet_Maintenance_Test_Case_Data.xls");
+            URL url = this.getClass().getResource("/setupfleet/Fleet_Maintenance_Annual_Cost_&_Mileage.xls");
             FileInputStream fileInputStream = new FileInputStream(url.getFile());
             HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream); //Open Spreadsheet Work book
 
@@ -156,7 +156,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
         return annualDataFleetMaintenanceCost;
     }
 
-//    @Test(dependsOnMethods = {"testSheet"})
+    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList = annualDataFleetMaintenanceCostService.findAll();
         if (annualDataFleetMaintenanceCostList.isEmpty()) {

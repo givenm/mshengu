@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.domain.procurement;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
@@ -74,21 +75,34 @@ public class AnnualDataFleetMaintenanceMileage implements Serializable, Comparab
     }
 
     @Override
-    public int compareTo(AnnualDataFleetMaintenanceMileage o) { // i wanna sort by "truckid" then by "transactionMonth"
-////        return this.truckId.compareTo(o.truckId);
-//        int varInt = this.truckId.compareTo(o.truckId);
-//        return varInt == 0 ? this.truckId.compareTo(o.truckId) : varInt;
-
-        if (o.truckId.equals(this.truckId)) {
-//            if (o.transactionMonth.before(this.transactionMonth)) {
-
-            return (o.transactionMonth).compareTo(this.transactionMonth);
-//            }
-        } else {
-            return o.truckId.compareTo(this.truckId);
-        }
-
+    public int compareTo(AnnualDataFleetMaintenanceMileage o) {
+        return this.transactionMonth.compareTo(o.transactionMonth);
     }
+    public static Comparator<AnnualDataFleetMaintenanceMileage> DescOrderTransactionDateAscOrderTruck = new Comparator<AnnualDataFleetMaintenanceMileage>() {
+        @Override
+        public int compare(AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage1, AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage2) {
+
+            //descending order by Date
+            int compareOne = annualDataFleetMaintenanceMileage2.getTransactionMonth().compareTo(annualDataFleetMaintenanceMileage1.getTransactionMonth());
+            // Ascending Order by Truck
+            int compareTwo = annualDataFleetMaintenanceMileage1.getTruckId().compareTo(annualDataFleetMaintenanceMileage2.getTruckId());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
+    public static Comparator<AnnualDataFleetMaintenanceMileage> AscOrderTruckAscOrderDateComparator = new Comparator<AnnualDataFleetMaintenanceMileage>() {
+        @Override
+        public int compare(AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage1, AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage2) {
+
+            // Ascending Order by Truck
+            int compareOne = annualDataFleetMaintenanceMileage1.getTruckId().compareTo(annualDataFleetMaintenanceMileage2.getTruckId());
+            // Ascending order by Date
+            int compareTwo = annualDataFleetMaintenanceMileage1.getTransactionMonth().compareTo(annualDataFleetMaintenanceMileage2.getTransactionMonth());
+
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
 
     @Override
     public int hashCode() {

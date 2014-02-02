@@ -20,7 +20,6 @@ import zm.hashcode.mshengu.client.web.content.setup.officeutils.status.tables.St
 import zm.hashcode.mshengu.domain.ui.util.Status;
 import zm.hashcode.mshengu.domain.ui.util.StatusType;
 
-
 /**
  *
  * @author Ferox
@@ -68,8 +67,6 @@ public class StatusTab extends VerticalLayout implements
         }
     }
 
-    
-    
     private void saveForm(FieldGroup binder) {
         try {
             binder.commit();

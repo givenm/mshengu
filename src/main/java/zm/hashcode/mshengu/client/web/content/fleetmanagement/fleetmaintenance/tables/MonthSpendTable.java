@@ -4,7 +4,6 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables;
 
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Table;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -12,8 +11,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
 
 /**
  *
@@ -25,8 +24,7 @@ public class MonthSpendTable extends Table {
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-    final DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
-    private final FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
     public MonthSpendTable(MshenguMain main) {
         this.main = main;
@@ -47,20 +45,37 @@ public class MonthSpendTable extends Table {
 
     }
 
-    public void populateMonthSpendTable(List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList) {
+    public void populateMonthSpendTable(List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList, List<MonthlySpendData> monthlySpendDataList) {
 //        // Remove Table's ValueChangeListener, add contents to Table then Add  Table's ValueChangeListener
 //        table.removeValueChangeListener((Property.ValueChangeListener) this);
 //
         this.removeAllItems();
-        Integer i = 0;
+        initializeRows(totalMaintenanceSpendKmTraveledList);
+
+        // NB NB The order of Trucks in the Chart has been flipped bc of the nature of the chart.
+        // in ArrayList, the index of zero begins from bottom in the chart.
+        Integer i = totalMaintenanceSpendKmTraveledList.size() - 1;
         for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
-            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getRandPerKilometre()}, i);
-            addItem(new Object[]{totalMaintenanceSpendKmTraveled.getRandPerKilometre().compareTo(BigDecimal.ZERO) == 0 ? "0.00" : df.format(Double.parseDouble(totalMaintenanceSpendKmTraveled.getRandPerKilometre().toString()))}, i);
-            i++;
+            for (MonthlySpendData monthlySpendData : monthlySpendDataList) {
+                if (totalMaintenanceSpendKmTraveled.getVehicleNumber().equals(monthlySpendData.getVehicleNumber())) {
+                    getItem(i).getItemProperty("").setValue(monthlySpendData.getTruckMonthlySpendTotal().compareTo(BigDecimal.ZERO) == 0 ? "0.00" : df.format(Double.parseDouble(monthlySpendData.getTruckMonthlySpendTotal().toString())));
+//                    addItem(new Object[]{monthlySpendData.getTruckMonthlySpendTotal().compareTo(BigDecimal.ZERO) == 0 ? "0.00" : df.format(Double.parseDouble(monthlySpendData.getTruckMonthlySpendTotal().toString()))}, i);
+                    break;
+                }
+            }
+            i--; // counter of totalMaintenanceSpendKmTraveledList to match Ids created by method initializeRows
         }
 //        table.addValueChangeListener((Property.ValueChangeListener) this); // TotalMaintenanceSpendKmTraveled spendByKmTravelledChartDataList
 //        setSizeFull();
         resetColumnWidths();
+    }
+
+    public void initializeRows(List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList) {
+        int i = 0;
+        for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
+            addItem(new Object[]{"0.00"}, i);
+            i++;
+        }
     }
 
     public void performTableCellStyling() {
