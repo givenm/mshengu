@@ -68,7 +68,6 @@ public class FleetMaintenanceUtil implements Serializable {
     public static void setEndDate(Date aEndDate) {
         endDate = aEndDate;
     }
-
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private TrackerUtil trackerUtil = new TrackerUtil();
     private static Date startDate = null;
@@ -145,12 +144,15 @@ public class FleetMaintenanceUtil implements Serializable {
                         for (Truck truck : serviceTrucks) {
                             BigDecimal accumulatedTotal = BigDecimal.ZERO;
                             for (Request request : requestList) {
-                                if (truck.getId().equals(request.getTruck().getId())
-                                        && (request.getDeliveryDate().compareTo(startCalendar.getTime()) == 0
-                                        || request.getDeliveryDate().compareTo(endOfMonth.getTime()) == 0
-                                        || (request.getDeliveryDate().after(startCalendar.getTime()) && request.getDeliveryDate().before(endOfMonth.getTime())))) {
-                                    // Accumulate the Total for each Request for current Truck for current Month
-                                    accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                                try {
+                                    if (truck.getId().equals(request.getTruck().getId())
+                                            && (request.getDeliveryDate().compareTo(startCalendar.getTime()) == 0
+                                            || request.getDeliveryDate().compareTo(endOfMonth.getTime()) == 0
+                                            || (request.getDeliveryDate().after(startCalendar.getTime()) && request.getDeliveryDate().before(endOfMonth.getTime())))) {
+                                        // Accumulate the Total for each Request for current Truck for current Month
+                                        accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                                    }
+                                } catch (java.lang.NullPointerException ex) {
                                 }
                             }
                             // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
