@@ -100,7 +100,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
             // NB The last Record in the totalMonthlyMileageDataList will not enter this IF Statement
             if (dateTimeFormatHelper.resetTimeAndMonthStart(monthlyMileageData.getTransactDate()).compareTo(dateTimeFormatHelper.resetTimeAndMonthStart(transactDate)) > 0) {
                 // INCREMENT the Date. Keep track of Months without Data and enter Zero Rows for them
-                if (!transactDate.equals(calendar.getTime())) {
+                if (dateTimeFormatHelper.resetTimeAndMonthStart(transactDate).after(dateTimeFormatHelper.resetTimeAndMonthStart(calendar.getTime()))) {
                     getItem(i).getItemProperty("RowHead").setValue(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
                     getItem(i).getItemProperty("Total").setValue(0);
 
@@ -109,6 +109,8 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
                     for (int z = 0; z < truckVehicleNumberArray.length; z++) {
                         getItem(i).getItemProperty(monthlyMileageData.getVehicleNumber()).setValue(0);
                     }
+
+
 
                 } else {
                     getItem(i).getItemProperty("RowHead").setValue(totalMonthlyMileageDataList.get(totalMonthlyMileageDataList.indexOf(monthlyMileageData) - 1).getTransactionDate());
