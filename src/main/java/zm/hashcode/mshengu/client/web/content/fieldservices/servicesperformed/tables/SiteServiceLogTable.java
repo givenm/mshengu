@@ -36,7 +36,6 @@ public class SiteServiceLogTable extends Table {
         addContainerProperty("Total Units Serviced", Integer.class, null);
         addContainerProperty("Total Units Not Serviced", Integer.class, null);
 
-
     }
 
     public void loadSiteServiceLog(List<SiteServiceLog> siteServiceLogs) {
@@ -45,20 +44,18 @@ public class SiteServiceLogTable extends Table {
         setImmediate(false);
         removeAllItems();
 
-
         for (SiteServiceLog siteServiceLog : siteServiceLogs) {
 //            SiteServiceContractLifeCycle contractLifeCycle = SiteFacade.getSiteService().getSitetCurrentContract(site.getId());
 //            String noOfUnits = getNoOfUnits(contractLifeCycle.getNumberOfUnits(), contractLifeCycle.getExpectedNumberOfUnits());
             addItem(new Object[]{
-                        formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
-                        formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
-                        getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
-                        siteServiceLog.getNumberPlate(),
-                        siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
-                        siteServiceLog.getNumberOfUnitsServiced(),
-                        siteServiceLog.getNumberOfUnitsNotServiced(),}, siteServiceLog.getId());
+                formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
+                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
+                getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
+                siteServiceLog.getNumberPlate(),
+                siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
+                siteServiceLog.getNumberOfUnitsServiced(),
+                siteServiceLog.getNumberOfUnitsNotServiced(),}, siteServiceLog.getId());
         }
-
 
         // Allow selecting items from the table.
         setNullSelectionAllowed(false);
@@ -81,10 +78,10 @@ public class SiteServiceLogTable extends Table {
             return null;
         }
     }
-    
-     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate){
-         List<SiteServiceLog> siteServiceLogs =  SiteServiceLogFacade.getSiteServiceLogService().getServiceLogs(siteId, startDate, endDate, "CLOSED");
-         loadSiteServiceLog(siteServiceLogs);
+
+    public void loadServiceLogDetails(String siteId, Date startDate, Date endDate) {
+        List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getServiceLogs(siteId, startDate, endDate, "CLOSED");
+        loadSiteServiceLog(siteServiceLogs);
 //        table
     }
 }

@@ -33,7 +33,8 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
     private final CustomerSiteUnitBean bean;
     public final BeanItem<CustomerSiteUnitBean> item;
     public final FieldGroup binder;
-    public ComboBox comboBoxSelectContractType;;
+    public ComboBox comboBoxSelectContractType;
+    ;
     public ComboBox comboBoxSelectSite;
     public ComboBox comboBoxSelectCustomer;
     public DateField startDate;
@@ -45,11 +46,10 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         item = new BeanItem<>(bean);
         binder = new FieldGroup(item);
 
-
         Label heading = new Label("Services Performed");
         heading.setSizeUndefined();
         heading.addStyleName("h4");
-        
+
         comboBoxSelectContractType = UIComboBox.getContractTypeComboBox("Select Hire Type", "contractType", CustomerSiteUnitBean.class, binder);
         comboBoxSelectContractType = UIValidatorHelper.setRequiredComboBox(comboBoxSelectContractType, "Select Hire Type");
         comboBoxSelectSite = new ComboBox("Select Site");
@@ -58,20 +58,22 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         endDate = UIComponent.getDateField("End Date", "endDate", CustomerSiteUnitBean.class, binder);
         comboBoxSelectSite.setImmediate(true);
         comboBoxSelectCustomer.setImmediate(true);
-        
+
         errorMessage = UIComponent.getErrorLabel();
-        
+
         GridLayout grid = new GridLayout(4, 10);
 
         grid.setSizeFull();
-        
+
         grid.addComponent(errorMessage, 1, 0, 2, 0);
 
         grid.addComponent(heading, 1, 1);
         grid.addComponent(comboBoxSelectContractType, 0, 2);
         grid.addComponent(comboBoxSelectCustomer, 1, 2);
         grid.addComponent(comboBoxSelectSite, 2, 2);
-
+        grid.addComponent(startDate, 0, 3);
+        grid.addComponent(endDate, 1, 3);
+//        grid.addComponent(comboBoxSelectSite, 2, 3);
 
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 5, 2, 5);
         addComponent(grid);
