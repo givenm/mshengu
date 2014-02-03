@@ -119,7 +119,7 @@ public class CustomerContractsTab extends VerticalLayout implements
             Collection<Field<?>> fields = binder.getFields();
             OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
             helper.doValidation();
-            Notification.show("Please select customer!", Notification.Type.TRAY_NOTIFICATION);            
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);            
         } finally {
             return isCustomerSelected;
         }

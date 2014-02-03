@@ -61,8 +61,11 @@ public class CustomerContractForm  extends FormLayout {
         
         TextField numberOfUnits = UIComponent.getTextField("Number of Units:", "numberOfUnits", CustomerContractBean.class, binder);
         numberOfUnits = UIValidatorHelper.setRequiredTextField(numberOfUnits, "Number of Units");
+        
         TextField pricePerUnit = UIComponent.getBigDecimalTextField("Price per Unit :", "pricePerUnit", CustomerContractBean.class, binder);
+        
         TextField status = UIComponent.getTextField("Status :", "status", CustomerContractBean.class, binder);
+        
         ComboBox contractTypeId = UIComboBox.getContractTypeComboBox("Contract Type :", "contractTypeId", CustomerContractBean.class, binder);
         contractTypeId = UIValidatorHelper.setRequiredComboBox(contractTypeId, "Contract Type");
         
