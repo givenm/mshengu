@@ -404,60 +404,6 @@ public class TrackerUtil implements Serializable {
     }
 
     /**
-     * Determines Flagging based on parameter and return an Embedded type (a
-     * flag) with the appropriate color
-     *
-     * @param value BigDecimal
-     * @return Embedded
-     */
-    public Embedded determineFlag(BigDecimal value) {
-        // Image as a tHEME Resource
-        Embedded greenImage = new Embedded("", new ThemeResource("images/green_flag.png"));
-        Embedded redImage = new Embedded("", new ThemeResource("images/red_flag.png"));
-        Embedded yellowImage = new Embedded("", new ThemeResource("images/yellow_flag.png"));
-        Double val = value.doubleValue();
-
-        if (val.compareTo(new Double("0.0")) == 0) {
-            return new Embedded();
-        }
-
-        if (val.compareTo(new Double("7.9")) > 0) {
-            return redImage;
-        } else if (val.compareTo(new Double("6.0")) > 0) {
-            return yellowImage;
-        }
-
-        return greenImage;
-    }
-
-    /**
-     * Determines Flagging based on parameter and return an image (a flag) with
-     * the appropriate color
-     *
-     * @param value BigDecimal
-     * @return Image
-     */
-    public Image determineImageFlag(BigDecimal value) {
-        // Image as a tHEME Resource
-        Image greenImage = new Image("", new ThemeResource("images/green_flag.png"));
-        Image redImage = new Image("", new ThemeResource("images/red_flag.png"));
-        Image yellowImage = new Image("", new ThemeResource("images/yellow_flag.png"));
-        Double val = value.doubleValue();
-
-        if (val.compareTo(new Double("0.0")) == 0) {
-            return new Image();
-        }
-
-        if (val.compareTo(new Double("7.9")) > 0) {
-            return redImage;
-        } else if (val.compareTo(new Double("6.0")) > 0) {
-            return yellowImage;
-        }
-
-        return greenImage;
-    }
-
-    /**
      * Determines and retrieves the highest Fuel Price i.e. in Rands Per Litre
      * for the queried month
      *
