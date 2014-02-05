@@ -111,9 +111,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     form.postalCode.setValue(contactPerson.getCode());
                 }
                 if (keep != null) {
-                    form.description.setRequired(false);
+                    //form.description.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.description);
-                    form.itemDescription.setRequired(true);
+                    //form.itemDescription.setRequired(true);
                     form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 3);
                     
                 }
@@ -137,9 +137,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 form.postalCode.setReadOnly(true);
                 form.costCentre.setReadOnly(true);
                 if (keep == null) {
-                    form.itemDescription.setRequired(false);
+                    //form.itemDescription.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.itemDescription);
-                    form.description.setRequired(true);
+                    //form.description.setRequired(true);
                     form.itemPurchaseLayout.addComponent(form.description, 0, 3);                    
                     keep = "keep";
                 }
@@ -252,10 +252,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
             form.approval.setVisible(true);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Collection<Field<?>> fields = binder.getFields();
-            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
-            helper.doValidation();
-            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
+//            Collection<Field<?>> fields = binder.getFields();
+//            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+//            helper.doValidation();
+//            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (Exception e) {
             Notification.show("Values MISSING .. !", Notification.Type.TRAY_NOTIFICATION);
         }
@@ -331,10 +331,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
             RequestFacade.getRequestService().persist(request);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Collection<Field<?>> fields = binder.getFields();
-            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
-            helper.doValidation();
-            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
+//            Collection<Field<?>> fields = binder.getFields();
+//            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+//            helper.doValidation();
+//            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
