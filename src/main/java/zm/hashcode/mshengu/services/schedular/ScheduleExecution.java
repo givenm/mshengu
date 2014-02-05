@@ -41,7 +41,7 @@ public class ScheduleExecution {
     public void runthisCode() {
         // Code to be execute duering Schedule
 
-        Calendar calendar = Calendar.getInstance();
+      /*  Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         setTodaysDate(calendar.getTime());
         List<Site> sitesList = SiteFacade.getSiteService().findAllWithVisitToday(dtfwh.getDateToday());
@@ -53,7 +53,7 @@ public class ScheduleExecution {
         for (Site site : sitesList) {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-        }
+        }*/
 
     }
 
