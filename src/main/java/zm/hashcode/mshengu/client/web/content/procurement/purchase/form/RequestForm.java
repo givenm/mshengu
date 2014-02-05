@@ -146,7 +146,7 @@ public class RequestForm extends FormLayout {
         itemDescription = UIValidatorHelper.setRequiredComboBox(itemDescription, "Item Description");
         
         itemNumber = UIComponent.getTextField("Item Number:", "itemNumber", RequestBean.class, binder);
-        itemNumber = UIValidatorHelper.setRequiredTextField(itemNumber, "Item Number");
+        //itemNumber = UIValidatorHelper.setRequiredTextField(itemNumber, "Item Number");
         
         quantity = UIComponent.getTextField("Quantity:", "quantity", RequestBean.class, binder);
         quantity = UIValidatorHelper.setRequiredTextField(quantity, "Quantity");
@@ -156,7 +156,7 @@ public class RequestForm extends FormLayout {
         volume = UIComponent.getTextField("Volume:", "volume", RequestBean.class, binder);
         
         unitPrice = UIComponent.getBigDecimalTextField("Unit Price:", "unitPrice", RequestBean.class, binder);
-        unitPrice = UIValidatorHelper.setRequiredTextField(unitPrice, "Unit Price");
+        //unitPrice = UIValidatorHelper.setRequiredTextField(unitPrice, "Unit Price");
         
         subTotal = UIComponent.getBigDecimalTextField("Sub Total: R", "subTotal", RequestBean.class, binder);
         
