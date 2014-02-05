@@ -8,9 +8,12 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceCategoryFacade;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.vendors.ServiceProviderMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.vendors.forms.ServiceCategoryForm;
@@ -72,8 +75,10 @@ public class ServiceCategoryTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -84,8 +89,10 @@ public class ServiceCategoryTab extends VerticalLayout implements
             getHome();
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
