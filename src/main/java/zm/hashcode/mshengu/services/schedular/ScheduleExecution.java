@@ -11,10 +11,8 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.domain.products.Site;
-import zm.hashcode.mshengu.services.fieldservices.CreateSiteServiceLogsService;
 
 /**
  *

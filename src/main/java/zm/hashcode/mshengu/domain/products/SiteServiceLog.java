@@ -32,6 +32,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
     private int numberOfUnitsNotServiced;
     private String comment;
     private String parentId;
+    private String contractType;
 
     private SiteServiceLog() {
     }
@@ -48,11 +49,12 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         this.numberOfUnitsNotServiced = builder.numberOfUnitsNotServiced;
         this.comment = builder.comment;
         this.parentId = builder.parentId;
+        this.contractType = builder.contractType;
     }
 
     @Override
     public int compareTo(SiteServiceLog o) {
-        return serviceDate.compareTo(o.serviceDate);
+        return -1 * serviceDate.compareTo(o.serviceDate);
     }
 
     @Override
@@ -98,6 +100,13 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         return status;
     }
 
+    /**
+     * @return the contractType
+     */
+    public String getContractType() {
+        return contractType;
+    }
+
     public static class Builder {
 
         private String id;
@@ -111,6 +120,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         private int numberOfUnitsNotServiced;
         private String comment;
         private String parentId;
+        private String contractType;
 
         public Builder(Date value) {
             this.serviceDate = value;
@@ -128,6 +138,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
             this.comment = siteServiceLog.getComment();
             this.parentId = siteServiceLog.getParentId();
             this.completionStatus = siteServiceLog.getCompletionStatus();
+            this.contractType = siteServiceLog.getContractType();
             return this;
 
         }
@@ -137,6 +148,11 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
             return this;
         }
 
+        public Builder contractType(String value) {
+            this.contractType = value;
+            return this;
+        }
+        
         public Builder serviceTime(Date value) {
             this.serviceTime = value;
             return this;
@@ -174,6 +190,11 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
 
         public Builder comment(String value) {
             this.comment = value;
+            return this;
+        }
+
+        public Builder parentId(String value) {
+            this.parentId = value;
             return this;
         }
 

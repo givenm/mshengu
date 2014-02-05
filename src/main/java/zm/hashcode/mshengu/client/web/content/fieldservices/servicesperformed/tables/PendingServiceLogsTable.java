@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.t
 import com.vaadin.ui.Table;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import zm.hashcode.mshengu.app.facade.products.SiteServiceLogFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
@@ -19,23 +20,18 @@ import zm.hashcode.mshengu.domain.products.SiteServiceLog;
  *
  * @author boniface
  */
-public class SiteServiceLogTable extends Table {
+public class PendingServiceLogsTable extends Table {
 
     private final MshenguMain main;
     private final DateTimeFormatHelper formatHelper = new DateTimeFormatHelper();
-    private final DateTimeFormatWeeklyHelper dtfwh;
-    Date date = formatHelper.getDate(22, 10, 2013);
     Date startDate;
     Date endDate;
 
-    public SiteServiceLogTable(MshenguMain main) {
+    public PendingServiceLogsTable(MshenguMain main, Date startDate, Date endDate) {
         this.main = main;
+        this.startDate = startDate;
+        this.endDate = endDate;
         setSizeFull();
-
-        this.dtfwh = new DateTimeFormatWeeklyHelper();
-        dtfwh.setDate(date);
-        startDate = dtfwh.getDateYesterday();
-        endDate = dtfwh.getDateToday();
 
         addContainerProperty("Site", String.class, null);
         addContainerProperty("Service Date", String.class, null);
@@ -46,7 +42,8 @@ public class SiteServiceLogTable extends Table {
         addContainerProperty("Completion Status", String.class, null);
         addContainerProperty("Total Units Serviced", Integer.class, null);
         addContainerProperty("Total Units Not Serviced", Integer.class, null);
-         List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getAllServiceLogs(startDate, endDate);
+//        PENDING, SERVICED, OUTSTANDING
+        List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getAllServiceLogsException(startDate, endDate, "PENDING");
         loadSiteServiceLog(siteServiceLogs);
 
     }
@@ -93,8 +90,6 @@ public class SiteServiceLogTable extends Table {
     }
 
     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate) {
-        List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getAllSiteServiceLogs(siteId, startDate, endDate);
-        loadSiteServiceLog(siteServiceLogs);
 //        table
     }
 }

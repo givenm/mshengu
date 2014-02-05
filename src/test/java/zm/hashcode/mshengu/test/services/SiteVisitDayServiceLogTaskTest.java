@@ -31,11 +31,11 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
     private SiteService siteService;
     @Autowired
     private CreateSiteServiceLogsService siteServiceScheduleLogsService;
-    private DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
+    private final DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
 //    private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
     private final DateTimeFormatHelper dtfh = new DateTimeFormatHelper();
 //    Date startDate = dtfh.getDate(18,10, 2013);
-    Date endDate = dtfh.getDate(1, 1, 2014);
+    Date endDate = dtfh.getDate(19, 10, 2013);
 
     private void setTodaysDate(Date date) {
         dtfwh.setDate(date);
@@ -65,14 +65,47 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
 
 //        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
     }
-    
-    
-    //    @Test
+
+//    @Test
+    public void findAllWithVistTodayTest(){
+      
+        siteService = ctx.getBean(SiteService.class);
+        setTodaysDate(endDate);
+         List<Site> sitesList = siteService.findAllWithVisitToday(dtfwh.getDateToday());
+         
+        int count = 0;
+        int size = sitesList.size();
+        System.out.println("Count " + size);
+        System.out.println("\n\n================= DAY [ " + dtfwh.getDayOfWeekTodayStr() + " ] - VISIT DATE : "  + endDate);
+        for (Site site : sitesList) {
+            count++;
+            System.out.println("\n\n --- Site No" + count + "/" + size + "---" +site.getName());
+        }
+    }
+//        @Test
     public void createLogsWithRecursion() {
         logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(endDate);
         setTodaysDate(calendar.getTime());
         logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
+    }
+
+    public void updateLogs(Date date) {
+        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        setTodaysDate(calendar.getTime());
+        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+        logSheduledSiteServices.updateOpensSiteServicesLogs(date);
+    }
+
+    public void closeLogs(Date date) {
+        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        setTodaysDate(calendar.getTime());
+        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+        logSheduledSiteServices.closeOutdatedSiteServicesLogs(date);
     }
 }

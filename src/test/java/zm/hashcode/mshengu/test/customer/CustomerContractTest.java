@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.customer.Contract;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
+import zm.hashcode.mshengu.domain.products.SiteServiceContractLifeCycle;
 import zm.hashcode.mshengu.services.customer.ContractService;
 import zm.hashcode.mshengu.services.customer.CustomerService;
 import zm.hashcode.mshengu.services.people.PersonService;
 import zm.hashcode.mshengu.services.products.SiteService;
-import zm.hashcode.mshengu.services.ui.util.RoleService;
+import zm.hashcode.mshengu.services.products.SiteServiceContractLifeCycleService;
 import zm.hashcode.mshengu.test.AppTest;
 import static zm.hashcode.mshengu.test.AppTest.ctx;
 
@@ -30,7 +30,7 @@ import static zm.hashcode.mshengu.test.AppTest.ctx;
 public class CustomerContractTest extends AppTest {
 
     @Autowired
-    private RoleService roleService;
+    private SiteServiceContractLifeCycleService siteServiceContractLifeCycleService;
     @Autowired
     private PersonService personService;
     @Autowired
@@ -53,11 +53,9 @@ public class CustomerContractTest extends AppTest {
             System.out.println("Customer Count = " + count);
             int x = 1;
 
-
             for (Customer customer : customerList) {
                 System.out.println("\n=============Site no " + x + "/" + count + "==================");
                 System.out.println("Customer Name : " + customer.getName());
-
 
                 Set<Contract> contractList = customer.getContracts();
 
@@ -110,7 +108,6 @@ public class CustomerContractTest extends AppTest {
             }
         }
 
-
     }
 
 //    @Test
@@ -129,7 +126,6 @@ public class CustomerContractTest extends AppTest {
             System.out.println("Customer Count = " + countCust);
             int xCust = 1;
 
-
             for (Customer customer : customerList) {
                 calcTotalCust++;
                 System.out.println("\n=============Customer no " + xCust + " of " + countCust + "==================");
@@ -142,9 +138,7 @@ public class CustomerContractTest extends AppTest {
                     int countSite = siteList.size();
                     aggtotalSIte += countSite;
 
-
                     int xSite = 1;
-
 
                     for (Site site : siteList) {
                         calcTotalSite++;
@@ -175,4 +169,51 @@ public class CustomerContractTest extends AppTest {
 //            .contract(contract)
 //            .build();
 //}
+
+    public void updateSietContractLifeCycle() {
+
+        customerService = ctx.getBean(CustomerService.class);
+        List<Customer> customerList = customerService.findAll();
+//       siteList.subList(fromIndex, toIndex)
+        if (customerList != null) {
+            int count = customerList.size();
+            System.out.println("Customer Count = " + count);
+            int x = 1;
+
+            for (Customer customer : customerList) {
+                System.out.println("\n=============Site no " + x + "/" + count + "==================");
+
+                String contractType = customer.getLastContactTypeName();
+                Set<Site> siteList = customer.getSites();
+                System.out.println("Customer Name : " + customer.getName());
+                System.out.println("Site Count : " + siteList.size());
+                System.out.println("Contract Type : " + contractType);
+                updateSiteContractLifeCycle(siteList, contractType);
+
+                x++;
+            }
+        }
+
+    }
+
+    private void updateSiteContractLifeCycle(Set<Site> siteList, String contractType) {
+        siteServiceContractLifeCycleService = ctx.getBean(SiteServiceContractLifeCycleService.class);
+
+        for (Site site : siteList) {
+            if (site != null) {
+                if (site.getLastSiteServiceContractLifeCycle() != null) {
+                    SiteServiceContractLifeCycle siteServiceContractLifeCycle = site.getLastSiteServiceContractLifeCycle();
+                    SiteServiceContractLifeCycle newSiteServiceContractLifeCycle = new SiteServiceContractLifeCycle.Builder(siteServiceContractLifeCycle.getDateofAction())
+                            .siteServiceContractLifeCycle(siteServiceContractLifeCycle)
+                            .parentId(site.getName())
+                            .contractType(contractType)
+                            .build();
+                    siteServiceContractLifeCycleService.merge(newSiteServiceContractLifeCycle);
+
+                }
+            }
+        }
+//                System.out.println("Last Contract Type" + customer.getLastContactTypeName());
+//                System.out.println("Last Contract Date of Action Date " + customer.getLastContactDateOfAction());
+    }
 }

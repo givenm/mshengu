@@ -91,6 +91,7 @@ public class StatusTab extends VerticalLayout implements
         }
     }
 
+    
     private void deleteForm(FieldGroup binder) {
         StatusFacade.getStatusService().delete(getEntity(binder));
         getHome();
