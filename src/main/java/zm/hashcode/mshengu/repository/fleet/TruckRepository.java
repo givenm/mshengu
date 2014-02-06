@@ -9,8 +9,8 @@ import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
  *
- * @author Luckbliss
+ * @author Colin
  */
-public interface TruckRepository extends PagingAndSortingRepository<Truck, String>{
-    
+public interface TruckRepository extends PagingAndSortingRepository<Truck, String>, TruckRepositoryCustom {
+//    public Truck findByVehicleNumber(String vehicleNumber);
 }

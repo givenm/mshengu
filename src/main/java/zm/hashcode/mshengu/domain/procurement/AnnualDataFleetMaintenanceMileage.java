@@ -78,7 +78,7 @@ public class AnnualDataFleetMaintenanceMileage implements Serializable, Comparab
     public int compareTo(AnnualDataFleetMaintenanceMileage o) {
         return this.transactionMonth.compareTo(o.transactionMonth);
     }
-    public static Comparator<AnnualDataFleetMaintenanceMileage> DescOrderTransactionDateAscOrderTruck = new Comparator<AnnualDataFleetMaintenanceMileage>() {
+    public static Comparator<AnnualDataFleetMaintenanceMileage> DescOrderDateAscOrderTruck = new Comparator<AnnualDataFleetMaintenanceMileage>() {
         @Override
         public int compare(AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage1, AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage2) {
 

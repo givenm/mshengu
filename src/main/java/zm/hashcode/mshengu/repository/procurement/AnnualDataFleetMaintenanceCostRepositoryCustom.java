@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.services.procurement;
+package zm.hashcode.mshengu.repository.procurement;
 
 import java.util.Date;
 import java.util.List;
@@ -13,19 +13,8 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
  *
  * @author Colin
  */
-public interface AnnualDataFleetMaintenanceCostService {
+public interface AnnualDataFleetMaintenanceCostRepositoryCustom {
 
-    public List<AnnualDataFleetMaintenanceCost> findAll();
-
-    public void persist(AnnualDataFleetMaintenanceCost value);
-
-    public void merge(AnnualDataFleetMaintenanceCost value);
-
-    public AnnualDataFleetMaintenanceCost findById(String id);
-
-    public void delete(AnnualDataFleetMaintenanceCost value);
-
-//    public List<AnnualDataFleetMaintenanceCost> getMonthlyMaintenanceCostBtnTwoDates(Date start, Date end);
     public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostBetweenTwoDates(Date from, Date to);
 
     public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostByTruckBetweenTwoDates(Truck truck, Date from, Date to);

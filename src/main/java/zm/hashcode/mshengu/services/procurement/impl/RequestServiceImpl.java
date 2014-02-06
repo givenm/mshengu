@@ -11,8 +11,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.repository.procurement.RequestRepository;
@@ -91,40 +91,66 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> getTransactedRequestsBtnTwoDates(Date start, Date end) {
-        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        Date resetStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
-        Date resetEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+        return repository.getTransactedRequestsBtnTwoDates(start, end);
 
-        List<Request> requestList = new ArrayList<>();
-        List<Request> allRequestList = findAll();
+//        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        Date resetStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
+//        Date resetEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+//
+//        List<Request> requestList = new ArrayList<>();
+//        List<Request> allRequestList = findAll();
+//
+//        for (Request request : allRequestList) {
+//            if (request.getDeliveryDate() != null && request.getOrderNumber() != null) { // Uncompleted Request have DeliveryDate and OrderNumber with null
+//                Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(request.getDeliveryDate());
+//                if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
+//                    requestList.add(request);
+//                }
+//            }
+//        }
+//        return requestList;
+    }
 
-        for (Request request : allRequestList) {
-            if (request.getDeliveryDate() != null && request.getOrderNumber() != null) { // Uncompleted Request have DeliveryDate and OrderNumber with null
-                Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(request.getDeliveryDate());
-                if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
-                    requestList.add(request);
-                }
-            }
-        }
-        return requestList;
+//    @Override
+//    public List<Request> findByServiceProvider(String id) {
+//        List<Request> requestList = new ArrayList<>();
+//        List<Request> allRequestList = findAll();
+//        for (Request request : allRequestList) {
+//            if (getServiceProvider(request.getServiceProvider()).equalsIgnoreCase(id)) {
+//                requestList.add(request);
+//            }
+//        }
+//        return requestList;
+//    }
+//
+//    private String getServiceProvider(ServiceProvider serviceProvider) {
+//        if (serviceProvider != null) {
+//            return serviceProvider.getId();
+//        }
+//        return null;
+//    }
+    @Override
+    public List<Request> getTransactedRequestsByTruckBtnTwoDates(Truck truck, Date start, Date end) {
+        return repository.getTransactedRequestsByTruckBtnTwoDates(truck, start, end);
     }
 
     @Override
-    public List<Request> findByServiceProvider(String id) {
-        List<Request> requestList = new ArrayList<>();
-        List<Request> allRequestList = findAll();
-        for (Request request : allRequestList) {
-            if (getServiceProvider(request.getServiceProvider()).equalsIgnoreCase(id)) { 
-                requestList.add(request);
-            }
-        }
-        return requestList;
+    public List<Request> getTransactedRequestsByTruckByMonth(Truck truck, Date month) {
+        return repository.getTransactedRequestsByTruckByMonth(truck, month);
     }
-    
-    private String getServiceProvider(ServiceProvider serviceProvider){
-        if(serviceProvider != null){
-            return serviceProvider.getId();
-        }
-        return null;
+
+    @Override
+    public List<Request> getTransactedRequestsByServiceProviderBtnTwoDates(ServiceProvider sericeProvider, Date start, Date end) {
+        return repository.getTransactedRequestsByServiceProviderBtnTwoDates(sericeProvider, start, end);
+    }
+
+    @Override
+    public List<Request> getTransactedRequestsByServiceProviderByMonth(ServiceProvider serviceProvider, Date month) {
+        return repository.getTransactedRequestsByServiceProviderByMonth(serviceProvider, month);
+    }
+
+    @Override
+    public List<Request> getTransactedRequestsByServiceProvider(ServiceProvider serviceProvider) {
+        return repository.getTransactedRequestsByServiceProvider(serviceProvider);
     }
 }

@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
@@ -45,18 +44,18 @@ public class AnnualMaintenanceCostTable extends AnnualDataSuperTable {
         addContainerProperty("RowHead", String.class, null, "", null, Table.Align.RIGHT); // SHORT DATE e.g. Jun-2013
     }
 
-    public void populateAnnualMaintenanceCostTable(List<MonthlySpendData> totalMonthlySpendDataList, int annualDataMonthCount, Date startDate) {
+    public void populateAnnualMaintenanceCostTable(List<MonthlySpendData> totalMonthlySpendDataList, int annualDataMonthCount, Date startDate, List<Truck> serviceTrucks) {
         this.annualDataMonthCount = annualDataMonthCount;
         // Sort in Ascending Order of VehicleNumber happened in TruckService's  findAllServiceAndUtilityVehicles
-        List<Truck> serviceUtilityTrucksList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
-        int columnSize = serviceUtilityTrucksList.size() + 2;
+//        List<Truck> serviceUtilityTrucksList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
+        int columnSize = serviceTrucks.size() + 2;
         int rowSize = annualDataMonthCount + 1;
 
         // DYNAMICALLY create the other Table columns
-        createTruckColumns(serviceUtilityTrucksList, serviceUtilityTrucksList.size());
+        createTruckColumns(serviceTrucks, serviceTrucks.size());
 
         this.removeAllItems();
-        populateTable(totalMonthlySpendDataList, rowSize, columnSize, serviceUtilityTrucksList);
+        populateTable(totalMonthlySpendDataList, rowSize, columnSize, serviceTrucks);
 
         /*
          super.resetColumnWidths();
@@ -88,13 +87,11 @@ public class AnnualMaintenanceCostTable extends AnnualDataSuperTable {
         createRows(rowSize);
 
 //        System.out.println("\nIn Populate Table Method the ff data was found");
-        int i = 1; // Table row counter, Row 0 is Total Row
-        Date transactDate = totalMonthlySpendDataList.get(0).getTransactDate();
 
+        Date transactDate = totalMonthlySpendDataList.get(0).getTransactDate();
+        int i = 1; // Table row counter, Row 0 is Total Row
         for (MonthlySpendData monthlySpendData : totalMonthlySpendDataList) {
             int x = 0;
-//            System.out.println(monthlySpendData.getVehicleNumber() + " - " + monthlySpendData.getTransactionDate() + " - " + monthlySpendData.getTruckMonthlySpendTotal());
-
             // NB The last Record in the totalMonthlySpendDataList will not enter this IF Statement
             if (dateTimeFormatHelper.resetTimeAndMonthStart(monthlySpendData.getTransactDate()).compareTo(dateTimeFormatHelper.resetTimeAndMonthStart(transactDate)) > 0) {
                 getItem(i).getItemProperty("RowHead").setValue(totalMonthlySpendDataList.get(totalMonthlySpendDataList.indexOf(monthlySpendData) - 1).getTransactionDate());
@@ -120,7 +117,7 @@ public class AnnualMaintenanceCostTable extends AnnualDataSuperTable {
                 grandTotal = grandTotal.add(monthlySpendData.getTruckMonthlySpendTotal());
             }
 
-            // Test if this is the last recored in the List totalMonthlySpendDataList
+            // Test if this is the last record in the List totalMonthlySpendDataList
             if (totalMonthlySpendDataList.indexOf(monthlySpendData) == totalMonthlySpendDataList.size() - 1) {
                 getItem(i).getItemProperty("RowHead").setValue(monthlySpendData.getTransactionDate());
                 getItem(i).getItemProperty("Total").setValue(df.format(Double.parseDouble(monthTotal.toString())));

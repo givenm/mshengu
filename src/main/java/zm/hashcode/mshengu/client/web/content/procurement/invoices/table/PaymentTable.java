@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
@@ -34,49 +35,57 @@ public class PaymentTable extends Table {
 
     public final void loadTable(String month, String year) {
         grandTotal = new BigDecimal("0.00");
+        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         if (month != null) {
             List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
-                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-                List<Request> newlist = new ArrayList<>();
-                if (list != null) {
-                    for (Request request : list) {
-                        if (request.getInvoiceNumber() != null) {
-                            String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-                            String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-                            if (datemonth.equals(month) && year.equals(dateyear)) {
-                                newlist.add(request);
-                            }
-                        }
-                    }
-                    if (newlist.size() > 0) {
-                        addItem(new Object[]{
-                            serviceProvider.getName(),
-                            f.format(getSupplierTotal(newlist)),}, serviceProvider.getId());
-                        grandTotal = grandTotal.add(getSupplierTotal(newlist));
-                    }
+//                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+                // Repository get requests by ServiceProvieder withing the Month/year specified and whose InvoiceNumber is NotNull
+                List<Request> list = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, dateTimeFormatHelper.getDate(Integer.parseInt(year), Integer.parseInt(month)));
+
+//                List<Request> newlist = new ArrayList<>();
+                if (!list.isEmpty()) {
+//                    for (Request request : list) {
+//                        if (request.getInvoiceNumber() != null) {
+////                            String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
+////                            String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
+////                            if (datemonth.equals(month) && year.equals(dateyear)) {
+//                                newlist.add(request);
+////                            }
+//                        }
+//                    }
+//                    if (newlist.size() > 0) {
+                    addItem(new Object[]{
+                        serviceProvider.getName(),
+                        f.format(getSupplierTotal(list)),}, serviceProvider.getId());
+                    grandTotal = grandTotal.add(getSupplierTotal(list));
+//                    }
                 }
             }
         } else {
             List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
-                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-                List<Request> newlist = new ArrayList<>();
+//                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+
+                // Repository get requests by ServiceProvieder and whose InvoiceNumber is NotNull
+                List<Request> list = RequestFacade.getRequestService().getTransactedRequestsByServiceProvider(serviceProvider);
+
+//                List<Request> newlist = new ArrayList<>();
+//                if (list.size() > 0) {
+//                    if (list != null) {
+//                        for (Request request : list) {
+//                            if (request.getInvoiceNumber() != null) {
+//                                newlist.add(request);
+//                            }
+//                        }
                 if (list.size() > 0) {
-                    if (list != null) {
-                        for (Request request : list) {
-                            if (request.getInvoiceNumber() != null) {
-                                newlist.add(request);
-                            }
-                        }
-                        if (newlist.size() > 0) {
-                            addItem(new Object[]{
-                                serviceProvider.getName(),
-                                f.format(getSupplierTotal(newlist)),}, serviceProvider.getId());
-                            grandTotal = grandTotal.add(getSupplierTotal(newlist));
-                        }
-                    }
+                    addItem(new Object[]{
+                        serviceProvider.getName(),
+                        f.format(getSupplierTotal(list)),}, serviceProvider.getId());
+                    grandTotal = grandTotal.add(getSupplierTotal(list));
                 }
+//                    }
+//                }
             }
         }
     }
@@ -86,11 +95,13 @@ public class PaymentTable extends Table {
     }
 
     private BigDecimal getSupplierTotal(List<Request> requests) {
-        BigDecimal total = new BigDecimal("0");
+        BigDecimal total = BigDecimal.ZERO;
         for (Request request : requests) {
-            if (request.getInvoiceNumber() != null) {
-                total = total.add(request.getTotal());
-            }
+            // Null check done at Repository Level
+
+//            if (request.getInvoiceNumber() != null) {
+            total = total.add(request.getTotal());
+//            }
         }
         return total;
     }

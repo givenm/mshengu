@@ -46,7 +46,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     private final RatingTable ratingTable;
     private final MonthSpendTable monthSpendTable;
     private final VehicleRankingForm form;
-    public final VehicleRankingChart chart;
+    private final VehicleRankingChart chart;
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
     private static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
     private static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
@@ -278,6 +278,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
         monthSpendPanel.setWidth(monthSpendTable.getWidth() + "px");
 
         // ADD Panels to VehicleRankingChart.java
+        chart.chartRootVerticalLayout.removeAllComponents();
         chart.defineAndAddLayouts(kmTravelledVehicleChartPanel, vehicleNumberPanel, totalMaintenanceCostPanel, totalMileagePanel, randsPerKmPanel, ratingPanel, monthSpendPanel);
 
     }

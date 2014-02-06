@@ -11,5 +11,5 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
  *
  * @author Colin
  */
-public interface AnnualDataFleetMaintenanceCostRepository extends PagingAndSortingRepository<AnnualDataFleetMaintenanceCost, String> {
+public interface AnnualDataFleetMaintenanceCostRepository extends PagingAndSortingRepository<AnnualDataFleetMaintenanceCost, String>, AnnualDataFleetMaintenanceCostRepositoryCustom {
 }

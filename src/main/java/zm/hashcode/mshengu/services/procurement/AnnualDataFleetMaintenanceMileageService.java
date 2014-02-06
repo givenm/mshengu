@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.services.procurement;
 
 import java.util.Date;
 import java.util.List;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 
 /**
@@ -24,5 +25,10 @@ public interface AnnualDataFleetMaintenanceMileageService {
 
     public void delete(AnnualDataFleetMaintenanceMileage value);
 
-    public List<AnnualDataFleetMaintenanceMileage> getMonthlyMileageCostBtnTwoDates(Date start, Date end);
+//    public List<AnnualDataFleetMaintenanceMileage> getMonthlyMileageBtnTwoDates(Date start, Date end);
+    public List<AnnualDataFleetMaintenanceMileage> getAnnualDataMileageByTruckBetweenTwoDates(Truck truck, Date from, Date to);
+
+    public List<AnnualDataFleetMaintenanceMileage> getAnnualDataMileageByTruckForMonth(Truck truck, Date month);
+
+    public List<AnnualDataFleetMaintenanceMileage> getAnnualDataMileageBetweenTwoDates(Date from, Date to);
 }
