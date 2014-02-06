@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.customer.Contract;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
@@ -169,7 +170,7 @@ public class CustomerContractTest extends AppTest {
 //            .contract(contract)
 //            .build();
 //}
-
+//@Test
     public void updateSietContractLifeCycle() {
 
         customerService = ctx.getBean(CustomerService.class);

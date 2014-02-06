@@ -22,7 +22,7 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
     @Autowired
     private RequestService requestService; //
 
-    @Test
+//    @Test
     public void testAddTruckIdSupplierIdToRequest() {
         requestService = ctx.getBean(RequestService.class);
         List<Request> requests = requestService.findAll();
@@ -37,7 +37,7 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
         }
     }
 
-    @Test(dependsOnMethods = {"testAddTruckIdSupplierIdToRequest"})
+//    @Test(dependsOnMethods = {"testAddTruckIdSupplierIdToRequest"})
     public void testDb() {
         requestService = ctx.getBean(RequestService.class);
         List<Request> requests = requestService.findAll();
