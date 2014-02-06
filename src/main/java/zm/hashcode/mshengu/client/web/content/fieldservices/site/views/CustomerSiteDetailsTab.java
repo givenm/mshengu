@@ -306,6 +306,8 @@ public class CustomerSiteDetailsTab extends VerticalLayout implements
                 .saturday(siteBean.isSaturday())
                 .sunday(siteBean.isSunday())
                 .siteUnit(siteUnitsList)
+                .parentId(siteBean.getName())
+                .contractType(getCustomerContractType())
                 .build();
 
         SiteServiceContractLifeCycleFacade.getSiteServiceContractService().persist(serviceContractLifeCycles);
@@ -394,6 +396,19 @@ public class CustomerSiteDetailsTab extends VerticalLayout implements
             return location.getParentLocationId();
         } else {
             return null;
+        }
+    }
+
+    private String getCustomerContractType() {
+        {
+            String contractType = "Other";
+            if (parentId != null) {
+                Customer customer = CustomerFacade.getCustomerService().findById(parentId);
+                if (customer != null) {
+                    contractType = customer.getLastContactTypeName();
+                }
+            }
+            return contractType;
         }
     }
 }
