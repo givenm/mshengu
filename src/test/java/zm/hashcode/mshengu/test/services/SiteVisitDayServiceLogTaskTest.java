@@ -35,7 +35,7 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
 //    private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
     private final DateTimeFormatHelper dtfh = new DateTimeFormatHelper();
 //    Date startDate = dtfh.getDate(18,10, 2013);
-    Date endDate = dtfh.getDate(27, 0, 2014);
+    Date endDate = dtfh.getDate(1, 1, 2014);
 
     private void setTodaysDate(Date date) {
         dtfwh.setDate(date);
@@ -43,7 +43,7 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
     }
 
 //    @Test
-    public void createLogs() {
+    public void createLogsNoRecursion() {
         siteService = ctx.getBean(SiteService.class);
         siteServiceScheduleLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
 //        SiteService siteService;
@@ -64,5 +64,15 @@ public class SiteVisitDayServiceLogTaskTest extends AppTest {
         }
 
 //        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
+    }
+    
+    
+    //    @Test
+    public void createLogsWithRecursion() {
+        logSheduledSiteServices = ctx.getBean(LogSheduledSiteServices.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        setTodaysDate(calendar.getTime());
+        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
     }
 }

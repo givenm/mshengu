@@ -530,4 +530,8 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     }
     
     
+     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate){
+        table.loadServiceLogDetails(siteId, startDate, endDate);
+    }
+    
 }
