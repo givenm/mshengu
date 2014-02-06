@@ -145,7 +145,7 @@ public class TrackerUtil implements Serializable {
 
     public Integer doMileageCalculation(List<OperatingCost> queriedMonthOperatingCostList, Truck truck) {
         Integer lastClosingMileage = 0;
-        Integer previousClosingMileage = calculatePreviousMonthClosingMileage(truck);
+        Integer previousClosingMileage = calculatePreviousMonthClosingMileage(truck);//
 
         lastClosingMileage = queriedMonthOperatingCostList.get(queriedMonthOperatingCostList.size() - 1).getSpeedometer();
         if (!previousClosingMileage.equals(Double.parseDouble("0.0")) && !lastClosingMileage.equals(Double.parseDouble("0.0"))) {

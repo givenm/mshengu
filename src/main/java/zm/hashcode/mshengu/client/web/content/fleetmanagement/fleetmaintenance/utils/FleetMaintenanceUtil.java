@@ -37,7 +37,7 @@ public class FleetMaintenanceUtil implements Serializable {
     private static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
     public static BigDecimal grandTotalMonthlySpend = BigDecimal.ZERO;
-    public static List<Truck> serviceTrucks;
+    private static List<Truck> serviceTrucks;
 
     public FleetMaintenanceUtil() {
     }
@@ -53,6 +53,7 @@ public class FleetMaintenanceUtil implements Serializable {
     public void determineDateRange(Date endDate, int dateRange) {
         // Range is calculated as ending with Month before current month,
         // and counting into the past number of months specified in dateRange
+        serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
 
         Calendar calendarEndDate = Calendar.getInstance();
         Calendar calendarStartDate = Calendar.getInstance();
@@ -64,6 +65,9 @@ public class FleetMaintenanceUtil implements Serializable {
         calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
         calendarStartDate.add(Calendar.MONTH, -dateRange);
         setStartDate(resetMonthToFirstDay(calendarStartDate.getTime()));
+//
+//        System.out.println("StartDate: " + startDate + " | EndDate: " + this.endDate);
+
     }
 
     /**
@@ -75,13 +79,13 @@ public class FleetMaintenanceUtil implements Serializable {
      * @return List AnnualDataFleetMaintenanceCost
      */
     public List<AnnualDataFleetMaintenanceCost> findMaintenanceCostBetweenTwoDates(Date startDate, Date endDate) {
-        MaintenanceCostUtil maintenanceCostUtil = new MaintenanceCostUtil();
-        return maintenanceCostUtil.findMaintenanceCostBetweenTwoDates(startDate, endDate);
+        final MaintenanceCostUtil maintenanceCostUtil = new MaintenanceCostUtil();
+        return maintenanceCostUtil.findMaintenanceCostBetweenTwoDates(startDate, endDate, serviceTrucks);
     }
 
     public List<AnnualDataFleetMaintenanceMileage> findMaintenanceMileageBetweenTwoDates(Date startDate, Date endDate) {
-        MileageUtil mileageUtil = new MileageUtil();
-        return mileageUtil.findMaintenanceMileageBetweenTwoDates(startDate, endDate);
+        final MileageUtil mileageUtil = new MileageUtil();
+        return mileageUtil.findMaintenanceMileageBetweenTwoDates(startDate, endDate, serviceTrucks);
     }
 
     public List<TotalMaintenanceSpendMonthly> getMaintenanceSpendMonthlyChartData(List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList, Date startDate, int monthCount) {
@@ -95,7 +99,7 @@ public class FleetMaintenanceUtil implements Serializable {
         String truckId = null;
         Calendar startCalendar = Calendar.getInstance();
         startCalendar.setTime(startDate);
-        List<TotalMaintenanceSpendMonthly> maintenanceSpendMonthlyList = new ArrayList<>();
+        final List<TotalMaintenanceSpendMonthly> maintenanceSpendMonthlyList = new ArrayList<>();
 
         for (int j = 1; j <= monthCount; j++) {
             for (AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
@@ -119,17 +123,29 @@ public class FleetMaintenanceUtil implements Serializable {
     }
 
     public TotalMaintenanceSpendMonthly getTotalMaintenanceSpendMonthly(BigDecimal total, int j, String month, Date date, String truckId) {
+        String newMonth = month;
+        if (total.compareTo(BigDecimal.ZERO) == 0) {
+            newMonth = dateTimeFormatHelper.getMonthYearMonthAsMediumString(date.toString());
+        }
+
         TotalMaintenanceSpendMonthly totalMaintenanceSpendMonthly = new TotalMaintenanceSpendMonthly();
         totalMaintenanceSpendMonthly.setId(j + "");
         totalMaintenanceSpendMonthly.setMonth(date);
-        totalMaintenanceSpendMonthly.setMonthYear(month);
+        totalMaintenanceSpendMonthly.setMonthYear(newMonth);
         totalMaintenanceSpendMonthly.setTotal(total);
 
-        Truck eTruck = TruckFacade.getTruckService().findById(truckId);
-        totalMaintenanceSpendMonthly.setVehicleNumber(eTruck.getVehicleNumber());
-        totalMaintenanceSpendMonthly.setNumberPlate(eTruck.getNumberPlate());
+        Truck truck = null;
+        for (Truck truckk : serviceTrucks) {
+            if (truckk.getId().equals(truckId)) {
+                truck = truckk;
+                break;
+            }
+        }
 
-        System.out.println("Id is: " + totalMaintenanceSpendMonthly.getId() + ". Month: " + totalMaintenanceSpendMonthly.getMonthYear() + ", Total: " + totalMaintenanceSpendMonthly.getTotal());
+        totalMaintenanceSpendMonthly.setVehicleNumber(truck.getVehicleNumber());
+        totalMaintenanceSpendMonthly.setNumberPlate(truck.getNumberPlate());
+
+        System.out.println("Id is: " + j + ". Month: " + newMonth + ", Total: " + total);
         System.out.println("Grand Total is: " + grandTotalMaintenanceSpend);
 
         return totalMaintenanceSpendMonthly;
@@ -137,8 +153,8 @@ public class FleetMaintenanceUtil implements Serializable {
 
     public int countMonthsInRange(Date startDate, Date endDate) {
         int monthCount = 0;
-        Calendar startCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
+        final Calendar startCalendar = Calendar.getInstance();
+        final Calendar endCalendar = Calendar.getInstance();
 
         startCalendar.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(startDate));
         endCalendar.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
@@ -168,10 +184,10 @@ public class FleetMaintenanceUtil implements Serializable {
         String numberPlate = null;
         int counter = 0;
 
-        List<TotalMaintenanceSpendByVehicle> maintenanceSpendByVehicleList = new ArrayList<>();
+        final List<TotalMaintenanceSpendByVehicle> maintenanceSpendByVehicleList = new ArrayList<>();
 
-        List<Truck> allTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
-        for (Truck truckk : allTrucks) {
+
+        for (Truck truckk : getServiceTrucks()) {
             truckId = truckk.getId();
             numberPlate = truckk.getNumberPlate();
 
@@ -202,10 +218,10 @@ public class FleetMaintenanceUtil implements Serializable {
         String numberPlate = null;
         int counter = 0;
 
-        List<TotalMaintenanceMileage> totalMaintenanceMileageList = new ArrayList<>();
+        final List<TotalMaintenanceMileage> totalMaintenanceMileageList = new ArrayList<>();
 
-        List<Truck> allTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
-        for (Truck truckk : allTrucks) {
+
+        for (Truck truckk : serviceTrucks) {
             truckId = truckk.getId();
             numberPlate = truckk.getNumberPlate();
 
@@ -240,7 +256,7 @@ public class FleetMaintenanceUtil implements Serializable {
      * over corresponding "truckMileagetotal"
      */
     public List<TotalMaintenanceSpendKmTraveled> getMaintenanceMileageChartData(List<TotalMaintenanceMileage> spendMaintenanceMileageList, List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList) {
-        List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList = new ArrayList<>();
+        final List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList = new ArrayList<>();
         int counter = 0;
 
         for (TotalMaintenanceMileage totalMaintenanceMileage : spendMaintenanceMileageList) {
@@ -271,7 +287,7 @@ public class FleetMaintenanceUtil implements Serializable {
     }
 
     public Date resetMonthToFirstDay(Date date) {
-        Calendar calendarDate = Calendar.getInstance();
+        final Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
         calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
 
@@ -279,7 +295,7 @@ public class FleetMaintenanceUtil implements Serializable {
     }
 
     public Date resetMonthToLastDay(Date date) {
-        Calendar calendarDate = Calendar.getInstance();
+        final Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
         calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
 
@@ -291,11 +307,16 @@ public class FleetMaintenanceUtil implements Serializable {
         BigDecimal totalMonthlySpend = BigDecimal.ZERO;
         String month = null;
         int iD = 1;
-        Calendar calendar = Calendar.getInstance();
-        List<MonthlySpendData> monthlySpendDataList = new ArrayList<>();
+        final Calendar calendar = Calendar.getInstance();
+        final List<MonthlySpendData> monthlySpendDataList = new ArrayList<>();
 
         // Sort AnnualDataFleetMaintenanceCost List in DESC Order by Date. Extract last month data ONLY
         Collections.sort(annualDataFleetMaintenanceCostList, AnnualDataFleetMaintenanceCost.DescOrderDateAscOrderTruckComparator);
+
+//        System.out.println("annualDataFleetMaintenanceCostList after Sort Before BUILDING buildTwelvethMonthMaintenanceSpend List");
+//        for (AnnualDataFleetMaintenanceCost AnnualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
+//            System.out.println(AnnualDataFleetMaintenanceCost.getTruckId() + " | " + AnnualDataFleetMaintenanceCost.getTransactionMonth() + " | " + AnnualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
+//        }
 
         Date latestDate = annualDataFleetMaintenanceCostList.get(0).getTransactionMonth(); // the 12th month is AT the TOP in the List
         String latestTruckId = annualDataFleetMaintenanceCostList.get(0).getTruckId();
@@ -316,17 +337,21 @@ public class FleetMaintenanceUtil implements Serializable {
 
                     totalMonthlySpend = totalMonthlySpend.add(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
                 }
-
             } else {
                 break;
             }
         }
-
         return monthlySpendDataList;
     }
 
     private MonthlySpendData createTotalMonthlySpendList(BigDecimal totalMonthlySpend, String month, Date date, String truckId, int id) {
-        Truck truck = TruckFacade.getTruckService().findById(truckId);
+        Truck truck = null;
+        for (Truck truckk : serviceTrucks) {
+            if (truckk.getId().equals(truckId)) {
+                truck = truckk;
+                break;
+            }
+        }
         MonthlySpendData monthlySpendData = new MonthlySpendData();
         monthlySpendData.setVehicleNumber(truck.getVehicleNumber());
         monthlySpendData.setNumberPlate(truck.getNumberPlate());
@@ -336,134 +361,6 @@ public class FleetMaintenanceUtil implements Serializable {
         monthlySpendData.setId(id + "");
 
         return monthlySpendData;
-    }
-
-    public List<MonthlySpendData> buildAnnualDataMaintenanceCost(List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList) {
-        BigDecimal truckMonthlyTotal = BigDecimal.ZERO;
-        String month = null;
-        int iD = 1;
-        List<MonthlySpendData> monthlySpendDataList = new ArrayList<>();
-
-        Collections.sort(annualDataFleetMaintenanceCostList, AnnualDataFleetMaintenanceCost.AscOrderTruckAscOrderDateComparator);
-        //
-        Truck truck = TruckFacade.getTruckService().findById(annualDataFleetMaintenanceCostList.get(0).getTruckId());
-        String vehicleNumber = truck.getVehicleNumber();
-        Date transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceCostList.get(0).getTransactionMonth());
-        String latestTruckId = annualDataFleetMaintenanceCostList.get(0).getTruckId();
-
-        for (AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
-            if (this.resetMonthToFirstDay(annualDataFleetMaintenanceCost.getTransactionMonth()).compareTo(transactionDate) == 0) {
-                Truck truck2 = TruckFacade.getTruckService().findById(annualDataFleetMaintenanceCost.getTruckId());
-                if (!vehicleNumber.equals(truck2.getVehicleNumber())) { // TRUCK change
-                    // SUBTOTAL FOR LAST MONTH FOR PREVIOUS TRUCK
-                    month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(transactionDate.toString());
-                    monthlySpendDataList.add(createTotalMonthlySpendList(truckMonthlyTotal, month, transactionDate, latestTruckId, iD));
-                    iD++;
-
-                    truckMonthlyTotal = annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost();
-                    latestTruckId = annualDataFleetMaintenanceCost.getTruckId();
-                    vehicleNumber = truck2.getVehicleNumber();
-                    transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceCost.getTransactionMonth());
-
-                } else {
-                    // add to SUBTOTAL FOR CURRENT MONTH FOR CURRENT TRUCK
-                    truckMonthlyTotal = truckMonthlyTotal.add(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
-                }
-            } else { // if Month Changes
-                Truck truck2 = TruckFacade.getTruckService().findById(annualDataFleetMaintenanceCost.getTruckId());
-                if (!vehicleNumber.equals(truck2.getVehicleNumber())) {// Truck has Change
-                    month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(transactionDate.toString());
-                    monthlySpendDataList.add(createTotalMonthlySpendList(truckMonthlyTotal, month, transactionDate, latestTruckId, iD));
-                    iD++;
-
-                    truckMonthlyTotal = annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost();
-                    latestTruckId = annualDataFleetMaintenanceCost.getTruckId();
-                    vehicleNumber = truck2.getVehicleNumber();
-                    transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceCost.getTransactionMonth());
-
-
-                } else {
-//                    // SUBTOTAL FOR PREVIOUS MONTH FOR CURRENT TRUCK
-                    month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(transactionDate.toString());
-                    monthlySpendDataList.add(createTotalMonthlySpendList(truckMonthlyTotal, month, transactionDate, annualDataFleetMaintenanceCost.getTruckId(), iD));
-                    iD++;
-                    // resets
-                    transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceCost.getTransactionMonth());
-                    truckMonthlyTotal = annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost();
-                }
-            }
-        }
-        return monthlySpendDataList;
-    }
-
-    public List<MonthlyMileageData> buildAnnualDataMileage(List<AnnualDataFleetMaintenanceMileage> annualDataFleetMaintenanceMileageList) {
-        Integer truckMonthlyMileageTotal = Integer.parseInt("0");
-        String month = null;
-        int iD = 1;
-        List<MonthlyMileageData> monthlyMileageDataList = new ArrayList<>();
-
-        Collections.sort(annualDataFleetMaintenanceMileageList, AnnualDataFleetMaintenanceMileage.AscOrderTruckAscOrderDateComparator);
-        //
-        Truck truck = TruckFacade.getTruckService().findById(annualDataFleetMaintenanceMileageList.get(0).getTruckId());
-        String vehicleNumber = truck.getVehicleNumber();
-        Date transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceMileageList.get(0).getTransactionMonth());
-        String latestTruckId = annualDataFleetMaintenanceMileageList.get(0).getTruckId();
-
-        for (AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage : annualDataFleetMaintenanceMileageList) {
-            if (this.resetMonthToFirstDay(annualDataFleetMaintenanceMileage.getTransactionMonth()).compareTo(transactionDate) == 0) {
-                Truck truck2 = TruckFacade.getTruckService().findById(annualDataFleetMaintenanceMileage.getTruckId());
-                if (!vehicleNumber.equals(truck2.getVehicleNumber())) { // TRUCK change
-                    // SUBTOTAL FOR LAST MONTH FOR PREVIOUS TRUCK
-                    month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(transactionDate.toString());
-                    monthlyMileageDataList.add(createMonthlyMileageList(truckMonthlyMileageTotal, month, transactionDate, latestTruckId, iD));
-                    iD++;
-
-                    truckMonthlyMileageTotal = annualDataFleetMaintenanceMileage.getMonthlyMileage();
-                    latestTruckId = annualDataFleetMaintenanceMileage.getTruckId();
-                    vehicleNumber = truck2.getVehicleNumber();
-                    transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceMileage.getTransactionMonth());
-
-                } else {
-                    // add to SUBTOTAL FOR CURRENT MONTH FOR CURRENT TRUCK
-                    truckMonthlyMileageTotal += annualDataFleetMaintenanceMileage.getMonthlyMileage();
-                }
-            } else { // if Month Changes
-                Truck truck2 = TruckFacade.getTruckService().findById(annualDataFleetMaintenanceMileage.getTruckId());
-                if (!vehicleNumber.equals(truck2.getVehicleNumber())) {// Truck has Change
-                    month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(transactionDate.toString());
-                    monthlyMileageDataList.add(createMonthlyMileageList(truckMonthlyMileageTotal, month, transactionDate, latestTruckId, iD));
-                    iD++;
-                    // resets
-                    truckMonthlyMileageTotal = annualDataFleetMaintenanceMileage.getMonthlyMileage();
-                    latestTruckId = annualDataFleetMaintenanceMileage.getTruckId();
-                    vehicleNumber = truck2.getVehicleNumber();
-                    transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceMileage.getTransactionMonth());
-                } else {
-//                    // SUBTOTAL FOR PREVIOUS MONTH FOR CURRENT TRUCK
-                    month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(transactionDate.toString());
-                    monthlyMileageDataList.add(createMonthlyMileageList(truckMonthlyMileageTotal, month, transactionDate, annualDataFleetMaintenanceMileage.getTruckId(), iD));
-                    iD++;
-                    // resets
-                    transactionDate = this.resetMonthToFirstDay(annualDataFleetMaintenanceMileage.getTransactionMonth());
-                    truckMonthlyMileageTotal = annualDataFleetMaintenanceMileage.getMonthlyMileage();
-                }
-            }
-        }
-
-        return monthlyMileageDataList;
-    }
-
-    private MonthlyMileageData createMonthlyMileageList(Integer monthlyMileageTotal, String month, Date date, String truckId, int id) {
-        Truck truck = TruckFacade.getTruckService().findById(truckId);
-        MonthlyMileageData monthlyMileageData = new MonthlyMileageData();
-        monthlyMileageData.setVehicleNumber(truck.getVehicleNumber());
-        monthlyMileageData.setNumberPlate(truck.getNumberPlate());
-        monthlyMileageData.setTransactionDate(month);
-        monthlyMileageData.setTransactDate(date);
-        monthlyMileageData.setTruckMonthlyMileageTotal(monthlyMileageTotal);
-        monthlyMileageData.setId(id + "");
-
-        return monthlyMileageData;
     }
 
     /**
@@ -492,5 +389,12 @@ public class FleetMaintenanceUtil implements Serializable {
      */
     public static void setEndDate(Date aEndDate) {
         endDate = aEndDate;
+    }
+
+    /**
+     * @return the serviceTrucks
+     */
+    public static List<Truck> getServiceTrucks() {
+        return serviceTrucks;
     }
 }

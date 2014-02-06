@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.domain.procurement;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -56,6 +57,8 @@ public final class Request implements Serializable, Comparable<Request> {
     private String approver;
     private Date orderDate;
     private boolean emailstatus;
+    private String truckId;
+    private String serviceProviderSupplierId;
 
     private Request() {
     }
@@ -83,12 +86,25 @@ public final class Request implements Serializable, Comparable<Request> {
         this.paymentDate = builder.paymentDate;
         this.approver = builder.approver;
         this.emailstatus = builder.emailstatus;
+        this.truckId = builder.truckId;
+        this.serviceProviderSupplierId = builder.serviceProviderSupplierId;
     }
 
     @Override
     public int compareTo(Request o) {
         return getOrderNumber().compareToIgnoreCase(o.getOrderNumber());
     }
+    public static Comparator<Request> AscOrderTruckAscOrderDeliveryDateComparator = new Comparator<Request>() {
+        @Override
+        public int compare(Request request1, Request request2) {
+            // Ascending Order by Truck
+            int compareOne = request1.getTruckId().compareTo(request2.getTruckId());
+            // Ascending order by Delivery Date
+            int compareTwo = request1.getDeliveryDate().compareTo(request2.getDeliveryDate());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
 
     @Override
     public int hashCode() {
@@ -136,6 +152,8 @@ public final class Request implements Serializable, Comparable<Request> {
         private String approver;
         private Date orderDate;
         private boolean emailstatus;
+        private String truckId;
+        private String serviceProviderSupplierId;
 
         public Builder(Person value) {
             this.person = value;
@@ -162,6 +180,8 @@ public final class Request implements Serializable, Comparable<Request> {
             this.paymentDate = request.getPaymentDate();
             this.approver = request.getApprover();
             this.emailstatus = request.isEmailstatus();
+            this.truckId = request.getTruckId();
+            this.serviceProviderSupplierId = request.getServiceProviderSupplierId();
             return this;
         }
 
@@ -267,6 +287,16 @@ public final class Request implements Serializable, Comparable<Request> {
 
         public Builder orderNumber(String value) {
             this.orderNumber = value;
+            return this;
+        }
+
+        public Builder truckId(String value) {
+            this.truckId = value;
+            return this;
+        }
+
+        public Builder serviceProviderSupplierId(String value) {
+            this.serviceProviderSupplierId = value;
             return this;
         }
 
@@ -409,5 +439,19 @@ public final class Request implements Serializable, Comparable<Request> {
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return the truckId
+     */
+    public String getTruckId() {
+        return truckId;
+    }
+
+    /**
+     * @return the serviceProviderSupplierId
+     */
+    public String getServiceProviderSupplierId() {
+        return serviceProviderSupplierId;
     }
 }

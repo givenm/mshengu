@@ -11,5 +11,5 @@ import zm.hashcode.mshengu.domain.procurement.MaintenanceSpendBySupplier;
  *
  * @author Colin
  */
-public interface MaintenanceSpendBySupplierRepository extends PagingAndSortingRepository<MaintenanceSpendBySupplier, String> {
+public interface MaintenanceSpendBySupplierRepository extends PagingAndSortingRepository<MaintenanceSpendBySupplier, String>, MaintenanceSpendBySupplierRepositoryCustom {
 }

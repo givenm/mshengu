@@ -68,13 +68,15 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public Truck findByVehicleNumber(String vehicleNumber) {
-        List<Truck> allTrucks = findAll();
-        for (Truck truck : allTrucks) {
-            if (truck.getVehicleNumber().toLowerCase().equals(vehicleNumber.toLowerCase())) {
-                return truck;
-            }
-        }
-        return null;
+        return repository.findByVehicleNumber(vehicleNumber);
+
+//        List<Truck> allTrucks = findAll();
+//        for (Truck truck : allTrucks) {
+//            if (truck.getVehicleNumber().toLowerCase().equals(vehicleNumber.toLowerCase())) {
+//                return truck;
+//            }
+//        }
+//        return null;
     }
 
     @Override
@@ -89,8 +91,8 @@ public class TruckServiceImpl implements TruckService {
     public Truck findBySiteName(String siteName) {
         List<Truck> truckList = (List<Truck>) repository.findAll();
         Collection<Truck> truckFilteredList = Collections2.filter(truckList, new SiteNameTruckPredicate(siteName));
-        Iterator<Truck> truckIterator = truckFilteredList.iterator(); 
-        return truckIterator.hasNext()? truckIterator.next() : null;
+        Iterator<Truck> truckIterator = truckFilteredList.iterator();
+        return truckIterator.hasNext() ? truckIterator.next() : null;
 //        return Iterator truckFilteredList.iterator().next();
 //        return ImmutableList.copyOf();
 

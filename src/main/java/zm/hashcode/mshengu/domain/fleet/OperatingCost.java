@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.domain.fleet;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
@@ -32,6 +33,7 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
     private BigDecimal randPerLitre;
     @DBRef
     private Person driver;
+    private String truckId;
 
     private OperatingCost() {
     }
@@ -47,6 +49,7 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
         this.oilCost = builder.oilCost;
         this.randPerLitre = builder.randPerLitre;
         this.driver = builder.driver;
+        this.truckId = builder.truckId;
     }
 
     public static class Builder {
@@ -61,6 +64,12 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
         private BigDecimal oilCost;
         private BigDecimal randPerLitre;
         private Person driver;
+        private String truckId;
+
+        public Builder truckId(String value) {
+            this.truckId = value;
+            return this;
+        }
 
         public Builder slipNo(String value) {
             this.slipNo = value;
@@ -69,7 +78,6 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
 
         public Builder(Date transactionDate) {
             this.transactionDate = transactionDate;
-
         }
 
         public Builder id(String value) {
@@ -121,6 +129,30 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
     public int compareTo(OperatingCost o) {
         return transactionDate.compareTo(o.transactionDate);
     }
+    public static Comparator<OperatingCost> AscOrderDateAscOrderTruckIdComparator = new Comparator<OperatingCost>() {
+        @Override
+        public int compare(OperatingCost operatingCost1, OperatingCost operatingCost2) {
+
+            //Ascending order by Date
+            int compareOne = operatingCost1.getTransactionDate().compareTo(operatingCost2.getTransactionDate());
+            // Ascending Order by TruckId
+            int compareTwo = operatingCost1.getTruckId().compareTo(operatingCost2.getTruckId());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
+    public static Comparator<OperatingCost> AscOrderTruckIdAscOrderDateComparator = new Comparator<OperatingCost>() {
+        @Override
+        public int compare(OperatingCost operatingCost1, OperatingCost operatingCost2) {
+
+            //Ascending order by TruckId
+            int compareOne = operatingCost1.getTruckId().compareTo(operatingCost2.getTruckId());
+            // Ascending Order by Date
+            int compareTwo = operatingCost1.getTransactionDate().compareTo(operatingCost2.getTransactionDate());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
 
     @Override
     public int hashCode() {
@@ -233,5 +265,12 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return the truckId
+     */
+    public String getTruckId() {
+        return truckId;
     }
 }

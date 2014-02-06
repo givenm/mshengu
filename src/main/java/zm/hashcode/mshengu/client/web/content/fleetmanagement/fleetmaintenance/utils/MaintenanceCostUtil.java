@@ -14,7 +14,6 @@ import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.procurement.AnnualDataFleetMaintenanceCostFacade;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
-import static zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil.serviceTrucks;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -26,10 +25,13 @@ import zm.hashcode.mshengu.domain.procurement.Request;
 public class MaintenanceCostUtil implements Serializable {
 
     private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-    private final Date liveDataBeginDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 0, 2014)); // 1, 0, 2014    Test Live: 1, 11, 2013 // 10 = Nov, 11 = Dec, 0 = Jan
     // from December 1st 2013, MaintenanceCost is collected from persisted life data captured from UI (Procurement > Request)
-    private final Date staticDataEndDate = this.resetMonthToFirstDay(dateTimeFormatHelper.getDate(31, 11, 2013)); // 31, 11, 2013    Test Live: 31, 10, 2013   // 10 = Nov, 11 = Dec
     private final List<AnnualDataFleetMaintenanceCost> maintenanceCostList = new ArrayList<>();
+    private final Date liveDataStartDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 0, 2014)); // 1, 0, 2014    Test Live ON LOCAL: 1, 11, 2013 // 10 = Nov, 11 = Dec, 0 = Jan
+    // from December 1st 2013, MaintenanceCost is collected from persisted life data captured from UI (Procurement > Request)
+    private final Date staticDataStartDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 7, 2012));
+    private final Date staticDataEndDate = this.resetMonthToLastDay(dateTimeFormatHelper.getDate(31, 11, 2013)); // 31, 11, 2013    Test Live ON LOCAL: 31, 10, 2013   // 10 = Nov, 11 = Dec
+    private static List<Truck> serviceTrucks;
 
     /**
      * Retrieves a List of AnnualDataFleetMaintenanceCost between a specified
@@ -39,99 +41,84 @@ public class MaintenanceCostUtil implements Serializable {
      * @param endDate Date
      * @return List AnnualDataFleetMaintenanceCost
      */
-    public List<AnnualDataFleetMaintenanceCost> findMaintenanceCostBetweenTwoDates(Date startDate, Date endDate) {
-        Date liveDataEndDate = this.resetMonthToLastDay(endDate);
-        Date newEndDate = resetMonthToLastDay(endDate);
-        // if endDate is before Dec 1st, 2013, ELSE Collect live data
-        if (newEndDate.before(staticDataEndDate) || newEndDate.equals(staticDataEndDate)) {
-            return AnnualDataFleetMaintenanceCostFacade.getAnnualDataFleetMaintenanceCostService().getMonthlyMaintenanceCostBtnTwoDates(startDate, endDate);
+    public List<AnnualDataFleetMaintenanceCost> findMaintenanceCostBetweenTwoDates(Date startDate, Date endDate, List<Truck> serviceTrucks) {
+        this.serviceTrucks = serviceTrucks;
+
+        if (endDate.before(staticDataEndDate) || endDate.compareTo(staticDataEndDate) == 0) {
+            return AnnualDataFleetMaintenanceCostFacade.getAnnualDataFleetMaintenanceCostService().getAnnualDataCostBetweenTwoDates(startDate, endDate);
         } else {
-            if (startDate.before(staticDataEndDate)) {
-
-                // get MaintenanceCost static Data
-                maintenanceCostList.addAll(AnnualDataFleetMaintenanceCostFacade.getAnnualDataFleetMaintenanceCostService().getMonthlyMaintenanceCostBtnTwoDates(startDate, staticDataEndDate));
-
-                // get MaintenanceCost live data from Dec 1st 2013 till EndDate from Request domain
-                List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsBtnTwoDates(liveDataBeginDate, liveDataEndDate);
-                // Aggregate the request list and Add to maintenanceCostList (i.e. Monthly summary per Truck throughout the date range)
-                if (requestList.size() > 0) {
-                    serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
-                    Integer counter = new Integer("0");
-                    // Date Loop OR Calendar Loop from startDate till endDate
-                    Calendar startCalendar = Calendar.getInstance();
-                    for (startCalendar.setTime(liveDataBeginDate); startCalendar.getTime().before(liveDataEndDate); startCalendar.add(Calendar.MONTH, 1)) {
-                        Calendar endOfMonth = Calendar.getInstance();
-                        endOfMonth.setTime(this.resetMonthToLastDay(startCalendar.getTime()));
-                        for (Truck truck : serviceTrucks) {
-                            BigDecimal accumulatedTotal = BigDecimal.ZERO;
-                            for (Request request : requestList) {
-                                try {
-                                    if (truck.getId().equals(request.getTruck().getId())
-                                            && (request.getDeliveryDate().compareTo(startCalendar.getTime()) == 0
-                                            || request.getDeliveryDate().compareTo(endOfMonth.getTime()) == 0
-                                            || (request.getDeliveryDate().after(startCalendar.getTime()) && request.getDeliveryDate().before(endOfMonth.getTime())))) {
-                                        // Accumulate the Total for each Request for current Truck for current Month
-                                        accumulatedTotal = accumulatedTotal.add(request.getTotal());
-                                    }
-                                } catch (java.lang.NullPointerException ex) {
-                                }
-                            }
-                            // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
-                            counter++;
-                            final AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost = new AnnualDataFleetMaintenanceCost.Builder(startCalendar.getTime())
-                                    .driverPersonId(truck.getDriver().getId())
-                                    .id(counter + "")
-                                    .monthlyMaintenanceCost(accumulatedTotal)
-                                    .truckId(truck.getId())
-                                    .build();
-
-                            // ADD to maintenanceCostList List
-                            maintenanceCostList.add(annualDataFleetMaintenanceCost);
-                        }
-                    }
-                }
+            if (startDate.before(staticDataEndDate) || startDate.compareTo(staticDataEndDate) == 0) {
+                performStaticAndLiveDataHarvesting(startDate, endDate);
             } else {
-                // get all MaintenanceCost from StartDate till EndDate from Request domain (i.e. live data)
-                // Aggregate the request list and Add to maintenanceCostList  (i.e. Monthly summary per Truck throughout the date range)
-                // get MaintenanceCost live data from Dec 1st 2013 till EndDate from Request domain
-                List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsBtnTwoDates(startDate, endDate);
-                // Aggregate the request list and Add to maintenanceCostList (i.e. Monthly summary per Truck throughout the date range)
-                if (requestList.size() > 0) {
-                    serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
-                    Integer counter = new Integer("0");
-                    // Date Loop OR Calendar Loop from startDate till endDate
-                    Calendar startCalendar = Calendar.getInstance();
-                    for (startCalendar.setTime(this.resetMonthToFirstDay(liveDataBeginDate)); startCalendar.getTime().before(this.resetMonthToLastDay(endDate)); startCalendar.add(Calendar.MONTH, 1)) {
-                        Calendar endOfMonth = Calendar.getInstance();
-                        endOfMonth.setTime(this.resetMonthToLastDay(startCalendar.getTime()));
-                        for (Truck truck : serviceTrucks) {
-                            BigDecimal accumulatedTotal = BigDecimal.ZERO;
-                            for (Request request : requestList) {
-                                if (truck.getId().equals(request.getTruck().getId())
-                                        && (request.getDeliveryDate().compareTo(startCalendar.getTime()) == 0
-                                        || request.getDeliveryDate().compareTo(endOfMonth.getTime()) == 0
-                                        || (request.getDeliveryDate().after(startCalendar.getTime()) && request.getDeliveryDate().before(endOfMonth.getTime())))) {
-                                    // Accumulate the Total for each Request for current Truck for current Month
-                                    accumulatedTotal = accumulatedTotal.add(request.getTotal());
-                                }
-                            }
-                            // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
-                            counter++;
-                            final AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost = new AnnualDataFleetMaintenanceCost.Builder(startCalendar.getTime())
-                                    .driverPersonId(truck.getDriver().getId())
-                                    .id(counter + "")
-                                    .monthlyMaintenanceCost(accumulatedTotal)
-                                    .truckId(truck.getId())
-                                    .build();
-
-                            // ADD to maintenanceCostList List
-                            maintenanceCostList.add(annualDataFleetMaintenanceCost);
-                        }
-                    }
-                }
+                performLiveDataHarvesting(startDate, endDate);
             }
         }
         return maintenanceCostList;
+    }
+
+    private void performStaticAndLiveDataHarvesting(Date startDate, Date endDate) {
+        maintenanceCostList.addAll(AnnualDataFleetMaintenanceCostFacade.getAnnualDataFleetMaintenanceCostService().getAnnualDataCostBetweenTwoDates(startDate, staticDataEndDate));
+        Integer counter = new Integer("0");
+        // get MaintenanceCost live data from Dec 1st 2013 till EndDate from Request domain
+        // Aggregate the request list and Add to maintenanceCostList (i.e. Monthly summary per Truck throughout the date range)
+
+        // Date Loop OR Calendar Loop from startDate till endDate
+        Calendar startCalendar = Calendar.getInstance();
+        for (startCalendar.setTime(liveDataStartDate); startCalendar.getTime().before(endDate) || startCalendar.getTime().compareTo(endDate) == 0; startCalendar.add(Calendar.MONTH, 1)) {
+            for (Truck truck : serviceTrucks) {
+                BigDecimal accumulatedTotal = BigDecimal.ZERO;
+                List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsByTruckByMonth(truck, startCalendar.getTime());
+                if (!requestList.isEmpty()) {
+                    for (Request request : requestList) {
+                        // Accumulate the Total for each Request for current Truck for current Month
+                        accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                    }
+                    // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
+                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, accumulatedTotal);
+                } else {
+                    // Add a Zero for the Month
+                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, BigDecimal.ZERO);
+                    System.out.println("Zero Month in Maintenance Cost Live Data " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()));
+                }
+            }
+        }
+    }
+
+    private void performLiveDataHarvesting(Date startDate, Date endDate) {
+        // Aggregate the request list and Add to maintenanceCostList (i.e. Monthly summary per Truck throughout the date range)
+        Integer counter = new Integer("0");
+        // Date Loop OR Calendar Loop from startDate till endDate
+        Calendar startCalendar = Calendar.getInstance();
+        for (startCalendar.setTime(startDate); startCalendar.getTime().before(endDate) || startCalendar.getTime().compareTo(endDate) == 0; startCalendar.add(Calendar.MONTH, 1)) {
+            for (Truck truck : serviceTrucks) {
+                BigDecimal accumulatedTotal = BigDecimal.ZERO;
+                List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsByTruckByMonth(truck, startCalendar.getTime());
+                if (!requestList.isEmpty()) {
+                    for (Request request : requestList) {
+                        accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                    }
+                    // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
+                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, accumulatedTotal);
+                } else {
+                    // Add a Zero for the Month
+                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, BigDecimal.ZERO);
+                    System.out.println("Zero Month in Maintenance Cost Live Data " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()));
+                }
+            }
+        }
+    }
+
+    private AnnualDataFleetMaintenanceCost buildAnnualDataFleetMaintenanceCostList(int counter, Truck truck, Calendar startCalendar, BigDecimal monthlyCost) {
+        // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
+        counter++;
+        final AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost = new AnnualDataFleetMaintenanceCost.Builder(startCalendar.getTime())
+                .driverPersonId(truck.getDriver().getId())
+                .id(counter + "")
+                .monthlyMaintenanceCost(monthlyCost)
+                .truckId(truck.getId())
+                .build();
+
+        return annualDataFleetMaintenanceCost;
     }
 
     public Date resetMonthToFirstDay(Date date) {
