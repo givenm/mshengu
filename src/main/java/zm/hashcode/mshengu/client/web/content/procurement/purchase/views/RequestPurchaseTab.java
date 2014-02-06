@@ -74,6 +74,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
         //Register Button Listeners
         form.save.addClickListener((Button.ClickListener) this);
         form.approval.addClickListener((Button.ClickListener) this);
+        //form.editItemsButton.addClickListener((Button.ClickListener) this);
         form.name.addValueChangeListener((Property.ValueChangeListener) this);
         form.itemDescription.addValueChangeListener((Property.ValueChangeListener) this);
         form.quantity.addValueChangeListener((Property.ValueChangeListener) this);
@@ -90,7 +91,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
         } else if (source == form.approval) {
             sendRequest(form.binder);
             getHome();
-        }
+        } 
+//        else if (source == form.editItemsButton) {
+//            allowEditOfItems();
+//        }
     }
 
     @Override
@@ -114,8 +118,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     form.description.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.description);
                     form.itemDescription.setRequired(true);
-                    form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 3);
-                    
+                    form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 4);
+
                 }
                 for (ServiceProviderProduct product : provider.getServiceProviderProduct()) {
                     form.itemDescription.addItem(product.getId());
@@ -133,14 +137,12 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     form.postalCode.setValue(contactPerson.getCode());
                 }
                 form.address.setReadOnly(true);
-                form.number.setReadOnly(true);
-                form.postalCode.setReadOnly(true);
-                form.costCentre.setReadOnly(true);
+                form.number.setReadOnly(true);                
                 if (keep == null) {
                     form.itemDescription.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.itemDescription);
                     form.description.setRequired(true);
-                    form.itemPurchaseLayout.addComponent(form.description, 0, 3);                    
+                    form.itemPurchaseLayout.addComponent(form.description, 0, 4);
                     keep = "keep";
                 }
             }
@@ -165,13 +167,14 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 setReadOnlyTrue();
             }
         } else if (property == form.quantity) {
-            if (!form.quantity.getValue().toString().isEmpty()) {
+            if (!form.quantity.getValue().toString().isEmpty() && !form.itemNumber.getValue().toString().isEmpty() && !form.unitPrice.getValue().toString().equals("0")) {
                 setReadOnlyFalse();
                 BigDecimal subtotal = new BigDecimal(form.unitPrice.getValue());
                 subtotal = subtotal.multiply(new BigDecimal(form.quantity.getValue()));
                 form.subTotal.setValue(f.format(subtotal));
                 subtotal = subtotal.multiply(new BigDecimal(1.14));
                 form.total.setValue(f.format(subtotal));
+                //form.editItemsButton.setVisible(true); 
                 setReadOnlyTrue();
             }
         } else if (property == form.costCentre) {
@@ -249,7 +252,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 resetValues();
                 setReadOnlyTrue();
             }
+            
             form.approval.setVisible(true);
+            //form.editItemsButton.setVisible(false);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
             Collection<Field<?>> fields = binder.getFields();
@@ -425,4 +430,31 @@ public class RequestPurchaseTab extends VerticalLayout implements
             return request;
         }
     }
+
+//    private void allowEditOfItems() {
+//        form.itemNumber.setReadOnly(false);
+//        form.unitPrice.setReadOnly(false);        
+//        form.unit.setReadOnly(false);
+//        form.volume.setReadOnly(false);
+//        form.subTotal.setReadOnly(false);
+//        form.total.setReadOnly(false);
+//        form.itemNumber.setValue("");
+//        form.unitPrice.setValue("");
+//        form.unit.setValue("");
+//        form.volume.setValue("");
+//        form.subTotal.setValue("");
+//        form.total.setValue("");
+//        if (form.itemDescription.isVisible()) {
+//            form.itemNumber.setReadOnly(true);
+//            form.unitPrice.setReadOnly(true);
+//        }else{
+//            form.itemNumber.setReadOnly(false);
+//            form.unitPrice.setReadOnly(false);
+//            form.itemNumber.setRequired(true);
+//            form.unitPrice.setRequired(true);
+//        }
+//        form.subTotal.setReadOnly(true);
+//        form.total.setReadOnly(true);
+//        form.editItemsButton.setVisible(false);
+//    }
 }

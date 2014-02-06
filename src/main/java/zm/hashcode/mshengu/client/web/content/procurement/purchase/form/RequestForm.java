@@ -36,6 +36,7 @@ public class RequestForm extends FormLayout {
     public final FieldGroup binder = new FieldGroup(item);
     public Button save = new Button("Add Item To Request");
     public Button approval = new Button("Send Request For Approval");
+    public Button editItemsButton = new Button("Edit ITEMS INFORMATION");
     public UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
     public UIComponentHelper UIComponent = new UIComponentHelper();
     public ComboBox name = new ComboBox();
@@ -57,7 +58,7 @@ public class RequestForm extends FormLayout {
     public TextField ordernumber = new TextField();
     public TextField vat = new TextField();
     public TextField total = new TextField();
-    public GridLayout itemPurchaseLayout = new GridLayout(3, 9);
+    public GridLayout itemPurchaseLayout = new GridLayout(3, 11);
     public TextField description = new TextField();
     private SequenceHelper sequenceHelper = new SequenceHelper();
     public Label errorMessage;
@@ -175,22 +176,24 @@ public class RequestForm extends FormLayout {
 
         itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 0);
         itemPurchaseLayout.addComponent(details, 0, 1);
-        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 2);
-        itemPurchaseLayout.addComponent(itemDescription, 0, 3);
-        itemPurchaseLayout.addComponent(itemNumber, 1, 3);
-        itemPurchaseLayout.addComponent(unitPrice, 2, 3);
+        editItemsButton.setVisible(false);
+//        itemPurchaseLayout.addComponent(editItemsButton, 0, 2);        
+        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
+        itemPurchaseLayout.addComponent(itemDescription, 0, 4);
+        itemPurchaseLayout.addComponent(itemNumber, 1, 4);
+        itemPurchaseLayout.addComponent(unitPrice, 2, 4);
 
-        itemPurchaseLayout.addComponent(unit, 0, 4);
-        itemPurchaseLayout.addComponent(volume, 1, 4);
-        itemPurchaseLayout.addComponent(quantity, 2, 4);
+        itemPurchaseLayout.addComponent(unit, 0, 5);
+        itemPurchaseLayout.addComponent(volume, 1, 5);
+        itemPurchaseLayout.addComponent(quantity, 2, 5);
 
-        itemPurchaseLayout.addComponent(subTotal, 0, 5);
-        itemPurchaseLayout.addComponent(vat, 1, 5);
+        itemPurchaseLayout.addComponent(subTotal, 0, 6);
+        itemPurchaseLayout.addComponent(vat, 1, 6);
 
-        itemPurchaseLayout.addComponent(total, 2, 5);
-        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 6);
-        itemPurchaseLayout.addComponent(buttons, 0, 7, 2, 7);
-        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 8);
+        itemPurchaseLayout.addComponent(total, 2, 6);
+        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 7);
+        itemPurchaseLayout.addComponent(buttons, 0, 8, 2, 8);
+        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 9);
         setReadOnly();
         addComponent(panel);
         addComponent(itemPurchaseLayout);
