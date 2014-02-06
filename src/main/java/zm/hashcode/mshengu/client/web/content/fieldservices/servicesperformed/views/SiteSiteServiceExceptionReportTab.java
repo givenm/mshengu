@@ -105,7 +105,6 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
                 getHome();
                 Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
             } else {
-
                 Notification.show("Please select a customer 1!", Notification.Type.TRAY_NOTIFICATION);
             }
 
@@ -124,7 +123,6 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
                 getHome();
                 Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
             } else {
-
                 Notification.show("Please select a customer!", Notification.Type.TRAY_NOTIFICATION);
             }
         } catch (FieldGroup.CommitException e) {
@@ -207,10 +205,10 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
         serviceContractLifeCyclesList.addAll(saveSiteServiceContractLifeCycle(siteBean)); //Save the site service contract life cycle
 
         final Site site = new Site.Builder(siteBean.getName())
-//                .address(address)
+                //                .address(address)
                 .location(location)
-//                .contactPerson(contactPerson)
-//                .serviceProvider(serviceProvider)
+                //                .contactPerson(contactPerson)
+                //                .serviceProvider(serviceProvider)
                 .status("")
                 .siteServiceLog(siteServiceLog)
                 .siteServiceContractLifeCycle(serviceContractLifeCyclesList)
@@ -221,8 +219,6 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
     }
 
     private Site getUpdateEntity(FieldGroup binder) {
-
-
         Set<SiteServiceContractLifeCycle> serviceContractLifeCyclesList = new HashSet<>();
         final SiteDetailsBean siteBean = ((BeanItem<SiteDetailsBean>) binder.getItemDataSource()).getBean();
         if (!StringUtils.isEmpty(siteBean.getId())) {
@@ -246,9 +242,7 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
                 Notification.show("Site Not Found!", Notification.Type.TRAY_NOTIFICATION);
                 return null;
             }
-
         } else {
-
             Notification.show("Site Not Found!", Notification.Type.TRAY_NOTIFICATION);
             return null;
         }
@@ -260,7 +254,6 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
                 .postalCode(siteBean.getPostalCode())
                 .id(addressId)
                 .build();
-
         if (!StringUtils.isEmpty(addressId)) {
             AddressFacade.getAddressService().persist(address);
         } else {
@@ -269,8 +262,6 @@ public class SiteSiteServiceExceptionReportTab extends VerticalLayout implements
 
         return address;
     }
-
-
 
     private Set<SiteServiceContractLifeCycle> saveSiteServiceContractLifeCycle(SiteDetailsBean siteBean) {
 
