@@ -76,20 +76,20 @@ public class RequestForm extends FormLayout {
         ordernumber = UIComponent.getTextField("Purchase Order Number:", "orderNumber", RequestBean.class, binder);
 //        ordernumber.setValue(orderNum);
         personRequesting = UIComboBox.getRequestingPersonComboBox("Person Requesting Item(s):", "requestingPerson", RequestBean.class, binder);
-//        personRequesting = UIValidatorHelper.setRequiredComboBox(personRequesting, "Person Requesting Item(s)");
+        personRequesting = UIValidatorHelper.setRequiredComboBox(personRequesting, "Person Requesting Item(s)");
         
         costCentre = UIComboBox.getCostCentreType("Cost Centre Type:", "costCentre", RequestBean.class, binder);
-//        costCentre = UIValidatorHelper.setRequiredComboBox(costCentre, "Cost Centre Type");
+        costCentre = UIValidatorHelper.setRequiredComboBox(costCentre, "Cost Centre Type");
         
         costCategory = UIComboBox.getCostCentreCategoryType("Cost Category Type:", "costCategory", RequestBean.class, binder);
         
         itemCategory = UIComboBox.getCostCentreCategoryType("Item Category Type:", "itemCategory", RequestBean.class, binder);
         
         TextArea deliveryInstructions = UIComponent.getTextArea("Delivery Instructions:", "deliveryInstructions", RequestBean.class, binder);
-//        deliveryInstructions = UIValidatorHelper.setRequiredTextArea(deliveryInstructions, "Delivery Instructions");
+        deliveryInstructions = UIValidatorHelper.setRequiredTextArea(deliveryInstructions, "Delivery Instructions");
         
         DateField orderDate = UIComponent.getDateField("Delivery Date:", "orderDate", RequestBean.class, binder);
-//        orderDate = UIValidatorHelper.setRequiredDateField(orderDate, "Delivery Date");
+        orderDate = UIValidatorHelper.setRequiredDateField(orderDate, "Delivery Date");
         
         errorMessage = UIComponent.getErrorLabel();
         
@@ -111,7 +111,7 @@ public class RequestForm extends FormLayout {
         Label vendorInfo = new Label("Vendor Information");
         vendorInfo.addStyleName("h4");
         name = UIComboBox.getVendorsComboBox("Vendor:", "companyName", RequestBean.class, binder);
-//        name = UIValidatorHelper.setRequiredComboBox(name, "Vendor");
+        name = UIValidatorHelper.setRequiredComboBox(name, "Vendor");
         
         address = UIComponent.getTextField("Address:", "address", RequestBean.class, binder);        
          
@@ -143,20 +143,20 @@ public class RequestForm extends FormLayout {
         
         
         itemDescription = UIComboBox.getProductDescriptionComboBox("Item Description:", "itemDescription", RequestBean.class, binder);
-//        itemDescription = UIValidatorHelper.setRequiredComboBox(itemDescription, "Item Description");
+        itemDescription = UIValidatorHelper.setRequiredComboBox(itemDescription, "Item Description");
         
         itemNumber = UIComponent.getTextField("Item Number:", "itemNumber", RequestBean.class, binder);
-        //itemNumber = UIValidatorHelper.setRequiredTextField(itemNumber, "Item Number");
+        itemNumber = UIValidatorHelper.setRequiredTextField(itemNumber, "Item Number");
         
         quantity = UIComponent.getTextField("Quantity:", "quantity", RequestBean.class, binder);
-//        quantity = UIValidatorHelper.setRequiredTextField(quantity, "Quantity");
+        quantity = UIValidatorHelper.setRequiredTextField(quantity, "Quantity");
         
         unit = UIComponent.getTextField("Unit:", "unit", RequestBean.class, binder);
         
         volume = UIComponent.getTextField("Volume:", "volume", RequestBean.class, binder);
         
         unitPrice = UIComponent.getBigDecimalTextField("Unit Price:", "unitPrice", RequestBean.class, binder);
-        //unitPrice = UIValidatorHelper.setRequiredTextField(unitPrice, "Unit Price");
+        unitPrice = UIValidatorHelper.setRequiredTextField(unitPrice, "Unit Price");
         
         subTotal = UIComponent.getBigDecimalTextField("Sub Total: R", "subTotal", RequestBean.class, binder);
         
