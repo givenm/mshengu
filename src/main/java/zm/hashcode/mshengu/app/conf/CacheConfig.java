@@ -35,6 +35,7 @@ public class CacheConfig {
         caches.add(sites().getObject());
         caches.add(drivers().getObject());
         caches.add(requestors().getObject());
+        caches.add(unitLocationLifeCycle().getObject());
         cacheManager.setCaches(caches);
 
         return cacheManager;
@@ -87,6 +88,14 @@ public class CacheConfig {
     public ConcurrentMapCacheFactoryBean siteUnits() {
         ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
         cacheFactoryBean.setName("siteUnits");
+        return cacheFactoryBean;
+    }
+    
+    
+    @Bean
+    public ConcurrentMapCacheFactoryBean unitLocationLifeCycle() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("unitLocationLifeCycle");
         return cacheFactoryBean;
     }
 }

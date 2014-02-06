@@ -8,6 +8,7 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Date;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.forms.CustomerSiteFiledServicesForm;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views.SiteSiteServiceExceptionReportTab;
@@ -29,10 +30,11 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
     SiteSiteUnitTab siteSiteUnitTab;
     private String selectedCustomerId;
     private String selectedSiteId;
+    private Date startDate;
+    private Date endDate;
 
     public ServicePerformedMenu(MshenguMain app, String selectedTab) {
         main = app;
-
 
         selectCustomerSite = new CustomerSiteFiledServicesForm();
         serviceExceptionReportTab = new SiteSiteServiceExceptionReportTab(main);
@@ -88,6 +90,31 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
                 setSelectedSiteId(selectCustomerSite.comboBoxSelectSite.getValue().toString());
 //                setSelectedSiteInTabs(getSelectedCustomerId());
 //                selectCustomerSite.loadCustomerSites(getSelectedCustomerId());
+
+            }
+        } else if (property == selectCustomerSite.startDate) {
+            if (selectCustomerSite.startDate.getValue() != null) {
+                setStartDate(selectCustomerSite.startDate.getValue());
+                if (selectCustomerSite.endDate == null) {
+                    setEndDate(new Date());
+                }
+                if (selectedCustomerId != null) {
+                    loadLogTables();
+                }
+//                setSelectedSiteInTabs(getSelectedCustomerId());
+//                selectCustomerSite.loadCustomerSites(getSelectedCustomerId());
+
+            }
+        } else if (property == selectCustomerSite.endDate) {
+            if (selectCustomerSite.comboBoxSelectSite.getValue() != null) {
+                setEndDate(selectCustomerSite.endDate.getValue());
+                if ((selectedCustomerId != null) && (startDate != null)) {
+                    loadLogTables();
+                } else {
+
+                    Notification.show("Please select Site and Start Date!", Notification.Type.TRAY_NOTIFICATION);
+                }
+
             }
         }
     }
@@ -134,4 +161,40 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
     public void setSelectedSiteInTabs(String selectedSiteId) {
         this.siteSiteUnitTab.loadSiteUnits(selectedSiteId);
     }
+
+    private void loadLogTables() {
+        serviceExceptionReportTab.loadServiceLogDetails(selectedSiteId, getStartDate(), getStartDate());
+        siteServiceLogTab.loadServiceLogDetails(selectedSiteId, getStartDate(), getStartDate());
+//siteServiceLogTab.   
+
+    }
+
+    /**
+     * @return the startDate
+     */
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the startDate to set
+     */
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the endDate
+     */
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the endDate to set
+     */
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
 }

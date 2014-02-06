@@ -10,6 +10,9 @@ import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.domain.products.UnitLocationLifeCycle;
@@ -27,12 +30,16 @@ public class UnitLocationLifeCycleServiceImpl implements UnitLocationLifeCycleSe
     @Autowired
     private UnitLocationLifeCycleRepository repository;
 
-    @Override
+    @Override 
+    @Cacheable("unitLocationLifeCycle")
     public List<UnitLocationLifeCycle> findAll() {
         return ImmutableList.copyOf(repository.findAll(sortByServiceDate()));
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "unitLocationLifeCycle", allEntries = true)
+    })
     public void persist(UnitLocationLifeCycle unitLocationLifeCycle) {
 
         repository.save(unitLocationLifeCycle);
@@ -40,6 +47,9 @@ public class UnitLocationLifeCycleServiceImpl implements UnitLocationLifeCycleSe
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "unitLocationLifeCycle", allEntries = true)
+    })
     public void merge(UnitLocationLifeCycle unitLocationLifeCycle) {
         if (unitLocationLifeCycle.getId() != null) {
             repository.save(unitLocationLifeCycle);
@@ -56,6 +66,9 @@ public class UnitLocationLifeCycleServiceImpl implements UnitLocationLifeCycleSe
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "unitLocationLifeCycle", allEntries = true)
+    })
     public void delete(UnitLocationLifeCycle unitLocationLifeCycle) {
         repository.delete(unitLocationLifeCycle);
     }

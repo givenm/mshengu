@@ -6,9 +6,7 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.t
 
 import com.vaadin.ui.Table;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
-import zm.hashcode.mshengu.app.facade.products.SiteServiceLogFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.domain.fleet.Truck;
@@ -19,12 +17,12 @@ import zm.hashcode.mshengu.domain.products.SiteServiceLog;
  *
  * @author boniface
  */
-public class SiteServiceLogTable extends Table {
+public class SiteServiceLogExceptionTable extends Table {
 
     private final MshenguMain main;
     private DateTimeFormatHelper formatHelper = new DateTimeFormatHelper();
 
-    public SiteServiceLogTable(MshenguMain main) {
+    public SiteServiceLogExceptionTable(MshenguMain main) {
         this.main = main;
         setSizeFull();
 
@@ -36,26 +34,29 @@ public class SiteServiceLogTable extends Table {
         addContainerProperty("Total Units Serviced", Integer.class, null);
         addContainerProperty("Total Units Not Serviced", Integer.class, null);
 
+
     }
 
-    public void loadSiteServiceLog(List<SiteServiceLog> siteServiceLogs) {
+    public void loadSiteServiceLog(Set<SiteServiceLog> siteServiceLogs) {
         setNullSelectionAllowed(true);
         setSelectable(false);
         setImmediate(false);
         removeAllItems();
 
+
         for (SiteServiceLog siteServiceLog : siteServiceLogs) {
 //            SiteServiceContractLifeCycle contractLifeCycle = SiteFacade.getSiteService().getSitetCurrentContract(site.getId());
 //            String noOfUnits = getNoOfUnits(contractLifeCycle.getNumberOfUnits(), contractLifeCycle.getExpectedNumberOfUnits());
             addItem(new Object[]{
-                formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
-                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
-                getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
-                siteServiceLog.getNumberPlate(),
-                siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
-                siteServiceLog.getNumberOfUnitsServiced(),
-                siteServiceLog.getNumberOfUnitsNotServiced(),}, siteServiceLog.getId());
+                        formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
+                        formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
+                        getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
+                        siteServiceLog.getNumberPlate(),
+                        siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
+                        siteServiceLog.getNumberOfUnitsServiced(),
+                        siteServiceLog.getNumberOfUnitsNotServiced(),}, siteServiceLog.getId());
         }
+
 
         // Allow selecting items from the table.
         setNullSelectionAllowed(false);
@@ -78,10 +79,8 @@ public class SiteServiceLogTable extends Table {
             return null;
         }
     }
-
-    public void loadServiceLogDetails(String siteId, Date startDate, Date endDate) {
-        List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getServiceLogs(siteId, startDate, endDate, "CLOSED");
-        loadSiteServiceLog(siteServiceLogs);
+    
+     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate){
 //        table
     }
 }

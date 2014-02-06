@@ -8,10 +8,12 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,8 +26,8 @@ import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFac
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreCategoryTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.ItemCategoryTypeFacade;
-import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.RequestForm;
@@ -41,7 +43,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
-import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -85,11 +86,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
         if (source == form.save) {
-            if (!form.total.getValue().isEmpty()) {
-                addItemsToTable(form.binder);
-            } else {
-                Notification.show("Add Item Values!", Notification.Type.TRAY_NOTIFICATION);
-            }
+            addItemsToTable(form.binder);
         } else if (source == form.approval) {
             sendRequest(form.binder);
             getHome();
@@ -114,8 +111,11 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     form.postalCode.setValue(contactPerson.getCode());
                 }
                 if (keep != null) {
+                    //form.description.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.description);
+                    //form.itemDescription.setRequired(true);
                     form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 3);
+                    
                 }
                 for (ServiceProviderProduct product : provider.getServiceProviderProduct()) {
                     form.itemDescription.addItem(product.getId());
@@ -137,8 +137,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 form.postalCode.setReadOnly(true);
                 form.costCentre.setReadOnly(true);
                 if (keep == null) {
+                    //form.itemDescription.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.itemDescription);
-                    form.itemPurchaseLayout.addComponent(form.description, 0, 3);
+                    //form.description.setRequired(true);
+                    form.itemPurchaseLayout.addComponent(form.description, 0, 3);                    
                     keep = "keep";
                 }
             }
@@ -250,10 +252,11 @@ public class RequestPurchaseTab extends VerticalLayout implements
             form.approval.setVisible(true);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+//            Collection<Field<?>> fields = binder.getFields();
+//            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+//            helper.doValidation();
+//            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (Exception e) {
-            e.printStackTrace();
             Notification.show("Values MISSING .. !", Notification.Type.TRAY_NOTIFICATION);
         }
     }
@@ -267,12 +270,12 @@ public class RequestPurchaseTab extends VerticalLayout implements
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         if (productId != null) {
             ServiceProviderProduct product = ServiceProviderProductFacade.getServiceProviderProductService().findById(productId);
-            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity())
+            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
                     .product(product)
                     .subTotal(bean.getTotal())
                     .build();
         } else {
-            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity())
+            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
                     .itemDescription(bean.getDescription())
                     .itemNumber(bean.getItemNumber())
                     .unit(bean.getUnit())
@@ -328,8 +331,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
             RequestFacade.getRequestService().persist(request);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+//            Collection<Field<?>> fields = binder.getFields();
+//            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+//            helper.doValidation();
+//            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -337,7 +342,6 @@ public class RequestPurchaseTab extends VerticalLayout implements
 
 //        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
 //        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
-
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         Set<RequestPurchaseItem> items = new HashSet<>();
         for (Object id : table.getItemIds()) {

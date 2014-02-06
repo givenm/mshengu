@@ -16,44 +16,44 @@ import javax.validation.constraints.NotNull;
 public class RequestBean implements Serializable {
 
     private String id;
-    @NotNull
+    
     private String account;
-    @NotNull
+    
     private String costCentre;
     private String costCategory;
     private String itemCategory;
     private String itemNumber;
-    @NotNull
+    
     private String rfqNumber;
-    @NotNull
+    
     private String requestingPerson;
-    @NotNull
+    
     private String product;
     private String orderNumber;
-    @NotNull
+    
     private String companyName;
     private String address;
     private String postalCode;
     private String phoneNumber;
-    @NotNull
+    
     private String quantity;
     private String unit;
     private String volume;
     private BigDecimal unitPrice;
     private BigDecimal subTotal;
     private String itemDescription;
-    @NotNull
+    
     private String reason;
     private String vat;
     private BigDecimal total;
-    @NotNull
+    
     private String deliveryInstructions;
-    @NotNull
+    
     private Date deliveryDate;
-    @NotNull
+    
     private Date closingDate;
     private String description;
-    @NotNull
+    
     private Date orderDate;
 
     public Date getClosingDate() {
