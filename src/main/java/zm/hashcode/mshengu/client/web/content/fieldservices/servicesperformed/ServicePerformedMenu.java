@@ -33,12 +33,12 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
     public ServicePerformedMenu(MshenguMain app, String selectedTab) {
         main = app;
 
-        
+
         selectCustomerSite = new CustomerSiteFiledServicesForm();
-        serviceExceptionReportTab =  new SiteSiteServiceExceptionReportTab(main);
+        serviceExceptionReportTab = new SiteSiteServiceExceptionReportTab(main);
         siteSiteUnitTab = new SiteSiteUnitTab(main, "LANDING");
         siteServiceLogTab = new SiteSiteServiceLogTab(main);
-        
+
         tab = new TabSheet();
         tab.setHeight("100%");
         tab.setWidth("100%");
@@ -47,9 +47,9 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
         if (selectedCustomerId != null) {
             if (selectedTab.equals("LANDING")) {
                 tab.setSelectedTab(serviceExceptionReportTab);
-            }else if (selectedTab.equals("SERVICE_LOGS")) {
+            } else if (selectedTab.equals("SERVICE_LOGS")) {
                 tab.setSelectedTab(siteServiceLogTab);
-            }else if (selectedTab.equals("SITE_UNITS")) {
+            } else if (selectedTab.equals("SITE_UNITS")) {
                 tab.setSelectedTab(siteSiteUnitTab);
             }
         } else {
@@ -67,7 +67,7 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
     @Override
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
-          if (property == selectCustomerSite.comboBoxSelectContractType) {
+        if (property == selectCustomerSite.comboBoxSelectContractType) {
             if (selectCustomerSite.comboBoxSelectContractType.getValue().toString() != null) {
                 String id = selectCustomerSite.comboBoxSelectContractType.getValue().toString();
                 String caption = selectCustomerSite.comboBoxSelectContractType.getItemCaption(id);
@@ -81,14 +81,13 @@ public class ServicePerformedMenu extends VerticalLayout implements Property.Val
                 selectCustomerSite.comboBoxSelectSite.removeValueChangeListener((Property.ValueChangeListener) this);
                 selectCustomerSite.loadCustomerSites(getSelectedCustomerId());
                 selectCustomerSite.comboBoxSelectSite.addValueChangeListener((Property.ValueChangeListener) this);
-             
+
             }
         } else if (property == selectCustomerSite.comboBoxSelectSite) {
             if (selectCustomerSite.comboBoxSelectSite.getValue().toString() != null) {
                 setSelectedSiteId(selectCustomerSite.comboBoxSelectSite.getValue().toString());
 //                setSelectedSiteInTabs(getSelectedCustomerId());
 //                selectCustomerSite.loadCustomerSites(getSelectedCustomerId());
-
             }
         }
     }
