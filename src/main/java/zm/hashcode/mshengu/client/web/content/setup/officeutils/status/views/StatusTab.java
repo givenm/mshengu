@@ -99,17 +99,13 @@ public class StatusTab extends VerticalLayout implements
 
     private Status getEntity(FieldGroup binder) {
         //final  Status cust = new Status.Builder(binder.getItemDataSource().getItemProperty("name")).
-
         final StatusBean statusBean = ((BeanItem<StatusBean>) binder.getItemDataSource()).getBean();
-
         final StatusType statusType = StatusTypeFacade.getStatusTypeService().findById(statusBean.getStatusType());
-
         final Status status = new Status.Builder(statusBean.getName())
                 .statusType(statusType)
                 .id(statusBean.getId())
                 .build();
         return status;
-
     }
 
     private void getHome() {

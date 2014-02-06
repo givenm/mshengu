@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.services.procurement;
+package zm.hashcode.mshengu.repository.procurement;
 
 import java.util.Date;
 import java.util.List;
@@ -12,24 +12,9 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
 /**
  *
- * @author Luckbliss
+ * @author Colin
  */
-public interface RequestService {
-
-    public List<Request> findAll();
-
-    public void persist(Request request);
-
-    public void merge(Request request);
-
-    public Request findById(String id);
-
-    public Request findByOrderNumber(String id);
-
-    public List<Request> findByMisMatchStatus();
-
-//    public List<Request> findByServiceProvider(String id);
-    public void delete(Request request);
+public interface RequestRepositoryCustom {
 
     public List<Request> getTransactedRequestsBtnTwoDates(Date start, Date end);
 
@@ -37,7 +22,7 @@ public interface RequestService {
 
     public List<Request> getTransactedRequestsByTruckByMonth(Truck truck, Date month);
 
-    public List<Request> getTransactedRequestsByServiceProviderBtnTwoDates(ServiceProvider sericeProvider, Date start, Date end);
+    public List<Request> getTransactedRequestsByServiceProviderBtnTwoDates(ServiceProvider serviceProvider, Date start, Date end);
 
     public List<Request> getTransactedRequestsByServiceProviderByMonth(ServiceProvider serviceProvider, Date month);
 

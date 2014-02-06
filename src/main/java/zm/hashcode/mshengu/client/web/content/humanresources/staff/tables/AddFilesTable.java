@@ -42,7 +42,7 @@ public class AddFilesTable extends Table {
         showDetails.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                JOptionPane.showMessageDialog(null, "delete");
+                //JOptionPane.showMessageDialog(null, "delete");
             }
         });
 

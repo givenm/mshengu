@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.app.util.FlagImage;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.DailyDieselTrackerMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
@@ -42,6 +43,7 @@ public class VehicleFuelUsageTable extends Table {
     private final MshenguMain main;
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private TrackerUtil trackerUtil = new TrackerUtil();
+    private final FlagImage flagImage = new FlagImage();
     private VehicleFuelUsageData vehicleFuelUsageData;
     public static List<VehicleFuelUsageData> vehicleFuelUsageDataList = new ArrayList<>();
     public BigDecimal mtdActAverageCalc = new BigDecimal("0.00");
@@ -119,7 +121,7 @@ public class VehicleFuelUsageTable extends Table {
                     trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck),
                     df.format(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString())),
                     df.format(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString())),
-                    trackerUtil.determineFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
+                    flagImage.determineFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
                 }, truck.getId());
             }
         }
@@ -163,7 +165,7 @@ public class VehicleFuelUsageTable extends Table {
                         trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck),
                         df.format(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString())),
                         df.format(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString())),
-                        trackerUtil.determineFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
+                        flagImage.determineFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
                     }, truck.getId());
                 } else {
                     Notification.show("No records were found matching specified Date and Truck!", Notification.Type.TRAY_NOTIFICATION);

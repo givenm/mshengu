@@ -94,49 +94,63 @@ public class OperatingCostServiceImpl implements OperatingCostService {
 
     @Override
     public List<OperatingCost> getOperatingCostByTruckByMonth(Truck truck, Date month) {
-        boolean found = false;
-        boolean isTrigger = false;
-        List<OperatingCost> operatingCosts = new ArrayList<>();
-        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        List<OperatingCost> operatingCostList = new ArrayList<>() ;
-        
-        Truck truckk = null;
-        if (truck.getId() != null) {
-            truckk = truckRepository.findOne(truck.getId());
-        }
-        
-        if(truckk != null){
-            operatingCostList.addAll(truckk.getOperatingCosts());
-        }
+        List<OperatingCost> operatingCosts = repository.getOperatingCostByTruckByMonth(truck, month);
+//        Collections.sort(operatingCosts);
+        return operatingCosts;
 
-        String filteredMonthNumber = dateTimeFormatHelper.getMonthNumber(month);
-        String filteredYearNumber = dateTimeFormatHelper.getYearNumber(month);
 
-        for (OperatingCost operatingCost : operatingCostList) {
-            if (dateTimeFormatHelper.getMonthNumber(operatingCost.getTransactionDate()).equalsIgnoreCase(filteredMonthNumber)
-                    && dateTimeFormatHelper.getYearNumber(operatingCost.getTransactionDate()).equalsIgnoreCase(filteredYearNumber)) {
-                operatingCosts.add(operatingCost);
-            }
-        }
-        Collections.sort(operatingCosts);
+//        boolean found = false;
+//        boolean isTrigger = false;
+//        List<OperatingCost> operatingCosts = new ArrayList<>();
+//        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        List<OperatingCost> operatingCostList = new ArrayList<>();
+//
+//        Truck truckk = null;
+//        if (truck.getId() != null) {
+//            truckk = truckRepository.findOne(truck.getId());
+//        }
+//
+//        if (truckk != null) {
+//            operatingCostList.addAll(truckk.getOperatingCosts());
+//        }
+//
+//        String filteredMonthNumber = dateTimeFormatHelper.getMonthNumber(month);
+//        String filteredYearNumber = dateTimeFormatHelper.getYearNumber(month);
+//
+//        for (OperatingCost operatingCost : operatingCostList) {
+//            if (dateTimeFormatHelper.getMonthNumber(operatingCost.getTransactionDate()).equalsIgnoreCase(filteredMonthNumber)
+//                    && dateTimeFormatHelper.getYearNumber(operatingCost.getTransactionDate()).equalsIgnoreCase(filteredYearNumber)) {
+//                operatingCosts.add(operatingCost);
+//            }
+//        }
+//        Collections.sort(operatingCosts);
+//        return operatingCosts;
+    }
+
+    @Override
+    public List<OperatingCost> getOperatingCostByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
+        List<OperatingCost> operatingCosts = repository.getOperatingCostByTruckBetweenTwoDates(truck, from, to);
+//        Collections.sort(operatingCosts);
         return operatingCosts;
     }
 
     @Override
     public List<OperatingCost> getOperatingCostBtnTwoDates(Date start, Date end) {
-        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        Date resetStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
-        Date resetEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+        return repository.findOperatingCostBetweenTwoDates(start, end);
 
-        List<OperatingCost> operatingCostList = new ArrayList<>();
-        List<OperatingCost> allOperatingCostList = findAll();
+        //        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        Date resetStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
+//        Date resetEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
 
-        for (OperatingCost operatingCost : allOperatingCostList) {
-            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(operatingCost.getTransactionDate());
-            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
-                operatingCostList.add(operatingCost);
-            }
-        }
-        return operatingCostList;
+//        List<OperatingCost> operatingCostList = new ArrayList<>();
+////        List<OperatingCost> allOperatingCostList = findAll();
+////
+////        for (OperatingCost operatingCost : allOperatingCostList) {
+////            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(operatingCost.getTransactionDate());
+////            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
+////                operatingCostList.add(operatingCost);
+////            }
+////        }
+//        return operatingCostList;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 import zm.hashcode.mshengu.repository.procurement.AnnualDataFleetMaintenanceMileageRepository;
 import zm.hashcode.mshengu.services.procurement.AnnualDataFleetMaintenanceMileageService;
@@ -61,22 +62,36 @@ public class AnnualDataFleetMaintenanceMileageServiceImpl implements AnnualDataF
         return new Sort(
                 new Sort.Order(Sort.Direction.ASC, "transactionMonth"));
     }
+//    @Override
+//    public List<AnnualDataFleetMaintenanceMileage> getMonthlyMileageBtnTwoDates(Date start, Date end) {
+//        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        Date resetStartDate = dateTimeFormatHelper.resetTimeOfDate(start);
+//        Date resetEndDate = dateTimeFormatHelper.resetTimeOfDate(end);
+//
+//        List<AnnualDataFleetMaintenanceMileage> annualDataFleetMileageList = new ArrayList<>();
+//        List<AnnualDataFleetMaintenanceMileage> allAnnualDataFleetMileageList = findAll();
+//
+//        for (AnnualDataFleetMaintenanceMileage AnnualDataFleetMileage : allAnnualDataFleetMileageList) {
+//            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(AnnualDataFleetMileage.getTransactionMonth());
+//            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
+//                annualDataFleetMileageList.add(AnnualDataFleetMileage);
+//            }
+//        }
+//        return annualDataFleetMileageList;
+//    }
 
     @Override
-    public List<AnnualDataFleetMaintenanceMileage> getMonthlyMileageCostBtnTwoDates(Date start, Date end) {
-        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        Date resetStartDate = dateTimeFormatHelper.resetTimeOfDate(start);
-        Date resetEndDate = dateTimeFormatHelper.resetTimeOfDate(end);
+    public List<AnnualDataFleetMaintenanceMileage> getAnnualDataMileageByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
+        return repository.getAnnualDataMileageByTruckBetweenTwoDates(truck, from, to);
+    }
 
-        List<AnnualDataFleetMaintenanceMileage> annualDataFleetMileageList = new ArrayList<>();
-        List<AnnualDataFleetMaintenanceMileage> allAnnualDataFleetMileageList = findAll();
+    @Override
+    public List<AnnualDataFleetMaintenanceMileage> getAnnualDataMileageByTruckForMonth(Truck truck, Date month) {
+        return repository.getAnnualDataMileageByTruckForMonth(truck, month);
+    }
 
-        for (AnnualDataFleetMaintenanceMileage AnnualDataFleetMileage : allAnnualDataFleetMileageList) {
-            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(AnnualDataFleetMileage.getTransactionMonth());
-            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
-                annualDataFleetMileageList.add(AnnualDataFleetMileage);
-            }
-        }
-        return annualDataFleetMileageList;
+    @Override
+    public List<AnnualDataFleetMaintenanceMileage> getAnnualDataMileageBetweenTwoDates(Date from, Date to) {
+        return repository.getAnnualDataMileageBetweenTwoDates(from, to);
     }
 }

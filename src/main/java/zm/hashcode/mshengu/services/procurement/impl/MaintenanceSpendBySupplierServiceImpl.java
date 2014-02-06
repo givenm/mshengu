@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.MaintenanceSpendBySupplier;
+import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.repository.procurement.MaintenanceSpendBySupplierRepository;
 import zm.hashcode.mshengu.services.procurement.MaintenanceSpendBySupplierService;
 
@@ -58,21 +60,45 @@ public class MaintenanceSpendBySupplierServiceImpl implements MaintenanceSpendBy
                 new Sort.Order(Sort.Direction.ASC, "transactionMonth"));
     }
 
+//    @Override
+//    public List<MaintenanceSpendBySupplier> getMonthlyMileageCostBtnTwoDates(Date start, Date end) {
+//        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        Date resetStartDate = dateTimeFormatHelper.resetTimeOfDate(start);
+//        Date resetEndDate = dateTimeFormatHelper.resetTimeOfDate(end);
+//
+//        List<MaintenanceSpendBySupplier> annualDataFleetMileageList = new ArrayList<>();
+//        List<MaintenanceSpendBySupplier> allAnnualDataFleetMileageList = findAll();
+//
+//        for (MaintenanceSpendBySupplier AnnualDataFleetMileage : allAnnualDataFleetMileageList) {
+//            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(AnnualDataFleetMileage.getTransactionDate());
+//            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
+//                annualDataFleetMileageList.add(AnnualDataFleetMileage);
+//            }
+//        }
+//        return annualDataFleetMileageList;
+//    }
     @Override
-    public List<MaintenanceSpendBySupplier> getMonthlyMileageCostBtnTwoDates(Date start, Date end) {
-        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        Date resetStartDate = dateTimeFormatHelper.resetTimeOfDate(start);
-        Date resetEndDate = dateTimeFormatHelper.resetTimeOfDate(end);
+    public List<MaintenanceSpendBySupplier> getMaintenanceSpendBetweenTwoDates(Date from, Date to) {
+        return repository.getMaintenanceSpendBetweenTwoDates(from, to);
+    }
 
-        List<MaintenanceSpendBySupplier> annualDataFleetMileageList = new ArrayList<>();
-        List<MaintenanceSpendBySupplier> allAnnualDataFleetMileageList = findAll();
+    @Override
+    public List<MaintenanceSpendBySupplier> getMaintenanceSpendByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
+        return repository.getMaintenanceSpendByTruckBetweenTwoDates(truck, from, to);
+    }
 
-        for (MaintenanceSpendBySupplier AnnualDataFleetMileage : allAnnualDataFleetMileageList) {
-            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(AnnualDataFleetMileage.getTransactionDate());
-            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
-                annualDataFleetMileageList.add(AnnualDataFleetMileage);
-            }
-        }
-        return annualDataFleetMileageList;
+    @Override
+    public List<MaintenanceSpendBySupplier> getMaintenanceSpendByTruckForMonth(Truck truck, Date month) {
+        return repository.getMaintenanceSpendByTruckForMonth(truck, month);
+    }
+
+    @Override
+    public List<MaintenanceSpendBySupplier> getMaintenanceSpendBySupplierBetweenTwoDates(ServiceProvider serviceProvider, Date from, Date to) {
+        return repository.getMaintenanceSpendBySupplierBetweenTwoDates(serviceProvider, from, to);
+    }
+
+    @Override
+    public List<MaintenanceSpendBySupplier> getMaintenanceSpendBySupplierForMonth(ServiceProvider serviceProvider, Date month) {
+        return repository.getMaintenanceSpendBySupplierForMonth(serviceProvider, month);
     }
 }
