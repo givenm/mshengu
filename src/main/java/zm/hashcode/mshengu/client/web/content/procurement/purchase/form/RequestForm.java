@@ -36,6 +36,7 @@ public class RequestForm extends FormLayout {
     public final FieldGroup binder = new FieldGroup(item);
     public Button save = new Button("Add Item To Request");
     public Button approval = new Button("Send Request For Approval");
+    public Button editItemsButton = new Button("Edit ITEMS INFORMATION");
     public UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
     public UIComponentHelper UIComponent = new UIComponentHelper();
     public ComboBox name = new ComboBox();
@@ -57,7 +58,7 @@ public class RequestForm extends FormLayout {
     public TextField ordernumber = new TextField();
     public TextField vat = new TextField();
     public TextField total = new TextField();
-    public GridLayout itemPurchaseLayout = new GridLayout(3, 9);
+    public GridLayout itemPurchaseLayout = new GridLayout(3, 11);
     public TextField description = new TextField();
     private SequenceHelper sequenceHelper = new SequenceHelper();
     public Label errorMessage;
@@ -76,20 +77,20 @@ public class RequestForm extends FormLayout {
         ordernumber = UIComponent.getTextField("Purchase Order Number:", "orderNumber", RequestBean.class, binder);
 //        ordernumber.setValue(orderNum);
         personRequesting = UIComboBox.getRequestingPersonComboBox("Person Requesting Item(s):", "requestingPerson", RequestBean.class, binder);
-//        personRequesting = UIValidatorHelper.setRequiredComboBox(personRequesting, "Person Requesting Item(s)");
+        personRequesting = UIValidatorHelper.setRequiredComboBox(personRequesting, "Person Requesting Item(s)");
         
         costCentre = UIComboBox.getCostCentreType("Cost Centre Type:", "costCentre", RequestBean.class, binder);
-//        costCentre = UIValidatorHelper.setRequiredComboBox(costCentre, "Cost Centre Type");
+        costCentre = UIValidatorHelper.setRequiredComboBox(costCentre, "Cost Centre Type");
         
         costCategory = UIComboBox.getCostCentreCategoryType("Cost Category Type:", "costCategory", RequestBean.class, binder);
         
         itemCategory = UIComboBox.getCostCentreCategoryType("Item Category Type:", "itemCategory", RequestBean.class, binder);
         
         TextArea deliveryInstructions = UIComponent.getTextArea("Delivery Instructions:", "deliveryInstructions", RequestBean.class, binder);
-//        deliveryInstructions = UIValidatorHelper.setRequiredTextArea(deliveryInstructions, "Delivery Instructions");
+        deliveryInstructions = UIValidatorHelper.setRequiredTextArea(deliveryInstructions, "Delivery Instructions");
         
         DateField orderDate = UIComponent.getDateField("Delivery Date:", "orderDate", RequestBean.class, binder);
-//        orderDate = UIValidatorHelper.setRequiredDateField(orderDate, "Delivery Date");
+        orderDate = UIValidatorHelper.setRequiredDateField(orderDate, "Delivery Date");
         
         errorMessage = UIComponent.getErrorLabel();
         
@@ -111,7 +112,7 @@ public class RequestForm extends FormLayout {
         Label vendorInfo = new Label("Vendor Information");
         vendorInfo.addStyleName("h4");
         name = UIComboBox.getVendorsComboBox("Vendor:", "companyName", RequestBean.class, binder);
-//        name = UIValidatorHelper.setRequiredComboBox(name, "Vendor");
+        name = UIValidatorHelper.setRequiredComboBox(name, "Vendor");
         
         address = UIComponent.getTextField("Address:", "address", RequestBean.class, binder);        
          
@@ -143,20 +144,20 @@ public class RequestForm extends FormLayout {
         
         
         itemDescription = UIComboBox.getProductDescriptionComboBox("Item Description:", "itemDescription", RequestBean.class, binder);
-//        itemDescription = UIValidatorHelper.setRequiredComboBox(itemDescription, "Item Description");
+        itemDescription = UIValidatorHelper.setRequiredComboBox(itemDescription, "Item Description");
         
         itemNumber = UIComponent.getTextField("Item Number:", "itemNumber", RequestBean.class, binder);
-        //itemNumber = UIValidatorHelper.setRequiredTextField(itemNumber, "Item Number");
+        itemNumber = UIValidatorHelper.setRequiredTextField(itemNumber, "Item Number");
         
         quantity = UIComponent.getTextField("Quantity:", "quantity", RequestBean.class, binder);
-//        quantity = UIValidatorHelper.setRequiredTextField(quantity, "Quantity");
+        quantity = UIValidatorHelper.setRequiredTextField(quantity, "Quantity");
         
         unit = UIComponent.getTextField("Unit:", "unit", RequestBean.class, binder);
         
         volume = UIComponent.getTextField("Volume:", "volume", RequestBean.class, binder);
         
         unitPrice = UIComponent.getBigDecimalTextField("Unit Price:", "unitPrice", RequestBean.class, binder);
-        //unitPrice = UIValidatorHelper.setRequiredTextField(unitPrice, "Unit Price");
+        unitPrice = UIValidatorHelper.setRequiredTextField(unitPrice, "Unit Price");
         
         subTotal = UIComponent.getBigDecimalTextField("Sub Total: R", "subTotal", RequestBean.class, binder);
         
@@ -175,22 +176,24 @@ public class RequestForm extends FormLayout {
 
         itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 0);
         itemPurchaseLayout.addComponent(details, 0, 1);
-        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 2);
-        itemPurchaseLayout.addComponent(itemDescription, 0, 3);
-        itemPurchaseLayout.addComponent(itemNumber, 1, 3);
-        itemPurchaseLayout.addComponent(unitPrice, 2, 3);
+        editItemsButton.setVisible(false);
+//        itemPurchaseLayout.addComponent(editItemsButton, 0, 2);        
+        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
+        itemPurchaseLayout.addComponent(itemDescription, 0, 4);
+        itemPurchaseLayout.addComponent(itemNumber, 1, 4);
+        itemPurchaseLayout.addComponent(unitPrice, 2, 4);
 
-        itemPurchaseLayout.addComponent(unit, 0, 4);
-        itemPurchaseLayout.addComponent(volume, 1, 4);
-        itemPurchaseLayout.addComponent(quantity, 2, 4);
+        itemPurchaseLayout.addComponent(unit, 0, 5);
+        itemPurchaseLayout.addComponent(volume, 1, 5);
+        itemPurchaseLayout.addComponent(quantity, 2, 5);
 
-        itemPurchaseLayout.addComponent(subTotal, 0, 5);
-        itemPurchaseLayout.addComponent(vat, 1, 5);
+        itemPurchaseLayout.addComponent(subTotal, 0, 6);
+        itemPurchaseLayout.addComponent(vat, 1, 6);
 
-        itemPurchaseLayout.addComponent(total, 2, 5);
-        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 6);
-        itemPurchaseLayout.addComponent(buttons, 0, 7, 2, 7);
-        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 8);
+        itemPurchaseLayout.addComponent(total, 2, 6);
+        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 7);
+        itemPurchaseLayout.addComponent(buttons, 0, 8, 2, 8);
+        itemPurchaseLayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 9);
         setReadOnly();
         addComponent(panel);
         addComponent(itemPurchaseLayout);
