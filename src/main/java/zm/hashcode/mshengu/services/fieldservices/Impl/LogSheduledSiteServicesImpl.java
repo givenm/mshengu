@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.domain.products.Site;
@@ -42,17 +45,23 @@ public class LogSheduledSiteServicesImpl implements LogSheduledSiteServices {
         int size = todaysSitesList.size();
         System.out.println("\n\n================= TEST VISIT DATE : " + date);
         for (Site site : todaysSitesList) {
-            count++;
-            System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-            System.out.println("Site :" + site.getName());
-            CreateServiceLogTaskTwo task = new CreateServiceLogTaskTwo(site, createSiteServiceLogsService, date);
+            try {
+                count++;
+                System.out.println("\n\n --- Site No" + count + "/" + size + "---");
+                System.out.println("Site :" + site.getName());
+                CreateServiceLogTaskTwo task = new CreateServiceLogTaskTwo(site, createSiteServiceLogsService, date);
 //        pool.execute(task);
 //            forkJoinTask.complete(task);
 //            task.fork();
-            pool.execute(task);
-            pool.shutdown();
+                pool.execute(task);
+                pool.awaitTermination(10, TimeUnit.MINUTES);
 //        forkJoinTask.(new CreateServiceLogTask(todaysSitesList, createSiteServiceLogsService, date));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LogSheduledSiteServicesImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        //                pool.
+//                pool.shutdown();
 
 
 

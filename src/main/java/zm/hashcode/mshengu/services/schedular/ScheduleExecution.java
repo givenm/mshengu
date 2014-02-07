@@ -11,10 +11,8 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.domain.products.Site;
-import zm.hashcode.mshengu.services.fieldservices.CreateSiteServiceLogsService;
 
 /**
  *
@@ -43,7 +41,7 @@ public class ScheduleExecution {
     public void runthisCode() {
         // Code to be execute duering Schedule
 
-        Calendar calendar = Calendar.getInstance();
+      /*  Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         setTodaysDate(calendar.getTime());
         List<Site> sitesList = SiteFacade.getSiteService().findAllWithVisitToday(dtfwh.getDateToday());
@@ -55,7 +53,7 @@ public class ScheduleExecution {
         for (Site site : sitesList) {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-        }
+        }*/
 
     }
 

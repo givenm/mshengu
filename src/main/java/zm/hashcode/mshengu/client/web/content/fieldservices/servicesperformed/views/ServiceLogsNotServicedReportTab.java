@@ -5,79 +5,72 @@
 package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views;
 
 import com.vaadin.data.Property;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
+import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.SiteServiceLogTable;
-import zm.hashcode.mshengu.client.web.content.fieldservices.site.ServiceSchedulingMenu;
-import zm.hashcode.mshengu.client.web.content.fieldservices.site.forms.SiteDetailsForm;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.ServicePerformedMenu;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.NotServicedServiceLogsTable;
 import zm.hashcode.mshengu.domain.products.Site;
 
 /**
  *
  * @author Ferox
  */
-public class SiteSiteServiceLogTab extends VerticalLayout implements
-        Button.ClickListener, Property.ValueChangeListener {
+public class ServiceLogsNotServicedReportTab extends VerticalLayout implements
+        Property.ValueChangeListener {
 
     private final MshenguMain main;
-    private final SiteDetailsForm form;
-    private final SiteServiceLogTable table;
+//    private final SiteDetailsForm form;
+    private final NotServicedServiceLogsTable table;
     private String parentId = null;
-    private final Label weekRange;
+    private final DateTimeFormatWeeklyHelper dtfwh;
+    Date date;
+    Date startDate;
+    Date endDate;
 
-    public SiteSiteServiceLogTab(MshenguMain app) {
+    public ServiceLogsNotServicedReportTab(MshenguMain app) {
         main = app;
-        form = new SiteDetailsForm();
-        table = new SiteServiceLogTable(main);
+        this.dtfwh = new DateTimeFormatWeeklyHelper();
+        date = dtfwh.getDate(22, 10, 2013);
+        dtfwh.setDate(date);
+        startDate = dtfwh.getMondayDateFull();
+        endDate = dtfwh.getSaturdayDateFull();
+
+        table = new NotServicedServiceLogsTable(main, startDate, endDate);
+
+        setCaption("Missed Services - Weekly");
+        setSizeFull();
+//        addComponent(form);
         Label topleft = new Label("");
         topleft.setSizeUndefined();
         topleft.addStyleName("h4");
         Label bottomRight = new Label("");
         bottomRight.setSizeUndefined();
         bottomRight.addStyleName("h4");
-        setCaption("Service Performed");
-//        addComponent(form);
-        Label heading = new Label("Site's Services Performed");
+
+        Label heading = new Label("Missed Services - Weekly");
         heading.setSizeUndefined();
         heading.addStyleName("h4");
 
-        weekRange = new Label("");
+        Label weekRange = new Label("Services - From : " + dtfwh.getMondayDateYYMMDD() + " To :" + dtfwh.getSundayDateYYMMDD());
         weekRange.setSizeUndefined();
         weekRange.addStyleName("h4");
         GridLayout grid = new GridLayout(6, 3);
 
         grid.setSizeFull();
 
+        
         grid.addComponent(topleft, 0, 0);
         grid.addComponent(heading, 1, 1, 2, 1);
         grid.addComponent(weekRange, 3, 1, 4, 1);
         grid.addComponent(bottomRight, 5, 2);
-        addComponent(grid);;
-        setSizeFull();
-//        addComponent(form);
+        addComponent(grid);
         addComponent(table);
         addListeners();
-    }
-
-    @Override
-    public void buttonClick(Button.ClickEvent event) {
-        final Button source = event.getButton();
-        if (source == form.save) {
-//            saveForm(form.binder);
-        } else if (source == form.edit) {
-            setEditFormProperties();
-        } else if (source == form.cancel) {
-            getHome();
-        } else if (source == form.update) {
-//            saveEditedForm(form.binder);
-        } else if (source == form.delete) {
-//            deleteForm(form.binder);
-        }
     }
 
     @Override
@@ -86,7 +79,7 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
         if (property == table) {
             final Site site = SiteFacade.getSiteService().findById(table.getValue().toString());
 //            form.binder.setItemDataSource(new BeanItem<>(getBean(site)));
-            setReadFormProperties();
+//            setReadFormProperties();
 //        } else if (property == selectedCustomer.comboBoxSelectCustomer) {
 //            String custId = getCustomerId();
 //            if (selectedCustomer.comboBoxSelectCustomer.getValue().toString() != null) {
@@ -101,36 +94,10 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     }
 
     private void getHome() {
-        main.content.setSecondComponent(new ServiceSchedulingMenu(main, "SERVICE_LOGS"));
-    }
-
-    private void setEditFormProperties() {
-        form.binder.setReadOnly(false);
-        form.save.setVisible(false);
-        form.edit.setVisible(false);
-        form.cancel.setVisible(true);
-        form.delete.setVisible(false);
-        form.update.setVisible(true);
-    }
-
-    private void setReadFormProperties() {
-        form.binder.setReadOnly(true);
-        //Buttons Behaviour
-        form.save.setVisible(false);
-        form.edit.setVisible(true);
-        form.cancel.setVisible(true);
-        form.delete.setVisible(true);
-        form.update.setVisible(false);
-
+        main.content.setSecondComponent(new ServicePerformedMenu(main, "NOT_SERVICED"));
     }
 
     private void addListeners() {
-        //Register Button Listeners
-        form.save.addClickListener((Button.ClickListener) this);
-        form.edit.addClickListener((Button.ClickListener) this);
-        form.cancel.addClickListener((Button.ClickListener) this);
-        form.update.addClickListener((Button.ClickListener) this);
-        form.delete.addClickListener((Button.ClickListener) this);
         //Register Table Listerners
         table.addValueChangeListener((Property.ValueChangeListener) this);
 //        selectedCustomer.comboBoxSelectCustomer.addValueChangeListener((Property.ValueChangeListener) this);
@@ -148,16 +115,10 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
      */
     public void setParentId(String parentId) {
         this.parentId = parentId;
-
     }
 
     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate) {
-        setServiceLogRange(startDate, endDate);
         table.loadServiceLogDetails(siteId, startDate, endDate);
+//        table
     }
-
-    private void setServiceLogRange(Date startDate, Date endDate) {
-        weekRange.setValue("Services - From : " + startDate + " To :" + endDate);
-    }
-
 }

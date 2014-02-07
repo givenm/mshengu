@@ -49,7 +49,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
     private static String vehicleNumber;
     private static String employeeNumber;
 
-    @Test
+//    @Test
     public void testSheet() {
         try {
             truckService = ctx.getBean(TruckService.class);
@@ -156,7 +156,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
         return annualDataFleetMaintenanceCost;
     }
 
-    @Test(dependsOnMethods = {"testSheet"})
+//    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList = annualDataFleetMaintenanceCostService.findAll();
         if (annualDataFleetMaintenanceCostList.isEmpty()) {
