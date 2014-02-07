@@ -76,16 +76,19 @@ public class DailyInputsTab extends VerticalLayout implements
             final OperatingCost operatingCost = OperatingCostFacade.getOperatingCostService().findById(table.getValue().toString());
 
             // Find Truck that has this operatingCosts
-            List<Truck> trucks = TruckFacade.getTruckService().findAll();
-            for (Truck truck : trucks) {
-                List<OperatingCost> operatingCostList = truck.getOperatingCosts();
-                for (OperatingCost operatingCostt : operatingCostList) {
-                    if (operatingCostt.getId().equals(operatingCost.getId())) {
-                        trucKiD = truck.getId();
-                        break;
-                    }
-                }
-            }
+//            List<Truck> trucks = TruckFacade.getTruckService().findAll();
+//            for (Truck truck : trucks) {
+//                List<OperatingCost> operatingCostList = truck.getOperatingCosts();
+//                for (OperatingCost operatingCostt : operatingCostList) {
+//                    if (operatingCostt.getId().equals(operatingCost.getId())) {
+//                        trucKiD = truck.getId();
+//                        break;
+//                    }
+//                }
+//            }
+
+            trucKiD = form.filterTruckId.getValue().toString();
+
             form.transactionDate.setReadOnly(false);
             form.randPerLitreCalc.setReadOnly(false);
             form.randPerLitreCalc.setValue("");
@@ -119,7 +122,7 @@ public class DailyInputsTab extends VerticalLayout implements
             }
         } else if (property == form.filterTransactionDate) {
             filteredTransactionDate = form.filterTransactionDate.getValue();
-            if (form.filterTruckId.getValue() != null) {
+            if (form.filterTruckId.getValue().toString() != null) {
                 Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
                 List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
 
@@ -268,6 +271,7 @@ public class DailyInputsTab extends VerticalLayout implements
                 .slipNo(dailyInputBean.getSlipNo())
                 .randPerLitre(dailyInputBean.getRandPerLitre())
                 .driver(driver)
+                .truckId(dailyInputBean.getTruckId())
                 .build();
 
         return operatingCosts;
@@ -286,6 +290,7 @@ public class DailyInputsTab extends VerticalLayout implements
                 .slipNo(dailyInputBean.getSlipNo())
                 .driver(driver)
                 .randPerLitre(dailyInputBean.getRandPerLitre())
+                .truckId(dailyInputBean.getTruckId())
                 .id(dailyInputBean.getId())
                 .build();
 

@@ -13,8 +13,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitDeliveryResource;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitServiceResource;
+import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceContractLifeCycle;
 import zm.hashcode.mshengu.domain.products.SiteUnit;
@@ -177,6 +179,8 @@ public class MobileAppServiceImpl implements MobileAppService {
                     .siteServiceContractLifeCycle(siteServiceContractLifeCycle)
                     .numberOfUnits(numberOfunits)
                     .siteUnit(siteUnits)
+                    .parentId(site.getName())
+                    .contractType(getCustomerContractType(site.getParentId()))
                     .build();
 
             siteServiceContractLifeCycleService.persist(newSiteServiceContractLifeCycle);
@@ -187,7 +191,6 @@ public class MobileAppServiceImpl implements MobileAppService {
 
     private SiteServiceContractLifeCycle updateSiteServiceContractLifeCycleAdd(String siteName, Set<SiteUnit> newUnitsAtThisSite) {
         Site site = siteService.findByName(siteName);
-
 
         SiteServiceContractLifeCycle siteServiceContractLifeCycle = siteService.getSitetCurrentContract(site.getId());
 
@@ -203,6 +206,8 @@ public class MobileAppServiceImpl implements MobileAppService {
                 .siteServiceContractLifeCycle(siteServiceContractLifeCycle)
                 .numberOfUnits(numberOfunits)
                 .siteUnit(siteUnits)
+                .parentId(site.getName())
+                .contractType(getCustomerContractType(site.getParentId()))
                 .build();
 
         siteServiceContractLifeCycleService.persist(newSiteServiceContractLifeCycle);
@@ -243,6 +248,8 @@ public class MobileAppServiceImpl implements MobileAppService {
                     .siteServiceContractLifeCycle(siteServiceContractLifeCycle)
                     .numberOfUnits(numberOfunits)
                     .siteUnit(siteUnits)
+                    .parentId(site.getName())
+                    .contractType(getCustomerContractType(site.getParentId()))
                     .build();
 
             siteServiceContractLifeCycleService.persist(newSiteServiceContractLifeCycle);
@@ -261,7 +268,6 @@ public class MobileAppServiceImpl implements MobileAppService {
 
             siteServiceContractLifeCycleList.add(newSiteServiceContractLifeCycle);
             siteServiceContractLifeCycleList.addAll(currentSiteServiceContractLifeCycle);
-
 
             Site newSite = new Site.Builder(site.getName())
                     .site(site)
@@ -323,10 +329,6 @@ public class MobileAppServiceImpl implements MobileAppService {
             }
         }
 
-
-
-
-
     }
 
     private void addServiceLogToSite(SiteUnit siteUnit, UnitServiceLog unitServiceLog) {
@@ -380,7 +382,6 @@ public class MobileAppServiceImpl implements MobileAppService {
             unitLifeCycleList.add(unitLifeCycle);
 
             List<UnitServiceLog> unitServiceLogList = new ArrayList<>();
-
 
             final SiteUnit siteUnit = new SiteUnit.Builder(unitType)
                     .description(unitType.getName())
@@ -438,6 +439,19 @@ public class MobileAppServiceImpl implements MobileAppService {
             return status;
         } else {
             return null;
+        }
+    }
+
+    private String getCustomerContractType(String parentId) {
+        {
+            String contractType = "Other";
+            if (parentId != null) {
+                Customer customer = CustomerFacade.getCustomerService().findById(parentId);
+                if (customer != null) {
+                    contractType = customer.getLastContactTypeName();
+                }
+            }
+            return contractType;
         }
     }
 }

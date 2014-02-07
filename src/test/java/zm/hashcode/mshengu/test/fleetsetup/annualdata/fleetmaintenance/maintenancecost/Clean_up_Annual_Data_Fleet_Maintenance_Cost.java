@@ -20,7 +20,7 @@ public class Clean_up_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
     @Autowired
     private AnnualDataFleetMaintenanceCostService annualDataFleetMaintenanceCostService;
 
-    @Test
+//    @Test
     public void testSheet() {
         annualDataFleetMaintenanceCostService = ctx.getBean(AnnualDataFleetMaintenanceCostService.class);
         List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostServiceList = annualDataFleetMaintenanceCostService.findAll();
@@ -30,7 +30,7 @@ public class Clean_up_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
         }
     }
 
-    @Test(dependsOnMethods = {"testSheet"})
+//    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostServiceList = annualDataFleetMaintenanceCostService.findAll();
         if (annualDataFleetMaintenanceCostServiceList.isEmpty()) {

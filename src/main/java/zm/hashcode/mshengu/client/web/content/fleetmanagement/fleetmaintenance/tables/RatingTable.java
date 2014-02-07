@@ -10,6 +10,7 @@ import java.util.List;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
+import zm.hashcode.mshengu.app.util.FlagImage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
 
 /**
@@ -20,6 +21,7 @@ public class RatingTable extends Table {
 
     private final MshenguMain main;
     private final FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
+    private final FlagImage flagImage = new FlagImage();
 
     public RatingTable(MshenguMain main) {
         this.main = main;
@@ -51,7 +53,7 @@ public class RatingTable extends Table {
         Integer i = totalMaintenanceSpendKmTraveledList.size() - 1;
 
         for (TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled : totalMaintenanceSpendKmTraveledList) {
-            getItem(i).getItemProperty("").setValue(fleetMaintenanceUtil.determineFlag(totalMaintenanceSpendKmTraveled.getRandPerKilometre()));
+            getItem(i).getItemProperty("").setValue(flagImage.determineFlag(totalMaintenanceSpendKmTraveled.getRandPerKilometre()));
 //            addItem(new Object[]{fleetMaintenanceUtil.determineFlag(totalMaintenanceSpendKmTraveled.getRandPerKilometre())}, i);
             i--;
         }

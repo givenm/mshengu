@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.repository.procurement.AnnualDataFleetMaintenanceCostRepository;
 import zm.hashcode.mshengu.services.procurement.AnnualDataFleetMaintenanceCostService;
@@ -62,21 +63,35 @@ public class AnnualDataFleetMaintenanceCostServiceImpl implements AnnualDataFlee
                 new Sort.Order(Sort.Direction.ASC, "transactionMonth"));
     }
 
+//    @Override
+//    public List<AnnualDataFleetMaintenanceCost> getMonthlyMaintenanceCostBtnTwoDates(Date start, Date end) {
+//        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        Date resetStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
+//        Date resetEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+//
+//        List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList = new ArrayList<>();
+//        List<AnnualDataFleetMaintenanceCost> allAnnualDataFleetMaintenanceCostList = findAll();
+//
+//        for (AnnualDataFleetMaintenanceCost AnnualDataFleetMaintenanceCost : allAnnualDataFleetMaintenanceCostList) {
+//            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(AnnualDataFleetMaintenanceCost.getTransactionMonth());
+//            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
+//                annualDataFleetMaintenanceCostList.add(AnnualDataFleetMaintenanceCost);
+//            }
+//        }
+//        return annualDataFleetMaintenanceCostList;
+//    }
     @Override
-    public List<AnnualDataFleetMaintenanceCost> getMonthlyMaintenanceCostBtnTwoDates(Date start, Date end) {
-        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-        Date resetStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
-        Date resetEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+    public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostBetweenTwoDates(Date from, Date to) {
+        return repository.getAnnualDataCostBetweenTwoDates(from, to);
+    }
 
-        List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList = new ArrayList<>();
-        List<AnnualDataFleetMaintenanceCost> allAnnualDataFleetMaintenanceCostList = findAll();
+    @Override
+    public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
+        return repository.getAnnualDataCostByTruckBetweenTwoDates(truck, from, to);
+    }
 
-        for (AnnualDataFleetMaintenanceCost AnnualDataFleetMaintenanceCost : allAnnualDataFleetMaintenanceCostList) {
-            Date transactionDate = dateTimeFormatHelper.resetTimeOfDate(AnnualDataFleetMaintenanceCost.getTransactionMonth());
-            if (transactionDate.compareTo(resetStartDate) == 0 || transactionDate.compareTo(resetEndDate) == 0 || (transactionDate.after(resetStartDate) && transactionDate.before(resetEndDate))) {
-                annualDataFleetMaintenanceCostList.add(AnnualDataFleetMaintenanceCost);
-            }
-        }
-        return annualDataFleetMaintenanceCostList;
+    @Override
+    public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostByTruckForMonth(Truck truck, Date month) {
+        return repository.getAnnualDataCostByTruckForMonth(truck, month);
     }
 }

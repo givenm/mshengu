@@ -27,6 +27,7 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.m
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
+import zm.hashcode.mshengu.app.util.FlagImage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.MaintenanceSpendByKmTravelledChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.TotalMaintenanceSpendMonthlyChart;
@@ -59,6 +60,7 @@ public class DashBoardTab extends VerticalLayout implements
     public static Integer chartPeriodCount = null;
     public static Image maintenanceSpendPerKmRatingFlag; // USE the randsPerKilometreCalc above
     public FleetMaintenanceMenu fleetMaintenanceMenu = null;
+    private final FlagImage flagImage = new FlagImage();
 
     public DashBoardTab(MshenguMain app, FleetMaintenanceMenu fleetMaintenanceMenu) {
         main = app;
@@ -304,7 +306,7 @@ public class DashBoardTab extends VerticalLayout implements
         Label perKmLabel = new Label("<b style=\"color:red;\">per Km</b>", Label.CONTENT_XHTML);
         perKmLabel.setWidth(50, Sizeable.Unit.PIXELS);
 
-        maintenanceSpendPerKmRatingFlag = fleetMaintenanceUtil.determineImageFlag(totalMaintenanceSpendPerKm);
+        maintenanceSpendPerKmRatingFlag = flagImage.determineImageFlag(totalMaintenanceSpendPerKm);
         maintenanceSpendPerKmRatingFlag.setHeight(maintenanceSpendPerKmRatingFlag.getHeight(), Sizeable.Unit.PIXELS);
         maintenanceSpendPerKmRatingFlag.setWidth(maintenanceSpendPerKmRatingFlag.getWidth(), Sizeable.Unit.PIXELS);
 

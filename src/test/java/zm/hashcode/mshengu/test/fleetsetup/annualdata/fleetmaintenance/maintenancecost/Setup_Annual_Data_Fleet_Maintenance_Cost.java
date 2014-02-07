@@ -49,7 +49,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
     private static String vehicleNumber;
     private static String employeeNumber;
 
-    @Test
+//    @Test
     public void testSheet() {
         try {
             truckService = ctx.getBean(TruckService.class);
@@ -74,7 +74,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
 
                 HSSFSheet worksheet = workbook.getSheetAt(j);
 
-                for (int column = 1; column <= 15; column++) { // we will navigate 15 columns
+                for (int column = 1; column <= 16; column++) { // we will navigate 16 columns
                     vehicleNumber = worksheet.getRow(2).getCell(column).getStringCellValue(); // getStringCellValue() returns result of fomula // DONT USE .toString().trim().;
                     employeeNumber = worksheet.getRow(4).getCell(column).toString().trim();
 
@@ -156,7 +156,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
         return annualDataFleetMaintenanceCost;
     }
 
-    @Test(dependsOnMethods = {"testSheet"})
+//    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList = annualDataFleetMaintenanceCostService.findAll();
         if (annualDataFleetMaintenanceCostList.isEmpty()) {

@@ -377,6 +377,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
+                    .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
                     .total(total)
                     .build();
             return request;
@@ -391,6 +393,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
+                    .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
                     .total(total)
                     .build();
             return request;
@@ -405,6 +409,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
                     .total(total)
                     .build();
             return request;
@@ -419,6 +424,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
                     .total(total)
                     .build();
             return request;

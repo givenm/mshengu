@@ -4,6 +4,8 @@
  */
 package zm.hashcode.mshengu.repository.procurement;
 
+import java.util.Date;
+import java.util.List;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 
@@ -11,5 +13,5 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
  *
  * @author Colin
  */
-public interface AnnualDataFleetMaintenanceMileageRepository extends PagingAndSortingRepository<AnnualDataFleetMaintenanceMileage, String> {
+public interface AnnualDataFleetMaintenanceMileageRepository extends PagingAndSortingRepository<AnnualDataFleetMaintenanceMileage, String>, AnnualDataFleetMaintenanceMileageRepositoryCustom {
 }

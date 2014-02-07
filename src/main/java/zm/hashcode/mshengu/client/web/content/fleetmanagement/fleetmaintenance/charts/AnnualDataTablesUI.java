@@ -8,6 +8,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Date;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.panel.PanelStyled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMaintenanceCostHeadingTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMaintenanceCostTable;
@@ -53,8 +54,6 @@ public class AnnualDataTablesUI extends VerticalLayout {
         mileageTableLayout.addComponent(annualMileageTable);
         mileageTableLayout.setSpacing(false);
 
-
-
         mainLayout.addComponent(costTitleHorizontalLayout);
         mainLayout.addComponent(costHeadingLayout);
         mainLayout.addComponent(costTableLayout);
@@ -93,10 +92,11 @@ public class AnnualDataTablesUI extends VerticalLayout {
         costTitleHorizontalLayout.setWidth("100%");  // inherit the size of mainLayout
         mileageTitleHorizontalLayout.setWidth("100%");
         costHeadingLayout.setWidth(annualMaintenanceCostTable.getWidth(), Unit.PIXELS);  // inherit the size of annualMaintenanceCostHeadingTable
+        costTableLayout.setWidth(annualMaintenanceCostTable.getWidth(), Unit.PIXELS);
         mainLayout.setWidth(costHeadingLayout.getWidth(), Unit.PIXELS); // inherit the size of costHeadingLayout
         mainLayout.setSpacing(false);
         //
-        mainPanel.setWidth(1000, Unit.PIXELS);
+        mainPanel.setWidth(1045, Unit.PIXELS);
         mainPanel.setContent(mainLayout);
 
         addComponent(mainPanel);

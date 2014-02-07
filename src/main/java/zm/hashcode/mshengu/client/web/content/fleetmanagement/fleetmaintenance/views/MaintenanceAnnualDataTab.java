@@ -9,9 +9,12 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.AnnualDataTablesUI;
@@ -22,6 +25,7 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.t
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMaintenanceCostTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMileageTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 
@@ -37,6 +41,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     private final AnnualMaintenanceCostHeadingTable annualMaintenanceCostHeadingTable;
     private final AnnualMaintenanceCostTable annualMaintenanceCostTable;
     private final AnnualMileageTable annualMileageTable;
+    private static List<Truck> serviceTrucks = null;
     //
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
@@ -78,6 +83,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     }
 
     public void generateData() {
+        serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
 //        Date endDate = new Date();
         int year = Integer.parseInt(dateTimeFormatHelper.getYearNumber(new Date()));
 
@@ -88,7 +94,9 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         annualMileageList = getMaintenanceMileageList();
 
         if (!annualMaintenanceCostList.isEmpty()) {
-            grabMaintenanceAnnualData(annualMaintenanceCostList); // , FleetMaintenanceUtil.startDate, 12
+////            System.out.println("buildAnnualDataMaintenanceCost in MaintenanceAnnualDataTab.java STARTS: " + new Date());
+            maintenanceCostDataList = buildAnnualDataMaintenanceCost(annualMaintenanceCostList, serviceTrucks);
+////            System.out.println("buildAnnualDataMaintenanceCost in MaintenanceAnnualDataTab.java ENDS: " + new Date());
             // Sort AnnualDataFleetMaintenanceCost List in ASC Order by Date ASC Order by Vehicle Number .
             Collections.sort(maintenanceCostDataList, MonthlySpendData.AscOrderDateAscOrderVehicleNumberComparator);
             createMaintenanceCostAndHeadingTable();
@@ -97,10 +105,12 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         }
 
         if (!annualMileageList.isEmpty()) {
-            grabMileageAnnualData(annualMileageList); // , FleetMaintenanceUtil.startDate, 12
+////            System.out.println("buildAnnualDataMileage in MaintenanceAnnualDataTab.java STARTS: " + new Date());
+            mileageList = buildAnnualDataMileage(annualMileageList, serviceTrucks);
+////            System.out.println("buildAnnualDataMileage in MaintenanceAnnualDataTab.java ENDS: " + new Date());
             // Sort AnnualDataFleetMaintenanceCost List in ASC Order by Vehicle Number ASC Order by Date.
             Collections.sort(mileageList, MonthlyMileageData.AscOrderDateAscOrderVehicleNumberComparator);
-            createMileageAndHeadingTable();
+            createMileageTable();
         } else {
             Notification.show("No Mileage Data found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
         }
@@ -113,49 +123,22 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
-//    public Date getDate(int day, int month, int year) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.YEAR, year);
-//        calendar.set(Calendar.MONTH, month);
-//        calendar.set(Calendar.DAY_OF_MONTH, day);
-//// Set time fields to zero
-//        calendar.set(Calendar.HOUR_OF_DAY, 0);
-//        calendar.set(Calendar.MINUTE, 0);
-//        calendar.set(Calendar.SECOND, 0);
-//        calendar.set(Calendar.MILLISECOND, 0);
-//        return calendar.getTime();
-//    }
-    public void grabMaintenanceAnnualData(List<AnnualDataFleetMaintenanceCost> maintenanceCostList) {
-        maintenanceCostDataList = fleetMaintenanceUtil.buildAnnualDataMaintenanceCost(maintenanceCostList);
-    }
-
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
         return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
-    }
-
-    public void grabMileageAnnualData(List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList) {
-        mileageList = fleetMaintenanceUtil.buildAnnualDataMileage(maintenanceMileageList);
     }
 
     public void createMaintenanceCostAndHeadingTable() {
         annualMaintenanceCostHeadingTable.populateAnnualMaintenanceCostHeadingTable();
         // Size the table Height to the number of Rows u want or to autofit the rows in it
         annualMaintenanceCostHeadingTable.setPageLength(annualMaintenanceCostHeadingTable.size()); // Adjust the table height a bit
-
-////         // Add totalMileageTable to Layout then to the Panel
-////        VerticalLayout costHeadingTableLayout = new VerticalLayout();
-////        costHeadingTableLayout.addComponent(annualMaintenanceCostHeadingTable);
-////        totalMileagePanel.setContent(costHeadingTableLayout);
-//////        totalMileagePanel.setWidth(totalMileageTable.getWidth() + "px");
-
-        annualMaintenanceCostTable.populateAnnualMaintenanceCostTable(maintenanceCostDataList, annualDataMonthCount, fleetMaintenanceUtil.getStartDate());
+        annualMaintenanceCostTable.populateAnnualMaintenanceCostTable(maintenanceCostDataList, annualDataMonthCount, FleetMaintenanceUtil.getStartDate(), serviceTrucks);
         // Size the table Height to the number of Rows u want or to autofit the rows in it
         annualMaintenanceCostTable.setPageLength(annualMaintenanceCostTable.size()); // Adjust the table height a bit
     }
 
-    public void createMileageAndHeadingTable() {
+    public void createMileageTable() {
         // No Table with Headings before Table with Annual Mileage
-        annualMileageTable.populateAnnualMileageTable(mileageList, annualDataMonthCount, fleetMaintenanceUtil.getStartDate());
+        annualMileageTable.populateAnnualMileageTable(mileageList, annualDataMonthCount, FleetMaintenanceUtil.getStartDate(), serviceTrucks);
         // Size the table Height to the number of Rows u want or to autofit the rows in it
         annualMileageTable.setPageLength(annualMileageTable.size()); // Adjust the table height a bit
 
@@ -170,10 +153,73 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     public void columnResize(Table.ColumnResizeEvent event) {
         // Get the new width of the resized column
         int width = event.getCurrentWidth();
-
         // Get the property ID of the resized column
         String column = (String) event.getPropertyId();
-
         System.out.println("Column " + column + " width is: " + width);
+    }
+
+    public List<MonthlySpendData> buildAnnualDataMaintenanceCost(List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList, List<Truck> serviceTrucks) {
+
+        String month = null;
+        int iD = 1;
+        List<MonthlySpendData> monthlySpendDataList = new ArrayList<>();
+        Collections.sort(annualDataFleetMaintenanceCostList, AnnualDataFleetMaintenanceCost.AscOrderTruckAscOrderDateComparator);
+        for (AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
+            month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceCost.getTransactionMonth().toString());
+            monthlySpendDataList.add(createTotalMonthlySpendList(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost(), month, annualDataFleetMaintenanceCost.getTransactionMonth(), annualDataFleetMaintenanceCost.getTruckId(), iD, serviceTrucks));
+            iD++;
+        }
+        return monthlySpendDataList;
+    }
+
+    private MonthlySpendData createTotalMonthlySpendList(BigDecimal totalMonthlySpend, String month, Date date, String truckId, int id, List<Truck> serviceTrucks) {
+        Truck truck = null;
+        for (Truck truckk : serviceTrucks) {
+            if (truckk.getId().equals(truckId)) {
+                truck = truckk;
+                break;
+            }
+        }
+        MonthlySpendData monthlySpendData = new MonthlySpendData();
+        monthlySpendData.setVehicleNumber(truck.getVehicleNumber());
+        monthlySpendData.setNumberPlate(truck.getNumberPlate());
+        monthlySpendData.setTransactionDate(month);
+        monthlySpendData.setTransactDate(date);
+        monthlySpendData.setTruckMonthlySpendTotal(totalMonthlySpend);
+        monthlySpendData.setId(id + "");
+
+        return monthlySpendData;
+    }
+
+    public List<MonthlyMileageData> buildAnnualDataMileage(List<AnnualDataFleetMaintenanceMileage> annualDataFleetMaintenanceMileageList, List<Truck> serviceTrucks) {
+        String month = null;
+        int iD = 1;
+        final List<MonthlyMileageData> monthlyMileageDataList = new ArrayList<>();
+        Collections.sort(annualDataFleetMaintenanceMileageList, AnnualDataFleetMaintenanceMileage.AscOrderTruckAscOrderDateComparator);
+        for (AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage : annualDataFleetMaintenanceMileageList) {
+            month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceMileage.getTransactionMonth().toString());
+            monthlyMileageDataList.add(createMonthlyMileageList(annualDataFleetMaintenanceMileage.getMonthlyMileage(), month, annualDataFleetMaintenanceMileage.getTransactionMonth(), annualDataFleetMaintenanceMileage.getTruckId(), iD, serviceTrucks));
+            iD++;
+        }
+        return monthlyMileageDataList;
+    }
+
+    private MonthlyMileageData createMonthlyMileageList(Integer monthlyMileageTotal, String month, Date date, String truckId, int id, List<Truck> serviceTrucks) {
+        Truck truck = null;
+        for (Truck truckk : serviceTrucks) {
+            if (truckk.getId().equals(truckId)) {
+                truck = truckk;
+                break;
+            }
+        }
+        MonthlyMileageData monthlyMileageData = new MonthlyMileageData();
+        monthlyMileageData.setVehicleNumber(truck.getVehicleNumber());
+        monthlyMileageData.setNumberPlate(truck.getNumberPlate());
+        monthlyMileageData.setTransactionDate(month);
+        monthlyMileageData.setTransactDate(date);
+        monthlyMileageData.setTruckMonthlyMileageTotal(monthlyMileageTotal);
+        monthlyMileageData.setId(id + "");
+
+        return monthlyMileageData;
     }
 }

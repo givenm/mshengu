@@ -30,24 +30,37 @@ public class MaintenanceSpendBySupplier implements Serializable, Comparable<Main
     public int compareTo(MaintenanceSpendBySupplier o) {
         return maintenanceCost.compareTo(o.getMaintenanceCost());
     }
-    public static Comparator<MaintenanceSpendBySupplier> DescendingOrderMaintenanceCostComparator = new Comparator<MaintenanceSpendBySupplier>() {
-        @Override
-        public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
-            //descending order
-            return maintenanceSpendBySupplier2.getMaintenanceCost().compareTo(maintenanceSpendBySupplier1.getMaintenanceCost());
-
-            //ascending order
-            // return maintenanceSpendBySupplier1.getMaintenanceCost().compareTo(maintenanceSpendBySupplier2.getMaintenanceCost());
-        }
-    };
-    public static Comparator<MaintenanceSpendBySupplier> AscendingOrderMaintenanceCostComparator = new Comparator<MaintenanceSpendBySupplier>() {
-        @Override
-        public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
-            //descending order
+//    public static Comparator<MaintenanceSpendBySupplier> DescendingOrderMaintenanceCostComparator = new Comparator<MaintenanceSpendBySupplier>() {
+//        @Override
+//        public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
+//            //descending order
 //            return maintenanceSpendBySupplier2.getMaintenanceCost().compareTo(maintenanceSpendBySupplier1.getMaintenanceCost());
+//
+//            //ascending order
+//            // return maintenanceSpendBySupplier1.getMaintenanceCost().compareTo(maintenanceSpendBySupplier2.getMaintenanceCost());
+//        }
+//    };
+//    public static Comparator<MaintenanceSpendBySupplier> AscendingOrderMaintenanceCostComparator = new Comparator<MaintenanceSpendBySupplier>() {
+//        @Override
+//        public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
+//            //descending order
+////            return maintenanceSpendBySupplier2.getMaintenanceCost().compareTo(maintenanceSpendBySupplier1.getMaintenanceCost());
+//
+//            //ascending order
+//            return maintenanceSpendBySupplier1.getMaintenanceCost().compareTo(maintenanceSpendBySupplier2.getMaintenanceCost());
+//        }
+//    };
+    public static Comparator<MaintenanceSpendBySupplier> AscOrderTruckAscOrderDateComparator = new Comparator<MaintenanceSpendBySupplier>() {
+        @Override
+        public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
 
-            //ascending order
-            return maintenanceSpendBySupplier1.getMaintenanceCost().compareTo(maintenanceSpendBySupplier2.getMaintenanceCost());
+            // Ascending Order by Truck
+            int compareOne = maintenanceSpendBySupplier1.getTruckId().compareTo(maintenanceSpendBySupplier2.getTruckId());
+            // Ascending order by Date
+            int compareTwo = maintenanceSpendBySupplier1.getTransactionDate().compareTo(maintenanceSpendBySupplier2.getTransactionDate());
+
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
         }
     };
 
