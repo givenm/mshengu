@@ -32,16 +32,20 @@ public class AnnualDataFleetMaintenanceCostRepositoryImpl implements AnnualDataF
                 .andOperator(Criteria.where("transactionMonth").gte(from),
                 Criteria.where("transactionMonth").lte(to)));
 
-        /*   */
-        List<AnnualDataFleetMaintenanceCost> truckAnnualDataCostList = mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
-//        System.out.println("truckAnnualDataCostList - "    + truckAnnualDataCostList.toString());
+        /*
+         List<AnnualDataFleetMaintenanceCost> truckAnnualDataCostList = mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
 
-        for (AnnualDataFleetMaintenanceCost annualDataCost : truckAnnualDataCostList) {
-            System.out.println("AnnualDataFleetMaintenanceCost Query - " + annualDataCost.getTransactionMonth() + " | " + annualDataCost.getMonthlyMaintenanceCost());
-        }
+         System.out.println("AnnualDataFleetMaintenanceCostRepository  - GENERAL QUERY - Start= " + from + " | To= " + to);
+         if (truckAnnualDataCostList.isEmpty()) {
+         System.out.println("AnnualDataFleetMaintenanceCostRepository  - GENERAL QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
-        return truckAnnualDataCostList;
+         for (AnnualDataFleetMaintenanceCost annualDataCost : truckAnnualDataCostList) {
+         System.out.println("AnnualDataFleetMaintenanceCostRepository - GENERAL QUERY  - Date= " + annualDataCost.getTransactionMonth() + " | Cost= " + annualDataCost.getMonthlyMaintenanceCost() + " | Truck= " + annualDataCost.getTruckId());
+         }
+         System.out.println("--==--");
+         */
+        return mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
     }
 
     @Override
@@ -65,15 +69,19 @@ public class AnnualDataFleetMaintenanceCostRepositoryImpl implements AnnualDataF
                 .andOperator(Criteria.where("transactionMonth").gte(from),
                 Criteria.where("transactionMonth").lte(to)));
 
-        /*   */
-        List<AnnualDataFleetMaintenanceCost> truckAnnualDataCostList = mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
-//        System.out.println("truckAnnualDataCostListQuery - "    + truckAnnualDataCostList.toString());
+        /*
+         List<AnnualDataFleetMaintenanceCost> truckAnnualDataCostList = mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
 
-        for (AnnualDataFleetMaintenanceCost annualDataCost : truckAnnualDataCostList) {
-            System.out.println("AnnualDataFleetMaintenanceCost Query - truckId= " + annualDataCost.getTruckId() + " | date= " + annualDataCost.getTransactionMonth());
-        }
+         System.out.println("AnnualDataFleetMaintenanceCostRepository  - TRUCK QUERY - Start= " + from + " | To= " + to + "  FOR truckId: " + truck.getId());
+         if (truckAnnualDataCostList.isEmpty()) {
+         System.out.println("AnnualDataFleetMaintenanceCostRepository  - TRUCK QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
-        return truckAnnualDataCostList;
+         for (AnnualDataFleetMaintenanceCost annualDataCost : truckAnnualDataCostList) {
+         System.out.println("AnnualDataFleetMaintenanceCostRepository - TRUCK QUERY  - Date= " + annualDataCost.getTransactionMonth() + " | Cost= " + annualDataCost.getMonthlyMaintenanceCost() + " | Truck= " + annualDataCost.getTruckId());
+         }
+         System.out.println("--==--");
+         */
+        return mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
     }
 }

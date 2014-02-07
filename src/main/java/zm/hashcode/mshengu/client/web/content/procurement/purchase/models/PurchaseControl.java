@@ -74,7 +74,7 @@ public class PurchaseControl {
             // Open the docx Template
             String fileName = "purchase.docx";
             URL url = this.getClass().getResource("/procurementpdf/");
-            System.out.println("getResource() PATH " + url.getPath());
+//            System.out.println("getResource() PATH " + url.getPath());
             FileInputStream in = new FileInputStream(url.getFile() + fileName);
 
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Velocity);

@@ -194,11 +194,11 @@ public class DashBoardTab extends VerticalLayout implements
         spendMaintenanceMileageList = fleetMaintenanceUtil.getMaintenanceMileageList(maintenanceMileageList, date, period);
 
         // Calculate Mileage Total
-        System.out.println("\n Total Maintenance Mileage for all Vehicles");
+//        System.out.println("\n Total Maintenance Mileage for all Vehicles");
         for (TotalMaintenanceMileage totalMaintenanceMileage : spendMaintenanceMileageList) {
             grandTotalMaintenanceMileage = grandTotalMaintenanceMileage.add(new BigDecimal(totalMaintenanceMileage.getTruckMileagetotal()));
         }
-        System.out.println(" = " + grandTotalMaintenanceMileage);
+//        System.out.println(" = " + grandTotalMaintenanceMileage);
 
 //        // TESTING
 //        System.out.println("\n Total Maintenance Mileage Total by Vehicle Data");
@@ -214,10 +214,10 @@ public class DashBoardTab extends VerticalLayout implements
     public void performSpendKmTravelledChart() {
         spendByKmTravelledChartDataList = fleetMaintenanceUtil.getMaintenanceMileageChartData(spendMaintenanceMileageList, spendByVehicleChartDataList);
         // TESTING
-        System.out.println("\n Maintenance SPend KM Travelled (R/Km) Chart");
-        for (TotalMaintenanceSpendKmTraveled totalMaintenanceMileage : spendByKmTravelledChartDataList) {
-            System.out.println(totalMaintenanceMileage.getNumberPlate() + " = " + totalMaintenanceMileage.getRandPerKilometre());
-        }
+//        System.out.println("\n Maintenance SPend KM Travelled (R/Km) Chart");
+//        for (TotalMaintenanceSpendKmTraveled totalMaintenanceMileage : spendByKmTravelledChartDataList) {
+//            System.out.println(totalMaintenanceMileage.getNumberPlate() + " = " + totalMaintenanceMileage.getRandPerKilometre());
+//        }
     }
 
     private void getHome() {
