@@ -44,9 +44,9 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
 
         for (Request request : requests) {
             Truck truck = request.getTruck();
-            if (truck != null) {
-                System.out.println("Request with null for TruckId n ServiceProviderId: getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber());
-            }
+//            if (truck != null) {
+            System.out.println("Request Check: TruckId= " + request.getTruckId() + " | ServiceProviderId= " + request.getServiceProviderId() + " | getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber());
+//            }
         }
     }
 

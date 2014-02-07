@@ -315,7 +315,7 @@ public class TrackerUtil implements Serializable {
                 }
                 mileage = operatingCost.getSpeedometer();
             }
-            System.out.println("Previous Mileage before this is: " + mileage);
+//            System.out.println("Previous Mileage before this is: " + mileage);
             return mileage;
         }
 
@@ -332,12 +332,12 @@ public class TrackerUtil implements Serializable {
                 // Check if new Entry will be first entry of Month
                 if (currentMonthOperatingCostList.get(0).getTransactionDate().after(transactionDate)) {
                     mileage = getPreviousMonthMileage(truck, previousMonth, previousYear);
-                    System.out.println("FIRST OF MONTH ENTRY - Previous Mileage before this is: " + mileage);
+//                    System.out.println("FIRST OF MONTH ENTRY - Previous Mileage before this is: " + mileage);
                     return mileage;
                 }
             } catch (java.lang.IndexOutOfBoundsException ex) {
                 mileage = getPreviousMonthMileage(truck, previousMonth, previousYear);
-                System.out.println("FIRST OF MONTH ENTRY - Previous Mileage before this is: " + mileage);
+//                System.out.println("FIRST OF MONTH ENTRY - Previous Mileage before this is: " + mileage);
                 return mileage;
             }
             // Check if new Entry will be in between the month
@@ -348,7 +348,7 @@ public class TrackerUtil implements Serializable {
                     }
                     mileage = operatingCost.getSpeedometer();
                 }
-                System.out.println("BETWEEN FIRST DAY OF MONTH N LAST DAY OF MONTH - Previous Mileage before this is: " + mileage);
+//                System.out.println("BETWEEN FIRST DAY OF MONTH N LAST DAY OF MONTH - Previous Mileage before this is: " + mileage);
                 return mileage;
             }
         }

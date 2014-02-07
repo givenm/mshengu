@@ -43,7 +43,7 @@ public class MaintenanceCostUtil implements Serializable {
      */
     public List<AnnualDataFleetMaintenanceCost> findMaintenanceCostBetweenTwoDates(Date startDate, Date endDate, List<Truck> serviceTrucks) {
         this.serviceTrucks = serviceTrucks;
-
+        maintenanceCostList.clear();
         if (endDate.before(staticDataEndDate) || endDate.compareTo(staticDataEndDate) == 0) {
             return AnnualDataFleetMaintenanceCostFacade.getAnnualDataFleetMaintenanceCostService().getAnnualDataCostBetweenTwoDates(startDate, endDate);
         } else {
@@ -74,11 +74,12 @@ public class MaintenanceCostUtil implements Serializable {
                         accumulatedTotal = accumulatedTotal.add(request.getTotal());
                     }
                     // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
-                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, accumulatedTotal);
+                    maintenanceCostList.add(buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, accumulatedTotal));
                 } else {
                     // Add a Zero for the Month
-                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, BigDecimal.ZERO);
-                    System.out.println("Zero Month in Maintenance Cost Live Data " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()));
+                    maintenanceCostList.add(buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, BigDecimal.ZERO));
+//                    System.out.println("No Entry For Request From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
+//                    System.out.println("--==--");
                 }
             }
         }
@@ -98,11 +99,12 @@ public class MaintenanceCostUtil implements Serializable {
                         accumulatedTotal = accumulatedTotal.add(request.getTotal());
                     }
                     // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
-                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, accumulatedTotal);
+                    maintenanceCostList.add(buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, accumulatedTotal));
                 } else {
                     // Add a Zero for the Month
-                    buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, BigDecimal.ZERO);
-                    System.out.println("Zero Month in Maintenance Cost Live Data " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()));
+                    maintenanceCostList.add(buildAnnualDataFleetMaintenanceCostList(counter, truck, startCalendar, BigDecimal.ZERO));
+//                    System.out.println("No Entry For Request From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
+//                    System.out.println("--==--");
                 }
             }
         }

@@ -51,7 +51,7 @@ public class AddTruckIdToDailyInputTest extends AppTest {
         List<OperatingCost> operatingCostList = operatingCostService.findAll();
         for (OperatingCost operatingCost : operatingCostList) {
             if (operatingCost.getTruckId() == null) {
-                System.out.println("This Operating Cost has a null for TruckId: getId()= " + operatingCost.getId() + " | TransactionDate= " + operatingCost.getTransactionDate() + " | Driver= " + operatingCost.getDriverName());
+                System.out.println("OperatingCost captured without TruckId: SlipNo= " + operatingCost.getSlipNo() + " | TransactionDate= " + operatingCost.getTransactionDate() + " | Driver= " + operatingCost.getDriverName() + " | Mileage= " + operatingCost.getSpeedometer() + " | FuelCost= " + operatingCost.getFuelCost() + " | Litres= " + operatingCost.getFuelLitres());
             }
         }
     }

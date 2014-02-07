@@ -101,7 +101,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
                     if (truck != null && driver != null) {
                         // iterated through all the rows
                         System.out.println("\n\n" + "Begin processing Sheet: " + j + " i.e. " + vehicleNumber + ", Driver: " + employeeNumber + ", Driver Id: " + driverPersonId);
-                        for (int i = 31; i <= 46; i++) { // // Row 32 to 47 e.g. if Row 1,  index is (0)  of the Mileage Columns
+                        for (int i = 31; i <= 47; i++) { // // Row 32 to 48 e.g. if Row 1,  index is (0)  of the Mileage Columns
 
                             try {
                                 datee = simpleFormat.parse(worksheet.getRow(i).getCell(0).toString().trim());  // String to Date
