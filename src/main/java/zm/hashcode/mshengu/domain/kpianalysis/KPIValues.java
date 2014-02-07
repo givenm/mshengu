@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.domain.kpianalysis;
 
 import java.io.Serializable;
+import java.util.Date;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -16,8 +17,7 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
     @Id
     private String id;
     private double value;
-    private String month;
-    private int year;
+    private Date date;
 
     private KPIValues() {
     }
@@ -25,13 +25,12 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
     private KPIValues(Builder builder) {
         this.id = builder.id;
         this.value = builder.value;
-        this.year = builder.year;
-        this.month = builder.month;
+        this.date = builder.date;
     }
 
     @Override
     public int compareTo(KPIValues o) {
-        return month.compareToIgnoreCase(o.month);
+        return date.compareTo(o.date);
     }
 
     @Override
@@ -58,11 +57,10 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
 
         private String id;
         private double value;
-        private final String month;
-        private int year;
+        private Date date;
 
-        public Builder(String value) {
-            this.month = value;
+        public Builder(Date value) {
+            this.date = value;
         }
 
         public Builder id(String value) {
@@ -75,15 +73,9 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
             return this;
         }
 
-        public Builder year(int value) {
-            this.year = value;
-            return this;
-        }
-
         public Builder kPIValues(KPIValues values) {
             this.id = values.getId();
             this.value = values.getValue();
-            this.year = values.getYear();
             return this;
         }
 
@@ -100,11 +92,7 @@ public class KPIValues implements Serializable, Comparable<KPIValues> {
         return value;
     }
 
-    public String getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
+    public Date getDate() {
+        return date;
     }
 }

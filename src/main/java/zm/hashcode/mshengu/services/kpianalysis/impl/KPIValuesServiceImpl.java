@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import zm.hashcode.mshengu.domain.kpianalysis.KPA;
 import zm.hashcode.mshengu.domain.kpianalysis.KPIValues;
 import zm.hashcode.mshengu.repository.kpianalysis.KPIValuesRepository;
 import zm.hashcode.mshengu.services.kpianalysis.KPIValuesService;

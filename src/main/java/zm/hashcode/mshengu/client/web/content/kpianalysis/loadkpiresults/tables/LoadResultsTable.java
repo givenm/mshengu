@@ -7,7 +7,7 @@ package zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.tables
 import com.vaadin.ui.Table;
 import java.util.List;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.domain.kpianalysis.KPI;
+import zm.hashcode.mshengu.domain.kpianalysis.KPA;
 import zm.hashcode.mshengu.domain.kpianalysis.KPIItem;
 
 /**
@@ -27,8 +27,8 @@ public class LoadResultsTable extends Table {
         addContainerProperty("Date", String.class, null);
     }
 
-    public void loadTable( List<KPI> items) {
-        for (KPI item : items) {
+    public void loadTable( List<KPA> items) {
+        for (KPA item : items) {
             addItem(new Object[]{
                 item.getName(),
                 item.getItems().size() + "",
