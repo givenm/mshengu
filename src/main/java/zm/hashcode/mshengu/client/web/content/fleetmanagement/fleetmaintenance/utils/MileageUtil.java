@@ -80,7 +80,7 @@ public class MileageUtil implements Serializable {
                 } else {
                     // Build ZERO Entry AnnualDataFleetMaintenanceMileage for current Truck for current Month
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, 0));
-                    System.out.println("No Entry For Daily Input(Operating Cost) From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
+//                    System.out.println("No Entry For Daily Input(Operating Cost) From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
                 }
             }
         }
@@ -107,7 +107,7 @@ public class MileageUtil implements Serializable {
                 } else {
                     // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, 0));
-                    System.out.println("No Entry For Daily Input(Operating Cost) From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
+//                    System.out.println("No Entry For Daily Input(Operating Cost) From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
                 }
             }
         }
