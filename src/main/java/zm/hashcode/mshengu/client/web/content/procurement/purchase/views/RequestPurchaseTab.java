@@ -89,7 +89,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
         if (source == form.save) {
             addItemsToTable(form.binder);
         } else if (source == form.approval) {
-            sendRequest(form.binder);            
+            sendRequest(form.binder);  
+            
         } 
 //        else if (source == form.editItemsButton) {
 //            allowEditOfItems();
@@ -329,12 +330,14 @@ public class RequestPurchaseTab extends VerticalLayout implements
     }
 
     private void sendRequest(FieldGroup binder) {
+          
         
             Request request = getRequestEntity(binder);
             RequestFacade.getRequestService().persist(request);
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
        
+            
     }
 
     private Request getRequestEntity(FieldGroup binder) {
