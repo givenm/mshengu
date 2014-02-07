@@ -207,7 +207,7 @@ public class CustomerContractTest extends AppTest {
                     SiteServiceContractLifeCycle newSiteServiceContractLifeCycle = new SiteServiceContractLifeCycle.Builder(siteServiceContractLifeCycle.getDateofAction())
                             .siteServiceContractLifeCycle(siteServiceContractLifeCycle)
                             .parentId(site.getName())
-                            .contractType(contractType)
+                           // .contractType(contractType)
                             .build();
                     siteServiceContractLifeCycleService.merge(newSiteServiceContractLifeCycle);
 
