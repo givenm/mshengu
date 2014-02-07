@@ -8,10 +8,12 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,8 +26,8 @@ import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFac
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreCategoryTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.CostCentreTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.ItemCategoryTypeFacade;
-import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.RequestForm;
@@ -41,7 +43,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.domain.ui.util.ItemCategoryType;
-import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -58,6 +59,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
     private BigDecimal total = BigDecimal.ZERO;
     private DecimalFormat f = new DecimalFormat("###.00");
     private SequenceHelper sequenceHelper = new SequenceHelper();
+    private ServiceProvider serviceProvider;
 
     public RequestPurchaseTab(MshenguMain app) {
         setSizeFull();
@@ -73,6 +75,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
         //Register Button Listeners
         form.save.addClickListener((Button.ClickListener) this);
         form.approval.addClickListener((Button.ClickListener) this);
+        //form.editItemsButton.addClickListener((Button.ClickListener) this);
         form.name.addValueChangeListener((Property.ValueChangeListener) this);
         form.itemDescription.addValueChangeListener((Property.ValueChangeListener) this);
         form.quantity.addValueChangeListener((Property.ValueChangeListener) this);
@@ -85,15 +88,14 @@ public class RequestPurchaseTab extends VerticalLayout implements
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
         if (source == form.save) {
-            if (!form.total.getValue().isEmpty()) {
-                addItemsToTable(form.binder);
-            } else {
-                Notification.show("Add Item Values!", Notification.Type.TRAY_NOTIFICATION);
-            }
+            addItemsToTable(form.binder);
         } else if (source == form.approval) {
             sendRequest(form.binder);
             getHome();
-        }
+        } 
+//        else if (source == form.editItemsButton) {
+//            allowEditOfItems();
+//        }
     }
 
     @Override
@@ -103,21 +105,24 @@ public class RequestPurchaseTab extends VerticalLayout implements
             table.removeAllItems();
             form.itemDescription.removeAllItems();
             String supplierId = form.name.getValue().toString();
-            ServiceProvider provider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
-            if (!provider.getServiceProviderProduct().isEmpty()) {
+            serviceProvider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
+            if (!serviceProvider.getServiceProviderProduct().isEmpty()) {
                 setReadOnlyFalse();
                 resetValues();
-                if (provider.getContactPerson() != null) {
-                    ContactPerson contactPerson = provider.getContactPerson();
+                if (serviceProvider.getContactPerson() != null) {
+                    ContactPerson contactPerson = serviceProvider.getContactPerson();
                     form.address.setValue(contactPerson.getAddress1());
                     form.number.setValue(contactPerson.getMainNumber());
                     form.postalCode.setValue(contactPerson.getCode());
                 }
                 if (keep != null) {
+                    form.description.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.description);
-                    form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 3);
+                    form.itemDescription.setRequired(true);
+                    form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 4);
+
                 }
-                for (ServiceProviderProduct product : provider.getServiceProviderProduct()) {
+                for (ServiceProviderProduct product : serviceProvider.getServiceProviderProduct()) {
                     form.itemDescription.addItem(product.getId());
                     form.itemDescription.setItemCaption(product.getId(), product.getProductName());
                     keep = null;
@@ -126,19 +131,19 @@ public class RequestPurchaseTab extends VerticalLayout implements
             } else {
                 setReadOnlyFalse();
                 resetValues();
-                if (provider.getContactPerson() != null) {
-                    ContactPerson contactPerson = provider.getContactPerson();
+                if (serviceProvider.getContactPerson() != null) {
+                    ContactPerson contactPerson = serviceProvider.getContactPerson();
                     form.address.setValue(contactPerson.getAddress1());
                     form.number.setValue(contactPerson.getMainNumber());
                     form.postalCode.setValue(contactPerson.getCode());
                 }
                 form.address.setReadOnly(true);
-                form.number.setReadOnly(true);
-                form.postalCode.setReadOnly(true);
-                form.costCentre.setReadOnly(true);
+                form.number.setReadOnly(true);                
                 if (keep == null) {
+                    form.itemDescription.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.itemDescription);
-                    form.itemPurchaseLayout.addComponent(form.description, 0, 3);
+                    form.description.setRequired(true);
+                    form.itemPurchaseLayout.addComponent(form.description, 0, 4);
                     keep = "keep";
                 }
             }
@@ -163,13 +168,16 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 setReadOnlyTrue();
             }
         } else if (property == form.quantity) {
-            if (!form.quantity.getValue().toString().isEmpty()) {
+            if (!form.quantity.getValue().toString().isEmpty() && !form.itemNumber.getValue().toString().isEmpty() && !form.unitPrice.getValue().toString().equals("0")) {
                 setReadOnlyFalse();
                 BigDecimal subtotal = new BigDecimal(form.unitPrice.getValue());
                 subtotal = subtotal.multiply(new BigDecimal(form.quantity.getValue()));
                 form.subTotal.setValue(f.format(subtotal));
-                subtotal = subtotal.multiply(new BigDecimal(1.14));
+                if(!serviceProvider.isRegisteredForVat()){
+                    subtotal = subtotal.multiply(new BigDecimal(1.14));
+                }                
                 form.total.setValue(f.format(subtotal));
+                //form.editItemsButton.setVisible(true); 
                 setReadOnlyTrue();
             }
         } else if (property == form.costCentre) {
@@ -247,13 +255,16 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 resetValues();
                 setReadOnlyTrue();
             }
+            
             form.approval.setVisible(true);
+            //form.editItemsButton.setVisible(false);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         } catch (Exception e) {
-            e.printStackTrace();
             Notification.show("Values MISSING .. !", Notification.Type.TRAY_NOTIFICATION);
         }
     }
@@ -267,12 +278,12 @@ public class RequestPurchaseTab extends VerticalLayout implements
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         if (productId != null) {
             ServiceProviderProduct product = ServiceProviderProductFacade.getServiceProviderProductService().findById(productId);
-            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity())
+            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
                     .product(product)
                     .subTotal(bean.getTotal())
                     .build();
         } else {
-            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity())
+            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
                     .itemDescription(bean.getDescription())
                     .itemNumber(bean.getItemNumber())
                     .unit(bean.getUnit())
@@ -328,8 +339,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
             RequestFacade.getRequestService().persist(request);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -337,7 +350,6 @@ public class RequestPurchaseTab extends VerticalLayout implements
 
 //        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
 //        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
-
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         Set<RequestPurchaseItem> items = new HashSet<>();
         for (Object id : table.getItemIds()) {
@@ -374,6 +386,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
+                    .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
                     .total(total)
                     .build();
             return request;
@@ -388,6 +402,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
+                    .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
                     .total(total)
                     .build();
             return request;
@@ -402,6 +418,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
                     .total(total)
                     .build();
             return request;
@@ -416,9 +433,37 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
                     .orderDate(bean.getOrderDate())
+                    .serviceProviderSupplierId(provider.getId())
                     .total(total)
                     .build();
             return request;
         }
     }
+
+//    private void allowEditOfItems() {
+//        form.itemNumber.setReadOnly(false);
+//        form.unitPrice.setReadOnly(false);        
+//        form.unit.setReadOnly(false);
+//        form.volume.setReadOnly(false);
+//        form.subTotal.setReadOnly(false);
+//        form.total.setReadOnly(false);
+//        form.itemNumber.setValue("");
+//        form.unitPrice.setValue("");
+//        form.unit.setValue("");
+//        form.volume.setValue("");
+//        form.subTotal.setValue("");
+//        form.total.setValue("");
+//        if (form.itemDescription.isVisible()) {
+//            form.itemNumber.setReadOnly(true);
+//            form.unitPrice.setReadOnly(true);
+//        }else{
+//            form.itemNumber.setReadOnly(false);
+//            form.unitPrice.setReadOnly(false);
+//            form.itemNumber.setRequired(true);
+//            form.unitPrice.setRequired(true);
+//        }
+//        form.subTotal.setReadOnly(true);
+//        form.total.setReadOnly(true);
+//        form.editItemsButton.setVisible(false);
+//    }
 }

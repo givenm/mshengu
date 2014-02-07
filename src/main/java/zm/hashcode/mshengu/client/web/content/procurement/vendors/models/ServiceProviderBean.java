@@ -24,7 +24,7 @@ public final class ServiceProviderBean implements Serializable {
     @NotNull
     private String legalForm;
     @NotNull
-    private int yearsOfBus;
+    private String yearsOfBus;
     @NotNull
     private String firstNameChiefExec;
     @NotNull
@@ -32,10 +32,10 @@ public final class ServiceProviderBean implements Serializable {
     @NotNull
     private String vatNum;
     private String website;
-    @NotNull
     private boolean active;
     private boolean preferedVendor;
     private boolean vehicleMaintenance;
+    private boolean registeredForVat;
     @NotNull
     private String address1;
     private String address2;
@@ -51,7 +51,6 @@ public final class ServiceProviderBean implements Serializable {
     @NotNull
     private String mainNumber;
     private String faxNumber;
-    @NotNull
     private String otherNumber;
     @NotNull
     private String emailAddress;
@@ -60,6 +59,14 @@ public final class ServiceProviderBean implements Serializable {
     private String bankName;
     private String accountNumber;
     private String branchCode;
+
+    public boolean isRegisteredForVat() {
+        return registeredForVat;
+    }
+
+    public void setRegisteredForVat(boolean registeredForVat) {
+        this.registeredForVat = registeredForVat;
+    }
 
     public String getCode() {
         return code;
@@ -227,11 +234,11 @@ public final class ServiceProviderBean implements Serializable {
         this.legalForm = legalForm;
     }
 
-    public int getYearsOfBus() {
+    public String getYearsOfBus() {
         return yearsOfBus;
     }
 
-    public void setYearsOfBus(int yearsOfBus) {
+    public void setYearsOfBus(String yearsOfBus) {
         this.yearsOfBus = yearsOfBus;
     }
 

@@ -11,7 +11,7 @@ import zm.hashcode.mshengu.domain.procurement.Request;
  *
  * @author Luckbliss
  */
-public interface RequestRepository extends PagingAndSortingRepository<Request, String> {
+public interface RequestRepository extends PagingAndSortingRepository<Request, String>, RequestRepositoryCustom {
 
     public Request findByOrderNumber(String orderNumber);
 }

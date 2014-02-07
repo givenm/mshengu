@@ -20,7 +20,6 @@ import zm.hashcode.mshengu.client.web.content.setup.officeutils.status.tables.St
 import zm.hashcode.mshengu.domain.ui.util.Status;
 import zm.hashcode.mshengu.domain.ui.util.StatusType;
 
-
 /**
  *
  * @author Ferox
@@ -68,8 +67,6 @@ public class StatusTab extends VerticalLayout implements
         }
     }
 
-    
-    
     private void saveForm(FieldGroup binder) {
         try {
             binder.commit();
@@ -94,6 +91,7 @@ public class StatusTab extends VerticalLayout implements
         }
     }
 
+    
     private void deleteForm(FieldGroup binder) {
         StatusFacade.getStatusService().delete(getEntity(binder));
         getHome();
@@ -101,17 +99,13 @@ public class StatusTab extends VerticalLayout implements
 
     private Status getEntity(FieldGroup binder) {
         //final  Status cust = new Status.Builder(binder.getItemDataSource().getItemProperty("name")).
-
         final StatusBean statusBean = ((BeanItem<StatusBean>) binder.getItemDataSource()).getBean();
-
         final StatusType statusType = StatusTypeFacade.getStatusTypeService().findById(statusBean.getStatusType());
-
         final Status status = new Status.Builder(statusBean.getName())
                 .statusType(statusType)
                 .id(statusBean.getId())
                 .build();
         return status;
-
     }
 
     private void getHome() {

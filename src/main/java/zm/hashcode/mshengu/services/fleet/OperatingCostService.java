@@ -30,4 +30,6 @@ public interface OperatingCostService {
     public List<OperatingCost> getOperatingCostByTruckByMonth(Truck truck, Date month);
 
     public List<OperatingCost> getOperatingCostBtnTwoDates(Date start, Date end);
+
+    public List<OperatingCost> getOperatingCostByTruckBetweenTwoDates(Truck truck, Date from, Date to);
 }

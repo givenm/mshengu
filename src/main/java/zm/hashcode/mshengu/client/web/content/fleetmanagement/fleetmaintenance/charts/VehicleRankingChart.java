@@ -19,21 +19,9 @@ public class VehicleRankingChart extends FormLayout {
 // Create the root content layout
 
     public VerticalLayout chartRootVerticalLayout = new VerticalLayout();
-    // Title bar
-    private HorizontalLayout titleBarHorizontalLayout = new HorizontalLayout();
-    // Horizontal layout to contain All Panels for Charts and Tables
-    HorizontalLayout detailsSectionHorizontalLayout = new HorizontalLayout();
-    // Layouts to contain individual panels
-    public VerticalLayout graphLayout = new VerticalLayout();
-    public VerticalLayout vehicleNumberLayout = new VerticalLayout();
-    public VerticalLayout maintenanceLayout = new VerticalLayout();
-    public VerticalLayout mileageLayout = new VerticalLayout();
-    public VerticalLayout RperKmLayout = new VerticalLayout();
-    public VerticalLayout ratingLayout = new VerticalLayout();
-    public VerticalLayout monthSpendLayout = new VerticalLayout();
 
     public VehicleRankingChart(MshenguMain main) {
-        addComponent(chartRootVerticalLayout);
+//        addComponent(chartRootVerticalLayout);
     }
 
     public void defineAndAddLayouts(PanelStyled kmTravelledVehicleChartPanel, PanelStyled vehicleNumberPanel, PanelStyled totalMaintenanceCostPanel,
@@ -42,7 +30,20 @@ public class VehicleRankingChart extends FormLayout {
         chartRootVerticalLayout.setMargin(true);
 //        chartRootVerticalLayout.setSizeFull();
 
+        // Title bar
+        HorizontalLayout titleBarHorizontalLayout = new HorizontalLayout();
+        // Horizontal layout to contain All Panels for Charts and Tables
+        HorizontalLayout detailsSectionHorizontalLayout = new HorizontalLayout();
+        // Layouts to contain individual panels
+        VerticalLayout graphLayout = new VerticalLayout();
+        VerticalLayout vehicleNumberLayout = new VerticalLayout();
+        VerticalLayout maintenanceLayout = new VerticalLayout();
+        VerticalLayout mileageLayout = new VerticalLayout();
+        VerticalLayout RperKmLayout = new VerticalLayout();
+        VerticalLayout ratingLayout = new VerticalLayout();
+        VerticalLayout monthSpendLayout = new VerticalLayout();
 
+///////////////////////////////////////////////////////////////////////////////
         Label title = new Label("Current 12-Monthly Vehicle Ranking ");
         title.addStyleName("title");
 

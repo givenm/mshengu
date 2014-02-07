@@ -60,6 +60,9 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
                 .completionStatus(statusHelper.getCompletionStatus())
                 .serviceStatus(statusHelper.getServiceStatus())
                 .status(statusHelper.getStatus())
+                .parentId(site.getName())
+                .contractType(site.getLastLifeCycleContractType())
+                
                 .build();
 
         siteServiceLogService.persist(newSiteServiceLog);
@@ -78,6 +81,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());
+        System.out.println("Contract type " + newSiteServiceLog.getContractType());
     }
 
     @Override
@@ -105,7 +109,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         siteServiceLogService.merge(newSiteServiceLog);
 
 
-        System.out.println("Site Name: " + site.getName());
+        System.out.println("Site Name: " + newSiteServiceLog.getParentId());
 //        if(totalNumberOfUnitsServiced > 0){){
         System.out.println("Action : CREATE LOG");
         System.out.println("Service Date " + newSiteServiceLog.getServiceDate());
@@ -117,6 +121,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());
+        System.out.println("Contract type " + newSiteServiceLog.getContractType());
     }
 
     @Override
@@ -140,6 +145,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());
+        System.out.println("Contract type " + newSiteServiceLog.getContractType());
     }
 
     private Date getServiceDate(SiteServiceLog lastSiteServiceLog) {

@@ -400,4 +400,12 @@ public final class Site implements Serializable, Comparable<Site> {
             return 0;
         }
     }
+     public String getLastLifeCycleContractType() {
+        SiteServiceContractLifeCycle lastContractLifeCycle = getLastSiteServiceContractLifeCycle();
+        if (lastContractLifeCycle != null) {
+            return lastContractLifeCycle.getContractType();
+        } else {
+            return "";
+        }
+    } 
 }

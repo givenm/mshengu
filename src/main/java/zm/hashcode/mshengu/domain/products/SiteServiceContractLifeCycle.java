@@ -40,7 +40,7 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
     private boolean friday;
     private boolean saturday;
     private boolean sunday;
-    //private String status;
+    private String contractType;
     private String parentId;
     private int monthlyServices;
     private int weeklyServices;
@@ -65,6 +65,7 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
         this.parentId = builder.parentId;
         this.monthlyServices = builder.monthlyServices;
         this.weeklyServices = builder.weeklyServices;
+        this.contractType = builder.contractType;
 
     }
 
@@ -116,6 +117,13 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
         return weeklyServices = frequency * expectedNumberOfUnits;
     }
 
+    /**
+     * @return the contractType
+     */
+    public String getContractType() {
+        return contractType;
+    }
+
     public static class Builder {
 
         private String id;
@@ -131,6 +139,7 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
         private boolean friday;
         private boolean saturday;
         private boolean sunday;
+        private String contractType;
         //private String status;
         private String parentId;
         private int monthlyServices;
@@ -140,6 +149,8 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
         public Builder siteServiceContractLifeCycle(SiteServiceContractLifeCycle serviceContractLifeCycle) {
             this.id = serviceContractLifeCycle.getId();
 //        this.dateofAction = siteUnit.dateofAction;
+            
+            this.contractType = serviceContractLifeCycle.getContractType();
             this.expectedNumberOfUnits = serviceContractLifeCycle.getExpectedNumberOfUnits();
             this.numberOfUnits = serviceContractLifeCycle.getNumberOfUnits();
             this.siteUnit = serviceContractLifeCycle.getSiteUnit();
@@ -162,6 +173,11 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
 
         public Builder id(String value) {
             this.id = value;
+            return this;
+        }
+
+        public Builder contractType(String value) {
+            this.contractType = value;
             return this;
         }
 
@@ -248,6 +264,8 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
             monthlySerices();
             return new SiteServiceContractLifeCycle(this);
         }
+
+   
     }
 
     /**
@@ -278,6 +296,7 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
         return numberOfUnits;
     }
 
+    
     /**
      * @return the siteUnit
      */

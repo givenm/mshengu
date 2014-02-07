@@ -86,9 +86,9 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
         Query query = new Query(Criteria
                 .where("siteName").is(siteName)
                 .andOperator(
-                Criteria.where("serviceDate").gte(serviceDateStart),
-                Criteria.where("serviceDate").lte(serviceDateEnd),
-                Criteria.where("statusMessage").is(statusMessage)));
+                        Criteria.where("serviceDate").gte(serviceDateStart),
+                        Criteria.where("serviceDate").lte(serviceDateEnd),
+                        Criteria.where("statusMessage").is(statusMessage)));
 //        query.with(new Sort(Sort.Direction.DESC, "date")); WITHIN
         long count = mongoTemplate.count(query, "unitServiceLog");
         return count;
@@ -101,12 +101,74 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
         Query query = new Query(Criteria
                 .where("status").is(SiteServiceLogStatusEnum.OPEN.name())
                 .andOperator(
-                //                Criteria.where("serviceDate").gte(serviceDateStart),
-                Criteria.where("serviceDate").lte(dtfwh.getMondayDateFull())));
+                        //                Criteria.where("serviceDate").gte(serviceDateStart),
+                        Criteria.where("serviceDate").lte(dtfwh.getMondayDateFull())));
 //                Criteria.where("statusMessage").is("WITHIN")));
 //        query.with(new Sort(Sort.Direction.DESC, "date"));
         List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
         return siteServiceLog;
 
+    }
+
+    @Override
+    public List<SiteServiceLog> getSiteServiceLogsException(String siteName, Date startDate, Date endDate, String serviceStatus) {
+//        dtfwh.setDate(date);
+        Query query = new Query(Criteria
+                .where("parentId").is(siteName)
+                .andOperator(
+                        Criteria.where("serviceDate").gte(startDate),
+                        Criteria.where("serviceDate").lte(endDate),
+                        Criteria.where("serviceStatus").is(serviceStatus)));
+//                Criteria.where("statusMessage").is("WITHIN")));
+//        query.with(new Sort(Sort.Direction.DESC, "date"));
+        List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog;
+
+    }
+
+    @Override
+    public List<SiteServiceLog> getAllSiteServiceLogs(String siteName, Date startDate, Date endDate) {
+//        dtfwh.setDate(date);
+        Query query = new Query(Criteria
+                .where("parentId").is(siteName)
+                .andOperator(
+                        Criteria.where("serviceDate").gte(startDate),
+                        Criteria.where("serviceDate").lte(endDate)));
+//                Criteria.where("serviceStatus").is(serviceStatus)));
+//                Criteria.where("statusMessage").is("WITHIN")));
+//        query.with(new Sort(Sort.Direction.DESC, "date"));
+        List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog;
+
+    }
+
+    @Override
+    public List<SiteServiceLog> getAllServiceLogsException(Date startDate, Date endDate, String serviceStatus) {
+//        dtfwh.setDate(date);
+        Query query = new Query(Criteria
+                .where("serviceStatus").is(serviceStatus)
+                .andOperator(
+                        Criteria.where("serviceDate").gte(startDate),
+                        Criteria.where("serviceDate").lte(endDate)));
+//                Criteria.where("serviceStatus").is(serviceStatus)));
+//                Criteria.where("statusMessage").is("WITHIN")));
+//        query.with(new Sort(Sort.Direction.DESC, "date"));
+        List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog;
+    }
+
+    @Override
+    public List<SiteServiceLog> getAllServiceLogs(Date startDate, Date endDate) {
+//        dtfwh.setDate(date);
+        Query query = new Query(Criteria
+                .where("serviceDate").gte(startDate)
+                .andOperator(
+                        //                Criteria.where("serviceDate").gte(startDate),
+                        Criteria.where("serviceDate").lte(endDate)));
+//                Criteria.where("serviceStatus").is(serviceStatus)));
+//                Criteria.where("statusMessage").is("WITHIN")));
+//        query.with(new Sort(Sort.Direction.DESC, "date"));
+        List<SiteServiceLog> siteServiceLog = mongoTemplate.find(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog;
     }
 }

@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import zm.hashcode.mshengu.domain.products.DaysOfWeekEnum;
@@ -853,4 +854,15 @@ public class DateTimeFormatWeeklyHelper implements Serializable {
         this.date = date;
         resetDayOfWeek();
     }
+    
+        public Date getDate(int day, int month, int year) {
+        Calendar calendar = new GregorianCalendar();
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return calendar.getTime();
+    }
+        
+
 }

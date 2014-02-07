@@ -31,6 +31,8 @@ public class SecurityService implements UserDetailsService {
     private PersonService userService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        try{
+            
         userService = PersonFacade.getPersonService();
         Person user = userService.findByUsername(username);
         boolean enabled = true;
@@ -45,6 +47,9 @@ public class SecurityService implements UserDetailsService {
                 credentialsNonExpired,
                 accountNonLocked,
                 getAuthorities(user.getRole()));
+        }catch(Exception e){
+            return null;
+        }
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {

@@ -10,6 +10,7 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Embedded;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -19,12 +20,15 @@ import com.vaadin.ui.TextField;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.SendPurchasePDFForm;
 import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.RFQMenu;
@@ -51,9 +55,13 @@ public class SendQuotePDFForm extends FormLayout {
     public final BeanItem<QuoteBean> item = new BeanItem<>(bean);
     public final FieldGroup binder = new FieldGroup(item);
     private TextField sendemail = new TextField();
+    public Label errorMessage;
 
     public SendQuotePDFForm(final RequestForQuote request, final MshenguMain main) {
         sendemail = UIComponent.getTextField("Email Address:", "email", QuoteBean.class, binder);
+        sendemail.addValidator(UIValidatorHelper.emailValidator());
+        sendemail = UIValidatorHelper.setRequiredTextField(sendemail, "Email Address");
+
         this.main = main;
         setSizeFull();
         streamResource = new StreamResource(createStreamResource(request), request.getRfqNumber() + ".pdf");
@@ -66,6 +74,10 @@ public class SendQuotePDFForm extends FormLayout {
 //        embedded.setImmediate(true);
 
         GridLayout layout = new GridLayout(3, 4);
+        errorMessage = UIComponent.getErrorLabel();
+        
+        layout.addComponent(errorMessage, 0, 0, 1, 0);
+        addComponent(new Label("<br>", ContentMode.HTML)); 
         layout.addComponent(sendemail);
         addComponent(embedded);
         addComponent(new Label("<br>", ContentMode.HTML));
@@ -102,7 +114,10 @@ public class SendQuotePDFForm extends FormLayout {
                 } catch (IOException ex) {
                     Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (FieldGroup.CommitException ex) {
-                    Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+                    Collection<Field<?>> fields = binder.getFields();
+                    OnSubmitValidationHelper validationHelper = new OnSubmitValidationHelper(fields, errorMessage);
+                    validationHelper.doValidation();
+                    Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
                 }
             }
         });

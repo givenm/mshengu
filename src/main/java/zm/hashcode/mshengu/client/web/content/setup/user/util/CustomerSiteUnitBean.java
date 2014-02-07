@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.web.content.setup.user.util;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -22,6 +23,9 @@ public final class CustomerSiteUnitBean implements Serializable {
     private String siteId;
     @NotNull
     private String siteUnitId;
+    private Date startDate;
+    private Date endDate;
+    
     
     
      
@@ -140,5 +144,33 @@ public final class CustomerSiteUnitBean implements Serializable {
      */
     public void setCustomerTotal(int customerTotal) {
         this.customerTotal = customerTotal;
+    }
+
+    /**
+     * @return the startDate
+     */
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the startDate to set
+     */
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the endDate
+     */
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the endDate to set
+     */
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

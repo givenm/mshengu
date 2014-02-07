@@ -53,6 +53,7 @@ public class DailyInputsForm extends FormLayout {
     //
     public DateField filterTransactionDate;
     public ComboBox filterTruckId;
+    public TextField slipNo;
 
     public DailyInputsForm() {
         bean = new DailyInputsBean();
@@ -70,7 +71,7 @@ public class DailyInputsForm extends FormLayout {
 
 
         transactionDate = UIComponent.getDateField("Invoice Date", "transactionDate", DailyInputsBean.class, binder);
-        TextField slipNo = UIComponent.getTextField("Invoice Number:", "slipNo", DailyInputsBean.class, binder);
+        slipNo = UIComponent.getTextField("Invoice Number:", "slipNo", DailyInputsBean.class, binder);
         speedometer = UIComponent.getTextField("Closing Mileage:", "speedometer", DailyInputsBean.class, binder);
         fuelLitres = UIComponent.getTextField("Litres (Fuel):", "fuelLitres", DailyInputsBean.class, binder);
         oilLitres = UIComponent.getTextField("Litres (Oil):", "oilLitres", DailyInputsBean.class, binder);
@@ -88,7 +89,7 @@ public class DailyInputsForm extends FormLayout {
 
         transactionDate.setValue(new Date());
         fuelCost.setValue("0.00");
-        speedometer.setValue("0.00");
+        speedometer.setValue("0");
         fuelLitres.setValue("0.00");
         oilLitres.setValue("0.00");
         oilCost.setValue("0.00");

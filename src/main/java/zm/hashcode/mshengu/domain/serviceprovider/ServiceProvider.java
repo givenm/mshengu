@@ -19,8 +19,6 @@ import zm.hashcode.mshengu.domain.people.ContactPerson;
  *
  * @author Ferox
  */
-
-
 @Document
 public final class ServiceProvider implements Serializable, Comparable<ServiceProvider> {
 
@@ -46,6 +44,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
     private Set<ServiceProviderProduct> serviceProviderProduct = new HashSet<>();
     private boolean active;
     private boolean vehicleMaintenance;
+    private boolean registeredForVat;
     private boolean preferedVendor;
     private MailNotifications mailNotifications;
 
@@ -63,6 +62,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         this.accountNumber = builder.accountNumber;
         this.branchCode = builder.branchCode;
         this.vehicleMaintenance = builder.vehicleMaintenance;
+        this.registeredForVat = builder.registeredForVat;
         this.registrationNum = builder.registrationNum;
         this.yearsOfBusiness = builder.yearsOfBusiness;
         this.firstNameChiefExec = builder.firstNameChiefExec;
@@ -72,7 +72,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         this.vatNum = builder.vatNum;
         this.mailNotifications = builder.mailNotifications;
         this.preferedVendor = builder.preferedVendor;
-        this.vendorNumber =  builder.vendorNumber;
+        this.vendorNumber = builder.vendorNumber;
     }
 
     @Override
@@ -136,6 +136,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         private String accountNumber;
         private String branchCode;
         private boolean vehicleMaintenance;
+        private boolean registeredForVat;
         private String registrationNum;
         private int yearsOfBusiness;
         private String firstNameChiefExec;
@@ -169,7 +170,8 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
             this.vatNum = serviceProvider.getVatNum();
             this.mailNotifications = serviceProvider.getMailNotifications();
             this.preferedVendor = serviceProvider.isPreferedVendor();
-            this.vendorNumber =  serviceProvider.getVendorNumber();
+            this.vendorNumber = serviceProvider.getVendorNumber();
+            this.registeredForVat = serviceProvider.isRegisteredForVat();
             return this;
         }
 
@@ -177,8 +179,8 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
             this.contactPerson = contactPerson;
             return this;
         }
-        
-         public Builder vendorNumber(String value) {
+
+        public Builder vendorNumber(String value) {
             this.vendorNumber = value;
             return this;
         }
@@ -243,6 +245,11 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
             return this;
         }
 
+        public Builder registeredForVat(boolean value) {
+            this.registeredForVat = value;
+            return this;
+        }
+
         public Builder vehicleMaintenance(boolean value) {
             this.vehicleMaintenance = value;
             return this;
@@ -273,6 +280,10 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         public ServiceProvider build() {
             return new ServiceProvider(this);
         }
+    }
+
+    public boolean isRegisteredForVat() {
+        return registeredForVat;
     }
 
     public String getVatNum() {

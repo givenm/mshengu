@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.app.util.FlagImage;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.DailyTrackerTableData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
@@ -34,10 +35,11 @@ public class DailyTrackerTable extends Table {
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-    final DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
     //
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private final TrackerUtil trackerUtil = new TrackerUtil();
+    private final FlagImage flagImage = new FlagImage();
     // List of DATA in tables
     public static List<DailyTrackerTableData> dailyTrackerTableDataList = new ArrayList<>();
     public static List<DailyTrackerTableData> dailyTrackerTableDataListFinal = new ArrayList<>();
@@ -105,9 +107,10 @@ public class DailyTrackerTable extends Table {
         this.truck = truck;
         trackerUtil.setQueriedDate(date);
 
+        List<OperatingCost> truckOperatingCostList = truck.getOperatingCosts();
         // Add Data Columns
-        trackerUtil.setOperatingCostList(truck.getOperatingCosts());
-        List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(truck.getOperatingCosts(), date);
+        trackerUtil.setOperatingCostList(truckOperatingCostList);
+        List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(truckOperatingCostList, date); // truck.getOperatingCosts()
 
 // -- =============================================================================================================================
         if (!queriedMonthOperatingCostList.isEmpty()) {
@@ -253,7 +256,7 @@ public class DailyTrackerTable extends Table {
         dailyTrackerTableData.setClosingMileage(dailyTrackerData.getClosingMileage());
         dailyTrackerTableData.setTrip(trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck));
         dailyTrackerTableData.setRandsPerKilometer(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
-        dailyTrackerTableData.setRating(trackerUtil.determineFlag(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck))));
+        dailyTrackerTableData.setRating(flagImage.determineFlag(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck))));
         dailyTrackerTableData.setLitresPerKilometer(trackerUtil.getLitrePerKilometer(dailyTrackerData.getLitres(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
         dailyTrackerTableData.setDriverId(dailyTrackerData.getDriverId());
         dailyTrackerTableData.setDriverName(dailyTrackerData.getDriverName());
@@ -297,9 +300,9 @@ public class DailyTrackerTable extends Table {
             }
         }
         //
-        monthRatingFlag = trackerUtil.determineFlag(randsPerKilometreCalc);
+        monthRatingFlag = flagImage.determineFlag(randsPerKilometreCalc);
         // Get flag to show in Layout in FOrm
-        monthRatingFlagImage = trackerUtil.determineImageFlag(randsPerKilometreCalc);
+        monthRatingFlagImage = flagImage.determineImageFlag(randsPerKilometreCalc);
 
         if (litresSum > 0 && closingMileageCalc > 0) {
             litresPerKilometerCalc = litresSum / closingMileageCalc;

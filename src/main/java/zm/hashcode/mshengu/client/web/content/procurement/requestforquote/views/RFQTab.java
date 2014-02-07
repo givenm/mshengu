@@ -7,8 +7,10 @@ package zm.hashcode.mshengu.client.web.content.procurement.requestforquote.views
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import zm.hashcode.mshengu.app.facade.people.PersonFacade;
@@ -16,6 +18,7 @@ import zm.hashcode.mshengu.app.facade.procurement.RequestForQuoteFacade;
 import zm.hashcode.mshengu.app.facade.procurement.RequestPurchaseItemFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.models.RequestBean;
 import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.RFQMenu;
@@ -54,11 +57,7 @@ public class RFQTab extends VerticalLayout implements
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
         if (source == form.save) {
-            if (!form.quantity.getValue().isEmpty()) {
-                addItemsToTable(form.binder);
-            } else {
-                Notification.show("Add All Item Values!", Notification.Type.TRAY_NOTIFICATION);
-            }
+            addItemsToTable(form.binder);
         } else if (source == form.approval) {
             sendRequest(form.binder);
         } else if (source == pDFForm.back) {
@@ -72,20 +71,16 @@ public class RFQTab extends VerticalLayout implements
     }
 
     private void sendRequest(FieldGroup binder) {
-        try {
-            setReadOnlyFalse();
-            binder.commit();
-            RequestForQuote request = getRequestForQuoteEntity(binder);
-            RequestForQuoteFacade.getRequestForQuoteService().persist(request);
-            Sequence sequence = SequenceFacade.getSequenceListService().findByName("MSHENGU_RFQ");
-            helper.getRefNumber(sequence);
-            setReadOnlyFalse();
-            Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
-            main.content.setSecondComponent(new RFQMenu(main, "LIST_RFQ"));
-        } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-        }
+
+        setReadOnlyFalse();
+
+        RequestForQuote request = getRequestForQuoteEntity(binder);
+        RequestForQuoteFacade.getRequestForQuoteService().persist(request);
+        Sequence sequence = SequenceFacade.getSequenceListService().findByName("MSHENGU_RFQ");
+        helper.getRefNumber(sequence);
+        setReadOnlyFalse();
+        Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
+        main.content.setSecondComponent(new RFQMenu(main, "LIST_RFQ"));
     }
 
     private void addListeners() {
@@ -104,8 +99,10 @@ public class RFQTab extends VerticalLayout implements
             resetValues();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            e.printStackTrace();
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper validationHelper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            validationHelper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -119,7 +116,7 @@ public class RFQTab extends VerticalLayout implements
     private RequestPurchaseItem getEntity(FieldGroup binder) {
         RequestPurchaseItem requestPurchaseItem;
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
-        requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity())
+        requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
                 .itemDescription(bean.getItemDescription())
                 .unit(bean.getUnit())
                 .volume(bean.getVolume())

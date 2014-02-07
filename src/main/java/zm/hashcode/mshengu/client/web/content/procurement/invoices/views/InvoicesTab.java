@@ -9,10 +9,13 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
+import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.InvoicesForm;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.table.InvoiceTable;
 import zm.hashcode.mshengu.domain.procurement.Request;
+import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
 /**
  *
@@ -23,6 +26,7 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
     private InvoicesForm form;
     private MshenguMain main;
     private InvoiceTable table;
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public InvoicesTab(MshenguMain main) {
         setSizeFull();
@@ -53,7 +57,9 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
             table.removeAllItems();
             String month = form.month.getValue().toString();
             String year = form.year.getValue().toString();
-            List<Request> requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
+            final ServiceProvider serviceProvider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
+            // Reposotory get Requests with InvoiceNum notNull for Specified Date for Service Provider
+            List<Request> requests = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, dateTimeFormatHelper.getDate(Integer.parseInt(year), Integer.parseInt(month)));
             table.loadTable(requests, month, year);
             getGrandTotal();
         } else {

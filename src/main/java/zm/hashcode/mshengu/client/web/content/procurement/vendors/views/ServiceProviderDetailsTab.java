@@ -8,8 +8,10 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import zm.hashcode.mshengu.app.facade.external.MailNotificationsFacade;
@@ -18,6 +20,7 @@ import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderCategoryFa
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.app.util.UtilMethods;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.vendors.ServiceProviderMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.vendors.forms.ServiceProviderForm;
@@ -86,7 +89,10 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -97,7 +103,10 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -137,11 +146,12 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .active(serviceProviderBean.isActive())
                 .preferedVendor(serviceProviderBean.isPreferedVendor())
                 .vehicleMaintenance(serviceProviderBean.isVehicleMaintenance())
+                .registeredForVat(serviceProviderBean.isRegisteredForVat())
                 .firstNameChiefExec(serviceProviderBean.getFirstNameChiefExec())
                 .lastNameChiefExec(serviceProviderBean.getLastNameChiefExec())
                 .website(serviceProviderBean.getWebsite())
                 .legalForm(serviceProviderBean.getLegalForm())
-                .yearsOfBusiness(serviceProviderBean.getYearsOfBus())
+                .yearsOfBusiness(Integer.parseInt(serviceProviderBean.getYearsOfBus()))
                 .registrationNum(serviceProviderBean.getRegistrationNum())
                 .vatNum(serviceProviderBean.getVatNum())
                 .vendorNumber(utilMethods.getRefNumber(mailNotifications))
@@ -181,11 +191,12 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .active(serviceProviderBean.isActive())
                 .preferedVendor(serviceProviderBean.isPreferedVendor())
                 .vehicleMaintenance(serviceProviderBean.isVehicleMaintenance())
+                .registeredForVat(serviceProviderBean.isRegisteredForVat())
                 .firstNameChiefExec(serviceProviderBean.getFirstNameChiefExec())
                 .lastNameChiefExec(serviceProviderBean.getLastNameChiefExec())
                 .website(serviceProviderBean.getWebsite())
                 .legalForm(serviceProviderBean.getLegalForm())
-                .yearsOfBusiness(serviceProviderBean.getYearsOfBus())
+                .yearsOfBusiness(Integer.parseInt(serviceProviderBean.getYearsOfBus()))
                 .registrationNum(serviceProviderBean.getRegistrationNum())
                 .vatNum(serviceProviderBean.getVatNum())
                 .vendorNumber(serviceProviderUpdate.getVendorNumber())
@@ -283,6 +294,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         bean.setActive(serviceProvider.isActive());
         bean.setPreferedVendor(serviceProvider.isPreferedVendor());
         bean.setVehicleMaintenance(serviceProvider.isVehicleMaintenance());
+        bean.setRegisteredForVat(serviceProvider.isRegisteredForVat());
         bean.setBankName(serviceProvider.getBankName());
         bean.setAccountNumber(serviceProvider.getAccountNumber());
         bean.setBranchCode(serviceProvider.getBranchCode());
@@ -290,7 +302,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         bean.setLastNameChiefExec(serviceProvider.getLastNameChiefExec());
         bean.setLegalForm(serviceProvider.getLegalForm());
         bean.setRegistrationNum(serviceProvider.getRegistrationNum());
-        bean.setYearsOfBus(serviceProvider.getYearsOfBusiness());
+        bean.setYearsOfBus(serviceProvider.getYearsOfBusiness() + "");
         bean.setWebsite(serviceProvider.getWebsite());
         bean.setVatNum(serviceProvider.getVatNum());
         bean.setVendorNumber(serviceProvider.getVendorNumber());

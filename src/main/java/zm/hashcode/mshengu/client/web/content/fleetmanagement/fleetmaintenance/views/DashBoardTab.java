@@ -12,15 +12,12 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.dussan.vaadin.dcharts.DCharts;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.chemicals.DashboardChemicalsMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.FleetMaintenanceMenu;
@@ -30,6 +27,7 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.m
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
+import zm.hashcode.mshengu.app.util.FlagImage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.MaintenanceSpendByKmTravelledChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.TotalMaintenanceSpendMonthlyChart;
@@ -48,12 +46,12 @@ public class DashBoardTab extends VerticalLayout implements
     private final DashBoardForm form;
     private final DashBoardChart chart;
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
-    private static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
-    private static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
-    private static List<TotalMaintenanceSpendMonthly> spendMonthlyChartDataList = null;
-    private static List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList = null;
-    private static List<TotalMaintenanceMileage> spendMaintenanceMileageList = null;
-    private static List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList = null;
+    public static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
+    public static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
+    public static List<TotalMaintenanceSpendMonthly> spendMonthlyChartDataList = null;
+    public static List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList = null;
+    public static List<TotalMaintenanceMileage> spendMaintenanceMileageList = null;
+    public static List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList = null;
     public static Date startDate = null;
     public static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
@@ -61,8 +59,8 @@ public class DashBoardTab extends VerticalLayout implements
     public static String chartPeriod = null;
     public static Integer chartPeriodCount = null;
     public static Image maintenanceSpendPerKmRatingFlag; // USE the randsPerKilometreCalc above
-    private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     public FleetMaintenanceMenu fleetMaintenanceMenu = null;
+    private final FlagImage flagImage = new FlagImage();
 
     public DashBoardTab(MshenguMain app, FleetMaintenanceMenu fleetMaintenanceMenu) {
         main = app;
@@ -101,9 +99,9 @@ public class DashBoardTab extends VerticalLayout implements
                 maintenanceCostList = getMaintenanceCostList();
                 maintenanceMileageList = getMaintenanceMileageList();
                 if (!maintenanceCostList.isEmpty()) {
-                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 3);
-                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 3);
-                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 3);
+                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 3);
+                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 3);
+                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 3);
                     performSpendKmTravelledChart();
                     displayCharts();
                 } else {
@@ -114,9 +112,9 @@ public class DashBoardTab extends VerticalLayout implements
                 maintenanceCostList = getMaintenanceCostList();
                 maintenanceMileageList = getMaintenanceMileageList();
                 if (!maintenanceCostList.isEmpty()) {
-                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 6);
-                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 6);
-                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 6);
+                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 6);
+                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 6);
+                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 6);
                     performSpendKmTravelledChart();
                     displayCharts();
                 } else {
@@ -128,9 +126,9 @@ public class DashBoardTab extends VerticalLayout implements
 
                 maintenanceMileageList = getMaintenanceMileageList();
                 if (!maintenanceCostList.isEmpty()) {
-                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.startDate, 12);
-                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.startDate, 12);
+                    performSpendMonthlyChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 12);
+                    performSpendByVehicleChart(maintenanceCostList, FleetMaintenanceUtil.getStartDate(), 12);
+                    getSpendMaintenanceMileageList(maintenanceMileageList, FleetMaintenanceUtil.getStartDate(), 12);
                     performSpendKmTravelledChart();
                     displayCharts();
                 } else {
@@ -163,11 +161,11 @@ public class DashBoardTab extends VerticalLayout implements
     }
 
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
-        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.startDate, FleetMaintenanceUtil.endDate);
+        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     public void performSpendMonthlyChart(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {
@@ -244,9 +242,10 @@ public class DashBoardTab extends VerticalLayout implements
     public void displayCharts() {
         chartPeriodCount = spendMonthlyChartDataList.size();
         chartPeriod = spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear();
-        DCharts dTotalMaintenanceCostMOnthlySpendChart = displayTotalMaintenanceCostMOnthlySpendChart();
-        DCharts dTotalMaintenanceSpendPerVehicleChart = displayTotalMaintenanceSpendPerVehicleChart();
-        DCharts dMaintenanceSpendByKmTravelledChart = displayMaintenanceSpendByKmTravelledChart("dashboard");
+
+        DCharts dTotalMaintenanceCostMOnthlySpendChart = createTotalMaintenanceCostMOnthlySpendChart();
+        DCharts dTotalMaintenanceSpendPerVehicleChart = createTotalMaintenanceSpendPerVehicleChart();
+        DCharts dMaintenanceSpendByKmTravelledChart = createMaintenanceSpendByKmTravelledChart("dashboard");
         dMaintenanceSpendByKmTravelledChart.setWidth("600px");
         dMaintenanceSpendByKmTravelledChart.setHeight("300px");
 
@@ -307,7 +306,7 @@ public class DashBoardTab extends VerticalLayout implements
         Label perKmLabel = new Label("<b style=\"color:red;\">per Km</b>", Label.CONTENT_XHTML);
         perKmLabel.setWidth(50, Sizeable.Unit.PIXELS);
 
-        maintenanceSpendPerKmRatingFlag = fleetMaintenanceUtil.determineImageFlag(totalMaintenanceSpendPerKm);
+        maintenanceSpendPerKmRatingFlag = flagImage.determineImageFlag(totalMaintenanceSpendPerKm);
         maintenanceSpendPerKmRatingFlag.setHeight(maintenanceSpendPerKmRatingFlag.getHeight(), Sizeable.Unit.PIXELS);
         maintenanceSpendPerKmRatingFlag.setWidth(maintenanceSpendPerKmRatingFlag.getWidth(), Sizeable.Unit.PIXELS);
 
@@ -358,7 +357,7 @@ public class DashBoardTab extends VerticalLayout implements
 
 ////        // chart for Vehicle Menu chart for Vehicle Menu Tab ????????????????????????????????????????????????????????????????????????????
 ////
-////        DCharts dKmTravelledVehicleMenuChart = displayMaintenanceSpendByKmTravelledChart("vehicleMenu");
+////        DCharts dKmTravelledVehicleMenuChart = createMaintenanceSpendByKmTravelledChart("vehicleMenu");
 ////        // use sort order in spendByKmTravelledChartDataList which is sorted by Total
 ////        //  extract data from 1)spendByVehicleChartDataList 2) spendMaintenanceMileageList 3) spendByKmTravelledChartDataList
 ////        // 4) Perform flagging based on spendByKmTravelledChartDataList
@@ -411,17 +410,17 @@ public class DashBoardTab extends VerticalLayout implements
         grandTotalMaintenanceSpend = BigDecimal.ZERO;
     }
 
-    public DCharts displayTotalMaintenanceCostMOnthlySpendChart() {
+    public DCharts createTotalMaintenanceCostMOnthlySpendChart() {
         TotalMaintenanceSpendMonthlyChart TotalMaintenanceSpendMonthlyChart = new TotalMaintenanceSpendMonthlyChart();
         return TotalMaintenanceSpendMonthlyChart.createChart(spendMonthlyChartDataList, grandTotalMaintenanceSpend);
     }
 
-    public DCharts displayTotalMaintenanceSpendPerVehicleChart() {
+    public DCharts createTotalMaintenanceSpendPerVehicleChart() {
         TotalMaintenanceSpendPerVehicleChart totalMaintenanceSpendPerVehicleChart = new TotalMaintenanceSpendPerVehicleChart();
         return totalMaintenanceSpendPerVehicleChart.createChart(spendByVehicleChartDataList, chartPeriod);
     }
 
-    public DCharts displayMaintenanceSpendByKmTravelledChart(String chartType) {
+    public DCharts createMaintenanceSpendByKmTravelledChart(String chartType) {
         MaintenanceSpendByKmTravelledChart maintenanceSpendByKmTravelledChart = new MaintenanceSpendByKmTravelledChart();
         return maintenanceSpendByKmTravelledChart.createChart(spendByKmTravelledChartDataList, chartPeriod, chartType);
     }

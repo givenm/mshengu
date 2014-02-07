@@ -61,7 +61,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
             simpleFormat.applyPattern("dd-MMM-yyyy");
 
             // Open the Excel File
-            URL url = this.getClass().getResource("/setupfleet/Fleet_Maintenance_Test_Case_Data.xls");
+            URL url = this.getClass().getResource("/setupfleet/Fleet_Maintenance_Annual_Cost_&_Mileage.xls");
             FileInputStream fileInputStream = new FileInputStream(url.getFile());
             HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream); //Open Spreadsheet Work book
 
@@ -74,7 +74,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Mileage extends AppTest {
 
                 HSSFSheet worksheet = workbook.getSheetAt(j);
 
-                for (int column = 1; column <= 15; column++) { // we will navigate Column 1 to 15
+                for (int column = 1; column <= 16; column++) { // we will navigate Column 1 to 16
                     vehicleNumber = worksheet.getRow(26).getCell(column).getStringCellValue(); // Row 27 is the Vehicle Numbers for Mileage Section
                     employeeNumber = worksheet.getRow(28).getCell(column).toString().trim(); // Row 28 must have Employee Number instead of Employee full names
 

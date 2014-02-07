@@ -35,7 +35,7 @@ public class DailyTrackerForm extends FormLayout {
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
-    final DecimalFormat df = new DecimalFormat("#0.00", new DecimalFormatSymbols(locale));
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
     //
     private final DailyTrackerBean bean;
     public final BeanItem<DailyTrackerBean> item;
