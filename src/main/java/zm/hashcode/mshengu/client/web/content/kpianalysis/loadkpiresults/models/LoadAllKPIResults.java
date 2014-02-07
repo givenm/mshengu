@@ -53,8 +53,8 @@ public class LoadAllKPIResults implements Serializable {
                     for (int j = 0; j < 12; j++) {
                         String month = getMonth(j);
                         //Creating kpivalues from start of services to current date ()
-                        initiallyInsertKPAOneValuesInDatabase(item, month, j);
-                        initiallyInsertKPATwoValuesInDatabase(item, month, j);
+//                        initiallyInsertKPAOneValuesInDatabase(item, month, j);
+//                        initiallyInsertKPATwoValuesInDatabase(item, month, j);
                     }
                 }
                 //Merge current item with new KPIValues
