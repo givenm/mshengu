@@ -112,18 +112,6 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
         return fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
-//    public Date getDate(int day, int month, int year) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.YEAR, year);
-//        calendar.set(Calendar.MONTH, month);
-//        calendar.set(Calendar.DAY_OF_MONTH, day);
-//// Set time fields to zero
-//        calendar.set(Calendar.HOUR_OF_DAY, 0);
-//        calendar.set(Calendar.MINUTE, 0);
-//        calendar.set(Calendar.SECOND, 0);
-//        calendar.set(Calendar.MILLISECOND, 0);
-//        return calendar.getTime();
-//    }
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
         return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
@@ -131,52 +119,39 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     private void performSpendMonthlyChart(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {
         spendMonthlyChartDataList = fleetMaintenanceUtil.getMaintenanceSpendMonthlyChartData(maintenanceCostList, date, period);
         grandTotalMaintenanceSpend = FleetMaintenanceUtil.grandTotalMaintenanceSpend;
-
-//        // TESTING
-//        System.out.println("\n Total Fleet Maintenance Spend Data");
-//        for (TotalMaintenanceSpendMonthly totalMaintenanceSpendMonthly : spendMonthlyChartDataList) {
-//            System.out.println(totalMaintenanceSpendMonthly.getMonthYear() + " = " + totalMaintenanceSpendMonthly.getTotal());
-////             System.out.println("Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceCost.getTransactionMonth() + "") + ", Total: " + annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
-//        }
     }
 
     private void getSpendByVehicleList(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {
         spendByVehicleChartDataList = fleetMaintenanceUtil.getMaintenanceSpendByVehicleChartData(maintenanceCostList, date, period);
-
-//        // TESTING
-//        System.out.println("\n Total Maintenance Spend Per Vehicle Data");
-//        for (TotalMaintenanceSpendByVehicle totalMaintenanceSpendByVehicle : spendByVehicleChartDataList) {
-//            System.out.println(totalMaintenanceSpendByVehicle.getNumberPlate() + " = " + totalMaintenanceSpendByVehicle.getTotal());
-//        }
     }
 
     private void getSpendMaintenanceMileageList(List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList, Date date, Integer period) {
         spendMaintenanceMileageList = fleetMaintenanceUtil.getMaintenanceMileageList(maintenanceMileageList, date, period);
 
         // Calculate Mileage Total
-        System.out.println("\n Total Maintenance Mileage for all Vehicles");
+//        System.out.println("\n Total Maintenance Mileage for all Vehicles");
         for (TotalMaintenanceMileage totalMaintenanceMileage : spendMaintenanceMileageList) {
             grandTotalMaintenanceMileage = grandTotalMaintenanceMileage.add(new BigDecimal(totalMaintenanceMileage.getTruckMileagetotal()));
         }
-        System.out.println(" = " + grandTotalMaintenanceMileage);
+//        System.out.println(" = " + grandTotalMaintenanceMileage);
     }
 
     private void getSpendKmTravelledList() {
         spendByKmTravelledChartDataList = fleetMaintenanceUtil.getMaintenanceMileageChartData(spendMaintenanceMileageList, spendByVehicleChartDataList);
         // TESTING
-        System.out.println("\n Maintenance SPend KM Travelled (R/Km) Chart");
-        for (TotalMaintenanceSpendKmTraveled totalMaintenanceMileage : spendByKmTravelledChartDataList) {
-            System.out.println(totalMaintenanceMileage.getNumberPlate() + " = " + totalMaintenanceMileage.getRandPerKilometre());
-        }
+//        System.out.println("\n Maintenance SPend KM Travelled (R/Km) Chart");
+//        for (TotalMaintenanceSpendKmTraveled totalMaintenanceMileage : spendByKmTravelledChartDataList) {
+//            System.out.println(totalMaintenanceMileage.getNumberPlate() + " = " + totalMaintenanceMileage.getRandPerKilometre());
+//        }
     }
 
     private void performMonthlySpendList() {
         monthlySpendDataList = fleetMaintenanceUtil.buildTwelvethMonthMaintenanceSpend(maintenanceCostList);
         // TESTING
-        System.out.println("\n 12th MONTHLY SPEND");
-        for (MonthlySpendData monthlySpendData : monthlySpendDataList) {
-            System.out.println(monthlySpendData.getNumberPlate() + " = " + monthlySpendData.getTruckMonthlySpendTotal());
-        }
+//        System.out.println("\n 12th MONTHLY SPEND");
+//        for (MonthlySpendData monthlySpendData : monthlySpendDataList) {
+//            System.out.println(monthlySpendData.getNumberPlate() + " = " + monthlySpendData.getTruckMonthlySpendTotal());
+//        }
     }
 
     private void displayChartAndTables() {

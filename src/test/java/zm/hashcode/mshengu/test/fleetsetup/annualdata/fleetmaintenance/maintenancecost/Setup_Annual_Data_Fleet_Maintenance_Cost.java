@@ -102,7 +102,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
                         // iterated through all the rows
 //                        for (int i = 4; i <= worksheet.getPhysicalNumberOfRows(); i++) { // if Row 6,  index is (5)
                         System.out.println("\n\n" + "Begin processing Sheet: " + j + " i.e. " + vehicleNumber + ", Driver: " + employeeNumber + ", Driver Id: " + driverPersonId);
-                        for (int i = 8; i <= 23; i++) { // we will navigate Row 9 to 24 e.g. if Row 6,  index is (5)
+                        for (int i = 8; i <= 24; i++) { // we will navigate Row 9 to 25 e.g. if Row 6,  index is (5)
 
                             try {
                                 datee = simpleFormat.parse(worksheet.getRow(i).getCell(0).toString().trim());  // String to Date
@@ -163,7 +163,7 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
             System.out.println("\n\nNo AnnualDataFleetMaintenanceCost FOUND in DB\n\n");
         } else {
             for (AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
-                System.out.println("READING DATABASE - TruckId: " + annualDataFleetMaintenanceCost.getTruckId() + ". Date: " + annualDataFleetMaintenanceCost.getTransactionMonth() + ". Maintenance Cost: " + annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost() + ". Driver Person ID: " + annualDataFleetMaintenanceCost.getDriverPersonId());
+                System.out.println("READING DATABASE - TruckId: " + annualDataFleetMaintenanceCost.getTruckId() + ". Date: " + annualDataFleetMaintenanceCost.getTransactionMonth() + ". Maintenance Cost: " + annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
             }
         }
     }

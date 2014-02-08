@@ -33,16 +33,21 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
                 .andOperator(Criteria.where("transactionDate").gte(from),
                 Criteria.where("transactionDate").lte(to)));
 
-        /*   */
-        List<MaintenanceSpendBySupplier> maintenanceSpendList = mongoOperation.find(maintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
-//        System.out.println("maintenanceSpendList - "    + maintenanceSpendList.toString());
+        /*
+         List<MaintenanceSpendBySupplier> maintenanceSpendList = mongoOperation.find(maintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
 
-        for (MaintenanceSpendBySupplier maintenanceSpend : maintenanceSpendList) {
-            System.out.println("MaintenanceSpendList - " + maintenanceSpend.getTransactionDate() + " | " + maintenanceSpend.getTransactionDate());
-        }
+         System.out.println(" MaintenanceSpendBySupplierRepository - GENERAL QUERY - Start= " + to + " | To= " + to);
+         if (maintenanceSpendList.isEmpty()) {
+         System.out.println("MaintenanceSpendBySupplierRepository  - GENERAL QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(maintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
-        return maintenanceSpendList;
+         for (MaintenanceSpendBySupplier maintenanceSpend : maintenanceSpendList) {
+         System.out.println(" MaintenanceSpendBySupplierRepository - GENERAL QUERY - Date= " + maintenanceSpend.getTransactionDate() + " | Cost= " + maintenanceSpend.getMaintenanceCost() + " | Truck= " + maintenanceSpend.getTruckId() + " | Supplier" + maintenanceSpend.getSupplierId());
+         }
+         System.out.println("--==--");
+         */
+
+        return mongoOperation.find(maintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
     }
 
     @Override
@@ -80,16 +85,21 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
                 .andOperator(Criteria.where("transactionDate").gte(from),
                 Criteria.where("transactionDate").lte(to)));
 
-        /*   */
-        List<MaintenanceSpendBySupplier> truckMaintenanceSpendList = mongoOperation.find(truckMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
-//        System.out.println("truckMaintenanceSpendList - "    + truckMaintenanceSpendList.toString());
+        /*
+         * List<MaintenanceSpendBySupplier> maintenanceSpendList = mongoOperation.find(truckMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
 
-        for (MaintenanceSpendBySupplier maintenanceSpend : truckMaintenanceSpendList) {
-            System.out.println("TruckMaintenanceSpendList - truckId= " + maintenanceSpend.getTruckId() + " | date= " + maintenanceSpend.getTransactionDate());
-        }
+         System.out.println(" MaintenanceSpendBySupplierRepository - TRUCK QUERY - Start= " + to + " | To= " + to + "  FOR truckId: " + truck.getId());
+         if (maintenanceSpendList.isEmpty()) {
+         System.out.println("MaintenanceSpendBySupplierRepository  - TRUCK QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(truckMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
-        return truckMaintenanceSpendList;
+         for (MaintenanceSpendBySupplier maintenanceSpend : maintenanceSpendList) {
+         System.out.println(" MaintenanceSpendBySupplierRepository - TRUCK QUERY - Date= " + maintenanceSpend.getTransactionDate() + " | Cost= " + maintenanceSpend.getMaintenanceCost() + " | Truck= " + maintenanceSpend.getTruckId() + " | Supplier" + maintenanceSpend.getSupplierId());
+         }
+         System.out.println("--==--");
+         */
+
+        return mongoOperation.find(truckMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
     }
 
     private List<MaintenanceSpendBySupplier> getSupplierMaintenanceSpend(ServiceProvider serviceProvider, Date from, Date to) {
@@ -98,16 +108,19 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
                 Criteria.where("supplierId").is(serviceProvider.getId())
                 .andOperator(Criteria.where("transactionDate").gte(from),
                 Criteria.where("transactionDate").lte(to)));
+        /*
+         List<MaintenanceSpendBySupplier> maintenanceSpendList = mongoOperation.find(supplierMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
 
-        /*   */
-        List<MaintenanceSpendBySupplier> supplierMaintenanceSpendList = mongoOperation.find(supplierMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
-//        System.out.println("supplierMaintenanceSpendList - "    + supplierMaintenanceSpendList.toString());
+         System.out.println(" MaintenanceSpendBySupplierRepository - SUPPLIER QUERY - Start= " + to + " | To= " + to + "  FOR serviceProviderId: " + serviceProvider.getId());
+         if (maintenanceSpendList.isEmpty()) {
+         System.out.println("MaintenanceSpendBySupplierRepository  - SUPPLIER QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-        for (MaintenanceSpendBySupplier maintenanceSpend : supplierMaintenanceSpendList) {
-            System.out.println("SupplierMaintenanceSpendList - supplierId= " + maintenanceSpend.getSupplierId() + " | date= " + maintenanceSpend.getTransactionDate());
-        }
-
-//        return mongoOperation.find(supplierMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
-        return supplierMaintenanceSpendList;
+         for (MaintenanceSpendBySupplier maintenanceSpend : maintenanceSpendList) {
+         System.out.println(" MaintenanceSpendBySupplierRepository - SUPPLIER QUERY - Date= " + maintenanceSpend.getTransactionDate() + " | Cost= " + maintenanceSpend.getMaintenanceCost() + " | Truck= " + maintenanceSpend.getTruckId() + " | Supplier" + maintenanceSpend.getSupplierId());
+         }
+         System.out.println("--==--");
+         */
+        return mongoOperation.find(supplierMaintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
     }
 }
