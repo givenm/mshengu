@@ -59,6 +59,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
     private BigDecimal total = BigDecimal.ZERO;
     private DecimalFormat f = new DecimalFormat("###.00");
     private SequenceHelper sequenceHelper = new SequenceHelper();
+    private ServiceProvider serviceProvider;
 
     public RequestPurchaseTab(MshenguMain app) {
         setSizeFull();
@@ -89,8 +90,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
         if (source == form.save) {
             addItemsToTable(form.binder);
         } else if (source == form.approval) {
-            sendRequest(form.binder);  
-            
+            sendRequest(form.binder);
+            getHome();
         } 
 //        else if (source == form.editItemsButton) {
 //            allowEditOfItems();
@@ -104,12 +105,12 @@ public class RequestPurchaseTab extends VerticalLayout implements
             table.removeAllItems();
             form.itemDescription.removeAllItems();
             String supplierId = form.name.getValue().toString();
-            ServiceProvider provider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
-            if (!provider.getServiceProviderProduct().isEmpty()) {
+            serviceProvider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
+            if (!serviceProvider.getServiceProviderProduct().isEmpty()) {
                 setReadOnlyFalse();
                 resetValues();
-                if (provider.getContactPerson() != null) {
-                    ContactPerson contactPerson = provider.getContactPerson();
+                if (serviceProvider.getContactPerson() != null) {
+                    ContactPerson contactPerson = serviceProvider.getContactPerson();
                     form.address.setValue(contactPerson.getAddress1());
                     form.number.setValue(contactPerson.getMainNumber());
                     form.postalCode.setValue(contactPerson.getCode());
@@ -121,7 +122,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     form.itemPurchaseLayout.addComponent(form.itemDescription, 0, 4);
 
                 }
-                for (ServiceProviderProduct product : provider.getServiceProviderProduct()) {
+                for (ServiceProviderProduct product : serviceProvider.getServiceProviderProduct()) {
                     form.itemDescription.addItem(product.getId());
                     form.itemDescription.setItemCaption(product.getId(), product.getProductName());
                     keep = null;
@@ -130,8 +131,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
             } else {
                 setReadOnlyFalse();
                 resetValues();
-                if (provider.getContactPerson() != null) {
-                    ContactPerson contactPerson = provider.getContactPerson();
+                if (serviceProvider.getContactPerson() != null) {
+                    ContactPerson contactPerson = serviceProvider.getContactPerson();
                     form.address.setValue(contactPerson.getAddress1());
                     form.number.setValue(contactPerson.getMainNumber());
                     form.postalCode.setValue(contactPerson.getCode());
@@ -172,7 +173,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 BigDecimal subtotal = new BigDecimal(form.unitPrice.getValue());
                 subtotal = subtotal.multiply(new BigDecimal(form.quantity.getValue()));
                 form.subTotal.setValue(f.format(subtotal));
-                subtotal = subtotal.multiply(new BigDecimal(1.14));
+                if(!serviceProvider.isRegisteredForVat()){
+                    subtotal = subtotal.multiply(new BigDecimal(1.14));
+                }                
                 form.total.setValue(f.format(subtotal));
                 //form.editItemsButton.setVisible(true); 
                 setReadOnlyTrue();
@@ -330,14 +333,17 @@ public class RequestPurchaseTab extends VerticalLayout implements
     }
 
     private void sendRequest(FieldGroup binder) {
-          
-        
+        try {
+            binder.commit();
             Request request = getRequestEntity(binder);
             RequestFacade.getRequestService().persist(request);
-            getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
-       
-            
+        } catch (FieldGroup.CommitException e) {
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
+        }
     }
 
     private Request getRequestEntity(FieldGroup binder) {
