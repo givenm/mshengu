@@ -80,7 +80,7 @@ public class KPITest extends AppTest {
         String[] months = new DateFormatSymbols().getMonths();
         for (int i = 0; i < months.length; i++) {
             if(j == i);
-            return months[i];
+//            return months[i];
         }
         return null;
     }
