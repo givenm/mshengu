@@ -25,12 +25,12 @@ public class SiteServiceLogOpenPredicate implements Predicate<Site> {
 
     private boolean getLatestServiceLog(Site site) {
         if (site != null) {
-            return isFridayVisitDay(site.getLastSiteServiceLog());
+            return isServiceLogOpen(site.getLastSiteServiceLog());
         }
         return false;
     }
 
-    private boolean isFridayVisitDay(SiteServiceLog siteServiceLog) {
+    private boolean isServiceLogOpen(SiteServiceLog siteServiceLog) {
         if (siteServiceLog != null) {
             if (siteServiceLog.getStatus().equalsIgnoreCase(SiteServiceLogStatusEnum.OPEN.name())) {
                 return true;
