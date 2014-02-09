@@ -32,10 +32,10 @@ public final class ServiceProviderBean implements Serializable {
     @NotNull
     private String vatNum;
     private String website;
-    
     private boolean active;
     private boolean preferedVendor;
     private boolean vehicleMaintenance;
+    private boolean registeredForVat;
     @NotNull
     private String address1;
     private String address2;
@@ -51,7 +51,6 @@ public final class ServiceProviderBean implements Serializable {
     @NotNull
     private String mainNumber;
     private String faxNumber;
-    
     private String otherNumber;
     @NotNull
     private String emailAddress;
@@ -60,6 +59,14 @@ public final class ServiceProviderBean implements Serializable {
     private String bankName;
     private String accountNumber;
     private String branchCode;
+
+    public boolean isRegisteredForVat() {
+        return registeredForVat;
+    }
+
+    public void setRegisteredForVat(boolean registeredForVat) {
+        this.registeredForVat = registeredForVat;
+    }
 
     public String getCode() {
         return code;
