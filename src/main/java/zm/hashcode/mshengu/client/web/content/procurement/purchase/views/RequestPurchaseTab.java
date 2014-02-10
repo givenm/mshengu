@@ -91,7 +91,6 @@ public class RequestPurchaseTab extends VerticalLayout implements
             addItemsToTable(form.binder);
         } else if (source == form.approval) {
             sendRequest(form.binder);
-            getHome();
         } 
 //        else if (source == form.editItemsButton) {
 //            allowEditOfItems();
@@ -333,17 +332,10 @@ public class RequestPurchaseTab extends VerticalLayout implements
     }
 
     private void sendRequest(FieldGroup binder) {
-        try {
-            binder.commit();
+       
             Request request = getRequestEntity(binder);
             RequestFacade.getRequestService().persist(request);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
-        } catch (FieldGroup.CommitException e) {
-            Collection<Field<?>> fields = binder.getFields();
-            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
-            helper.doValidation();
-            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
-        }
     }
 
     private Request getRequestEntity(FieldGroup binder) {
