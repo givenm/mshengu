@@ -16,7 +16,7 @@ import com.vaadin.ui.TextField;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.models.KPIBean;
-import zm.hashcode.mshengu.domain.kpianalysis.KPI;
+import zm.hashcode.mshengu.domain.kpianalysis.KPA;
 
 /**
  *
@@ -36,7 +36,7 @@ public class KPIForm extends FormLayout {
     public Label message = new Label("Non-financial metrics have been defined for this KPA");
     public String msg = message.getValue();
 
-    public KPIForm(MshenguMain main, KPI kpi) {
+    public KPIForm(MshenguMain main, KPA kpi) {
         setSizeFull();
         this.main = main;
 
@@ -84,7 +84,7 @@ public class KPIForm extends FormLayout {
         update.setVisible(false);
     }
 
-    private String kpiName(KPI kpi) {
+    private String kpiName(KPA kpi) {
         return kpi.getName();
     }
 }

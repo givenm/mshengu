@@ -459,3 +459,4 @@ public class RequestPurchaseTab extends VerticalLayout implements
 //        form.editItemsButton.setVisible(false);
 //    }
 }
+

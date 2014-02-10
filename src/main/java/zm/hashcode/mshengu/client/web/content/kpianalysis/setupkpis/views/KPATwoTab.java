@@ -19,7 +19,7 @@ import zm.hashcode.mshengu.client.web.content.kpianalysis.kpianalysis.KPIMenu;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.forms.KPIForm;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.models.KPIBean;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.setupkpis.tables.KPITable;
-import zm.hashcode.mshengu.domain.kpianalysis.KPI;
+import zm.hashcode.mshengu.domain.kpianalysis.KPA;
 import zm.hashcode.mshengu.domain.kpianalysis.KPIItem;
 
 /**
@@ -32,7 +32,7 @@ public class KPATwoTab extends VerticalLayout implements
     private final MshenguMain main;
     private final KPITable table;
     private final KPIForm form;
-    private KPI kpi;
+    private KPA kpi;
     private int counter = 0;
 
     public KPATwoTab(MshenguMain app) {
@@ -52,13 +52,13 @@ public class KPATwoTab extends VerticalLayout implements
         return kpi.getName();
     }
 
-    private KPI getKpi() {
-        KPI kpi = KPIFacade.getKPIService().findByTab("two");
+    private KPA getKpi() {
+        KPA kpi = KPIFacade.getKPIService().findByTab("two");
         if (kpi != null) {
             return kpi;
         } else {
             List<KPIItem> items = getItems();
-            KPI newkpi = new KPI.Builder("Field Services (Private)")
+            KPA newkpi = new KPA.Builder("Field Services (Private)")
                     .tab("two")
                     .items(items)
                     .build();
@@ -124,7 +124,7 @@ public class KPATwoTab extends VerticalLayout implements
         return null;
     }
     
-    private List<KPIItem> getKPIItems(KPI kpi) {
+    private List<KPIItem> getKPIItems(KPA kpi) {
         for (KPIItem item : kpi.getItems()) {
             if (!item.getShortDescription().equalsIgnoreCase("empty")) {
                 counter += 1;
@@ -160,10 +160,10 @@ public class KPATwoTab extends VerticalLayout implements
         }
     }
 
-    private KPI getEntity(FieldGroup binder) {
+    private KPA getEntity(FieldGroup binder) {
         final KPIBean bean = ((BeanItem<KPIBean>) binder.getItemDataSource()).getBean();
 
-        final KPI newkpi = new KPI.Builder(bean.getName())
+        final KPA newkpi = new KPA.Builder(bean.getName())
                 .kpi(kpi)
                 .build();
         return newkpi;
