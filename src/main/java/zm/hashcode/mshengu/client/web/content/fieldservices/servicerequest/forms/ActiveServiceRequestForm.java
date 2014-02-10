@@ -194,7 +194,6 @@ public class ActiveServiceRequestForm extends FormLayout {
         update.setStyleName("default");
         delete.setStyleName("default");
 
-
         buttons.addComponent(save);
         buttons.addComponent(edit);
         buttons.addComponent(cancel);
