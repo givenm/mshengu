@@ -34,12 +34,16 @@ public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCusto
 
         /*
          List<OperatingCost> operatingCostList = mongoOperation.find(operatingCostListQuery, OperatingCost.class);
-         System.out.println("operatingCostListQuery - "
-         + operatingCostList.toString());
+
+         System.out.println("OperatingCostRepository  - GENERAL QUERY Start= " + from + " | To= " + to);
+         if (operatingCostList.isEmpty()) {
+         System.out.println("OperatingCostRepository  - GENERAL QUERY - NO MATCHING RECORDS FOUND");
+         }
 
          for (OperatingCost operatingCost : operatingCostList) {
-         System.out.println("operatingCostListQuery - " + operatingCost.getTransactionDate() + " | " + operatingCost.getSpeedometer());
+         System.out.println("OperatingCostRepository - GENERAL QUERY -  Date= " + operatingCost.getTransactionDate() + " | Mileage= " + operatingCost.getSpeedometer() + " | Truck= " + operatingCost.getTruckId());
          }
+         System.out.println("--==--");
          */
         return mongoOperation.find(operatingCostListQuery, OperatingCost.class);
     }
@@ -65,15 +69,20 @@ public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCusto
                 .andOperator(Criteria.where("transactionDate").gte(from),
                 Criteria.where("transactionDate").lte(to)));
 
-        /*   */
-        List<OperatingCost> operatingCostList = mongoOperation.find(truckOperatingCostListQuery, OperatingCost.class);
-//        System.out.println("TruckOperatingCostListQuery - "    + operatingCostList.toString());
+        /*
+         List<OperatingCost> operatingCostList = mongoOperation.find(truckOperatingCostListQuery, OperatingCost.class);
 
-        for (OperatingCost operatingCost : operatingCostList) {
-            System.out.println("Annual OperatingCost ListQuery - " + operatingCost.getTransactionDate() + " | " + operatingCost.getSpeedometer());
-        }
+         System.out.println("OperatingCostRepository  - TRUCK QUERY Start= " + from + " | To= " + to + "  FOR TRUCK: " + truck.getId());
+         if (operatingCostList.isEmpty()) {
+         System.out.println("OperatingCostRepository  - TRUCK QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(truckOperatingCostListQuery, OperatingCost.class);
-        return operatingCostList;
+         for (OperatingCost operatingCost : operatingCostList) {
+         System.out.println("OperatingCostRepository - TRUCK QUERY -  Date= " + operatingCost.getTransactionDate() + " | Mileage= " + operatingCost.getSpeedometer() + " | Truck= " + operatingCost.getTruckId());
+         }
+         System.out.println("--==--");
+         */
+
+        return mongoOperation.find(truckOperatingCostListQuery, OperatingCost.class);
     }
 }

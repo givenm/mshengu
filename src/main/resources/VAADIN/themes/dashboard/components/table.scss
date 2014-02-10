@@ -259,7 +259,7 @@
         height: 29px;
         padding: 0px;
         margin: 0px;
-
+        color:black;
     }
 
     .v-table-cell-content-whiteCellHeight {
@@ -267,6 +267,7 @@
         height: 29px;
         padding: 0px;
         margin: 0px;
+        color:black;
      }
 
 /*   TABLE ROW HEIGHT ends */
@@ -276,5 +277,39 @@
      .v-table-panelTable {
          padding-top: 8px;
      }
+
+/* ANNUAL DATA MaintenanceCost and Mileage Tables*/
+
+    /* All cells. */
+    .annualDataTable .v-table-cell-wrapper {
+        font-size: 11px;
+    }
+
+    .annualDataTable .v-table-cell-content-white {
+        background: white;
+        color:      black;
+    }
+
+    .annualDataTable .v-table-cell-content-blue {
+        background: rgb(195, 215, 247);
+        color:      black;
+    }
+
+    .annualDataTable .v-table-cell-content-rowheader {
+        background: #d0d0d0;
+    /* USING AN IMAGE AS A BACKGROUND
+            background: #E7EDF3 url(../default/table/img/header-bg.png) repeat-x scroll 0 0;
+    */
+    }
+
+/* Total cells.
+    .annualDataTable .v-table-cell-content .v-table-cell-wrapper-monthTotalBold {
+        font-weight:bold;
+    }
+*/
+   .annualDataTable .v-table-cell-content-monthTotalBold {
+        background: rgb(255, 175, 175);
+        color: black;
+    }
 
 }

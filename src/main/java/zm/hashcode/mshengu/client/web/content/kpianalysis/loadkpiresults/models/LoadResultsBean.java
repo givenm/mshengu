@@ -4,13 +4,13 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.models;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  *
  * @author Luckbliss
  */
-public class LoadResultsBean {
+public class LoadResultsBean implements Serializable{
 
     private Date fromdate;
     private Date todate;

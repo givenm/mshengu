@@ -34,12 +34,17 @@ public class AnnualDataFleetMaintenanceMileageRepositoryImpl implements AnnualDa
 
         /*
          List<AnnualDataFleetMaintenanceMileage> truckAnnualDataMileageList = mongoOperation.find(truckAnnualDataMileageListQuery, AnnualDataFleetMaintenanceMileage.class);
-         //        System.out.println("truckAnnualDataMileageList - "    + truckAnnualDataMileageList.toString());
+         System.out.println("AnnualDataFleetMaintenanceMileageRepository  - GENERAL QUERY - Start= " + from + " | To= " + to);
+         if (truckAnnualDataMileageList.isEmpty()) {
+         System.out.println("AnnualDataFleetMaintenanceMileageRepository  - GENERAL QUERY - NO MATCHING RECORDS FOUND");
+         }
 
          for (AnnualDataFleetMaintenanceMileage annualDataMileage : truckAnnualDataMileageList) {
-         System.out.println("AnnualDataMileage Query List - " + annualDataMileage.getTransactionMonth() + " | " + annualDataMileage.getTransactionMonth());
+         System.out.println("AnnualDataFleetMaintenanceMileageRepository - GENERAL QUERY - Date= " + annualDataMileage.getTransactionMonth() + " | Mileage= " + annualDataMileage.getMonthlyMileage() + " | Truck= " + annualDataMileage.getTruckId());
          }
+         System.out.println("--==--");
          */
+
         return mongoOperation.find(truckAnnualDataMileageListQuery, AnnualDataFleetMaintenanceMileage.class);
     }
 
@@ -64,15 +69,18 @@ public class AnnualDataFleetMaintenanceMileageRepositoryImpl implements AnnualDa
                 .andOperator(Criteria.where("transactionMonth").gte(from),
                 Criteria.where("transactionMonth").lte(to)));
 
-        /*   */
-        List<AnnualDataFleetMaintenanceMileage> truckAnnualDataMileageList = mongoOperation.find(truckAnnualDataMileageListQuery, AnnualDataFleetMaintenanceMileage.class);
-//        System.out.println("truckAnnualDataMileageList - "    + truckAnnualDataMileageList.toString());
+        /*
+         List<AnnualDataFleetMaintenanceMileage> truckAnnualDataMileageList = mongoOperation.find(truckAnnualDataMileageListQuery, AnnualDataFleetMaintenanceMileage.class);
 
-        for (AnnualDataFleetMaintenanceMileage annualDataMileage : truckAnnualDataMileageList) {
-            System.out.println("AnnualDataMileage Query List - truckId= " + annualDataMileage.getTruckId() + " | date= " + annualDataMileage.getTransactionMonth());
-        }
-
-//        return mongoOperation.find(truckAnnualDataMileageListQuery, AnnualDataFleetMaintenanceMileage.class);
-        return truckAnnualDataMileageList;
+         System.out.println("AnnualDataFleetMaintenanceMileageRepository  - TRUCK QUERY - Start= " + from + " | To= " + to + "  FOR truckId: " + truck.getId());
+         if (truckAnnualDataMileageList.isEmpty()) {
+         System.out.println("AnnualDataFleetMaintenanceMileageRepository  - TRUCK QUERY  - NO MATCHING RECORDS FOUND");
+         }
+         for (AnnualDataFleetMaintenanceMileage annualDataMileage : truckAnnualDataMileageList) {
+         System.out.println("AnnualDataFleetMaintenanceMileageRepository - TRUCK QUERY - Date= " + annualDataMileage.getTransactionMonth() + " | Mileage= " + annualDataMileage.getMonthlyMileage() + " | Truck= " + annualDataMileage.getTruckId());
+         }
+         System.out.println("--==--");
+         */
+        return mongoOperation.find(truckAnnualDataMileageListQuery, AnnualDataFleetMaintenanceMileage.class);
     }
 }

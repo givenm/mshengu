@@ -107,7 +107,6 @@ public class FleetMaintenanceUtil implements Serializable {
                     month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString());
                     total = total.add(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
                     truckId = annualDataFleetMaintenanceCost.getTruckId();
-                    System.out.println("Monthy: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceCost.getTransactionMonth() + "") + ", Total: " + annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
                 }
             }
             grandTotalMaintenanceSpend = grandTotalMaintenanceSpend.add(total);
@@ -145,8 +144,8 @@ public class FleetMaintenanceUtil implements Serializable {
         totalMaintenanceSpendMonthly.setVehicleNumber(truck.getVehicleNumber());
         totalMaintenanceSpendMonthly.setNumberPlate(truck.getNumberPlate());
 
-        System.out.println("Id is: " + j + ". Month: " + newMonth + ", Total: " + total);
-        System.out.println("Grand Total is: " + grandTotalMaintenanceSpend);
+//        System.out.println("Id is: " + j + ". Month: " + newMonth + ", Total: " + total);
+//        System.out.println("Grand Total is: " + grandTotalMaintenanceSpend);
 
         return totalMaintenanceSpendMonthly;
     }
@@ -309,15 +308,8 @@ public class FleetMaintenanceUtil implements Serializable {
         int iD = 1;
         final Calendar calendar = Calendar.getInstance();
         final List<MonthlySpendData> monthlySpendDataList = new ArrayList<>();
-
         // Sort AnnualDataFleetMaintenanceCost List in DESC Order by Date. Extract last month data ONLY
         Collections.sort(annualDataFleetMaintenanceCostList, AnnualDataFleetMaintenanceCost.DescOrderDateAscOrderTruckComparator);
-
-//        System.out.println("annualDataFleetMaintenanceCostList after Sort Before BUILDING buildTwelvethMonthMaintenanceSpend List");
-//        for (AnnualDataFleetMaintenanceCost AnnualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
-//            System.out.println(AnnualDataFleetMaintenanceCost.getTruckId() + " | " + AnnualDataFleetMaintenanceCost.getTransactionMonth() + " | " + AnnualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
-//        }
-
         Date latestDate = annualDataFleetMaintenanceCostList.get(0).getTransactionMonth(); // the 12th month is AT the TOP in the List
         String latestTruckId = annualDataFleetMaintenanceCostList.get(0).getTruckId();
 
@@ -338,7 +330,7 @@ public class FleetMaintenanceUtil implements Serializable {
                     totalMonthlySpend = totalMonthlySpend.add(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost());
                 }
             } else {
-                break;
+                break; // because we want only the LaTEST Month data in the List
             }
         }
         return monthlySpendDataList;

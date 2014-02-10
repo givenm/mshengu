@@ -30,17 +30,20 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         Query transactedRequestListQuery = new Query();
         transactedRequestListQuery.addCriteria(
                 Criteria.where("serviceProviderSupplierId").is(serviceProvider.getId()).and("InvoiceNumber").ne(null));
+        /*
+         List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
 
-        /*   */
-        List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
-//        System.out.println("transactedRequestListQuery - "    + transactedRequestList.toString());
+         System.out.println("RequestRepository  - SERVICE PROVIDER WITH INVOICE NUMBER ONLY QUERY");
+         if (transactedRequestList.isEmpty()) {
+         System.out.println("RequestRepository  - SERVICE PROVIDER WITH INVOICE NUMBER ONLY QUERY - NO MATCHING RECORDS FOUND  FOR serviceProviderId: " + serviceProvider.getId());
+         }
 
-        for (Request request : transactedRequestList) {
-            System.out.println("ServiceProvide Request Query - serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
-        }
-
-//        return mongoOperation.find(transactedRequestListQuery, Request.class);
-        return transactedRequestList;
+         for (Request request : transactedRequestList) {
+         System.out.println("RequestRepository - SERVICE PROVIDER WITH INVOICE NUMBER ONLY QUERY -  serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
+         }
+         System.out.println("--==--");
+         */
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
     @Override
@@ -51,16 +54,20 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 .andOperator(Criteria.where("deliveryDate").gte(start),
                 Criteria.where("deliveryDate").lte(end)));
 
-        /*   */
-        List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
-//        System.out.println("transactedRequestListQuery - "    + transactedRequestList.toString());
+        /*
+         List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
 
-        for (Request request : transactedRequestList) {
-            System.out.println("Request Query - serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
-        }
+         System.out.println("RequestRepository  - GENERAL QUERY Start= " + start + " | To= " + end);
+         if (transactedRequestList.isEmpty()) {
+         System.out.println("RequestRepository  - GENERAL QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(transactedRequestListQuery, Request.class);
-        return transactedRequestList;
+         for (Request request : transactedRequestList) {
+         System.out.println("RequestRepository - GENERAL QUERY -  serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
+         }
+         //        System.out.println("--==--");
+         */
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
     @Override
@@ -98,16 +105,20 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 .andOperator(Criteria.where("transactionDate").gte(from),
                 Criteria.where("transactionDate").lte(to), Criteria.where("InvoiceNumber").ne(null)));
 
-        /*   */
-        List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
-//        System.out.println("transactedRequestListQuery - "    + transactedRequestList.toString());
+        /*
+         List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
 
-        for (Request request : transactedRequestList) {
-            System.out.println("Truck Request Query - serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
-        }
+         System.out.println("RequestRepository  - TRUCK QUERY Start= " + from + " | To= " + to + "  FOR truckId: " + truck.getId());
+         if (transactedRequestList.isEmpty()) {
+         System.out.println("RequestRepository  - TRUCK QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(transactedRequestListQuery, Request.class);
-        return transactedRequestList;
+         for (Request request : transactedRequestList) {
+         System.out.println("RequestRepository - TRUCK QUERY -  serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
+         }
+         //        System.out.println("--==--");
+         */
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
     private List<Request> getServiceProviderTransactedRequest(ServiceProvider serviceProvider, Date from, Date to) {
@@ -117,15 +128,19 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 .andOperator(Criteria.where("deliveryDate").gte(from),
                 Criteria.where("deliveryDate").lte(to), Criteria.where("InvoiceNumber").ne(null)));
 
-        /*   */
-        List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
-//        System.out.println("transactedRequestListQuery - "    + transactedRequestList.toString());
+        /*
+         List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
 
-        for (Request request : transactedRequestList) {
-            System.out.println("Supplier Request Query - serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
-        }
+         System.out.println("RequestRepository  - SERVICE PROVIDER QUERY Start= " + from + " | To= " + to + "  FOR serviceProviderId: " + serviceProvider.getId());
+         if (transactedRequestList.isEmpty()) {
+         System.out.println("RequestRepository  - SERVICE PROVIDER QUERY - NO MATCHING RECORDS FOUND");
+         }
 
-//        return mongoOperation.find(transactedRequestListQuery, Request.class);
-        return transactedRequestList;
+         for (Request request : transactedRequestList) {
+         System.out.println("RequestRepository - SERVICE PROVIDER QUERY -  serviceProviderId= " + request.getServiceProviderSupplierId() + " | truckId" + request.getTruckId() + " | DeliveryDATE= " + request.getDeliveryDate() + " | iNVoice= " + request.getInvoiceNumber());
+         }
+         //        System.out.println("--==--");
+         */
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 }
