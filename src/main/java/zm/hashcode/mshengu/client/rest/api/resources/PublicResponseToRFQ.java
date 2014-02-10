@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.client.rest.api.resources;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +18,7 @@ public class PublicResponseToRFQ {
     private String companyType;
     private int yearEstablishment;
     private String chiefExecutive;
+    private boolean hasVat;
     private String vatRegistrationNumber;
     private List<String> item;
     private List<String> itemNumber;
@@ -30,6 +30,14 @@ public class PublicResponseToRFQ {
     private String validityOfQuote;
     private String paymentTerms;
     private String email;
+    
+    public boolean hasVat() {
+        return hasVat;
+    }
+
+    public void hasVat(boolean hasVat) {
+        this.hasVat = hasVat;
+    }    
 
     public String getRfqNumber() {
         return rfqNumber;

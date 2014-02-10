@@ -211,6 +211,7 @@ public class WebAppServiceImpl implements WebAppService {
                 .companyType(publicResponseToRFQ.getCompanyType())
                 .yearEstablishment(publicResponseToRFQ.getYearEstablishment())
                 .chiefExecutive(publicResponseToRFQ.getChiefExecutive())
+                .registeredForVat(publicResponseToRFQ.hasVat())
                 .vatRegistrationNumber(publicResponseToRFQ.getVatRegistrationNumber())
                 .webSite(publicResponseToRFQ.getWebSite())
                 .items(itemList)
@@ -333,6 +334,7 @@ public class WebAppServiceImpl implements WebAppService {
                 .firstNameChiefExec(publicVendorRegistration.getChiefExecutiveFirstname()) /*this will not work bcoz there is one input box for name & surname*/
                 .lastNameChiefExec(publicVendorRegistration.getChiefExecutiveLastname())
                 .legalForm(publicVendorRegistration.getCompanyType())
+                .registeredForVat(publicVendorRegistration.hasVat())
                 .registrationNum(publicVendorRegistration.getCompanyRegistrationnumber())
                 .serviceProviderCategory(serviceProviderCategory)
                 .serviceProviderProduct(serviceProviderProducts)
