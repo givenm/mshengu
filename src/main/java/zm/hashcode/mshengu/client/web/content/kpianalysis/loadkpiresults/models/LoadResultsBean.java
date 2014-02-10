@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
