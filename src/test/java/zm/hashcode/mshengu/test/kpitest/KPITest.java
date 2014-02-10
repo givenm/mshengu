@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-import zm.hashcode.mshengu.domain.kpianalysis.KPI;
+import zm.hashcode.mshengu.domain.kpianalysis.KPA;
 import zm.hashcode.mshengu.domain.kpianalysis.KPIItem;
 import zm.hashcode.mshengu.domain.kpianalysis.KPIValues;
 import zm.hashcode.mshengu.services.kpianalysis.KPIItemService;
-import zm.hashcode.mshengu.services.kpianalysis.KPIService;
+import zm.hashcode.mshengu.services.kpianalysis.KPAService;
 import zm.hashcode.mshengu.services.kpianalysis.KPIValuesService;
 import zm.hashcode.mshengu.test.AppTest;
 
@@ -25,7 +25,7 @@ import zm.hashcode.mshengu.test.AppTest;
 public class KPITest extends AppTest {
 
     @Autowired
-    private KPIService service;
+    private KPAService service;
     @Autowired
     private KPIItemService itemService;
     @Autowired
@@ -33,13 +33,13 @@ public class KPITest extends AppTest {
 
 //    @Test
     public void testAddEvent() {
-        service = ctx.getBean(KPIService.class);
+        service = ctx.getBean(KPAService.class);
         itemService = ctx.getBean(KPIItemService.class);
         valuesService = ctx.getBean(KPIValuesService.class);
 
-        List<KPI> kpis = service.findAll();
+        List<KPA> kpis = service.findAll();
         Random random = new Random(5);
-        for (KPI kpi : kpis) {
+        for (KPA kpi : kpis) {
             List<KPIItem> items = kpi.getItems();
             List<KPIItem> kPIItems = new ArrayList<>();
             for (KPIItem item : items) {
@@ -49,13 +49,13 @@ public class KPITest extends AppTest {
                         int result = 0;
                         result = random.nextInt(25);
                         String month = getMonth(j);
-                        KPIValues value = new KPIValues.Builder(month)
-                                .value(result)
-                                .year(i)
-                                .build();
-                        values.add(value);
-                        valuesService.persist(value);
-                        value = null;
+////                        KPIValues value = new KPIValues.Builder(month)
+////                                .value(result)
+////                                .year(i)
+////                                .build();
+////                        values.add(value);
+////                        valuesService.persist(value);
+//                        value = null;
                     }
                 }
                 KPIItem newItem = new KPIItem.Builder(item.getShortDescription())
@@ -67,7 +67,7 @@ public class KPITest extends AppTest {
                 newItem = null;
                 values = null;
             }
-            KPI newkpi = new KPI.Builder(kpi.getName())
+            KPA newkpi = new KPA.Builder(kpi.getName())
                     .kpi(kpi)
                     .items(kPIItems)
                     .build();
@@ -80,7 +80,7 @@ public class KPITest extends AppTest {
         String[] months = new DateFormatSymbols().getMonths();
         for (int i = 0; i < months.length; i++) {
             if(j == i);
-            return months[i];
+//            return months[i];
         }
         return null;
     }

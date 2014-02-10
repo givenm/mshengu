@@ -12,7 +12,7 @@ import zm.hashcode.mshengu.app.facade.kpianalysis.KPIFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.settargets.tables.TargetTable;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.settargets.views.TargetsTab;
-import zm.hashcode.mshengu.domain.kpianalysis.KPI;
+import zm.hashcode.mshengu.domain.kpianalysis.KPA;
 
 /**
  *
@@ -28,35 +28,35 @@ public class TargetForm extends FormLayout {
         this.tab = tab;
         this.main = main;
 
-        KPI oneKpa = KPIFacade.getKPIService().findByTab("one");
+        KPA oneKpa = KPIFacade.getKPIService().findByTab("one");
         Label oneLabel = new Label();
         oneLabel.setValue(oneKpa.getName());
         
         TargetTable oneTable = new TargetTable(main, tab);
         oneTable.loadTable(oneKpa.getItems());
         
-        KPI twoKpa = KPIFacade.getKPIService().findByTab("two");
+        KPA twoKpa = KPIFacade.getKPIService().findByTab("two");
         Label twoLabel = new Label();
         twoLabel.setValue(twoKpa.getName());
         
         TargetTable twoTable = new TargetTable(main, tab);
         twoTable.loadTable(twoKpa.getItems());
         
-        KPI threeKpa = KPIFacade.getKPIService().findByTab("three");
+        KPA threeKpa = KPIFacade.getKPIService().findByTab("three");
         Label threeLabel = new Label();
         threeLabel.setValue(threeKpa.getName());
         
         TargetTable threeTable = new TargetTable(main, tab);
         threeTable.loadTable(threeKpa.getItems());
         
-        KPI fourKpa = KPIFacade.getKPIService().findByTab("four");
+        KPA fourKpa = KPIFacade.getKPIService().findByTab("four");
         Label fourLabel = new Label();
         fourLabel.setValue(fourKpa.getName());
         
         TargetTable fourTable = new TargetTable(main, tab);
         fourTable.loadTable(fourKpa.getItems());
         
-        KPI fiveKpa = KPIFacade.getKPIService().findByTab("five");
+        KPA fiveKpa = KPIFacade.getKPIService().findByTab("five");
         Label fiveLabel = new Label();
         fiveLabel.setValue(fiveKpa.getName());
         

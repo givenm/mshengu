@@ -25,6 +25,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
     private String companyType;
     private int yearEstablishment;
     private String chiefExecutive;
+    private boolean registeredForVat;
     private String vatRegistrationNumber;
     private String webSite;
     private String validityOfQuote;
@@ -75,6 +76,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
         this.yearEstablishment = builder.yearEstablishment;
         this.chiefExecutive = builder.chiefExecutive;
         this.vatRegistrationNumber = builder.vatRegistrationNumber;
+        this.registeredForVat = builder.registeredForVat;
         this.items = builder.items;
         this.webSite = builder.webSite;
         this.validityOfQuote = builder.validityOfQuote;
@@ -100,6 +102,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
         private int yearEstablishment;
         private String chiefExecutive;
         private String vatRegistrationNumber;
+        private boolean registeredForVat;
         private Set<RequestPurchaseItem> items;
         private String webSite;
         private String validityOfQuote;
@@ -119,6 +122,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
             this.yearEstablishment = request.getYearEstablishment();
             this.chiefExecutive = request.getChiefExecutive();
             this.vatRegistrationNumber = request.getVatRegistrationNumber();
+            this.registeredForVat = request.getRegisteredForVat();
             this.items = request.getItems();
             this.webSite = request.getWebSite();
             this.validityOfQuote = request.getValidityOfQuote();
@@ -162,6 +166,11 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
 
         public Builder vatRegistrationNumber(String value) {
             this.vatRegistrationNumber = value;
+            return this;
+        }
+        
+        public Builder registeredForVat(boolean value) {
+            this.registeredForVat = value;
             return this;
         }
 
@@ -230,6 +239,10 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
 
     public String getVatRegistrationNumber() {
         return vatRegistrationNumber;
+    }
+    
+    public boolean getRegisteredForVat() {
+        return registeredForVat;
     }
 
     public Set<RequestPurchaseItem> getItems() {

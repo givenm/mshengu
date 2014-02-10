@@ -4,8 +4,6 @@
  */
 package zm.hashcode.mshengu.client.rest.api.resources;
 
-import java.util.Date;
-
 /**
  *
  * @author given
@@ -18,6 +16,7 @@ public class PublicVendorRegistration {
     private int yearEstablishment;
     private String chiefExecutiveFirstname;
     private String chiefExecutiveLastname;
+    private boolean hasVat;
     private String vatRegistrationNumber;
     private String webSite;
     private String addressLine1;
@@ -35,6 +34,14 @@ public class PublicVendorRegistration {
     private String accountNumber;
     private String branchCode;
 
+    public boolean hasVat() {
+        return hasVat;
+    }
+
+    public void hasVat(boolean hasVat) {
+        this.hasVat = hasVat;
+    }    
+    
     public String getCompanyName() {
         return companyName;
     }
