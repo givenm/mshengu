@@ -91,6 +91,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
             addItemsToTable(form.binder);
         } else if (source == form.approval) {
             sendRequest(form.binder);
+            getHome();
         } 
 //        else if (source == form.editItemsButton) {
 //            allowEditOfItems();
