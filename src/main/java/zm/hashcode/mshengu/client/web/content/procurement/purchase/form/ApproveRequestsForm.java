@@ -13,14 +13,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.security.GetUserCredentials;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.humanresources.staff.tables.EmployeeDatabaseTable;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.table.DisplayItemsTable;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.ApproveRequestsTab;
@@ -40,6 +38,7 @@ public class ApproveRequestsForm extends FormLayout implements
     private Button approve = new Button("Approve");
     private Button disapprove = new Button("Disapprove");
     private Button back = new Button("Back");
+    private Button delete = new Button("Delete");
     private ApproveRequestsTab tab;
     private String requestId;
     private SequenceHelper helper = new SequenceHelper();
@@ -82,21 +81,24 @@ public class ApproveRequestsForm extends FormLayout implements
         layout.addComponent(deliveryInstructions, 0, 8, 1, 8);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 9);
 
-        DisplayItemsTable table = new DisplayItemsTable(request.getRequestPurchaseItems());
-        table.setSizeFull();
-        layout.addComponent(table, 0, 10, 2, 10);
-        layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 11);
-
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.setSizeFull();
         approve.setSizeFull();
         buttons.addComponent(approve);
         disapprove.setSizeFull();
         buttons.addComponent(disapprove);
+        delete.setSizeFull();
+        buttons.addComponent(delete);
         back.setSizeFull();
         buttons.addComponent(back);
 
-        layout.addComponent(buttons, 0, 12, 2, 12);
+        layout.addComponent(buttons, 0, 10, 2, 10);
+        layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 11);
+
+        DisplayItemsTable table = new DisplayItemsTable(request.getRequestPurchaseItems());
+        table.setSizeFull();
+
+        layout.addComponent(table, 0, 12, 2, 12);
         addListeners();
         addComponent(layout);
     }
@@ -120,6 +122,7 @@ public class ApproveRequestsForm extends FormLayout implements
         approve.addClickListener((Button.ClickListener) this);
         disapprove.addClickListener((Button.ClickListener) this);
         back.addClickListener((Button.ClickListener) this);
+        delete.addClickListener((Button.ClickListener) this);
     }
 
     @Override
@@ -139,7 +142,7 @@ public class ApproveRequestsForm extends FormLayout implements
                     if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
                         approve(request, user.getFirstname() + " " + user.getLastname());
                     } else {
-                        Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                        Notification.show("User not allowed to approve more than R3000!", Notification.Type.TRAY_NOTIFICATION);
                     }
                 }
             } else {
@@ -159,13 +162,17 @@ public class ApproveRequestsForm extends FormLayout implements
                     if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
                         disapprove();
                     } else {
-                        Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                        Notification.show("User not allowed to disapprove  more than R3000!", Notification.Type.TRAY_NOTIFICATION);
                     }
                 }
             } else {
                 Notification.show("You cannot disapprove your own request!", Notification.Type.TRAY_NOTIFICATION);
             }
         } else if (source == back) {
+            main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
+        } else if (source == delete) {
+            Request request = RequestFacade.getRequestService().findById(requestId);
+            RequestFacade.getRequestService().delete(request);
             main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
         }
     }

@@ -23,6 +23,7 @@ import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.models.GoodsBean;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.InvoicesMenu;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.InvoicePaidTab;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.InvoicesTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
 
@@ -30,10 +31,10 @@ import zm.hashcode.mshengu.domain.procurement.Request;
  *
  * @author Luckbliss
  */
-public class UpdatePaymentForm extends FormLayout {
+public class UpdateForm extends FormLayout {
 
     private MshenguMain main;
-    private final InvoicesTab tab;
+    private final InvoicePaidTab tab;
     public final GoodsBean bean = new GoodsBean();
     public final BeanItem<GoodsBean> item = new BeanItem<>(bean);
     public final FieldGroup binder = new FieldGroup(item);
@@ -44,7 +45,7 @@ public class UpdatePaymentForm extends FormLayout {
     public DateField date = UIComponent.getDateField("Payment Date:", "deliveryDate", GoodsBean.class, binder);
     private final Request request;
 
-    public UpdatePaymentForm(final MshenguMain main, final Request request, final InvoicesTab tab) {
+    public UpdateForm(final MshenguMain main, final Request request, final InvoicePaidTab tab) {
         this.main = main;
         this.tab = tab;
         this.request = request;
@@ -124,6 +125,6 @@ public class UpdatePaymentForm extends FormLayout {
     }
 
     private void getHome() {
-        main.content.setSecondComponent(new InvoicesMenu(main, "LANDING"));
+        main.content.setSecondComponent(new InvoicesMenu(main, "PAID"));
     }
 }
