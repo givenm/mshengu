@@ -121,7 +121,7 @@ public class VehicleFuelUsageTable extends Table {
                     trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck),
                     df.format(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString())),
                     df.format(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString())),
-                    flagImage.determineFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
+                    flagImage.determineFuelUsageFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
                 }, truck.getId());
             }
         }
@@ -165,7 +165,7 @@ public class VehicleFuelUsageTable extends Table {
                         trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck),
                         df.format(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString())),
                         df.format(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString())),
-                        flagImage.determineFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
+                        flagImage.determineFuelUsageFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
                     }, truck.getId());
                 } else {
                     Notification.show("No records were found matching specified Date and Truck!", Notification.Type.TRAY_NOTIFICATION);

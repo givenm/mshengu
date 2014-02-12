@@ -236,7 +236,7 @@ public class DailyTrackerTable extends Table {
 //        dailyTrackerTableData.setClosingMileage(operatingCost.getSpeedometer());
 //        dailyTrackerTableData.setTrip(trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck));
 //        dailyTrackerTableData.setRandsPerKilometer(trackerUtil.getRandPerKilometre(operatingCost.getFuelCost(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck)));
-//        dailyTrackerTableData.setRating(trackerUtil.determineFlag(trackerUtil.getRandPerKilometre(operatingCost.getFuelCost(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck))));
+//        dailyTrackerTableData.setRating(trackerUtil.determineFuelUsageFlag(trackerUtil.getRandPerKilometre(operatingCost.getFuelCost(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck))));
 //        dailyTrackerTableData.setLitresPerKilometer(trackerUtil.getLitrePerKilometer(operatingCost.getFuelLitres(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck)));
 //        dailyTrackerTableData.setDriverId(operatingCost.getDriver().getId());
 //        dailyTrackerTableData.setDriverName(operatingCost.getDriver().getFirstname() + " " + truck.getDriver().getLastname());
@@ -256,7 +256,7 @@ public class DailyTrackerTable extends Table {
         dailyTrackerTableData.setClosingMileage(dailyTrackerData.getClosingMileage());
         dailyTrackerTableData.setTrip(trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck));
         dailyTrackerTableData.setRandsPerKilometer(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
-        dailyTrackerTableData.setRating(flagImage.determineFlag(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck))));
+        dailyTrackerTableData.setRating(flagImage.determineFuelUsageFlag(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck))));
         dailyTrackerTableData.setLitresPerKilometer(trackerUtil.getLitrePerKilometer(dailyTrackerData.getLitres(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
         dailyTrackerTableData.setDriverId(dailyTrackerData.getDriverId());
         dailyTrackerTableData.setDriverName(dailyTrackerData.getDriverName());

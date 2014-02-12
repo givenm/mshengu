@@ -139,6 +139,9 @@ public class MaintenanceCostUtil implements Serializable {
                 BigDecimal accumulatedTotal = BigDecimal.ZERO;
                 List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsByTruckByMonth(truck, startCalendar.getTime());
                 if (!requestList.isEmpty()) {
+                    // REMOVE VAT CHARGES FROM TOTAL
+
+
                     for (Request request : requestList) {
                         accumulatedTotal = accumulatedTotal.add(request.getTotal());
                     }
