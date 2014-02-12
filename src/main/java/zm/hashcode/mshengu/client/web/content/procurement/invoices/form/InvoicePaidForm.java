@@ -19,7 +19,7 @@ import zm.hashcode.mshengu.client.web.content.procurement.invoices.models.Invoic
  *
  * @author Luckbliss
  */
-public class InvoicesForm extends FormLayout {
+public class InvoicePaidForm extends FormLayout {
 
     public UIComboBoxHelper UICombobox = new UIComboBoxHelper();
     public UIComponentHelper UIComponent = new UIComponentHelper();
@@ -32,7 +32,7 @@ public class InvoicesForm extends FormLayout {
     public Label mtdTotal = new Label("MTD Total: R ");
     public String total = mtdTotal.getValue();
 
-    public InvoicesForm() {
+    public InvoicePaidForm() {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();

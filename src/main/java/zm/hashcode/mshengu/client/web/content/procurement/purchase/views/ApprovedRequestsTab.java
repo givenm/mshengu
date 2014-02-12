@@ -6,10 +6,17 @@ package zm.hashcode.mshengu.client.web.content.procurement.purchase.views;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.List;
+import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
+import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
+import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.ApprovedRequestsForm;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.table.ApprovedRequestsTable;
+import zm.hashcode.mshengu.domain.procurement.Request;
+import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
 /**
  *
@@ -20,12 +27,16 @@ public class ApprovedRequestsTab extends VerticalLayout implements
 
     private final MshenguMain main;
     private ApprovedRequestsTable table;
+    private ApprovedRequestsForm form;
 
     public ApprovedRequestsTab(MshenguMain app) {
         table = new ApprovedRequestsTable(app, this);
+        form = new ApprovedRequestsForm();
         this.main = app;
         setSizeFull();
+        addComponent(form);
         addComponent(table);
+        addListeners();
     }
 
     public void clearTab() {
@@ -39,6 +50,27 @@ public class ApprovedRequestsTab extends VerticalLayout implements
         main.content.setSecondComponent(new PurchaseMenu(main, "APPROVED_REQUESTS"));
     }
 
+    private void getValues() {
+        if (form.month.getValue() != null && form.year.getValue() != null && form.supplier.getValue() != null) {
+            String supplierId = form.supplier.getValue().toString();
+            table.removeAllItems();
+            String month = form.month.getValue().toString();
+            String year = form.year.getValue().toString();
+            final ServiceProvider serviceProvider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
+            // Reposotory get Requests with InvoiceNum notNull for Specified Date for Service Provider
+            List<Request> requests = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+            table.loadTable(requests, month, year);
+        } else {
+            Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
+        }
+    }
+
+    private void addListeners() {
+        //Register Button Listeners
+        form.supplier.addValueChangeListener((Property.ValueChangeListener) this);
+        form.month.addValueChangeListener((Property.ValueChangeListener) this);
+        form.year.addValueChangeListener((Property.ValueChangeListener) this);
+    }
     @Override
     public void buttonClick(Button.ClickEvent event) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -46,6 +78,13 @@ public class ApprovedRequestsTab extends VerticalLayout implements
 
     @Override
     public void valueChange(Property.ValueChangeEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final Property property = event.getProperty();
+        if (property == form.supplier) {
+            getValues();
+        } else if (property == form.month) {
+            getValues();
+        } else if (property == form.year) {
+            getValues();
+        }
     }
 }
