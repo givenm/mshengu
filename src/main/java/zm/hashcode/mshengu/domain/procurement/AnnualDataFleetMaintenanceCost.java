@@ -26,7 +26,7 @@ public class AnnualDataFleetMaintenanceCost implements Serializable, Comparable<
     private Date transactionMonth;
     private BigDecimal monthlyMaintenanceCost;
 
-    public AnnualDataFleetMaintenanceCost() {
+    private AnnualDataFleetMaintenanceCost() {
     }
 
     public AnnualDataFleetMaintenanceCost(Builder builder) {

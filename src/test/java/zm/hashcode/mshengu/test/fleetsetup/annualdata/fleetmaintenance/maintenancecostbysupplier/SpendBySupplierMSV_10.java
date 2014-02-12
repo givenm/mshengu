@@ -14,14 +14,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.MaintenanceSpendBySupplier;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
@@ -35,7 +33,7 @@ import static zm.hashcode.mshengu.test.AppTest.ctx;
  *
  * @author Colin
  */
-public class SpendBySupplierMSV_01 extends AppTest {
+public class SpendBySupplierMSV_10 extends AppTest {
 
     @Autowired
     private MaintenanceSpendBySupplierService maintenanceSpendBySupplierService;
@@ -63,7 +61,7 @@ public class SpendBySupplierMSV_01 extends AppTest {
             String truckId = null;
             String serviceProviderId = null;
             BigDecimal maintenanceCost;
-            HSSFSheet worksheet = workbook.getSheetAt(0);
+            HSSFSheet worksheet = workbook.getSheetAt(9); // WorkSheet ????? Change this number for each Sheet (Sheet Number -1)
             String vehicleNumber = worksheet.getRow(0).getCell(3).getStringCellValue(); // Row 0 Column 3 is the Vehicle Number cell
 
             // Get the Truck based of the VEHICLEnUMBER
@@ -77,7 +75,7 @@ public class SpendBySupplierMSV_01 extends AppTest {
             if (truck != null) {
                 // iterated through all the rows
                 System.out.println("\n\n" + "Begin processing Sheet: " + vehicleNumber);
-                for (int i = 3; i <= 72; i++) { // For each row, from Row 4 to 72 e.g. Row 1 is index @(0)
+                for (int i = 3; i <= 20; i++) { // For each row, from Row 4 to 21 e.g. Row 1 is index @(0)  ????? Change this number (i <= ?) for each Sheet
                     // we will navigate Column A to B. C is read below
                     // Starts @Row 4
                     String vendorNumber = worksheet.getRow(i).getCell(2).getStringCellValue(); // Column 3(C) is the Vehicle Number cell

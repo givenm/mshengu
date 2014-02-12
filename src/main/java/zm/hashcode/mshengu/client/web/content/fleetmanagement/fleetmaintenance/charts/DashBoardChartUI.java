@@ -12,11 +12,11 @@ import zm.hashcode.mshengu.client.web.MshenguMain;
  *
  * @author ColinWa
  */
-public class DashBoardChart extends FormLayout {
+public class DashBoardChartUI extends FormLayout {
 
     public VerticalLayout chartVerticalLayout = new VerticalLayout();
 
-    public DashBoardChart(MshenguMain main) {
+    public DashBoardChartUI(MshenguMain main) {
         chartVerticalLayout.setSizeFull();
 
         addComponent(chartVerticalLayout);

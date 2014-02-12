@@ -19,8 +19,6 @@ import zm.hashcode.mshengu.domain.people.ContactPerson;
  *
  * @author Ferox
  */
-
-
 @Document
 public final class ServiceProvider implements Serializable, Comparable<ServiceProvider> {
 
@@ -72,7 +70,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         this.vatNum = builder.vatNum;
         this.mailNotifications = builder.mailNotifications;
         this.preferedVendor = builder.preferedVendor;
-        this.vendorNumber =  builder.vendorNumber;
+        this.vendorNumber = builder.vendorNumber;
     }
 
     @Override
@@ -100,27 +98,6 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
             return false;
         }
         return true;
-    }
-
-    /**
-     * @return the mailNotifications
-     */
-    public MailNotifications getMailNotifications() {
-        return mailNotifications;
-    }
-
-    /**
-     * @return the preferedVendor
-     */
-    public boolean isPreferedVendor() {
-        return preferedVendor;
-    }
-
-    /**
-     * @return the vendorNumber
-     */
-    public String getVendorNumber() {
-        return vendorNumber;
     }
 
     public static class Builder {
@@ -169,7 +146,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
             this.vatNum = serviceProvider.getVatNum();
             this.mailNotifications = serviceProvider.getMailNotifications();
             this.preferedVendor = serviceProvider.isPreferedVendor();
-            this.vendorNumber =  serviceProvider.getVendorNumber();
+            this.vendorNumber = serviceProvider.getVendorNumber();
             return this;
         }
 
@@ -177,8 +154,8 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
             this.contactPerson = contactPerson;
             return this;
         }
-        
-         public Builder vendorNumber(String value) {
+
+        public Builder vendorNumber(String value) {
             this.vendorNumber = value;
             return this;
         }
@@ -447,5 +424,26 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return the mailNotifications
+     */
+    public MailNotifications getMailNotifications() {
+        return mailNotifications;
+    }
+
+    /**
+     * @return the preferedVendor
+     */
+    public boolean isPreferedVendor() {
+        return preferedVendor;
+    }
+
+    /**
+     * @return the vendorNumber
+     */
+    public String getVendorNumber() {
+        return vendorNumber;
     }
 }

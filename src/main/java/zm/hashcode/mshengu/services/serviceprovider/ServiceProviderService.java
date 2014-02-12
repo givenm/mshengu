@@ -30,4 +30,6 @@ public interface ServiceProviderService {
     public List<ServiceProvider> findAllSubcontractors();
 
     public List<ServiceProvider> findAllSuppliers();
+
+    public ServiceProvider findByVendorNumber(String vendorNumber);
 }

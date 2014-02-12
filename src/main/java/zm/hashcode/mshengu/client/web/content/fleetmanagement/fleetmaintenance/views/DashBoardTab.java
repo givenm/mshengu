@@ -21,7 +21,7 @@ import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.chemicals.DashboardChemicalsMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.FleetMaintenanceMenu;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.DashBoardChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.DashBoardChartUI;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.DashBoardForm;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
@@ -29,9 +29,9 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.m
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
 import zm.hashcode.mshengu.app.util.FlagImage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.MaintenanceSpendByKmTravelledChart;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.TotalMaintenanceSpendMonthlyChart;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.TotalMaintenanceSpendPerVehicleChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendByKmTravelledChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.TotalMaintenanceSpendMonthlyChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.TotalMaintenanceSpendPerVehicleChart;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 
@@ -44,7 +44,7 @@ public class DashBoardTab extends VerticalLayout implements
 
     private final MshenguMain main;
     private final DashBoardForm form;
-    private final DashBoardChart chart;
+    private final DashBoardChartUI chart;
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
     public static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
     public static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
@@ -66,7 +66,7 @@ public class DashBoardTab extends VerticalLayout implements
         main = app;
         this.fleetMaintenanceMenu = fleetMaintenanceMenu;
         form = new DashBoardForm();
-        chart = new DashBoardChart(main);
+        chart = new DashBoardChartUI(main);
 
         addComponent(form);
         addComponent(chart);
