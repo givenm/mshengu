@@ -10,24 +10,24 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.InvoicesForm;
-import zm.hashcode.mshengu.client.web.content.procurement.invoices.table.InvoiceTable;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.InvoicePaidForm;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.table.InvoicePaidTable;
 import zm.hashcode.mshengu.domain.procurement.Request;
 
 /**
  *
  * @author Luckbliss
  */
-public class InvoicesTab extends VerticalLayout implements Property.ValueChangeListener {
+public class InvoicePaidTab extends VerticalLayout implements Property.ValueChangeListener {
 
-    private InvoicesForm form;
+    private InvoicePaidForm form;
     private MshenguMain main;
-    private InvoiceTable table;
+    private InvoicePaidTable table;
 
-    public InvoicesTab(MshenguMain main) {
+    public InvoicePaidTab(MshenguMain main) {
         setSizeFull();
-        form = new InvoicesForm();
-        table = new InvoiceTable(this, main);
+        form = new InvoicePaidForm();
+        table = new InvoicePaidTable(this, main);
         this.main = main;
         addComponent(form);
         addComponent(table);
@@ -73,3 +73,4 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
         form.mtdTotal.setValue(form.total + table.getGrandTotal());
     }
 }
+

@@ -28,7 +28,8 @@ public interface RequestService {
 
     public List<Request> findByMisMatchStatus();
 
-//    public List<Request> findByServiceProvider(String id);
+    public List<Request> findByServiceProvider(String id);
+    
     public void delete(Request request);
 
     public List<Request> getTransactedRequestsBtnTwoDates(Date start, Date end);
