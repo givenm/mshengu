@@ -14,6 +14,7 @@ import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,10 +93,8 @@ public class RequestPurchaseTab extends VerticalLayout implements
         } else if (source == form.approval) {
             sendRequest(form.binder);
             getHome();
-        } 
-//        else if (source == form.editItemsButton) {
-//            allowEditOfItems();
-//        }
+        }
+
     }
 
     @Override
@@ -138,7 +137,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     form.postalCode.setValue(contactPerson.getCode());
                 }
                 form.address.setReadOnly(true);
-                form.number.setReadOnly(true);                
+                form.number.setReadOnly(true);
                 if (keep == null) {
                     form.itemDescription.setRequired(false);
                     form.itemPurchaseLayout.removeComponent(form.itemDescription);
@@ -173,9 +172,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 BigDecimal subtotal = new BigDecimal(form.unitPrice.getValue());
                 subtotal = subtotal.multiply(new BigDecimal(form.quantity.getValue()));
                 form.subTotal.setValue(f.format(subtotal));
-                if(!serviceProvider.isRegisteredForVat()){
+                if (!serviceProvider.isRegisteredForVat()) {
                     subtotal = subtotal.multiply(new BigDecimal(1.14));
-                }                
+                }
                 form.total.setValue(f.format(subtotal));
                 //form.editItemsButton.setVisible(true); 
                 setReadOnlyTrue();
@@ -255,7 +254,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                 resetValues();
                 setReadOnlyTrue();
             }
-            
+
             form.approval.setVisible(true);
             //form.editItemsButton.setVisible(false);
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
@@ -333,16 +332,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
     }
 
     private void sendRequest(FieldGroup binder) {
-       
-            Request request = getRequestEntity(binder);
-            RequestFacade.getRequestService().persist(request);
-            Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
+
+        Request request = getRequestEntity(binder);
+        RequestFacade.getRequestService().persist(request);
+        Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
     }
 
     private Request getRequestEntity(FieldGroup binder) {
-
-//        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
-//        String orderNumber  = sequenceHelper.getSequenceInitialNumber(sequence);
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         Set<RequestPurchaseItem> items = new HashSet<>();
         for (Object id : table.getItemIds()) {
@@ -369,32 +365,32 @@ public class RequestPurchaseTab extends VerticalLayout implements
 
         CostCentreType centreType = CostCentreTypeFacade.getCostCentreTypeService().findById(form.costCentre.getValue().toString());
         if ("fleet maintenance".equalsIgnoreCase(centreType.getName()) && bean.getItemCategory() != null) {
-            Request request = new Request.Builder(person)
-                    .approvalStatus(false)
-                    .items(items)
-                    //                    .orderNumber(orderNumber)
-                    .serviceProvider(provider)
-                    .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
-                    .costCentreType(costCentreType)
-                    .itemCategoryType(itemCategoryType)
-                    .deliveryInstructions(bean.getDeliveryInstructions())
-                    .orderDate(bean.getOrderDate())
-                    .serviceProviderSupplierId(provider.getId())
-                    .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
-                    .total(total)
-                    .build();
-            return request;
+                Request request = new Request.Builder(person)
+                        .approvalStatus(false)
+                        .items(items)
+                        .serviceProvider(provider)
+                        .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
+                        .costCentreType(costCentreType)
+                        .itemCategoryType(itemCategoryType)
+                        .deliveryInstructions(bean.getDeliveryInstructions())
+                        .orderDate(new Date())
+                        .deliveryDate(bean.getOrderDate())
+                        .serviceProviderSupplierId(provider.getId())
+                        .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
+                        .total(total)
+                        .build();
+                return request;
         } else if ("fleet maintenance".equalsIgnoreCase(centreType.getName())) {
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
-                    .orderDate(bean.getOrderDate())
+                    .orderDate(new Date())
+                    .deliveryDate(bean.getOrderDate())
                     .serviceProviderSupplierId(provider.getId())
                     .truckId(TruckFacade.getTruckService().findById(bean.getCostCategory()).getId())
                     .total(total)
@@ -404,13 +400,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
-                    .orderDate(bean.getOrderDate())
+                    .orderDate(new Date())
+                    .deliveryDate(bean.getOrderDate())
                     .serviceProviderSupplierId(provider.getId())
                     .total(total)
                     .build();
@@ -419,45 +415,17 @@ public class RequestPurchaseTab extends VerticalLayout implements
             Request request = new Request.Builder(person)
                     .approvalStatus(false)
                     .items(items)
-                    //                    .orderNumber(orderNumber)
                     .serviceProvider(provider)
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
                     .deliveryInstructions(bean.getDeliveryInstructions())
-                    .orderDate(bean.getOrderDate())
+                    .orderDate(new Date())
+                    .deliveryDate(bean.getOrderDate())
                     .serviceProviderSupplierId(provider.getId())
                     .total(total)
                     .build();
             return request;
         }
     }
-
-//    private void allowEditOfItems() {
-//        form.itemNumber.setReadOnly(false);
-//        form.unitPrice.setReadOnly(false);        
-//        form.unit.setReadOnly(false);
-//        form.volume.setReadOnly(false);
-//        form.subTotal.setReadOnly(false);
-//        form.total.setReadOnly(false);
-//        form.itemNumber.setValue("");
-//        form.unitPrice.setValue("");
-//        form.unit.setValue("");
-//        form.volume.setValue("");
-//        form.subTotal.setValue("");
-//        form.total.setValue("");
-//        if (form.itemDescription.isVisible()) {
-//            form.itemNumber.setReadOnly(true);
-//            form.unitPrice.setReadOnly(true);
-//        }else{
-//            form.itemNumber.setReadOnly(false);
-//            form.unitPrice.setReadOnly(false);
-//            form.itemNumber.setRequired(true);
-//            form.unitPrice.setRequired(true);
-//        }
-//        form.subTotal.setReadOnly(true);
-//        form.total.setReadOnly(true);
-//        form.editItemsButton.setVisible(false);
-//    }
 }
-

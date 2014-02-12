@@ -58,7 +58,13 @@ public class ApprovedRequestsTab extends VerticalLayout implements
             String year = form.year.getValue().toString();
             final ServiceProvider serviceProvider = ServiceProviderFacade.getServiceProviderService().findById(supplierId);
             // Reposotory get Requests with InvoiceNum notNull for Specified Date for Service Provider
-            List<Request> requests = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+            List<Request> requests = null;
+            if (supplierId.equalsIgnoreCase("all")) {
+                requests = RequestFacade.getRequestService().findAll();
+            } else {
+                requests = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+
+            }
             table.loadTable(requests, month, year);
         } else {
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
@@ -71,6 +77,7 @@ public class ApprovedRequestsTab extends VerticalLayout implements
         form.month.addValueChangeListener((Property.ValueChangeListener) this);
         form.year.addValueChangeListener((Property.ValueChangeListener) this);
     }
+
     @Override
     public void buttonClick(Button.ClickEvent event) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
