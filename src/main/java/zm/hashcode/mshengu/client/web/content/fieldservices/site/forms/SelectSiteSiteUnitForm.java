@@ -36,16 +36,14 @@ public class SelectSiteSiteUnitForm extends FormLayout {
         item = new BeanItem<>(bean);
         binder = new FieldGroup(item);
 
-
         comboBoxSelectUnit = new ComboBox("Select Unit");
         comboBoxSelectUnit.setImmediate(true);
-        
+
         GridLayout grid = new GridLayout(4, 10);
 
         grid.setSizeFull();
 
         grid.addComponent(comboBoxSelectUnit, 0, 0);
-
 
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
         addComponent(grid);
@@ -53,12 +51,14 @@ public class SelectSiteSiteUnitForm extends FormLayout {
 
     public void loadSiteUnits(String siteId) {
         comboBoxSelectUnit.removeAllItems();
-        final SiteServiceContractLifeCycle siteServiceContractLifeCycle = SiteFacade.getSiteService().getSitetCurrentContract(siteId);
-        if (!StringUtils.isEmpty(siteServiceContractLifeCycle)) {
-            if (!StringUtils.isEmpty(siteServiceContractLifeCycle.getSiteUnit())) {
-                for (SiteUnit siteUnit : siteServiceContractLifeCycle.getSiteUnit()) {
-                    comboBoxSelectUnit.addItem(siteUnit.getId());
-                    comboBoxSelectUnit.setItemCaption(siteUnit.getId(), siteUnit.getUnitId());
+        if (!siteId.equals("All")) {
+            final SiteServiceContractLifeCycle siteServiceContractLifeCycle = SiteFacade.getSiteService().getSitetCurrentContract(siteId);
+            if (!StringUtils.isEmpty(siteServiceContractLifeCycle)) {
+                if (!StringUtils.isEmpty(siteServiceContractLifeCycle.getSiteUnit())) {
+                    for (SiteUnit siteUnit : siteServiceContractLifeCycle.getSiteUnit()) {
+                        comboBoxSelectUnit.addItem(siteUnit.getId());
+                        comboBoxSelectUnit.setItemCaption(siteUnit.getId(), siteUnit.getUnitId());
+                    }
                 }
             }
         }
