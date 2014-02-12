@@ -124,6 +124,6 @@ public class UpdatePaymentForm extends FormLayout {
     }
 
     private void getHome() {
-        main.content.setSecondComponent(new InvoicesMenu(main, "PAYMENT"));
+        main.content.setSecondComponent(new InvoicesMenu(main, "LANDING"));
     }
 }

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
@@ -30,62 +31,41 @@ public class PaymentTable extends Table {
 
         addContainerProperty("Supplier", String.class, null);
         addContainerProperty("Total", String.class, null);
-        loadTable(null, null);
+
+        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
+        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
+
+        loadTable(datemonth, dateyear);
     }
 
     public final void loadTable(String month, String year) {
         grandTotal = new BigDecimal("0.00");
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+//        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         if (month != null) {
             List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
-//                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
                 // Repository get requests by ServiceProvieder withing the Month/year specified and whose InvoiceNumber is NotNull
-                List<Request> list = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, dateTimeFormatHelper.getDate(Integer.parseInt(year), Integer.parseInt(month)));
+//                List<Request> list = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, dateTimeFormatHelper.getDate(Integer.parseInt(year), Integer.parseInt(month)));
 
-//                List<Request> newlist = new ArrayList<>();
-                if (!list.isEmpty()) {
-//                    for (Request request : list) {
-//                        if (request.getInvoiceNumber() != null) {
-////                            String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-////                            String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-////                            if (datemonth.equals(month) && year.equals(dateyear)) {
-//                                newlist.add(request);
-////                            }
-//                        }
-//                    }
-//                    if (newlist.size() > 0) {
+                List<Request> newlist = new ArrayList<>();
+//                if (!list.isEmpty()) {
+                for (Request request : list) {
+                    if (request.getInvoiceNumber() != null) {
+                        String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
+                        String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
+                        if (datemonth.equals(month) && year.equals(dateyear)) {
+                            newlist.add(request);
+                        }
+                    }
+                }
+                if (newlist.size() > 0) {
                     addItem(new Object[]{
                         serviceProvider.getName(),
-                        f.format(getSupplierTotal(list)),}, serviceProvider.getId());
-                    grandTotal = grandTotal.add(getSupplierTotal(list));
+                        f.format(getSupplierTotal(newlist)),}, serviceProvider.getId());
+                    grandTotal = grandTotal.add(getSupplierTotal(newlist));
 //                    }
                 }
-            }
-        } else {
-            List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
-            for (ServiceProvider serviceProvider : serviceProviders) {
-//                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-
-                // Repository get requests by ServiceProvieder and whose InvoiceNumber is NotNull
-                List<Request> list = RequestFacade.getRequestService().getTransactedRequestsByServiceProvider(serviceProvider);
-
-//                List<Request> newlist = new ArrayList<>();
-//                if (list.size() > 0) {
-//                    if (list != null) {
-//                        for (Request request : list) {
-//                            if (request.getInvoiceNumber() != null) {
-//                                newlist.add(request);
-//                            }
-//                        }
-                if (list.size() > 0) {
-                    addItem(new Object[]{
-                        serviceProvider.getName(),
-                        f.format(getSupplierTotal(list)),}, serviceProvider.getId());
-                    grandTotal = grandTotal.add(getSupplierTotal(list));
-                }
-//                    }
-//                }
             }
         }
     }
@@ -99,9 +79,9 @@ public class PaymentTable extends Table {
         for (Request request : requests) {
             // Null check done at Repository Level
 
-//            if (request.getInvoiceNumber() != null) {
-            total = total.add(request.getTotal());
-//            }
+            if (request.getInvoiceNumber() != null) {
+                total = total.add(request.getTotal());
+            }
         }
         return total;
     }

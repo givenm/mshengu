@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author Luckbliss
  */
 @Document
-public class KPI implements Serializable, Comparable<KPI> {
+public class KPA implements Serializable, Comparable<KPA> {
 
     @Id
     private String id;
@@ -24,10 +24,10 @@ public class KPI implements Serializable, Comparable<KPI> {
     @DBRef
     private List<KPIItem> items;
 
-    private KPI() {
+    private KPA() {
     }
 
-    private KPI(Builder builder) {
+    private KPA(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.items = builder.items;
@@ -35,7 +35,7 @@ public class KPI implements Serializable, Comparable<KPI> {
     }
 
     @Override
-    public int compareTo(KPI o) {
+    public int compareTo(KPA o) {
         return name.compareToIgnoreCase(o.name);
     }
 
@@ -60,7 +60,7 @@ public class KPI implements Serializable, Comparable<KPI> {
             return this;
         }
         
-        public Builder kpi(KPI kpi) {
+        public Builder kpi(KPA kpi) {
             this.id = kpi.getId();
             this.items = kpi.getItems();
             this.tab = kpi.getTab();
@@ -72,8 +72,8 @@ public class KPI implements Serializable, Comparable<KPI> {
             return this;
         }
 
-        public KPI build() {
-            return new KPI(this);
+        public KPA build() {
+            return new KPA(this);
         }
     }
 
@@ -87,10 +87,10 @@ public class KPI implements Serializable, Comparable<KPI> {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof KPI)) {
+        if (!(object instanceof KPA)) {
             return false;
         }
-        KPI other = (KPI) object;
+        KPA other = (KPA) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

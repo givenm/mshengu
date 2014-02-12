@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -89,7 +90,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-           Collection<Field<?>> fields = binder.getFields();
+            Collection<Field<?>> fields = binder.getFields();
             OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
             helper.doValidation();
             Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
@@ -146,6 +147,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .active(serviceProviderBean.isActive())
                 .preferedVendor(serviceProviderBean.isPreferedVendor())
                 .vehicleMaintenance(serviceProviderBean.isVehicleMaintenance())
+                .registeredForVat(serviceProviderBean.isRegisteredForVat())
                 .firstNameChiefExec(serviceProviderBean.getFirstNameChiefExec())
                 .lastNameChiefExec(serviceProviderBean.getLastNameChiefExec())
                 .website(serviceProviderBean.getWebsite())
@@ -190,6 +192,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
                 .active(serviceProviderBean.isActive())
                 .preferedVendor(serviceProviderBean.isPreferedVendor())
                 .vehicleMaintenance(serviceProviderBean.isVehicleMaintenance())
+                .registeredForVat(serviceProviderBean.isRegisteredForVat())
                 .firstNameChiefExec(serviceProviderBean.getFirstNameChiefExec())
                 .lastNameChiefExec(serviceProviderBean.getLastNameChiefExec())
                 .website(serviceProviderBean.getWebsite())
@@ -292,6 +295,7 @@ public class ServiceProviderDetailsTab extends VerticalLayout implements
         bean.setActive(serviceProvider.isActive());
         bean.setPreferedVendor(serviceProvider.isPreferedVendor());
         bean.setVehicleMaintenance(serviceProvider.isVehicleMaintenance());
+        bean.setRegisteredForVat(serviceProvider.isRegisteredForVat());
         bean.setBankName(serviceProvider.getBankName());
         bean.setAccountNumber(serviceProvider.getAccountNumber());
         bean.setBranchCode(serviceProvider.getBranchCode());

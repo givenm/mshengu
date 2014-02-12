@@ -85,6 +85,7 @@ public class ServiceProviderForm extends FormLayout {
         CheckBox active = UIComponent.getCheckBox("Vendor Status (Preferred / Non-preferred)", "active", ServiceProviderBean.class, binder);
         
         CheckBox vehicleMaintenance = UIComponent.getCheckBox("Vehicle Maintenance", "vehicleMaintenance", ServiceProviderBean.class, binder);
+        CheckBox registeredForVat = UIComponent.getCheckBox("Not Registered for VAT B/E", "registeredForVat", ServiceProviderBean.class, binder);
         
 
 //Contact Information
@@ -158,6 +159,7 @@ public class ServiceProviderForm extends FormLayout {
 
         grid.addComponent(active, 0, 6);
         grid.addComponent(vehicleMaintenance, 1, 6);
+        grid.addComponent(registeredForVat, 2, 6);
 
         grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 7, 2, 7);
         grid.addComponent(contactInfo, 0, 8);

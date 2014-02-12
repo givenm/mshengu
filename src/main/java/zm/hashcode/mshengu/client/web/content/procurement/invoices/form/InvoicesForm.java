@@ -36,7 +36,7 @@ public class InvoicesForm extends FormLayout {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
-        supplier = UICombobox.getSuppliersComboBox("Select Supplier: ", "supplier", InvoiceBean.class, binder);
+        supplier = UICombobox.getVendorsComboBox("Select Supplier: ", "supplier", InvoiceBean.class, binder);
         month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
         year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
 

@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -12,40 +13,22 @@ import java.io.Serializable;
  */
 public class LoadResultsBean implements Serializable{
 
-    private String frommonth;
-    private String fromyear;
-    private String tomonth;
-    private String toyear;
+    private Date fromdate;
+    private Date todate;
 
-    public String getFrommonth() {
-        return frommonth;
+    public Date getFromdate() {
+        return fromdate;
     }
 
-    public void setFrommonth(String frommonth) {
-        this.frommonth = frommonth;
+    public void setFromdate(Date fromdate) {
+        this.fromdate = fromdate;
     }
 
-    public String getFromyear() {
-        return fromyear;
+    public Date getTodate() {
+        return todate;
     }
 
-    public void setFromyear(String fromyear) {
-        this.fromyear = fromyear;
-    }
-
-    public String getTomonth() {
-        return tomonth;
-    }
-
-    public void setTomonth(String tomonth) {
-        this.tomonth = tomonth;
-    }
-
-    public String getToyear() {
-        return toyear;
-    }
-
-    public void setToyear(String toyear) {
-        this.toyear = toyear;
+    public void setTodate(Date todate) {
+        this.todate = todate;
     }
 }

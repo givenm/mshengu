@@ -111,24 +111,25 @@ public class RequestServiceImpl implements RequestService {
 //        return requestList;
     }
 
-//    @Override
-//    public List<Request> findByServiceProvider(String id) {
-//        List<Request> requestList = new ArrayList<>();
-//        List<Request> allRequestList = findAll();
-//        for (Request request : allRequestList) {
-//            if (getServiceProvider(request.getServiceProvider()).equalsIgnoreCase(id)) {
-//                requestList.add(request);
-//            }
-//        }
-//        return requestList;
-//    }
-//
-//    private String getServiceProvider(ServiceProvider serviceProvider) {
-//        if (serviceProvider != null) {
-//            return serviceProvider.getId();
-//        }
-//        return null;
-//    }
+    @Override
+    public List<Request> findByServiceProvider(String id) {
+        List<Request> requestList = new ArrayList<>();
+        List<Request> allRequestList = findAll();
+        for (Request request : allRequestList) {
+            if (getServiceProvider(request.getServiceProvider()).equalsIgnoreCase(id)) {
+                requestList.add(request);
+            }
+        }
+        return requestList;
+    }
+
+    private String getServiceProvider(ServiceProvider serviceProvider) {
+        if (serviceProvider != null) {
+            return serviceProvider.getId();
+        }
+        return null;
+    }
+
     @Override
     public List<Request> getTransactedRequestsByTruckBtnTwoDates(Truck truck, Date start, Date end) {
         return repository.getTransactedRequestsByTruckBtnTwoDates(truck, start, end);

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.ApproveRequestsForm;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.ApproveRequestsTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -48,10 +49,10 @@ public class ApproveRequestsTable extends Table {
         if (requestList != null) {
             for (Request request : requestList) {
                 if (!request.isApprovalStatus() && request.getReasonForDisapproval() == null) {
-                    Button showDetails = new Button("More Details");
-                    showDetails.setData(request.getId());
-                    showDetails.setStyleName(Reindeer.BUTTON_LINK);
-                    showDetails.addClickListener(new Button.ClickListener() {
+                    Button approve = new Button("More Details");
+                    approve.setData(request.getId());
+                    approve.setStyleName(Reindeer.BUTTON_LINK);
+                    approve.addClickListener(new Button.ClickListener() {
                         @Override
                         public void buttonClick(Button.ClickEvent event) {
                             String itemId = event.getButton().getData().toString();
@@ -64,7 +65,7 @@ public class ApproveRequestsTable extends Table {
                         request.getPersonName(),
                         request.getServiceProviderName(),
                         request.getTotal(),
-                        showDetails,}, request.getId());
+                        approve,}, request.getId());
                 }
             }
         }

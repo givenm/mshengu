@@ -13,13 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
-import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.InvoicesMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.UpdatePaymentForm;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.InvoicesTab;
 import zm.hashcode.mshengu.domain.procurement.Request;
-import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
 /**
  *
@@ -31,7 +30,6 @@ public class InvoiceTable extends Table {
     private BigDecimal grandTotal;
     private final InvoicesTab tab;
     private final MshenguMain main;
-    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public InvoiceTable(InvoicesTab tab, final MshenguMain main) {
         setSizeFull();
@@ -43,81 +41,48 @@ public class InvoiceTable extends Table {
         addContainerProperty("Supplier", String.class, null);
         addContainerProperty("Invoice", String.class, null);
         addContainerProperty("Total", String.class, null);
-        addContainerProperty("Payment Date", String.class, null);
-        addContainerProperty("Payment Amount", BigDecimal.class, null);
         addContainerProperty("Update", Button.class, null);
-        loadTable(RequestFacade.getRequestService().findAll(), null, null);
+
+        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
+        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
+
+        loadTable(RequestFacade.getRequestService().findAll(), datemonth, dateyear);
     }
 
     public final void loadTable(List<Request> requests, String month, String year) {
         grandTotal = new BigDecimal("0.00");
-////        if (requests != null) {
-        if (month != null) {
-            // Requests with InvoiceNum notNull for Specified Date for Service Provider as PARAMETER
-            for (Request request : requests) {
-////                    if (request.getInvoiceNumber() != null) {
-////                        String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-////                        String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-////                        if (datemonth.equals(month) && year.equals(dateyear)) {
-                Button update = new Button("Update");
-                update.setData(request.getId());
-                update.setStyleName(Reindeer.BUTTON_LINK);
-                update.addClickListener(new Button.ClickListener() {
-                    @Override
-                    public void buttonClick(Button.ClickEvent event) {
-                        String itemId = event.getButton().getData().toString();
-                        Request request = RequestFacade.getRequestService().findById(itemId);
-                        UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
-                        tab.removeAllComponents();
-                        tab.addComponent(form);
+        if (requests != null) {
+            for (int i = requests.size() - 1; i >= 0; i--) {
+                if (requests.get(i).getInvoiceNumber() != null && requests.get(i).getPaymentAmount() == null) {
+                    String datemonth = new SimpleDateFormat("MMMM").format(requests.get(i).getDeliveryDate());
+                    String dateyear = new SimpleDateFormat("YYYY").format(requests.get(i).getDeliveryDate());
+                    if (datemonth.equals(month) && year.equals(dateyear)) {
+                        Button update = new Button("Update");
+                        update.setData(requests.get(i).getId());
+                        update.setStyleName(Reindeer.BUTTON_LINK);
+                        update.addClickListener(new Button.ClickListener() {
+                            @Override
+                            public void buttonClick(Button.ClickEvent event) {
+                                String itemId = event.getButton().getData().toString();
+                                Request request = RequestFacade.getRequestService().findById(itemId);
+                                UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
+                                tab.removeAllComponents();
+                                tab.addComponent(form);
+                            }
+                        });
+                        addItem(new Object[]{
+                            getDelivery(requests.get(i).getOrderDate()),
+                            getDelivery(requests.get(i).getDeliveryDate()),
+                            requests.get(i).getOrderNumber(),
+                            requests.get(i).getServiceProviderName(),
+                            requests.get(i).getInvoiceNumber(),
+                            f.format(requests.get(i).getTotal()),
+                            update,}, requests.get(i).getId());
+                        grandTotal = grandTotal.add(requests.get(i).getTotal());
                     }
-                });
-                addItem(new Object[]{
-                    getDelivery(request.getOrderDate()),
-                    getDelivery(request.getDeliveryDate()),
-                    request.getOrderNumber(),
-                    request.getServiceProviderName(),
-                    request.getInvoiceNumber(),
-                    f.format(request.getTotal()),
-                    getDelivery(request.getPaymentDate()),
-                    request.getPaymentAmount(),
-                    update,}, request.getId());
-                grandTotal = grandTotal.add(request.getTotal());
-////                        }
-////                    }
-            }
-        } else {
-            for (Request request : requests) {
-                if (request.getInvoiceNumber() != null) {
-                    Button update = new Button("Update");
-                    update.setData(request.getId());
-                    update.setStyleName(Reindeer.BUTTON_LINK);
-                    update.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(Button.ClickEvent event) {
-                            String itemId = event.getButton().getData().toString();
-                            Request request = RequestFacade.getRequestService().findById(itemId);
-                            UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
-                            tab.removeAllComponents();
-                            tab.addComponent(form);
-                        }
-                    });
-                    addItem(new Object[]{
-                        getDelivery(request.getOrderDate()),
-                        getDelivery(request.getDeliveryDate()),
-                        request.getOrderNumber(),
-                        request.getServiceProviderName(),
-                        request.getInvoiceNumber(),
-                        f.format(request.getTotal()),
-                        getDelivery(request.getPaymentDate()),
-                        request.getPaymentAmount(),
-                        update,}, request.getId());
-                    grandTotal = grandTotal.add(request.getTotal());
                 }
             }
         }
-
-////        }
     }
 
     public String getGrandTotal() {
