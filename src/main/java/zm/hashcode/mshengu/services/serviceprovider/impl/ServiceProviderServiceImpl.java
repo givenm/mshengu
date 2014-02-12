@@ -84,14 +84,13 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         return ImmutableList.copyOf(personsFilteredList);
 //        return ImmutableList.copyOf();
     }
-    
 
     @Override
     public List<ServiceProvider> findAllServiceProvider() {
         vendorsList = (List<ServiceProvider>) repository.findAll();
         Collection<ServiceProvider> personsFilteredList = Collections2.filter(vendorsList, new ServiceProviderPredicate());
         return ImmutableList.copyOf(personsFilteredList);
-        
+
     }
 
     @Override
@@ -99,5 +98,10 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         vendorsList = (List<ServiceProvider>) repository.findAll();
         Collection<ServiceProvider> personsFilteredList = Collections2.filter(vendorsList, new PreferedVendorPredicate());
         return ImmutableList.copyOf(personsFilteredList); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ServiceProvider findByVendorNumber(String vendorNumber) {
+        return repository.findByVendorNumber(vendorNumber);
     }
 }
