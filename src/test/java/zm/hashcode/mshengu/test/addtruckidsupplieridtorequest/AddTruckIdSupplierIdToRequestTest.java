@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.Request;
+import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.services.procurement.RequestService;
 import zm.hashcode.mshengu.test.AppTest;
 
@@ -38,6 +39,7 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
     }
 
 //    @Test(dependsOnMethods = {"testAddTruckIdSupplierIdToRequest"})
+    @Test
     public void testDb() {
         requestService = ctx.getBean(RequestService.class);
         List<Request> requests = requestService.findAll();
@@ -45,8 +47,24 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
         for (Request request : requests) {
             Truck truck = request.getTruck();
 //            if (truck != null) {
-            System.out.println("Request Check: TruckId= " + request.getTruckId() + " | ServiceProviderId= " + request.getServiceProviderId() + " | getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber());
+            System.out.println("Request Check: request.getTruckId= " + getTruckId(request.getTruck()) + "  Cost Category Type " +  getCostCentreCategoryTypeName(request.getCategoryType()) + "  Request Date "+  request.getOrderDate() + "Request Check: TruckId= " + request.getTruckId() + " | ServiceProviderId= " + request.getServiceProviderId() + " | getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber());
 //            }
+        }
+    }
+    
+    public String getTruckId(Truck truck){
+        if(truck != null){
+           return truck.getId();
+        }else{
+            return "Trcuk IS null";
+        }
+    }
+    
+      public String getCostCentreCategoryTypeName(CostCentreCategoryType categoryType){
+        if(categoryType != null){
+           return categoryType.getName();
+        }else{
+            return " Category Name IS null ";
         }
     }
 
