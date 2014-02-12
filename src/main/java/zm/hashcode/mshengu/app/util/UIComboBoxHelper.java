@@ -1124,7 +1124,7 @@ public class UIComboBoxHelper<T> implements Serializable {
         ComboBox comboBox = new ComboBox(fieldText);
 
         int thisYear = 2020;
-        int startYear = thisYear - 10;
+        int startYear = thisYear - 6;
         for (int i = 0; i < 11; i++) {
             String value = (startYear + i) + "";
             comboBox.addItem(value);

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.procurement.invoices.form;
+package zm.hashcode.mshengu.client.web.content.procurement.purchase.form;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -19,7 +19,7 @@ import zm.hashcode.mshengu.client.web.content.procurement.invoices.models.Invoic
  *
  * @author Luckbliss
  */
-public class InvoicesForm extends FormLayout {
+public class ApprovedRequestsForm extends FormLayout {
 
     public UIComboBoxHelper UICombobox = new UIComboBoxHelper();
     public UIComponentHelper UIComponent = new UIComponentHelper();
@@ -29,10 +29,8 @@ public class InvoicesForm extends FormLayout {
     public ComboBox supplier = new ComboBox();
     public ComboBox month = new ComboBox();
     public ComboBox year = new ComboBox();
-    public Label mtdTotal = new Label("MTD Total: R ");
-    public String total = mtdTotal.getValue();
 
-    public InvoicesForm() {
+    public ApprovedRequestsForm() {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
@@ -45,10 +43,6 @@ public class InvoicesForm extends FormLayout {
         gridlayout.addComponent(year, 2, 0);
 
         gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
-
-        gridlayout.addComponent(mtdTotal, 0, 2);
-
-        gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 3);
 
         addComponent(gridlayout);
     }
