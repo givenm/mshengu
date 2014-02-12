@@ -42,19 +42,25 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
             getValues();
         } else if (property == form.month) {
             getValues();
-        } else if (property == form.year) {     
+        } else if (property == form.year) {
             getValues();
         }
     }
 
     private void getValues() {
-        if (form.month.getValue() != null && form.year.getValue() != null && form.supplier.getValue() != null) {
+//        if (form.month.getValue() != null && form.year.getValue() != null && form.supplier.getValue() != null) {
+        if (form.supplier.getValue() != null) {
             String supplierId = form.supplier.getValue().toString();
             table.removeAllItems();
-            String month = form.month.getValue().toString();
-            String year = form.year.getValue().toString();
-            List<Request> requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
-            table.loadTable(requests, month, year);
+//            String month = form.month.getValue().toString();
+//            String year = form.year.getValue().toString();
+            List<Request> requests = null;
+            if (supplierId.equalsIgnoreCase("all")) {
+                requests = RequestFacade.getRequestService().findAll();
+            } else {
+                requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
+            }
+            table.loadTable(requests);
             getGrandTotal();
         } else {
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);

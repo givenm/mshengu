@@ -10,8 +10,10 @@ import com.vaadin.ui.themes.Reindeer;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.ApproveRequestsForm;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.SendPurchasePDFForm;
@@ -33,6 +35,7 @@ public class ApprovedRequestsTable extends Table {
         this.main = main;
 
         addContainerProperty("Approver", String.class, null);
+        addContainerProperty("PO Date", String.class, null);
         addContainerProperty("PO Number", String.class, null);
         addContainerProperty("Purchasing Person", String.class, null);
         addContainerProperty("Company Name", String.class, null);
@@ -45,42 +48,10 @@ public class ApprovedRequestsTable extends Table {
         // Send changes in selection immediately to server.
         setImmediate(true);
         setSizeFull();
-        displayRequests(tab);
-    }
 
-    private void displayRequests(final ApprovedRequestsTab tab) {
-        String message;
-        if (RequestFacade.getRequestService().findAll() != null) {
-            List<Request> items = RequestFacade.getRequestService().findAll();
-            for (int i = items.size() - 1; i >= 0; i--) {
-                if (items.get(i).isApprovalStatus()) {
-                    Button showDetails = new Button("View PO");
-                    showDetails.setData(items.get(i));
-                    showDetails.setStyleName(Reindeer.BUTTON_LINK);
-                    showDetails.setImmediate(true);
-                    showDetails.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(Button.ClickEvent event) {
-                            displayPDF(event.getButton().getData());
-                        }
-                    });
-                    if (items.get(i).isEmailstatus()) {
-                        message = "sent";
-                    } else {
-                        message = "not sent";
-                    }
-                    addItem(new Object[]{
-                        items.get(i).getApprover(),
-                        items.get(i).getOrderNumber(),
-                        items.get(i).getPersonName(),
-                        items.get(i).getServiceProviderName(),
-                        items.get(i).getTotal(),
-                        message,
-                        showDetails,}, items.get(i).getId());
-                    message = "";
-                }
-            }
-        }
+        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
+        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
+        loadTable(RequestFacade.getRequestService().findAll(), datemonth, dateyear);
     }
 
     private void displayPDF(Object object) {
@@ -91,13 +62,13 @@ public class ApprovedRequestsTable extends Table {
         tab.addComponent(form);
     }
 
-    public void loadTable(List<Request> items, String month, String year) {
+    public final void loadTable(List<Request> items, String month, String year) {
         String message;
         for (int i = items.size() - 1; i >= 0; i--) {
-            if (items.get(i).isApprovalStatus()) {
-                String datemonth = new SimpleDateFormat("MMMM").format(items.get(i).getDeliveryDate());
-                String dateyear = new SimpleDateFormat("YYYY").format(items.get(i).getDeliveryDate());
-                if (datemonth.equals(month) && year.equals(dateyear)) {
+            if (items.get(i).isApprovalStatus() && items.get(i).getOrderDate() != null) {
+                String datemonth = new SimpleDateFormat("MMMM").format(items.get(i).getOrderDate());
+                String dateyear = new SimpleDateFormat("YYYY").format(items.get(i).getOrderDate());
+                if (datemonth.equals(month) && year.equals(dateyear)) {    
                     Button showDetails = new Button("View PO");
                     showDetails.setData(items.get(i));
                     showDetails.setStyleName(Reindeer.BUTTON_LINK);
@@ -115,6 +86,7 @@ public class ApprovedRequestsTable extends Table {
                     }
                     addItem(new Object[]{
                         items.get(i).getApprover(),
+                        getDelivery(items.get(i).getOrderDate()),
                         items.get(i).getOrderNumber(),
                         items.get(i).getPersonName(),
                         items.get(i).getServiceProviderName(),
@@ -125,5 +97,12 @@ public class ApprovedRequestsTable extends Table {
                 }
             }
         }
+    }
+
+    private String getDelivery(Date date) {
+        if (date != null) {
+            return new DateTimeFormatHelper().getDayMonthYear(date);
+        }
+        return null;
     }
 }
