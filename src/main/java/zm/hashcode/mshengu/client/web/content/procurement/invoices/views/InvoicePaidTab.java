@@ -42,7 +42,7 @@ public class InvoicePaidTab extends VerticalLayout implements Property.ValueChan
             getValues();
         } else if (property == form.month) {
             getValues();
-        } else if (property == form.year) {     
+        } else if (property == form.year) {
             getValues();
         }
     }
@@ -53,7 +53,12 @@ public class InvoicePaidTab extends VerticalLayout implements Property.ValueChan
             table.removeAllItems();
             String month = form.month.getValue().toString();
             String year = form.year.getValue().toString();
-            List<Request> requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
+            List<Request> requests = null;
+            if (supplierId.equalsIgnoreCase("all")) {
+                requests = RequestFacade.getRequestService().findAll();
+            } else {
+                requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
+            }
             table.loadTable(requests, month, year);
             getGrandTotal();
         } else {
@@ -73,4 +78,3 @@ public class InvoicePaidTab extends VerticalLayout implements Property.ValueChan
         form.mtdTotal.setValue(form.total + table.getGrandTotal());
     }
 }
-

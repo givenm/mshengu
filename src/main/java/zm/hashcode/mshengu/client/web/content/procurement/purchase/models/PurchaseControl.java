@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import fr.opensagres.xdocreport.converter.Options;
 import java.io.ByteArrayOutputStream;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
@@ -39,8 +40,19 @@ public class PurchaseControl {
     public ByteArrayOutputStream processFormDataToPDF(Request request) {
         try {
             Purchase purchase = new Purchase();
-            purchase.setCostCentre(returnCostCentre(request.getCostCentreType()));
-            purchase.setDate(getDate(request.getOrderDate()));
+            if (returnCostCentre(request.getCostCentreType()).equalsIgnoreCase("fleet maintenance")) {
+                Truck truck = TruckFacade.getTruckService().findById(request.getTruckId());
+                if (truck != null) {
+                    String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
+                    purchase.setCostCentre(returnCostCentre(request.getCostCentreType()) + " " + truckName);
+                } else{
+                    purchase.setCostCentre(returnCostCentre(request.getCostCentreType()));
+                }
+            } else {
+                purchase.setCostCentre(returnCostCentre(request.getCostCentreType()));
+            }
+            purchase.setPodate(getDate(request.getOrderDate()));
+            purchase.setDate(getDate(request.getDeliveryDate()));
             purchase.setFirstName(request.getPerson().getFirstname());
             purchase.setLastName(request.getPerson().getLastname());
             purchase.setOrderNumber(request.getOrderNumber());

@@ -243,6 +243,24 @@ public class UIComboBoxHelper<T> implements Serializable {
         return comboBox;
     }
 
+    public ComboBox getProcurementVendorsComboBox(String fieldText, String fieldName, Class<T> fieldClass, FieldGroup binder) {
+        ComboBox comboBox = new ComboBox(fieldText);
+        List<ServiceProvider> serviceProviderList = ServiceProviderFacade.getServiceProviderService().findAll();
+        //  Collection<Location> cities = Collections2.filter(locations, new CityPredicate());
+        comboBox.addItem("all");
+        comboBox.setItemCaption("all", "All");
+        for (ServiceProvider serviceProvider : serviceProviderList) {
+            comboBox.addItem(serviceProvider.getId());
+            comboBox.setItemCaption(serviceProvider.getId(), serviceProvider.getName());
+        }
+        comboBox.addValidator(new BeanValidator(fieldClass, fieldName));
+        comboBox.setImmediate(true);
+        comboBox.setNullSelectionAllowed(false);
+        comboBox.setWidth(250, Sizeable.Unit.PIXELS);
+        binder.bind(comboBox, fieldName);
+        return comboBox;
+    }
+
     public ComboBox getPreferedVendorsComboBox(String fieldText, String fieldName, Class<T> fieldClass, FieldGroup binder) {
         ComboBox comboBox = new ComboBox(fieldText);
         List<ServiceProvider> serviceProviderList = ServiceProviderFacade.getServiceProviderService().findAllPreferedVendors();
@@ -1061,6 +1079,7 @@ public class UIComboBoxHelper<T> implements Serializable {
         binder.bind(comboBox, fieldName);
         return comboBox;
     }
+
     public ComboBox getWeightingComboBox(String fieldText, String fieldName, Class<RequestBean> fieldClass, FieldGroup binder) {
         ComboBox comboBox = new ComboBox(fieldText);
         comboBox.addItem("H");

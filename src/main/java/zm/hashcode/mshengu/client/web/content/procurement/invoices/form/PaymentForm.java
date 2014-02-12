@@ -26,7 +26,7 @@ public class PaymentForm extends FormLayout {
     public final FieldGroup binder = new FieldGroup(item);
     public ComboBox month = new ComboBox();
     public ComboBox year = new ComboBox();
-    public Label grandTotal = new Label("Grand Total: R ");
+    public Label grandTotal = new Label("Total Outstanding: R ");
     public String total = grandTotal.getValue();
 
     public PaymentForm() {

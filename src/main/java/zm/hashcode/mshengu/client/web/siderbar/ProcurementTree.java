@@ -12,7 +12,6 @@ import zm.hashcode.mshengu.client.web.content.procurement.goodsreceived.GoodsRec
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.InvoicesMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.RFQMenu;
-import zm.hashcode.mshengu.client.web.content.procurement.suppliers.SupplierMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.vendors.ServiceProviderMenu;
 
 /**
@@ -37,7 +36,7 @@ public class ProcurementTree extends Tree implements ItemClickEvent.ItemClickLis
         addItem(GOODS_RECEIVED);
         addItem(INVOICES_FOR_PROCESSING);
         addItem(MANAGE_SERVICE_PROVIDERS);
-        addItem(CONSUMABLES);
+//        addItem(CONSUMABLES);
 
         //Add Listeners
         addItemClickListener((ItemClickEvent.ItemClickListener) this);

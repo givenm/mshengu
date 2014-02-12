@@ -29,20 +29,20 @@ public class InvoicesForm extends FormLayout {
     public ComboBox supplier = new ComboBox();
     public ComboBox month = new ComboBox();
     public ComboBox year = new ComboBox();
-    public Label mtdTotal = new Label("MTD Total: R ");
+    public Label mtdTotal = new Label("Outstanding Total: R ");
     public String total = mtdTotal.getValue();
 
     public InvoicesForm() {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
-        supplier = UICombobox.getVendorsComboBox("Select Supplier: ", "supplier", InvoiceBean.class, binder);
-        month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
-        year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
+        supplier = UICombobox.getProcurementVendorsComboBox("Select Supplier: ", "supplier", InvoiceBean.class, binder);
+//        month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
+//        year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
 
         gridlayout.addComponent(supplier, 0, 0);
-        gridlayout.addComponent(month, 1, 0);
-        gridlayout.addComponent(year, 2, 0);
+//        gridlayout.addComponent(month, 1, 0);
+//        gridlayout.addComponent(year, 2, 0);
 
         gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
 
