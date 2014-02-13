@@ -58,7 +58,7 @@ public class ServiceRequestFollowUpFormTwo extends FormLayout{
 
         // UIComponent
 
-        ComboBox status = UIComboBox.getIncidentStatusComboBox("Status :", "status", IncidentFollowUpBean.class, binder);
+        ComboBox status = UIComboBox.getServiceRequesttatusComboBox("Status :", "status", IncidentFollowUpBean.class, binder);
         status = UIValidatorHelper.setRequiredComboBox(status, "Status");
         
         DateField resolvedDate = UIComponent.getDateField("Resolved Date:", "resolvedDate", IncidentFollowUpBean.class, binder);

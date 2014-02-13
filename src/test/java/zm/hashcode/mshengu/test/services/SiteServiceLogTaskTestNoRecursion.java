@@ -13,6 +13,7 @@ import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
+import zm.hashcode.mshengu.services.asynchronous.AsyncCalls;
 import zm.hashcode.mshengu.services.fieldservices.CreateSiteServiceLogsService;
 import zm.hashcode.mshengu.services.products.SiteService;
 import zm.hashcode.mshengu.services.products.SiteServiceLogService;
@@ -31,12 +32,15 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
     @Autowired
     private SiteService siteService;
     @Autowired
+    private AsyncCalls asyncCalls;
+
+    @Autowired
     private CreateSiteServiceLogsService siteServiceScheduleLogsService;
     private final DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
 //    private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
     private final DateTimeFormatHelper dtfh = new DateTimeFormatHelper();
 //    Date startDate = dtfh.getDate(18,10, 2013);
-    Date endDate = dtfh.getDate(19, 10, 2013);
+    Date endDate = dtfh.getDate(12, 1, 2014);
 
     private void setTodaysDate(Date date) {
         dtfwh.setDate(date);
@@ -47,6 +51,7 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
     public void findAllWithVistTodayTest() {
 
         siteService = ctx.getBean(SiteService.class);
+        asyncCalls = ctx.getBean(AsyncCalls.class);
         setTodaysDate(endDate);
         List<Site> sitesList = siteService.findAllWithVisitToday(dtfwh.getDateToday());
 
@@ -56,7 +61,8 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
         System.out.println("\n\n================= DAY [ " + dtfwh.getDayOfWeekTodayStr() + " ] - VISIT DATE : " + endDate);
         for (Site site : sitesList) {
             count++;
-            System.out.println("\n\n --- Site No" + count + "/" + size + "---" + site.getName());
+            String s = "\n\n --- Site No" + count + "/" + size + "---" + site.getName();
+            asyncCalls.doSomething(s);
         }
     }
 
@@ -64,6 +70,7 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
     public void createLogsNoRecursion() {
         siteService = ctx.getBean(SiteService.class);
         siteServiceScheduleLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
+        asyncCalls = ctx.getBean(AsyncCalls.class);
 //        SiteService siteService;
 
         Calendar calendar = Calendar.getInstance();
@@ -78,7 +85,8 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
         for (Site site : sitesList) {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-            siteServiceScheduleLogsService.createSiteServiceLog(site, dtfwh.getDateToday());
+//            siteServiceScheduleLogsService.createSiteServiceLog(site, dtfwh.getDateToday());
+            asyncCalls.createLogsNoRecursion(site, dtfwh.getDateToday());
         }
 
 //        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
@@ -87,6 +95,7 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
 //    @Test(dependsOnMethods = {"createLogsNoRecursion"})
     public void updateLogsNoRecursion(Date date) {
         siteService = ctx.getBean(SiteService.class);
+        asyncCalls = ctx.getBean(AsyncCalls.class);
         siteServiceScheduleLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
 //        SiteService siteService;
 
@@ -102,7 +111,8 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
         for (Site site : sitesList) {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-            siteServiceScheduleLogsService.updateSiteServiceLog(site, dtfwh.getDateToday());
+//            siteServiceScheduleLogsService.updateSiteServiceLog(site, dtfwh.getDateToday());
+            asyncCalls.updateLogsNoRecursion(site, dtfwh.getDateToday());
         }
     }
 
@@ -110,6 +120,7 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
     public void closeLogsNoRecursion(Date date) {
         siteServiceLogService = ctx.getBean(SiteServiceLogService.class);
         siteServiceScheduleLogsService = ctx.getBean(CreateSiteServiceLogsService.class);
+        asyncCalls = ctx.getBean(AsyncCalls.class);
 
 //        SiteService siteService;
         Calendar calendar = Calendar.getInstance();
@@ -123,7 +134,14 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
         for (SiteServiceLog siteServiceLog : siteServiceLogList) {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-            siteServiceScheduleLogsService.closeOutdatedSiteService(siteServiceLog, dtfwh.getDateToday());
+//            siteServiceScheduleLogsService.closeOutdatedSiteService(siteServiceLog, dtfwh.getDateToday());
+            asyncCalls.closeLogsNoRecursion(siteServiceLog, dtfwh.getDateToday());
         }
+    }
+
+//    @Test
+    public void createLogsAsync() {
+        asyncCalls = ctx.getBean(AsyncCalls.class);
+        asyncCalls.createLogsAsync();
     }
 }

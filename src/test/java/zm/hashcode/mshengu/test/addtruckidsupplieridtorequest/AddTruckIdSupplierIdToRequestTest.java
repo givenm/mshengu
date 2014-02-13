@@ -39,7 +39,6 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
     }
 
 //    @Test(dependsOnMethods = {"testAddTruckIdSupplierIdToRequest"})
-    @Test
     public void testDb() {
         requestService = ctx.getBean(RequestService.class);
         List<Request> requests = requestService.findAll();
