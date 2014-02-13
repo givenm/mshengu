@@ -68,7 +68,7 @@ public class AllSitesDetailsForm extends FormLayout {
 
 
         TextField name = UIComponent.getTextField("Site Name", "name", SiteDetailsBean.class, binder);
-        name = UIValidatorHelper.setRequiredTextField(name, "Site Name");
+//        name = UIValidatorHelper.setRequiredTextField(name, "Site Name");
         TextField streetAddress = UIComponent.getTextField("Street Address", "streetAddress", SiteDetailsBean.class, binder);
         regionId = UIComboBox.getRegionsLocationComboBox("Region ", "regionId", SiteDetailsBean.class, binder);
         regionId = UIValidatorHelper.setRequiredComboBox(regionId, "Region");

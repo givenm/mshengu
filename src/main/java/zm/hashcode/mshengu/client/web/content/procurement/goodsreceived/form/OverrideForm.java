@@ -8,6 +8,7 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -37,6 +38,8 @@ public class OverrideForm extends FormLayout {
     public final BeanItem<GoodsBean> item = new BeanItem<>(bean);
     public final FieldGroup binder = new FieldGroup(item);
     private TextField override = new TextField();
+    private TextField invoiceNumber;
+    private DateField deliveryDate;
     private Button save;
     private final MshenguMain main;
     private final Request request;
@@ -48,6 +51,8 @@ public class OverrideForm extends FormLayout {
         GridLayout gridlayout = new GridLayout(3, 15);
         gridlayout.setSizeFull();
         override = UIComponent.getBigDecimalTextField("Enter Invoice Total: (Incl.VAT) ", "override", GoodsBean.class, binder);
+        invoiceNumber = UIComponent.getTextField("Enter The Invoice Number: ", "invoiceNumber", GoodsBean.class, binder);
+        deliveryDate = UIComponent.getDateField("Delivery Date:", "deliveryDate", GoodsBean.class, binder);
 
         save = new Button("Override");
 
@@ -73,8 +78,10 @@ public class OverrideForm extends FormLayout {
         gridlayout.addComponent(total, 0, 8);
         gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 9);
         gridlayout.addComponent(override, 0, 10);
+        gridlayout.addComponent(invoiceNumber, 1, 10);
+        gridlayout.addComponent(deliveryDate, 2, 10);
         gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 11);
-        gridlayout.addComponent(buttons, 0, 12);
+        gridlayout.addComponent(buttons, 0, 12, 2, 12);
 
         addComponent(gridlayout);
         addSave();
@@ -98,13 +105,19 @@ public class OverrideForm extends FormLayout {
             public void buttonClick(Button.ClickEvent event) {
                 Person user = new GetUserCredentials().getLoggedInPerson();
                 if (user.getUsername().equalsIgnoreCase("hiltonjc@iafrica.com")) {
-                    Request newRequest = new Request.Builder(request.getPerson())
-                            .request(request)
-                            .total(new BigDecimal(override.getValue()))
-                            .matchStatus("match")
-                            .build();
-                    RequestFacade.getRequestService().merge(newRequest);
-                    getHome();
+                    if (override.getValue() != null && invoiceNumber.getValue() != null && deliveryDate.getValue() != null) {
+                        Request newRequest = new Request.Builder(request.getPerson())
+                                .request(request)
+                                .total(new BigDecimal(override.getValue()))
+                                .invoiceNumber(invoiceNumber.getValue())
+                                .deliveryDate(deliveryDate.getValue())
+                                .matchStatus("match")
+                                .build();
+                        RequestFacade.getRequestService().merge(newRequest);
+                        getHome();
+                    } else {
+                        Notification.show("Enter all the values!", Notification.Type.TRAY_NOTIFICATION);
+                    }
                 } else {
                     Notification.show("Not authorized to override!", Notification.Type.TRAY_NOTIFICATION);
                 }
