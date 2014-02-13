@@ -44,6 +44,8 @@ public class InvoicePaidTable extends Table {
         addContainerProperty("Payment Date", String.class, null);
         addContainerProperty("Payment Amount", BigDecimal.class, null);
         addContainerProperty("Update", Button.class, null);
+        
+        findAndUpdate();
 
         String datemonth = new SimpleDateFormat("MMMM").format(new Date());
         String dateyear = new SimpleDateFormat("YYYY").format(new Date());
@@ -102,5 +104,29 @@ public class InvoicePaidTable extends Table {
 
     private void getHome() {
         main.content.setSecondComponent(new InvoicesMenu(main, "PAYMENT"));
+    }
+    
+    private void findAndUpdate(){
+        List<Request> requests = RequestFacade.getRequestService().findAll();
+        for(Request request: requests){
+            if(request.getOrderNumber().equals("MSH_PO-000031") && request.getInvoiceNumber() == null){
+                Request newRequest = new Request.Builder(request.getPerson())
+                        .request(request)
+                        .deliveryDate(new Date(2014, 01, 31))
+                        .invoiceNumber("00257034")
+                        .total(new BigDecimal("5164.49"))
+                        .build();
+                RequestFacade.getRequestService().merge(newRequest);
+            }
+            if(request.getOrderNumber().equals("MSH_PO-000037") && request.getInvoiceNumber() == null){
+                Request newRequest = new Request.Builder(request.getPerson())
+                        .request(request)
+                        .deliveryDate(new Date(2014, 01, 31))
+                        .invoiceNumber("00256537")
+                        .total(new BigDecimal("461.70"))
+                        .build();
+                RequestFacade.getRequestService().merge(newRequest);
+            }
+        }
     }
 }
