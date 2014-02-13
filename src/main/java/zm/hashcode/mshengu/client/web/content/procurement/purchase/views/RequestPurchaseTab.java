@@ -29,6 +29,7 @@ import zm.hashcode.mshengu.app.facade.ui.util.CostCentreTypeFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.ItemCategoryTypeFacade;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.PurchaseMenu;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.RequestForm;
@@ -207,6 +208,13 @@ public class RequestPurchaseTab extends VerticalLayout implements
     private void addItemsToCostCentreCategoryCombobox(CostCentreType centreType) {
         form.itemCategory.removeAllItems();
         form.costCategory.removeAllItems();
+        if ("fleet maintenance".equalsIgnoreCase(centreType.getName())){ //validate category if cost centre is             
+            form.costCategory.setRequired(true);
+            form.costCategory.setRequiredError("Cost Category Type is required for Fleet Maintenance.");      
+        }else{
+            form.costCategory.setRequired(false);
+            form.costCategory.removeStyleName("invalid");
+        }
         if (centreType.getCategoryTypes() != null) {
             if ("fleet maintenance".equalsIgnoreCase(centreType.getName())) {
                 List<Truck> truckList = TruckFacade.getTruckService().findAll();
