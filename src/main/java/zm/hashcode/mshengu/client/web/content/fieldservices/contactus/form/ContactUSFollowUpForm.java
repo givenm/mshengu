@@ -66,8 +66,8 @@ public class ContactUSFollowUpForm extends FormLayout{
         TextArea comment = UIComponent.getTextArea("Remarks:", "comment", ContactUSFollowUpBean.class, binder);
         comment = UIValidatorHelper.setRequiredTextArea(comment, "Remarks");
         
-        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", ContactUSFollowUpBean.class, binder);
-        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Reported On");
+//        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", ContactUSFollowUpBean.class, binder);
+//        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Reported On");
         
         DateField qualityAssuranceDate = UIComponent.getDateField("Quality Assurance Date:", "qualityAssuranceDate", ContactUSFollowUpBean.class, binder);
         qualityAssuranceDate = UIValidatorHelper.setRequiredDateField(qualityAssuranceDate, "Quality Assurance Date");
