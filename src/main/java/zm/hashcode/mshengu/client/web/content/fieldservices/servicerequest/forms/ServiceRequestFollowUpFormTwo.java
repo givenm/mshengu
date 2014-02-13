@@ -67,8 +67,8 @@ public class ServiceRequestFollowUpFormTwo extends FormLayout{
         TextArea comment = UIComponent.getTextArea("Remarks:", "comment", IncidentFollowUpBean.class, binder);
         comment = UIValidatorHelper.setRequiredTextArea(comment, "Remarks");
         
-        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", IncidentFollowUpBean.class, binder);
-        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Reported On");
+//        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", IncidentFollowUpBean.class, binder);
+//        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Reported On");
         
         DateField qualityAssuranceDate = UIComponent.getDateField("Quality Assurance Date:", "qualityAssuranceDate", IncidentFollowUpBean.class, binder);
         qualityAssuranceDate = UIValidatorHelper.setRequiredDateField(qualityAssuranceDate, "Quality Assurance Date");
