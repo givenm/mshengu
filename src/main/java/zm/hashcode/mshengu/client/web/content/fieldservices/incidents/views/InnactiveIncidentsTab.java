@@ -148,7 +148,7 @@ public class InnactiveIncidentsTab extends VerticalLayout implements
                 .serviceProvider(serviceProvider)
                 .site(incidentBean.getSite())
                 .suburb(incidentBean.getSuburb())
-                //                .status(status)
+                .email(incidentBean.getEmail())
                 .toiletType(unitType)
                 .id(incidentBean.getId())
                 .build();
@@ -194,7 +194,7 @@ public class InnactiveIncidentsTab extends VerticalLayout implements
                 .serviceProvider(serviceProvider)
                 .site(incidentBean.getSite())
                 .suburb(incidentBean.getSuburb())
-                //                .status(status)
+                .email(incidentBean.getEmail())
                 .toiletType(unitType)
                 .id(incidentBean.getId())
                 .build();
@@ -252,6 +252,7 @@ public class InnactiveIncidentsTab extends VerticalLayout implements
         bean.setMailNotifications(incident.getMailNotificationsId());
         bean.setServiceProvider(incident.getServiceProviderId());
         bean.setSite(incident.getSite());
+        bean.setEmail(incident.getEmail());
         bean.setStatus(incident.getStatusId());
         bean.setSuburb(incident.getSuburb());
         bean.setToiletType(incident.getToiletTypeId());
