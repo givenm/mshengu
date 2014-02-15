@@ -49,7 +49,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
 
         statusHelper.setServiceLogsStatus(isNextDayVisitDate, totalNumberOfUnits, totalNumberOfUnitsServiced);
 
-        Truck servicedBy = truckService.findBySiteName(site.getName());
+//        Truck servicedBy = truckService.findBySiteName(site.getName());
 
         SiteServiceLog newSiteServiceLog = new SiteServiceLog.Builder(serviceDate)
                 .serviceTime(serviceDate)

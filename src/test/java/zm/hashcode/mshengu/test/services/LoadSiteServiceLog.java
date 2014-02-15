@@ -35,7 +35,7 @@ public class LoadSiteServiceLog extends AppTest {
 //        dtfwh.resetDayOfWeek();
     }
 
-//    @Test
+
     public void loadSiteServceLogs(String siteName) {
         siteService = ctx.getBean(SiteService.class);
         siteServiceLogService = ctx.getBean(SiteServiceLogService.class);
@@ -74,7 +74,7 @@ public class LoadSiteServiceLog extends AppTest {
 //        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
     }
 
-    @Test
+//    @Test
     public void findAllWithVistTodayTest(){
       
         siteService = ctx.getBean(SiteService.class);

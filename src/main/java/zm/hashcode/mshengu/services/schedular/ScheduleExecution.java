@@ -30,7 +30,7 @@ public class ScheduleExecution {
      */
 //                       * * *  * * *
 //    @Scheduled(cron = "* 15 21-23 * * MON-SAT")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday
-    @Scheduled(cron = "* * 20 * * *")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday                     
+    @Scheduled(cron = "* * 18 * * *")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday                     
     public void runthisCode() {
         // Code to be execute duering Schedule
         Date date = new Date();
