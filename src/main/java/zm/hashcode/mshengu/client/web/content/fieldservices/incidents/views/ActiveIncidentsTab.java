@@ -88,7 +88,7 @@ public class ActiveIncidentsTab extends VerticalLayout implements
         try {
             binder.commit();
             Incident incident = getEntity(binder, "ADD");
-            IncidentFacade.getIncidentService().persist(incident);        
+            IncidentFacade.getIncidentService().persist(incident);
             sendEmailHelper.sendIncidentReportEmail(incident);
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
@@ -148,13 +148,12 @@ public class ActiveIncidentsTab extends VerticalLayout implements
                 .serviceProvider(serviceProvider)
                 .site(incidentBean.getSite())
                 .suburb(incidentBean.getSuburb())
-                //                .status(status)
+                .email(incidentBean.getEmail())
                 .toiletType(unitType)
                 .id(incidentBean.getId())
                 .build();
 
         return incident;
-
 
     }
 
@@ -192,7 +191,7 @@ public class ActiveIncidentsTab extends VerticalLayout implements
                 .serviceProvider(serviceProvider)
                 .site(incidentBean.getSite())
                 .suburb(incidentBean.getSuburb())
-//                .status(status)
+                .email(incidentBean.getEmail())
                 .id(incidentBean.getId())
                 .build();
         return incident;
@@ -241,7 +240,7 @@ public class ActiveIncidentsTab extends VerticalLayout implements
         bean.setContactPerson(incident.getContactPerson());
         bean.setCustomer(incident.getCustomer());
         bean.setRefNumber(incident.getRefNumber());
-
+        bean.setEmail(incident.getEmail());
         bean.setIncidentType(incident.getIncidentTypeId());
         bean.setMailNotifications(incident.getMailNotificationsId());
         bean.setServiceProvider(incident.getServiceProviderId());
