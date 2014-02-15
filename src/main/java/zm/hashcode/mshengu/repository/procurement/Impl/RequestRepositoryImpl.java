@@ -102,8 +102,8 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         Query transactedRequestListQuery = new Query();
         transactedRequestListQuery.addCriteria(
                 Criteria.where("truckId").is(truck.getId())
-                .andOperator(Criteria.where("transactionDate").gte(from),
-                Criteria.where("transactionDate").lte(to), Criteria.where("InvoiceNumber").ne(null)));
+                .andOperator(Criteria.where("deliveryDate").gte(from),
+                Criteria.where("deliveryDate").lte(to), Criteria.where("InvoiceNumber").ne(null)));
 
         /*
          List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);

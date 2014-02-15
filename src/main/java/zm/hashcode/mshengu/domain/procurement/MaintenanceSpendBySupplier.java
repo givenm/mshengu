@@ -26,9 +26,57 @@ public class MaintenanceSpendBySupplier implements Serializable, Comparable<Main
     private Date transactionDate;
     private BigDecimal maintenanceCost;
 
+    private MaintenanceSpendBySupplier() {
+    }
+
+    public MaintenanceSpendBySupplier(Builder builder) {
+        this.id = builder.id;
+        this.supplierId = builder.supplierId;
+        this.maintenanceCost = builder.maintenanceCost;
+        this.transactionDate = builder.transactionDate;
+        this.truckId = builder.truckId;
+    }
+
+    public static class Builder {
+
+        private String id;
+        private String truckId;
+        private String supplierId;
+        private Date transactionDate;
+        private BigDecimal maintenanceCost;
+
+        public Builder(Date value) {
+            this.transactionDate = value;
+        }
+
+        public Builder id(String value) {
+            this.id = value;
+            return this;
+        }
+
+        public Builder truckId(String value) {
+            this.truckId = value;
+            return this;
+        }
+
+        public Builder supplierId(String value) {
+            this.supplierId = value;
+            return this;
+        }
+
+        public Builder maintenanceCost(BigDecimal value) {
+            this.maintenanceCost = value;
+            return this;
+        }
+
+        public MaintenanceSpendBySupplier build() {
+            return new MaintenanceSpendBySupplier(this);
+        }
+    }
+
     @Override
     public int compareTo(MaintenanceSpendBySupplier o) {
-        return maintenanceCost.compareTo(o.getMaintenanceCost());
+        return this.transactionDate.compareTo(o.transactionDate);
     }
 //    public static Comparator<MaintenanceSpendBySupplier> DescendingOrderMaintenanceCostComparator = new Comparator<MaintenanceSpendBySupplier>() {
 //        @Override
@@ -53,13 +101,10 @@ public class MaintenanceSpendBySupplier implements Serializable, Comparable<Main
     public static Comparator<MaintenanceSpendBySupplier> AscOrderTruckAscOrderDateComparator = new Comparator<MaintenanceSpendBySupplier>() {
         @Override
         public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
-
             // Ascending Order by Truck
             int compareOne = maintenanceSpendBySupplier1.getTruckId().compareTo(maintenanceSpendBySupplier2.getTruckId());
             // Ascending order by Date
             int compareTwo = maintenanceSpendBySupplier1.getTransactionDate().compareTo(maintenanceSpendBySupplier2.getTransactionDate());
-
-
             return ((compareOne == 0) ? compareTwo : compareOne);
         }
     };

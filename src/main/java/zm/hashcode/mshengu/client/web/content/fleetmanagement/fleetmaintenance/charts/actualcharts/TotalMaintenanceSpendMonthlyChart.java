@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils;
+package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -32,19 +33,19 @@ import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.dussan.vaadin.dcharts.options.Title;
 import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
 import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
 
 /**
  *
  * @author geek
  */
-public class TotalMaintenanceSpendPerVehicleChart implements Serializable {
+public class TotalMaintenanceSpendMonthlyChart implements Serializable {
 
-    public DCharts createChart(List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList, String chartPeriod) {
+    public DCharts createChart(List<TotalMaintenanceSpendMonthly> spendMonthlyChartDataList, BigDecimal grandTotalMaintenanceSpend) {
 
 
         List<Object> totalList = new ArrayList<>();
-        List<Object> numberPlateList = new ArrayList<>();
+        List<Object> monthYearList = new ArrayList<>();
         //
         DataSeries dataSeries = new DataSeries();
         Axes axes = new Axes();
@@ -52,51 +53,70 @@ public class TotalMaintenanceSpendPerVehicleChart implements Serializable {
         Ticks ticks = new Ticks();
 
         // Get Objects of Data
-        for (TotalMaintenanceSpendByVehicle totalMaintenanceSpendByVehicle : spendByVehicleChartDataList) {
-            totalList.add(totalMaintenanceSpendByVehicle.getTotal());
-            numberPlateList.add(totalMaintenanceSpendByVehicle.getNumberPlate());
+        for (TotalMaintenanceSpendMonthly totalMaintenanceSpendMonthly : spendMonthlyChartDataList) {
+            totalList.add(totalMaintenanceSpendMonthly.getTotal());
+            monthYearList.add(totalMaintenanceSpendMonthly.getMonthYear());
 
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
-        Object[] numberPlateListArray = numberPlateList.toArray(new Object[numberPlateList.size()]);
+        Object[] monthYearListArray = monthYearList.toArray(new Object[monthYearList.size()]);
 
         // Add Objects as DataSeries and Ticks
         dataSeries.add(totalListArray);
-        ticks.add(numberPlateListArray);
+        ticks.add(monthYearListArray);
 
 
         xyAxis.setRenderer(AxisRenderers.CATEGORY);
         xyAxis.setTicks(ticks);
-
-//        if (numberPlateList.size() >= 5) { // flip Tick 90 or 45 degrees. in order to Avoid congestion of Ticks
-        xyAxis.setTickRenderer(TickRenderers.CANVAS);
-        xyAxis.setTickOptions(
-                new CanvasAxisTickRenderer()
-                .setAngle(-45)
-                .setFontSize("10pt")
-                .setShowMark(true)
-                .setShowGridline(true));
-//        }
+        if (monthYearList.size() >= 9) { // flip Tick 90 degrees. Avoid congestion
+            xyAxis.setTickRenderer(TickRenderers.CANVAS);
+            xyAxis.setTickOptions(
+                    new CanvasAxisTickRenderer()
+                    .setAngle(-45)
+                    .setFontSize("10pt")
+                    .setShowMark(true)
+                    .setShowGridline(true));
+        }
         axes.addAxis(xyAxis);
         axes.addAxis(
                 new XYaxis(XYaxes.Y)
                 .setPad(1.05f)
                 .setMin(0)
-                .setTickInterval(25000) // e.g. R 5, R10, R15 etc
+                .setTickInterval(20000) // e.g. R 5, R10, R15 etc
                 .setTickOptions(
                 new AxisTickRenderer()
                 .setFormatString("R %'.2f")));
+
+//        Axes axes = new Axes()
+//                .addAxis(
+//                new XYaxis()
+//                .setRenderer(AxisRenderers.CATEGORY)
+//                .setTicks(
+//                new Ticks()
+//                .add("2008", "Apricots", "Tomatoes", "Potatoes", "Rhubarb", "Squash", "Grapes", "Peanuts", "2009")))
+//                .setTickRenderer(TickRenderers.CANVAS)
+//                .setTickOptions(
+//                new CanvasAxisTickRenderer()
+//                .setAngle(-90)
+//                .setFontSize("10pt")
+//                .setShowMark(false)
+//                .setShowGridline(false))
+//        )
+//	.addAxis(
+//                new XYaxis(XYaxes.Y2)
+//                .setMin(0)
+//                .setTickInterval(5));
+
 
         //
         SeriesDefaults seriesDefaults = new SeriesDefaults()
                 .setFillToZero(true)
                 .setRenderer(SeriesRenderers.BAR) //                .setPointLabels(
-                //                    new PointLabels()
-                //                    .setFormatString("R %'.2f")
-                //                    .setShow(true)
-                //                    .setLocation(PointLabelLocations.NORTH)
-                //                    .setEdgeTolerance(-15)
-                //                )
+                //                new PointLabels()
+                //                .setFormatString("%'.2f")
+                //                .setShow(true)
+                //                .setLocation(PointLabelLocations.NORTH)
+                //                .setEdgeTolerance(-20))
                 ;
 
 //        SeriesDefaults seriesDefaults = new SeriesDefaults()
@@ -125,14 +145,15 @@ public class TotalMaintenanceSpendPerVehicleChart implements Serializable {
                 .setTooltipLocation(TooltipLocations.NORTH)
                 .setTooltipAxes(TooltipAxes.XY_BAR);
 
-        Title title = new Title("Total Maintenance Cost Spend per Vehicle: " + chartPeriod);
+        Title title = new Title("Total Maintenance Spend (" + monthYearListArray[0] + " - "
+                + monthYearListArray[monthYearListArray.length - 1] + "): R " + grandTotalMaintenanceSpend);
         title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
 
         Series series = new Series()
                 .addSeries(
                 new XYseries()
-                .setLabel("Maintenance Cost Spend"));
+                .setLabel("Fleet Maintenance Spend"));
 
         Options options = new Options()
                 .setCaptureRightClick(true)
@@ -150,7 +171,9 @@ public class TotalMaintenanceSpendPerVehicleChart implements Serializable {
                 .setOptions(options)
                 .setEnableDownload(false)
                 //                .setDownloadButtonLocation(DownloadButtonLocation.BOTTOM_RIGHT)
-                //                .setDownloadFilename("Maintenance_Cost_Spend_Per_Vehicle_" + chartPeriod)
+                //                .setDownloadButtonCaption("Save Chart")
+                //                .setDownloadFilename("Maintenance_Cost_Monthly_Spend_" + monthYearListArray[0] + "-"
+                //                + monthYearListArray[monthYearListArray.length - 1])
                 //                .setChartImageFormat(ChartImageFormat.GIF)
                 .show();
 

@@ -6,7 +6,6 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.form
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -20,7 +19,6 @@ import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fieldservices.incidents.models.IncidentFollowUpBean;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicerequest.models.ServiceRequestFollowUpBean;
 
 /**
@@ -58,19 +56,19 @@ public class ServiceRequestFollowUpFormTwo extends FormLayout{
 
         // UIComponent
 
-        ComboBox status = UIComboBox.getServiceRequesttatusComboBox("Status :", "status", IncidentFollowUpBean.class, binder);
+        ComboBox status = UIComboBox.getIncidentStatusComboBox("Status :", "status", ServiceRequestFollowUpBean.class, binder);
         status = UIValidatorHelper.setRequiredComboBox(status, "Status");
         
-        DateField resolvedDate = UIComponent.getDateField("Resolved Date:", "resolvedDate", IncidentFollowUpBean.class, binder);
+        DateField resolvedDate = UIComponent.getDateField("Resolved Date:", "resolvedDate", ServiceRequestFollowUpBean.class, binder);
         resolvedDate = UIValidatorHelper.setRequiredDateField(resolvedDate, "Resolved Date");
         
-        TextArea comment = UIComponent.getTextArea("Remarks:", "comment", IncidentFollowUpBean.class, binder);
+        TextArea comment = UIComponent.getTextArea("Remarks:", "comment", ServiceRequestFollowUpBean.class, binder);
         comment = UIValidatorHelper.setRequiredTextArea(comment, "Remarks");
         
-//        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", IncidentFollowUpBean.class, binder);
+//        DateField actionDate = UIComponent.getDateField("Reported On:", "actionDate", ServiceRequestFollowUpBean.class, binder);
 //        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Reported On");
         
-        DateField qualityAssuranceDate = UIComponent.getDateField("Quality Assurance Date:", "qualityAssuranceDate", IncidentFollowUpBean.class, binder);
+        DateField qualityAssuranceDate = UIComponent.getDateField("Quality Assurance Date:", "qualityAssuranceDate", ServiceRequestFollowUpBean.class, binder);
         qualityAssuranceDate = UIValidatorHelper.setRequiredDateField(qualityAssuranceDate, "Quality Assurance Date");
 
         errorMessage = UIComponent.getErrorLabel();

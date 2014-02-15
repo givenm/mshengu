@@ -46,7 +46,29 @@ public class MileageUtil implements Serializable {
         this.serviceTrucks = serviceTrucks;
         annualDataFleetMaintenanceMileageList.clear();
         if (endDate.before(staticDataEndDate) || endDate.compareTo(staticDataEndDate) == 0) {
-            return AnnualDataFleetMaintenanceMileageFacade.getAnnualDataFleetMaintenanceMileageService().getAnnualDataMileageBetweenTwoDates(startDate, endDate);
+            annualDataFleetMaintenanceMileageList.addAll(AnnualDataFleetMaintenanceMileageFacade.getAnnualDataFleetMaintenanceMileageService().getAnnualDataMileageBetweenTwoDates(startDate, endDate));
+            Integer counter = new Integer("0");
+            // Add Zero entries for Months without Static Data
+            Calendar calendar = Calendar.getInstance();
+            for (calendar.setTime(startDate); calendar.getTime().before(endDate) || calendar.getTime().compareTo(endDate) == 0; calendar.add(Calendar.MONTH, 1)) {
+                boolean found = false;
+                for (Truck truck : serviceTrucks) {
+                    for (AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage : annualDataFleetMaintenanceMileageList) {
+                        if (resetMonthToFirstDay(annualDataFleetMaintenanceMileage.getTransactionMonth()).compareTo(resetMonthToFirstDay(calendar.getTime())) == 0) {
+                            if (annualDataFleetMaintenanceMileage.getTruckId().equals(truck.getId())) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        // Build ZERO Entry AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                        counter++;
+                        annualDataFleetMaintenanceMileageList.add(this.buildAnnualDataFleetMaintenanceMileageList(counter, truck, calendar, 0));
+                    }
+                }
+            }
+            return annualDataFleetMaintenanceMileageList;
         } else {
             if (startDate.before(staticDataEndDate) || startDate.compareTo(staticDataEndDate) == 0) {
                 performStaticAndLiveDataHarvesting(startDate, endDate);
@@ -58,11 +80,33 @@ public class MileageUtil implements Serializable {
     }
 
     private void performStaticAndLiveDataHarvesting(Date startDate, Date endDate) {
+        Integer counter = new Integer("0");
         // get MaintenanceMileage static Data
         annualDataFleetMaintenanceMileageList.addAll(AnnualDataFleetMaintenanceMileageFacade.getAnnualDataFleetMaintenanceMileageService().getAnnualDataMileageBetweenTwoDates(startDate, staticDataEndDate));
+
+        // Add Zero entries for Months without Static Data
+        Calendar calendar = Calendar.getInstance();
+        for (calendar.setTime(startDate); calendar.getTime().before(staticDataEndDate) || calendar.getTime().compareTo(staticDataEndDate) == 0; calendar.add(Calendar.MONTH, 1)) {
+            boolean found = false;
+            for (Truck truck : serviceTrucks) {
+                for (AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage : annualDataFleetMaintenanceMileageList) {
+                    if (resetMonthToFirstDay(annualDataFleetMaintenanceMileage.getTransactionMonth()).compareTo(resetMonthToFirstDay(calendar.getTime())) == 0) {
+                        if (annualDataFleetMaintenanceMileage.getTruckId().equals(truck.getId())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    // Build ZERO Entry AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                    counter++;
+                    annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, calendar, 0));
+                }
+            }
+        }
+
         // get MaintenanceMileage live data from Dec 1st 2013 till EndDate from OperatingCost (DailyInputs) domain
         // Aggregate the request list and Add to MaintenanceMileageList (i.e. Monthly summary per Truck throughout the date range)
-        Integer counter = new Integer("0");
         // Date Loop OR Calendar Loop from startDate till endDate
         Calendar startCalendar = Calendar.getInstance();
         for (startCalendar.setTime(liveDataStartDate); startCalendar.getTime().before(endDate) || startCalendar.getTime().compareTo(endDate) == 0; startCalendar.add(Calendar.MONTH, 1)) {
@@ -76,9 +120,11 @@ public class MileageUtil implements Serializable {
                     trackerUtil.setQueriedDate(startCalendar.getTime());
                     truckClosingMileage = trackerUtil.doMileageCalculation(truckOperatingCostList, truck);
                     // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                    counter++;
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, truckClosingMileage));
                 } else {
                     // Build ZERO Entry AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                    counter++;
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, 0));
 //                    System.out.println("No Entry For Daily Input(Operating Cost) From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
                 }
@@ -103,9 +149,11 @@ public class MileageUtil implements Serializable {
                     trackerUtil.setQueriedDate(startCalendar.getTime());
                     truckClosingMileage = trackerUtil.doMileageCalculation(truckOperatingCostList, truck);
                     // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                    counter++;
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, truckClosingMileage));
                 } else {
-                    // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                    // Build ZERO Entry AnnualDataFleetMaintenanceMileage for current Truck for current Month
+                    counter++;
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, 0));
 //                    System.out.println("No Entry For Daily Input(Operating Cost) From live Data for this Month: " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(startCalendar.getTime().toString()) + " | Truck= " + truck.getVehicleNumber());
                 }
@@ -115,7 +163,6 @@ public class MileageUtil implements Serializable {
 
     private AnnualDataFleetMaintenanceMileage buildAnnualDataFleetMaintenanceMileageList(int counter, Truck truck, Calendar startCalendar, int monthlyMileage) {
         // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
-        counter++;
         final AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage = new AnnualDataFleetMaintenanceMileage.Builder(startCalendar.getTime())
                 .driverPersonId(truck.getDriver().getId())
                 .id(counter + "")

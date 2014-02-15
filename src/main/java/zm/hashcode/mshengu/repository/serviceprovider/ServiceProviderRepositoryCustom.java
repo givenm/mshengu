@@ -4,12 +4,13 @@
  */
 package zm.hashcode.mshengu.repository.serviceprovider;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
 /**
  *
- * @author Ferox
+ * @author Colin
  */
-public interface ServiceProviderRepository extends PagingAndSortingRepository<ServiceProvider, String>, ServiceProviderRepositoryCustom {
+public interface ServiceProviderRepositoryCustom {
+
+    public ServiceProvider findByVendorNumber(String vendorNumber);
 }

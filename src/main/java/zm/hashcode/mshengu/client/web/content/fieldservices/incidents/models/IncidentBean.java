@@ -17,28 +17,37 @@ public class IncidentBean {
     private Date actionDate;
     private Date resolvedDate;
     private Date qualityAssuranceDate;
-    
+
     private String refNumber;
-    
+
     private String customer;//(ongoing outstanding, resolved) 
-    
+
     private String contactPerson;
-    
+
     private String contactNumber;
+    private String email;
     private String site;
     private String suburb;
-    
+
     private String toiletType;
     private boolean closed;
-    
+
     private String incidentType;
 //    private Set<IncidentAction> incidentAction = new HashSet<>();
     private String serviceProvider;
     private String comment;
-    
+
     private String mailNotifications;
-    
+
     private String status;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     /**
      * @return the id
