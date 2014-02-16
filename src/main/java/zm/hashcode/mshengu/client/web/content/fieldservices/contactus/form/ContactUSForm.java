@@ -72,6 +72,7 @@ public class ContactUSForm extends FormLayout {
         email = UIValidatorHelper.setRequiredTextField(email, "Email");
 
         TextField phone = UIComponent.getTextField("Phone:", "phone", ContactUSBean.class, binder);
+        phone = UIValidatorHelper.setRequiredTextField(phone, "Phone");
         phone.addValidator(UIValidatorHelper.phoneNumberValidator());
 
         TextField faxNumber = UIComponent.getTextField("Fax:", "faxNumber", ContactUSBean.class, binder);

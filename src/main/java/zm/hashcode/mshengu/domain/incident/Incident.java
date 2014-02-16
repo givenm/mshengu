@@ -31,6 +31,7 @@ public final class Incident implements Serializable, Comparable<Incident> {
     private Date actionDate;
     private String refNumber;
     private String customer;//(ongoing outstanding, resolved) 
+    private String email;
     private String contactPerson;
     private String contactNumber;
     private String site;
@@ -60,6 +61,7 @@ public final class Incident implements Serializable, Comparable<Incident> {
         this.refNumber = builder.refNumber;
         this.customer = builder.customer;
         this.site = builder.site;
+        this.email = builder.email;
         this.contactNumber = builder.contactNumber;
         this.suburb = builder.suburb;
         this.toiletType = builder.toiletType;
@@ -104,6 +106,13 @@ public final class Incident implements Serializable, Comparable<Incident> {
         return id;
     }
 
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+    
     /**
      * @return the contactNumber
      */
@@ -209,6 +218,7 @@ public final class Incident implements Serializable, Comparable<Incident> {
         private String refNumber;
         private String customer;//(ongoing outstanding, resolved) 
         private String contactPerson;
+        private String email;
         private String contactNumber;
         private String site;
         private String suburb;
@@ -235,6 +245,7 @@ public final class Incident implements Serializable, Comparable<Incident> {
             this.userAction = incident.getUserAction();//
             this.serviceProvider = incident.getServiceProvider();//
             this.comment = incident.getComment();
+            this.email = incident.getEmail();
             this.contactNumber = incident.getContactNumber();
             this.suburb = incident.getSuburb();
             this.toiletType = incident.getToiletType();
@@ -267,6 +278,11 @@ public final class Incident implements Serializable, Comparable<Incident> {
 
         public Builder contactPerson(String value) {
             this.contactPerson = value;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
             return this;
         }
 

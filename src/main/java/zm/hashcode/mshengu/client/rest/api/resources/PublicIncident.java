@@ -12,13 +12,14 @@ public class PublicIncident {
 
     private String clientName;
     private String contactPerson;
+    private String email;
     private String contactNumber;
     private String incidentType;
     private String site;
     private String suburb;
     private String toiletType;
     private String remarks;
-    
+
     public String getClientName() {
         return clientName;
     }
@@ -33,6 +34,14 @@ public class PublicIncident {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getContactNumber() {

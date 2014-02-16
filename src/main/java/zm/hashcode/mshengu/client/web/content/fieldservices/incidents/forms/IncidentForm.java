@@ -68,6 +68,9 @@ public class IncidentForm extends FormLayout {
         contactNumber = UIValidatorHelper.setRequiredTextField(contactNumber, "Contact Number");
         contactNumber.addValidator(UIValidatorHelper.phoneNumberValidator());
 
+        TextField email = UIComponent.getTextField("Email:", "email", IncidentBean.class, binder);
+        email.addValidator(UIValidatorHelper.emailValidator());
+
         TextField site = UIComponent.getTextField("Site Name:", "site", IncidentBean.class, binder);
 
         TextField suburb = UIComponent.getTextField("Suburb:", "suburb", IncidentBean.class, binder);
@@ -98,20 +101,21 @@ public class IncidentForm extends FormLayout {
         grid.addComponent(refNumber, 0, 1);
         grid.addComponent(customer, 1, 1);
         grid.addComponent(mailNotifications, 2, 1);
-        
+
         grid.addComponent(contactPerson, 0, 2);
         grid.addComponent(contactNumber, 1, 2);
-        grid.addComponent(incidentType, 2, 2);
+        grid.addComponent(email, 2, 2);
 
-        grid.addComponent(site, 0, 3);
-        grid.addComponent(suburb, 1, 3);
-        grid.addComponent(toiletType, 2, 3);
+        grid.addComponent(incidentType, 0, 3);
+        grid.addComponent(site, 1, 3);
+        grid.addComponent(suburb, 2, 3);
+
+        grid.addComponent(toiletType, 0, 4);
+        grid.addComponent(serviceProvider, 1, 4);
+        grid.addComponent(closed, 2, 4);
         
-        grid.addComponent(serviceProvider, 0, 4);
-        grid.addComponent(closed, 1, 4);
-        grid.addComponent(comment, 2, 4);
-//        grid.addComponent(status, 0, 4);
-//        grid.addComponent(closed, 1, 4);
+        grid.addComponent(comment, 0, 5);
+
 
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 6, 2, 6);
         grid.addComponent(buttons, 0, 7, 2, 7);
