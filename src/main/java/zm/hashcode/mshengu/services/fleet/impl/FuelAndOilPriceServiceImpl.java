@@ -75,7 +75,7 @@ public class FuelAndOilPriceServiceImpl implements FuelAndOilPriceService {
                 return fuelAndOilPrice.getFuelPrice();
             }
         }
-        return new BigDecimal(BigInteger.ZERO);
+        return BigDecimal.ZERO;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FuelAndOilPriceServiceImpl implements FuelAndOilPriceService {
                 return fuelAndOilPrice.getEngineOilPrice();
             }
         }
-        return new BigDecimal(BigInteger.ZERO);
+        return BigDecimal.ZERO;
     }
 
     @Override
@@ -105,6 +105,6 @@ public class FuelAndOilPriceServiceImpl implements FuelAndOilPriceService {
                 return fuelAndOilPrice;
             }
         }
-        return new FuelAndOilPrice();
+        return null;
     }
 }

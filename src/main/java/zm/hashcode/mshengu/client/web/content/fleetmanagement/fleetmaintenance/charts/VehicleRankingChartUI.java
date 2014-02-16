@@ -15,12 +15,12 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.p
  *
  * @author geek
  */
-public class VehicleRankingChart extends FormLayout {
+public class VehicleRankingChartUI extends FormLayout {
 // Create the root content layout
 
     public VerticalLayout chartRootVerticalLayout = new VerticalLayout();
 
-    public VehicleRankingChart(MshenguMain main) {
+    public VehicleRankingChartUI(MshenguMain main) {
 //        addComponent(chartRootVerticalLayout);
     }
 

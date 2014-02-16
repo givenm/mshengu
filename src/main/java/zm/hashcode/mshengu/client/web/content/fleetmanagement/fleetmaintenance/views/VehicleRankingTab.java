@@ -13,7 +13,7 @@ import java.util.List;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.FleetMaintenanceMenu;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.VehicleRankingChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.VehicleRankingChartUI;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.VehicleRankingForm;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
@@ -28,7 +28,7 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.t
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.TotalMileageTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.VehicleNumberTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.MaintenanceSpendByKmTravelledChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendByKmTravelledChart;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 
@@ -46,7 +46,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     private final RatingTable ratingTable;
     private final MonthSpendTable monthSpendTable;
     private final VehicleRankingForm form;
-    private final VehicleRankingChart chart;
+    private final VehicleRankingChartUI chart;
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
     private static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
     private static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
@@ -68,7 +68,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
         ratingTable = new RatingTable(main);
         monthSpendTable = new MonthSpendTable(main);
         form = new VehicleRankingForm();
-        chart = new VehicleRankingChart(main);
+        chart = new VehicleRankingChartUI(main);
 
         addComponent(form);
         addComponent(chart);
@@ -252,7 +252,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
         monthSpendPanel.setContent(monthSpendLayout);
         monthSpendPanel.setWidth(monthSpendTable.getWidth() + "px");
 
-        // ADD Panels to VehicleRankingChart.java
+        // ADD Panels to VehicleRankingChartUI.java
         chart.chartRootVerticalLayout.removeAllComponents();
         chart.defineAndAddLayouts(kmTravelledVehicleChartPanel, vehicleNumberPanel, totalMaintenanceCostPanel, totalMileagePanel, randsPerKmPanel, ratingPanel, monthSpendPanel);
 

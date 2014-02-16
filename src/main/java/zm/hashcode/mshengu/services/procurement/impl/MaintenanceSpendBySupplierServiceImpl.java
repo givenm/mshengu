@@ -57,7 +57,7 @@ public class MaintenanceSpendBySupplierServiceImpl implements MaintenanceSpendBy
 
     private Sort sortByTransactionDate() {
         return new Sort(
-                new Sort.Order(Sort.Direction.ASC, "transactionMonth"));
+                new Sort.Order(Sort.Direction.ASC, "transactionDate"));
     }
 
 //    @Override
