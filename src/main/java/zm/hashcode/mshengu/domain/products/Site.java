@@ -130,7 +130,7 @@ public final class Site implements Serializable, Comparable<Site> {
             this.address = site.getAddress();
             this.location = site.getLocation();
             this.contactPerson = site.getContactPerson();
-//            this.siteServiceContractLifeCycle = site.getSiteServiceContractLifeCycle();
+            this.siteServiceContractLifeCycle = site.getSiteServiceContractLifeCycle();
             this.siteServiceLog = site.getSiteServiceLog();
             this.parentId = site.getParentId();
             this.status = site.getStatus();

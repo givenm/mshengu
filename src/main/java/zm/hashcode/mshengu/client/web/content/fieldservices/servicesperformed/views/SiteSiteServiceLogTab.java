@@ -11,6 +11,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
+import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.SiteServiceLogTable;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.ServiceSchedulingMenu;
@@ -28,11 +29,18 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     private final SiteDetailsForm form;
     private final SiteServiceLogTable table;
     private String parentId = null;
-    private final Label weekRange;
+    private final DateTimeFormatWeeklyHelper dtfwh;
+    private final Label lblFrom;
+    private final Label lblTo;
+    Date date;
 
     public SiteSiteServiceLogTab(MshenguMain app) {
         main = app;
+        this.dtfwh = new DateTimeFormatWeeklyHelper();
+        date = new Date();
+        dtfwh.setDate(date);
         form = new SiteDetailsForm();
+
         table = new SiteServiceLogTable(main);
         Label topleft = new Label("");
         topleft.setSizeUndefined();
@@ -46,20 +54,23 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
         heading.setSizeUndefined();
         heading.addStyleName("h4");
 
-        weekRange = new Label("");
-        weekRange.setSizeUndefined();
-        weekRange.addStyleName("h4");
+        lblFrom = new Label("From : " + dtfwh.getMondayDateYYMMDD());
+        lblFrom.setSizeUndefined();
+        lblFrom.addStyleName("h4");
+
+        lblTo = new Label(" To :" + dtfwh.getSundayDateYYMMDD());
+        lblTo.setSizeUndefined();
+        lblTo.addStyleName("h4");
         GridLayout grid = new GridLayout(6, 3);
 
         grid.setSizeFull();
 
         grid.addComponent(topleft, 0, 0);
-        grid.addComponent(heading, 1, 1, 2, 1);
-        grid.addComponent(weekRange, 3, 1, 4, 1);
+        grid.addComponent(heading, 2, 0, 3, 0);
+        grid.addComponent(lblFrom, 1, 1, 2, 1);
+        grid.addComponent(lblTo, 3, 1, 4, 1);
         grid.addComponent(bottomRight, 5, 2);
-        addComponent(grid);;
-        setSizeFull();
-//        addComponent(form);
+        addComponent(grid);
         addComponent(table);
         addListeners();
     }
@@ -157,7 +168,8 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     }
 
     private void setServiceLogRange(Date startDate, Date endDate) {
-        weekRange.setValue("Services - From : " + startDate + " To :" + endDate);
+        lblFrom.setValue("From : " + dtfwh.getYearMonthDay(startDate));
+        lblTo.setValue(" To :" + dtfwh.getYearMonthDay(endDate));
     }
 
 }

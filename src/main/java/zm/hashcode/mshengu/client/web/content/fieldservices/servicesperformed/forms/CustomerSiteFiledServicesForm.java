@@ -53,7 +53,7 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         binder = new FieldGroup(item);
 
         this.dtfwh = new DateTimeFormatWeeklyHelper();
-        date = dtfwh.getDate(22, 10, 2013);
+        date = new Date();
 //        dtfwh.setDate(new Date());
         dtfwh.setDate(date);
         Label heading = new Label("Services Performed");

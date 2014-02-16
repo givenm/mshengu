@@ -85,7 +85,7 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
 //            siteServiceScheduleLogsService.createSiteServiceLog(site, dtfwh.getDateToday());
-            asyncCalls.createLogsNoRecursion(site, dtfwh.getDateToday());
+//            asyncCalls.createLogsNoRecursion(site, dtfwh.getDateToday());
         }
 
 //        logSheduledSiteServices.createTodaysSiteServicesLogs2(calendar.getTime());
@@ -111,7 +111,7 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
 //            siteServiceScheduleLogsService.updateSiteServiceLog(site, dtfwh.getDateToday());
-            asyncCalls.updateLogsNoRecursion(site, dtfwh.getDateToday());
+//            asyncCalls.updateLogsNoRecursion(site, dtfwh.getDateToday());
         }
     }
 
@@ -134,13 +134,8 @@ public class SiteServiceLogTaskTestNoRecursion extends AppTest {
             count++;
             System.out.println("\n\n --- Site No" + count + "/" + size + "---");
 //            siteServiceScheduleLogsService.closeOutdatedSiteService(siteServiceLog, dtfwh.getDateToday());
-            asyncCalls.closeLogsNoRecursion(siteServiceLog, dtfwh.getDateToday());
+//            asyncCalls.closeLogsNoRecursion(siteServiceLog, dtfwh.getDateToday());
         }
     }
 
-//    @Test
-    public void createLogsAsync() {
-        asyncCalls = ctx.getBean(AsyncCalls.class);
-        asyncCalls.createLogsAsync();
-    }
 }

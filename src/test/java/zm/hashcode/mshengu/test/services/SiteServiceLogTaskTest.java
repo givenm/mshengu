@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.testng.annotations.Test;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.domain.products.Site;
@@ -16,6 +15,7 @@ import zm.hashcode.mshengu.services.fieldservices.CreateSiteServiceLogsService;
 import zm.hashcode.mshengu.services.fieldservices.LogSheduledSiteServices;
 import zm.hashcode.mshengu.services.products.SiteService;
 import zm.hashcode.mshengu.test.AppTest;
+import static zm.hashcode.mshengu.test.AppTest.ctx;
 
 /**
  *

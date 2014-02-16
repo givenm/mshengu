@@ -86,8 +86,8 @@ public class WebAppServiceImpl implements WebAppService {
     RequestForQuoteService requestForQuoteService;
 
     /**
-     *
-     * @param contact
+     * 
+     * @param publicContact 
      */
     @Override
     public void contactUs(PublicContact publicContact) {
@@ -124,8 +124,8 @@ public class WebAppServiceImpl implements WebAppService {
     }
 
     /**
-     *
-     * @param incident
+     * 
+     * @param publicIncident 
      */
     @Override
     public void incidentReport(PublicIncident publicIncident) {
@@ -167,8 +167,8 @@ public class WebAppServiceImpl implements WebAppService {
     }
 
     /**
-     *
-     * @param responseToRFQ
+     * 
+     * @param publicResponseToRFQ 
      */
     @Override
     public void responseToRFQ(PublicResponseToRFQ publicResponseToRFQ) {
@@ -253,8 +253,8 @@ public class WebAppServiceImpl implements WebAppService {
     }
 
     /**
-     *
-     * @param requestAQuote
+     * 
+     * @param publicRequestAQuote 
      */
     @Override
     public void requestForQuote(PublicRequestAQuote publicRequestAQuote) {
@@ -268,6 +268,7 @@ public class WebAppServiceImpl implements WebAppService {
         /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
         /*NB: The ServiceProviderBean (Under web/procurement/vendors/models) has details are the same with the website and could be used*/
         final IncomingRFQ incomingRFQ = new IncomingRFQ.Builder(new Date())
+                .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
                 .billingAddress(publicRequestAQuote.getBillingAddress())
                 .closed(false) /*what should be the value for clsed?*/
                 .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
@@ -281,27 +282,29 @@ public class WebAppServiceImpl implements WebAppService {
                 .eventDate(publicRequestAQuote.getEventDate())
                 .eventName(publicRequestAQuote.getEventName())
                 .eventType(publicRequestAQuote.getEventType())
-                .friday(publicRequestAQuote.isServiceFrequencyFri())
                 .mailNotifications(mailNotifications)
-                .monday(publicRequestAQuote.isServiceFrequencyMon())
                 .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
                 .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
                 .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
                 .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
                 .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
-                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/
-                .refNumber("this does not exist") /*This field does not exist on the website form*/
-                .saturday(publicRequestAQuote.isServiceFrequencySat())
+                .userAction(userActions)
+                .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
+//                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
+                
                 .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
-                .thursday(publicRequestAQuote.isServiceFrequencyThur())
                 .toiletsRequired1(publicRequestAQuote.getToiletsRequired1())
                 .toiletsRequired2(publicRequestAQuote.getToiletsRequired2())
                 .toiletsRequired3(publicRequestAQuote.getToiletsRequired3())
-                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+//                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+                
+                .monday(publicRequestAQuote.isServiceFrequencyMon())
                 .tuesday(publicRequestAQuote.isServiceFrequencyTue())
-                .userAction(userActions)
-                .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
                 .wednesday(publicRequestAQuote.isServiceFrequencyWed())
+                .thursday(publicRequestAQuote.isServiceFrequencyThur())
+                .friday(publicRequestAQuote.isServiceFrequencyFri())
+                .saturday(publicRequestAQuote.isServiceFrequencySat())
+                .sunday(publicRequestAQuote.isServiceFrequencySun())
                 .build();
 
 
@@ -309,7 +312,8 @@ public class WebAppServiceImpl implements WebAppService {
         incomingRFQService.persist(incomingRFQ);
 //        System.out.println("API TEST --  requestForQuote");
 //        System.out.println("API TEST --  requestForQuote " + publicRequestAQuote.getContactPerson());
-        sendEmailHelper.feedbackEmail(new Date(), publicRequestAQuote.getEmail(), "Request For Quote TEST", publicRequestAQuote.toString());
+        sendEmailHelper.icomingQuoteRequest(incomingRFQ);
+        sendEmailHelper.feedbackEmail(new Date(), incomingRFQ.getEmail(), incomingRFQ.getRefNumber(), publicRequestAQuote.toString());
     }
 
     
