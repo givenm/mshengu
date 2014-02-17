@@ -24,6 +24,8 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 public class PaymentTable extends Table {
 
     private BigDecimal grandTotal;
+    private BigDecimal paidTotal;
+    private BigDecimal balanceTotal;
     private DecimalFormat f = new DecimalFormat("###,###.00");
 
     public PaymentTable() {
@@ -31,6 +33,8 @@ public class PaymentTable extends Table {
 
         addContainerProperty("Supplier", String.class, null);
         addContainerProperty("Total", String.class, null);
+        addContainerProperty("Paid To Date", String.class, null);
+        addContainerProperty("Balance Outstanding", String.class, null);
 
         String datemonth = new SimpleDateFormat("MMMM").format(new Date());
         String dateyear = new SimpleDateFormat("YYYY").format(new Date());
@@ -62,8 +66,10 @@ public class PaymentTable extends Table {
                 if (newlist.size() > 0) {
                     addItem(new Object[]{
                         serviceProvider.getName(),
-                        f.format(getSupplierTotal(newlist)),}, serviceProvider.getId());
-                    grandTotal = grandTotal.add(getSupplierTotal(newlist));
+                        f.format(getSupplierTotal(newlist)),
+                        f.format(getPaidTotal(newlist)),
+                        f.format(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)))}, serviceProvider.getId());
+                    grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
 //                    }
                 }
             }
@@ -81,6 +87,18 @@ public class PaymentTable extends Table {
 
             if (request.getInvoiceNumber() != null) {
                 total = total.add(request.getTotal());
+            }
+        }
+        return total;
+    }
+
+    private BigDecimal getPaidTotal(List<Request> requests) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Request request : requests) {
+            if (request.getInvoiceNumber() != null) {
+                if (request.getPaymentAmount() != null) {
+                    total = total.add(request.getPaymentAmount());
+                }
             }
         }
         return total;

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,15 +45,21 @@ public class LogSheduledSiteServicesImpl implements LogSheduledSiteServices {
         int count = 0;
         int size = todaysSitesList.size();
         System.out.println("\n\n================= TEST VISIT DATE : " + date);
+        ForkJoinTask<CreateServiceLogTaskTwo> taskList = new RecursiveTask<CreateServiceLogTaskTwo>() {
+
+            @Override
+            protected CreateServiceLogTaskTwo compute() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
         for (Site site : todaysSitesList) {
             try {
                 count++;
                 System.out.println("\n\n --- Site No" + count + "/" + size + "---");
                 System.out.println("Site :" + site.getName());
                 CreateServiceLogTaskTwo task = new CreateServiceLogTaskTwo(site, createSiteServiceLogsService, date);
-//        pool.execute(task);
-//            forkJoinTask.complete(task);
-//            task.fork();
+
+                taskList.complete(task);
                 pool.execute(task);
                 pool.awaitTermination(10, TimeUnit.MINUTES);
 //        forkJoinTask.(new CreateServiceLogTask(todaysSitesList, createSiteServiceLogsService, date));
@@ -60,7 +67,7 @@ public class LogSheduledSiteServicesImpl implements LogSheduledSiteServices {
                 Logger.getLogger(LogSheduledSiteServicesImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        //                pool.
+//                        pool.execute(null); kind offf
 //                pool.shutdown();
 
 

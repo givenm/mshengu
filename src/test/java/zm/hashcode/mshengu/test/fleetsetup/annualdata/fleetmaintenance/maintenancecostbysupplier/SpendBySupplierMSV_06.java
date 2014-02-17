@@ -44,7 +44,8 @@ public class SpendBySupplierMSV_06 extends AppTest {
     private static Truck truck = null;
     private static ServiceProvider serviceProvider = null;
 
-    @Test
+//    @Test
+    
     public void testSheet() {
         try {
             serviceProviderService = ctx.getBean(ServiceProviderService.class);
@@ -127,7 +128,7 @@ public class SpendBySupplierMSV_06 extends AppTest {
         return maintenanceSpendBySupplier;
     }
 
-    @Test(dependsOnMethods = {"testSheet"})
+//    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
         List<MaintenanceSpendBySupplier> maintenanceSpendBySupplierList = maintenanceSpendBySupplierService.findAll();
         if (maintenanceSpendBySupplierList.isEmpty()) {

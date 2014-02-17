@@ -59,7 +59,7 @@ public class InvoicePaidTable extends Table {
                     String datemonth = new SimpleDateFormat("MMMM").format(requests.get(i).getDeliveryDate());
                     String dateyear = new SimpleDateFormat("YYYY").format(requests.get(i).getDeliveryDate());
                     if (datemonth.equals(month) && year.equals(dateyear)) {
-                        Button update = new Button("Update");
+                        Button update = new Button("Effect Payment");
                         update.setData(requests.get(i).getId());
                         update.setStyleName(Reindeer.BUTTON_LINK);
                         update.addClickListener(new Button.ClickListener() {

@@ -16,6 +16,7 @@ public class Purchase {
 
     private String orderNumber;
     private String date;
+    private String podate;
     private String costCentre;
     private String firstName;
     private String lastName;
@@ -23,6 +24,14 @@ public class Purchase {
     private String instructions;
     private BigDecimal total;
     private List<PurchaseItem> list = new ArrayList<>();
+
+    public String getPodate() {
+        return podate;
+    }
+
+    public void setPodate(String podate) {
+        this.podate = podate;
+    }
 
     public String getInstructions() {
         return instructions;

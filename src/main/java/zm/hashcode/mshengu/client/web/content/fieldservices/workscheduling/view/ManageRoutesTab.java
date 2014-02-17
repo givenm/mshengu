@@ -21,7 +21,6 @@ import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.table
 import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.tables.TrucksTable;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.products.Site;
-import zm.hashcode.mshengu.domain.ui.location.Address;
 
 /**
  *

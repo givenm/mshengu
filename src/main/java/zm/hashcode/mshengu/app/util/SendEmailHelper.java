@@ -29,11 +29,11 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
  */
 public class SendEmailHelper {
 
-    private DateTimeFormatHelper formatHelper = new DateTimeFormatHelper();
+    final private DateTimeFormatHelper formatHelper = new DateTimeFormatHelper();
 
     /**
-     *
-     * @param contact
+     * 
+     * @param contactUS 
      */
     public void sedContactUsEmail(ContactUS contactUS) {
 
@@ -46,7 +46,7 @@ public class SendEmailHelper {
                     .append("\n\n")
                     .append("Contact Request Number : ").append(contactUS.getRefNumber()).append("\n\n")
                     .append("Contact Request Date : ").append(formatHelper.getFullFormateddate(contactUS.getDateOfAction())).append("\n\n")
-                    .append("Contact Person : ").append(contactUS.getContactPersonFirstname() + " " + contactUS.getContactPersonLastname()).append("\n\n")
+                    .append("Contact Person : ").append(contactUS.getContactPersonFirstname()).append(" ").append(contactUS.getContactPersonLastname()).append("\n\n")
                     .append("Contact Number : ").append(contactUS.getPhone()).append("\n\n")
                     .append("Email : ").append(contactUS.getEmail()).append("\n\n")
                     .append("Request Details : ").append(contactUS.getMessage()).append("\n")
@@ -133,17 +133,18 @@ public class SendEmailHelper {
 
     /**
      *
-     * @param requestAQuote
+     * @param incomingRFQ
      */
     public void sendRequestForQuoteEmail(IncomingRFQ incomingRFQ) {
     }
 
     /**
      *
-     * @param vendorRegistration
+     * @param serviceProvider
+     * @param mailNotifications
      */
     public void vendoRegistration(ServiceProvider serviceProvider, MailNotifications mailNotifications) {
-          if (serviceProvider != null) {
+        if (serviceProvider != null) {
 
             String subject = "Vendor " + serviceProvider.getVendorNumber() + " has been logged in the Mshengu KMIS.";
             String subject2 = "Vendor" + serviceProvider.getVendorNumber() + " has been logged in the Mshengu KMIS.";
@@ -153,7 +154,7 @@ public class SendEmailHelper {
                     .append(subject2).append("\n")
                     .append("\n\n")
                     .append("Vendor Reference Number : ").append(serviceProvider.getVendorNumber()).append("\n\n")
-//                    .append("Vendor Date : ").append(formatHelper.getFullFormateddate(new Date())).append("\n\n")
+                    //                    .append("Vendor Date : ").append(formatHelper.getFullFormateddate(new Date())).append("\n\n")
                     .append("Contact Person : ").append(serviceProvider.getContactPersonName()).append("\n\n")
                     .append("Contact Number : ").append(serviceProvider.getContactPersonMainNumber()).append("\n\n")
                     //                    .append("Email : ").append("").append("\n\n")
@@ -174,11 +175,56 @@ public class SendEmailHelper {
         }
     }
 
-    public void serviceRequest(ServiceRequest serviceRequest) {
+        public void icomingQuoteRequest(IncomingRFQ incomingRFQ) {
+        if (incomingRFQ != null) {
+//            String siteName = getSiteName(incomingRFQ.getSiteId());
+            String customerName = getCustomerName(incomingRFQ.getCompanyName());
 
-        String siteName = getSiteName(serviceRequest.getSiteId());
-        String customerName = getCustomerName(serviceRequest.getCustomerId());
+            String subject = "Request for Hire " + incomingRFQ.getRefNumber()+ " has been logged in the Mshengu KMIS.";
+            String subject2 = "A request for hire " + incomingRFQ.getRefNumber() + " has been logged in the Mshengu KMIS.";
+
+            String messageBody = new StringBuilder()
+                    .append("\n\n")
+                    .append(subject2).append("\n")
+                    .append("\n\n")
+                    .append("Request Reference Number : ").append(incomingRFQ.getRefNumber()).append("\n")
+                    .append("Request Date : ").append(formatHelper.getFullFormateddateNoTime(incomingRFQ.getDateOfAction())).append("\n")
+                    .append("Contact Person : ").append(incomingRFQ.getContactPersonFirstname()).append(" ").append(incomingRFQ.getContactPersonLastname()).append("\n")
+                    .append("Contact Number : ").append(incomingRFQ.getContactNumber()).append("\n")
+                    .append("Cell Number : ").append(incomingRFQ.getTelephoneNumber()).append("\n")
+                    .append("Email : ").append(incomingRFQ.getEmail()).append("\n\n")
+                    //                    .append("Email : ").append("").append("\n\n")
+                    .append("----- Request Details -----").append("\n")
+                    .append("Customer Name : ").append(customerName).append("\n")
+                    .append("Event Name : ").append(incomingRFQ.getEventName()).append("\n")
+                    .append("Event Type : ").append(incomingRFQ.getEventType()).append("\n")
+                    .append("Event Date : ").append(incomingRFQ.getEventDate()).append("\n")
+                    .append("Delivery Date : ").append(formatHelper.getFullFormateddateNoTime(incomingRFQ.getDeliveryDate())).append("\n")
+                    .append("Collection Date : ").append(formatHelper.getFullFormateddateNoTime(incomingRFQ.getCollectionDate())).append("\n\n")
+                    .append("Comments  : ").append(incomingRFQ.getComment()).append("\n")
+                    .append("\n")
+                    .append("\n\n")
+                    .append("To attend to this  request for hire, please log on to the Mshengu  KMIS,\n")
+                    .append("using the following web address : www.mshengutoilethire.co.za \n")
+                    .append("\n\n")
+                    .append("\n")
+                    //                    .append("Please logon to the following site to access the System: www.mshengutoilethire.co.za")
+                    .toString();
+
+            sendEmail(incomingRFQ.getMailNotifications(), subject, messageBody);
+
+        } else {
+            Notification.show("Email Not Sent, Notification Type Not Set!", Notification.Type.ERROR_MESSAGE);
+        }
+    }
+        /**
+         * 
+         * @param serviceRequest 
+         */
+    public void serviceRequest(ServiceRequest serviceRequest) {
         if (serviceRequest != null) {
+            String siteName = getSiteName(serviceRequest.getSiteId());
+            String customerName = getCustomerName(serviceRequest.getCustomerId());
 
             String subject = "Service Request " + serviceRequest.getRefNumber() + " has been logged in the Mshengu KMIS.";
             String subject2 = "A service request " + serviceRequest.getRefNumber() + " has been logged in the Mshengu KMIS.";
@@ -204,7 +250,7 @@ public class SendEmailHelper {
                     .append(serviceRequest.getUnitsRequired())
                     .append("\n")
                     .append("\n\n")
-                    .append("To attend to this service equest , please log on to the Mshengu  KMIS,\n")
+                    .append("To attend to this service request , please log on to the Mshengu  KMIS,\n")
                     .append("using the following web address : www.mshengutoilethire.co.za \n")
                     .append("\n\n")
                     .append("\n")
@@ -224,7 +270,6 @@ public class SendEmailHelper {
                 ComposeEmail email = new ComposeEmail();
                 List<String> addressesTo = new ArrayList<>();
                 addressesTo.add("customerservice@mshengutoilethire.co.za");
-
 
                 email.setFrom("customerservice@mshengutoilethire.co.za");
                 email.setPassword("Mth@cust123");
@@ -271,10 +316,8 @@ public class SendEmailHelper {
         email.setEmailBody(messageBody);
         EmailUtil.sendSimpleEmail(email);
 
-
     }
 
-    
     public void feedbackEmail2(Date dateIn, String customerEmail, String refNumber) {
 //        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 //        String formatedDate = dateTimeFormatHelper.getFullFormateddate(dateIn);
@@ -303,7 +346,6 @@ public class SendEmailHelper {
         email.setSubject(subject);
         email.setEmailBody(messageBody);
         EmailUtil.sendSimpleEmail(email);
-
 
     }
 

@@ -34,7 +34,7 @@ public class ApprovedRequestsForm extends FormLayout {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
-        supplier = UICombobox.getVendorsComboBox("Select Supplier: ", "supplier", InvoiceBean.class, binder);
+        supplier = UICombobox.getProcurementVendorsComboBox("Select Supplier: ", "supplier", InvoiceBean.class, binder);
         month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
         year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
 

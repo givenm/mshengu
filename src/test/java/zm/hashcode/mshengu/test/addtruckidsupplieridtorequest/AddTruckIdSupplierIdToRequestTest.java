@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.Request;
+import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.services.procurement.RequestService;
 import zm.hashcode.mshengu.test.AppTest;
 
@@ -45,6 +46,22 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
 //            if (truck != null) {
             System.out.println("Request Check: TruckId= " + request.getTruckId() + " | ServiceProviderId= " + request.getServiceProviderId() + " | getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber() + " | Payment Amt= " + request.getPaymentAmount() + " | Total= " + request.getTotal() + " | CostCenter Name= " + request.getCostCentreType().getName());
 //            }
+        }
+    }
+    
+    public String getTruckId(Truck truck){
+        if(truck != null){
+           return truck.getId();
+        }else{
+            return "Trcuk IS null";
+        }
+    }
+    
+      public String getCostCentreCategoryTypeName(CostCentreCategoryType categoryType){
+        if(categoryType != null){
+           return categoryType.getName();
+        }else{
+            return " Category Name IS null ";
         }
     }
 

@@ -8,15 +8,22 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.util.Collection;
 import zm.hashcode.mshengu.app.facade.external.IncomingRFQFacade;
+import zm.hashcode.mshengu.app.facade.external.MailNotificationsFacade;
+import zm.hashcode.mshengu.app.util.SequenceHelper;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.QuoteRequestsMenu;
 import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.forms.QuoteRequestsForm;
 import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.models.QuoteRequestBean;
 import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.tables.QuoteRequestsTable;
 import zm.hashcode.mshengu.domain.external.IncomingRFQ;
+import zm.hashcode.mshengu.domain.external.MailNotifications;
+import zm.hashcode.mshengu.domain.ui.util.Sequence;
 
 /**
  *
@@ -28,6 +35,7 @@ public class QuoteRequestsTab extends VerticalLayout implements
     private final MshenguMain main;
     private final QuoteRequestsForm form;
     private final QuoteRequestsTable table;
+    private final SequenceHelper sequenceHelper = new SequenceHelper();
 
     public QuoteRequestsTab(MshenguMain app) {
         main = app;
@@ -72,7 +80,10 @@ public class QuoteRequestsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -83,7 +94,10 @@ public class QuoteRequestsTab extends VerticalLayout implements
             getHome();
             Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -93,9 +107,12 @@ public class QuoteRequestsTab extends VerticalLayout implements
     }
 
     private IncomingRFQ getEntity(FieldGroup binder) {
+        
+        final MailNotifications mailNotifications = MailNotificationsFacade.getMailNotificationsService().findByName("REQUEST_TOILET_HIRE_NOTIFCATION");
         final QuoteRequestBean bean = ((BeanItem<QuoteRequestBean>) binder.getItemDataSource()).getBean();
-
+//sequenceHelper
         IncomingRFQ incomingRFQ = new IncomingRFQ.Builder(bean.getActionDate())
+                .refNumber(sequenceHelper.getRefNumber(getMailNotficationSequence(mailNotifications)))
                 .billingAddress(bean.getBillingAddress())
                 .collectionDate(bean.getCollectionDate())
                 .comment(bean.getComment())
@@ -249,4 +266,14 @@ public class QuoteRequestsTab extends VerticalLayout implements
         bean.setFaxNumber(rfg.getFaxNumber());
         return bean;
     }
+    
+    private Sequence getMailNotficationSequence(MailNotifications mailNotifications){
+        if(mailNotifications != null){
+            return  mailNotifications.getSequence();
+        }else{
+            return null;
+        }
+    }
 }
+
+

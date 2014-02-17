@@ -56,8 +56,8 @@ public class ContactUSForm extends FormLayout {
 //          private String id;
         TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", ContactUSBean.class, binder);        
 
-        DateField dateOfAction = UIComponent.getDateField("Reported On:", "dateOfAction", ContactUSBean.class, binder);
-        dateOfAction = UIValidatorHelper.setRequiredDateField(dateOfAction, "Reported On");
+//        DateField dateOfAction = UIComponent.getDateField("Reported On:", "dateOfAction", ContactUSBean.class, binder);
+//        dateOfAction = UIValidatorHelper.setRequiredDateField(dateOfAction, "Reported On");
 
         TextField contactPersonFirstname = UIComponent.getTextField("Contact Person Firstname:", "contactPersonFirstname", ContactUSBean.class, binder);
         contactPersonFirstname = UIValidatorHelper.setRequiredTextField(contactPersonFirstname, "Contact Person Firstname");
@@ -72,6 +72,7 @@ public class ContactUSForm extends FormLayout {
         email = UIValidatorHelper.setRequiredTextField(email, "Email");
 
         TextField phone = UIComponent.getTextField("Phone:", "phone", ContactUSBean.class, binder);
+        phone = UIValidatorHelper.setRequiredTextField(phone, "Phone");
         phone.addValidator(UIValidatorHelper.phoneNumberValidator());
 
         TextField faxNumber = UIComponent.getTextField("Fax:", "faxNumber", ContactUSBean.class, binder);
