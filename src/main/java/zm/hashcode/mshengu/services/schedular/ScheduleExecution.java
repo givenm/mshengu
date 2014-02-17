@@ -22,15 +22,19 @@ public class ScheduleExecution {
     AsyncCalls asyncCalls;
 
     /**
-     * * * * * command to be executed - - - - - | | | | | | | | | ----- Day of
-     * week (0 - 7) (Sunday=0 or 7) | | | ------- Month (1 - 12) | | ---------
-     * Day of month (1 - 31) | ----------- Hour (0 - 23) ------------- Minute (0
-     * - 59)
-     *
+     * * * * * * * command to be executed - - - - - 
+     * | | | | | | 
+     * | | | | | | 
+     * | | | | | ----- Day of * week (0 - 7) (Sunday=0 or 7) 
+     * | | | | ------- Month (1 - 12) 
+     * | | | --------- * Day of month (1 - 31) 
+     * | | ----------- Hour (0 - 23) 
+     * | ------------- Minute (0 * - 59)
+     * |.............. Seconds 
      */
 //                       * * *  * * *
-//    @Scheduled(cron = "* 15 21-23 * * MON-SAT")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday
-    @Scheduled(cron = "* * 18 * * *")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday                     
+//    @Scheduled(cron = "*  15 21-23 * * MON-SAT")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday
+      @Scheduled(cron = "00 05 18 * * *")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday                     
     public void runthisCode() {
         // Code to be execute duering Schedule
         Date date = new Date();

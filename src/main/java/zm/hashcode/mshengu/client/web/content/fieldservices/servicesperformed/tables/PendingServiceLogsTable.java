@@ -35,7 +35,7 @@ public class PendingServiceLogsTable extends Table {
 
         addContainerProperty("Site", String.class, null);
         addContainerProperty("Service Date", String.class, null);
-        addContainerProperty("Service Time", String.class, null);
+//        addContainerProperty("Service Time", String.class, null);
 //        addContainerProperty("Serviced By", String.class, null);
 //        addContainerProperty("Truck Used", String.class, null);
         addContainerProperty("Service Status", String.class, null);
@@ -58,7 +58,7 @@ public class PendingServiceLogsTable extends Table {
             addItem(new Object[]{
                 siteServiceLog.getParentId(),
                 formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
-                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
+//                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
 //                getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
 //                siteServiceLog.getVehicleNumber(),
                 siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
