@@ -40,4 +40,14 @@ public class ServiceProviderRepositoryImpl implements ServiceProviderRepositoryC
 
         return mongoOperation.findOne(serviceProviderQuery, ServiceProvider.class);
     }
+
+    @Override
+    public List<ServiceProvider> getVehicleMaintenanceServiceProvders() {
+        // serviceProvder.isVehicleMaintenance()
+        Query serviceProviderQuery = new Query();
+        serviceProviderQuery.addCriteria(
+                Criteria.where("vehicleMaintenance").is(true));
+
+        return mongoOperation.find(serviceProviderQuery, ServiceProvider.class);
+    }
 }

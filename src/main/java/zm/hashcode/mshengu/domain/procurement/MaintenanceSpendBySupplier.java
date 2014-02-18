@@ -98,14 +98,20 @@ public class MaintenanceSpendBySupplier implements Serializable, Comparable<Main
 //            return maintenanceSpendBySupplier1.getMaintenanceCost().compareTo(maintenanceSpendBySupplier2.getMaintenanceCost());
 //        }
 //    };
-    public static Comparator<MaintenanceSpendBySupplier> AscOrderTruckAscOrderDateComparator = new Comparator<MaintenanceSpendBySupplier>() {
+//    public static Comparator<MaintenanceSpendBySupplier> AscOrderTruckAscOrderDateComparator = new Comparator<MaintenanceSpendBySupplier>() {
+//        @Override
+//        public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
+//            // Ascending Order by Truck
+//            int compareOne = maintenanceSpendBySupplier1.getTruckId().compareTo(maintenanceSpendBySupplier2.getTruckId());
+//            // Ascending order by Date
+//            int compareTwo = maintenanceSpendBySupplier1.getTransactionDate().compareTo(maintenanceSpendBySupplier2.getTransactionDate());
+//            return ((compareOne == 0) ? compareTwo : compareOne);
+//        }
+//    };
+    public static Comparator<MaintenanceSpendBySupplier> AscOrderSupplierComparator = new Comparator<MaintenanceSpendBySupplier>() {
         @Override
         public int compare(MaintenanceSpendBySupplier maintenanceSpendBySupplier1, MaintenanceSpendBySupplier maintenanceSpendBySupplier2) {
-            // Ascending Order by Truck
-            int compareOne = maintenanceSpendBySupplier1.getTruckId().compareTo(maintenanceSpendBySupplier2.getTruckId());
-            // Ascending order by Date
-            int compareTwo = maintenanceSpendBySupplier1.getTransactionDate().compareTo(maintenanceSpendBySupplier2.getTransactionDate());
-            return ((compareOne == 0) ? compareTwo : compareOne);
+            return maintenanceSpendBySupplier1.getSupplierId().compareTo(maintenanceSpendBySupplier2.getSupplierId());
         }
     };
 

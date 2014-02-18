@@ -104,4 +104,9 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     public ServiceProvider findByVendorNumber(String vendorNumber) {
         return repository.findByVendorNumber(vendorNumber);
     }
+
+    @Override
+    public List<ServiceProvider> getVehicleMaintenanceServiceProvders() {
+        return repository.getVehicleMaintenanceServiceProvders();
+    }
 }
