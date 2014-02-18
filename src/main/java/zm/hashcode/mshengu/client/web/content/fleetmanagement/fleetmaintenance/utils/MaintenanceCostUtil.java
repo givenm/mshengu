@@ -112,8 +112,12 @@ public class MaintenanceCostUtil implements Serializable {
                 List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsByTruckByMonth(truck, startCalendar.getTime());
                 if (!requestList.isEmpty()) {
                     for (Request request : requestList) {
-                        // Accumulate the Total for each Request for current Truck for current Month
-                        accumulatedTotal = accumulatedTotal.add(request.getTotal()); //
+                        if (request.getServiceProvider().getVatNum() != null) {
+                            // REMOVE VAT CHARGES FROM TOTAL
+                            accumulatedTotal = accumulatedTotal.add(getTotalExcludingVAT(request.getTotal()));
+                        } else {
+                            accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                        }
                     }
                     // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
                     counter++;
@@ -139,11 +143,13 @@ public class MaintenanceCostUtil implements Serializable {
                 BigDecimal accumulatedTotal = BigDecimal.ZERO;
                 List<Request> requestList = RequestFacade.getRequestService().getTransactedRequestsByTruckByMonth(truck, startCalendar.getTime());
                 if (!requestList.isEmpty()) {
-                    // REMOVE VAT CHARGES FROM TOTAL
-
-
                     for (Request request : requestList) {
-                        accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                        if (request.getServiceProvider().getVatNum() != null) {
+                            // REMOVE VAT CHARGES FROM TOTAL
+                            accumulatedTotal = accumulatedTotal.add(getTotalExcludingVAT(request.getTotal()));
+                        } else {
+                            accumulatedTotal = accumulatedTotal.add(request.getTotal());
+                        }
                     }
                     // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
                     counter++;
@@ -161,7 +167,6 @@ public class MaintenanceCostUtil implements Serializable {
 
     private AnnualDataFleetMaintenanceCost buildAnnualDataFleetMaintenanceCostList(int counter, Truck truck, Calendar startCalendar, BigDecimal monthlyCost) {
         // Build the AnnualDataFleetMaintenanceCost for current Truck for current Month
-
         final AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost = new AnnualDataFleetMaintenanceCost.Builder(startCalendar.getTime())
                 .driverPersonId(truck.getDriver().getId())
                 .id(counter + "")
@@ -176,7 +181,6 @@ public class MaintenanceCostUtil implements Serializable {
         Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
         calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
-
         return calendarDate.getTime();
     }
 
@@ -184,7 +188,14 @@ public class MaintenanceCostUtil implements Serializable {
         Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
         calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
-
         return calendarDate.getTime();
+    }
+
+    public BigDecimal getTotalExcludingVAT(BigDecimal totalWithVAT) {
+        BigDecimal VATValue = new BigDecimal("0.14").multiply(totalWithVAT);
+        VATValue.setScale(2, BigDecimal.ROUND_UP);
+
+        totalWithVAT = totalWithVAT.subtract(VATValue);
+        return totalWithVAT.setScale(2, BigDecimal.ROUND_UP);
     }
 }

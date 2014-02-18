@@ -159,7 +159,6 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     }
 
     public List<MonthlySpendData> buildAnnualDataMaintenanceCost(List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList, List<Truck> serviceTrucks) {
-
         String month = null;
         int iD = 1;
         List<MonthlySpendData> monthlySpendDataList = new ArrayList<>();

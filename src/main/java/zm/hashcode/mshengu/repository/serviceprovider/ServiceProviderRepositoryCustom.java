@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.repository.serviceprovider;
 
+import java.util.List;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
 /**
@@ -13,4 +14,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 public interface ServiceProviderRepositoryCustom {
 
     public ServiceProvider findByVendorNumber(String vendorNumber);
+
+    public List<ServiceProvider> getVehicleMaintenanceServiceProvders();
 }
