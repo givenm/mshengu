@@ -60,7 +60,6 @@ public class RequestForm extends FormLayout {
     public TextField total = new TextField();
     public GridLayout itemPurchaseLayout = new GridLayout(3, 11);
     public TextField description = new TextField();
-    private SequenceHelper sequenceHelper = new SequenceHelper();
     public Label errorMessage;
 
     public RequestForm(final MshenguMain main) {
@@ -70,12 +69,10 @@ public class RequestForm extends FormLayout {
         GridLayout generalPanel = new GridLayout(3, 10);
         generalPanel.setSizeFull();
 
-//        Sequence sequence = SequenceFacade.getSequenceListService().findByName("PURCHASE_REQUEST");
-//        String orderNum  = sequenceHelper.getSequenceInitialNumber(sequence);
         Label requesterInfo = new Label("Requester Information");
         requesterInfo.addStyleName("h4");
         ordernumber = UIComponent.getTextField("Purchase Order Number:", "orderNumber", RequestBean.class, binder);
-//        ordernumber.setValue(orderNum);
+        
         personRequesting = UIComboBox.getRequestingPersonComboBox("Person Requesting Item(s):", "requestingPerson", RequestBean.class, binder);
         personRequesting = UIValidatorHelper.setRequiredComboBox(personRequesting, "Person Requesting Item(s)");
         
