@@ -46,7 +46,6 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
          }
          System.out.println("--==--");
          */
-
         return mongoOperation.find(maintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
     }
 

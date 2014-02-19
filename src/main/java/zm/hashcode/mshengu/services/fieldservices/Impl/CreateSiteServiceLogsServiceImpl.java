@@ -33,8 +33,8 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
     private SiteServiceLogService siteServiceLogService;
     @Autowired
     private TruckService truckService;
-    private DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
-    private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
+    final private DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
+    final private SiteServiceLogsStatusHelper statusHelper = new SiteServiceLogsStatusHelper();
 
     @Override
     public void createSiteServiceLog(Site site, Date date) {
@@ -49,14 +49,14 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
 
         statusHelper.setServiceLogsStatus(isNextDayVisitDate, totalNumberOfUnits, totalNumberOfUnitsServiced);
 
-        Truck servicedBy = truckService.findBySiteName(site.getName());
+//        Truck servicedBy = truckService.findBySiteName(site.getName());
 
         SiteServiceLog newSiteServiceLog = new SiteServiceLog.Builder(serviceDate)
                 .serviceTime(serviceDate)
                 .comment("")
                 .numberOfUnitsNotServiced(totalNumberOfUnitsNotServiced)
                 .numberOfUnitsServiced(totalNumberOfUnitsServiced)
-                .servicedBy(servicedBy)
+//                .servicedBy(servicedBy)
                 .completionStatus(statusHelper.getCompletionStatus())
                 .serviceStatus(statusHelper.getServiceStatus())
                 .status(statusHelper.getStatus())
@@ -69,7 +69,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
 
         updateSite(site, newSiteServiceLog);
 
-        System.out.println("Site Name: " + site.getName());
+      /*  System.out.println("Site Name: " + site.getName());
 //        if(totalNumberOfUnitsServiced > 0){){
         System.out.println("Action : CREATE LOG");
         System.out.println("Service Date " + serviceDate);
@@ -81,7 +81,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());
-        System.out.println("Contract type " + newSiteServiceLog.getContractType());
+        System.out.println("Contract type " + newSiteServiceLog.getContractType());*/
     }
 
     @Override
@@ -108,10 +108,10 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
 
         siteServiceLogService.merge(newSiteServiceLog);
 
-
+/*
         System.out.println("Site Name: " + newSiteServiceLog.getParentId());
 //        if(totalNumberOfUnitsServiced > 0){){
-        System.out.println("Action : CREATE LOG");
+        System.out.println("Action : UPDATE LOG");
         System.out.println("Service Date " + newSiteServiceLog.getServiceDate());
         System.out.println("Tommorrows Date" + dtfwh.getTomorrowsDate_No_HTMSM());
         System.out.println("totalNumberOfUnits Not Serviced " + newSiteServiceLog.getNumberOfUnitsNotServiced());
@@ -121,7 +121,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());
-        System.out.println("Contract type " + newSiteServiceLog.getContractType());
+        System.out.println("Contract type " + newSiteServiceLog.getContractType());*/
     }
 
     @Override
@@ -134,8 +134,8 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
 
         siteServiceLogService.merge(newSiteServiceLog);
 
-        System.out.println("Site Name: " + "No Idea");
-        System.out.println("Action : CREATE LOG");
+      /*  System.out.println("Site Name: " + "No Idea");
+        System.out.println("Action : CLOSE LOG");
         System.out.println("Service Date " + newSiteServiceLog.getServiceDate());
         System.out.println("Tommorrows Date" + dtfwh.getTomorrowsDate_No_HTMSM());
         System.out.println("totalNumberOfUnits Not Serviced " + newSiteServiceLog.getNumberOfUnitsNotServiced());
@@ -145,7 +145,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());
-        System.out.println("Contract type " + newSiteServiceLog.getContractType());
+        System.out.println("Contract type " + newSiteServiceLog.getContractType());*/
     }
 
     private Date getServiceDate(SiteServiceLog lastSiteServiceLog) {

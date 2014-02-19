@@ -102,27 +102,6 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         return true;
     }
 
-    /**
-     * @return the mailNotifications
-     */
-    public MailNotifications getMailNotifications() {
-        return mailNotifications;
-    }
-
-    /**
-     * @return the preferedVendor
-     */
-    public boolean isPreferedVendor() {
-        return preferedVendor;
-    }
-
-    /**
-     * @return the vendorNumber
-     */
-    public String getVendorNumber() {
-        return vendorNumber;
-    }
-
     public static class Builder {
 
         private final String name;
@@ -458,5 +437,26 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return the mailNotifications
+     */
+    public MailNotifications getMailNotifications() {
+        return mailNotifications;
+    }
+
+    /**
+     * @return the preferedVendor
+     */
+    public boolean isPreferedVendor() {
+        return preferedVendor;
+    }
+
+    /**
+     * @return the vendorNumber
+     */
+    public String getVendorNumber() {
+        return vendorNumber;
     }
 }

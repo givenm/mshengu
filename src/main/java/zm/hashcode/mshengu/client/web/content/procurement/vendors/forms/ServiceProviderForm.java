@@ -57,86 +57,86 @@ public class ServiceProviderForm extends FormLayout {
         //General Information
         Label generalInfo = new Label("General Information");
         TextField vendorNumber = UIComponent.getTextField("Vendor Number:", "vendorNumber", ServiceProviderBean.class, binder);
-        
+
         TextField name = UIComponent.getTextField("Name of Company:", "name", ServiceProviderBean.class, binder);
         name = UIValidatorHelper.setRequiredTextField(name, "Name of Company");
-        
+
         TextField regNum = UIComponent.getTextField("Company Registration Number:", "registrationNum", ServiceProviderBean.class, binder);
         regNum = UIValidatorHelper.setRequiredTextField(regNum, "Company Registration Number");
-        
+
         ComboBox legalForm = UIComboBox.getLegalFormComboBox("Legal form of the company:", "legalForm", ServiceProviderBean.class, binder);
         legalForm = UIValidatorHelper.setRequiredComboBox(legalForm, "Legal form of the company");
-        
+
         TextField yearOfBus = UIComponent.getTextField("Year of business establishment:", "yearsOfBus", ServiceProviderBean.class, binder);
         yearOfBus = UIValidatorHelper.setRequiredTextField(yearOfBus, "Year of business establishment");
-        yearOfBus.addValidator(UIValidatorHelper.yearValidator());        
-        
+        yearOfBus.addValidator(UIValidatorHelper.yearValidator());
+
         TextField firstNameChiefExec = UIComponent.getTextField("First Name (Chief Executive/Proprietor):", "firstNameChiefExec", ServiceProviderBean.class, binder);
         firstNameChiefExec = UIValidatorHelper.setRequiredTextField(firstNameChiefExec, "First Name (Chief Executive/Proprietor)");
-        
+
         TextField lastNameChiefExec = UIComponent.getTextField("Last Name (Chief Executive/Proprietor):", "lastNameChiefExec", ServiceProviderBean.class, binder);
         lastNameChiefExec = UIValidatorHelper.setRequiredTextField(lastNameChiefExec, "Last Name (Chief Executive/Proprietor)");
-        
+
         TextField vatNum = UIComponent.getTextField("Vat Registration Number:", "vatNum", ServiceProviderBean.class, binder);
         vatNum = UIValidatorHelper.setRequiredTextField(vatNum, "Vat Registration Number");
-        
+
         TextField website = UIComponent.getTextField("Website:", "website", ServiceProviderBean.class, binder);
-        
+
         CheckBox active = UIComponent.getCheckBox("Vendor Status (Preferred / Non-preferred)", "active", ServiceProviderBean.class, binder);
-        
+
         CheckBox vehicleMaintenance = UIComponent.getCheckBox("Vehicle Maintenance", "vehicleMaintenance", ServiceProviderBean.class, binder);
         CheckBox registeredForVat = UIComponent.getCheckBox("Not Registered for VAT B/E", "registeredForVat", ServiceProviderBean.class, binder);
-        
+
 
 //Contact Information
         Label contactInfo = new Label("Contact Information");
-        
+
         TextArea address1 = UIComponent.getTextArea("Address Line 1:", "address1", ServiceProviderBean.class, binder);
-        address1 = UIValidatorHelper.setRequiredTextArea(address1, "Address Line 1");        
+        address1 = UIValidatorHelper.setRequiredTextArea(address1, "Address Line 1");
         address1.addValidator(new BeanValidator(ServiceProviderBean.class, "address1"));
-        
+
         TextArea address2 = UIComponent.getTextArea("Address Line 2:", "address2", ServiceProviderBean.class, binder);
         address1.addValidator(new BeanValidator(ServiceProviderBean.class, "address2"));
-        
+
         TextField city = UIComponent.getTextField("City:", "city", ServiceProviderBean.class, binder);
         city = UIValidatorHelper.setRequiredTextField(city, "City");
-        
+
         TextField code = UIComponent.getTextField("Postal Code: ", "code", ServiceProviderBean.class, binder);
         code = UIValidatorHelper.setRequiredTextField(code, "Postal Code");
         code.addValidator(UIValidatorHelper.postalCodeValidator());
-        
+
         TextField firstName = UIComponent.getTextField("Contact Person Name:", "firstName", ServiceProviderBean.class, binder);
         firstName = UIValidatorHelper.setRequiredTextField(firstName, "Contact Person Name");
-        
+
         TextField lastName = UIComponent.getTextField("Contact Person Surname:", "lastName", ServiceProviderBean.class, binder);
         lastName = UIValidatorHelper.setRequiredTextField(lastName, "Contact Person Surname");
-        
+
         TextField mainNumber = UIComponent.getTextField("Telephone Number:", "mainNumber", ServiceProviderBean.class, binder);
         mainNumber = UIValidatorHelper.setRequiredTextField(mainNumber, "Telephone Number");
         mainNumber.addValidator(UIValidatorHelper.phoneNumberValidator());
-        
+
         TextField faxNumber = UIComponent.getTextField("Fax Number:", "faxNumber", ServiceProviderBean.class, binder);
         faxNumber.addValidator(UIValidatorHelper.faxNumberValidator());
-        
+
         TextField otherNumber = UIComponent.getTextField("Mobile Number :", "otherNumber", ServiceProviderBean.class, binder);
         otherNumber.addValidator(UIValidatorHelper.mobileNumberValidator());
-        
+
         TextField emailAddress = UIComponent.getTextField("Email :", "emailAddress", ServiceProviderBean.class, binder);
         emailAddress.addValidator(UIValidatorHelper.emailValidator());
         emailAddress = UIValidatorHelper.setRequiredTextField(emailAddress, "Email");
-        
+
         //Organizational Information
         Label orgInfo = new Label("Organizational Information");
-        
+
         ComboBox serviceProviderCategoryId = UIComboBox.getServiceProviderCategoryComboBox("Vendor Category", "serviceProviderCategoryId", ServiceProviderBean.class, binder);
         serviceProviderCategoryId = UIValidatorHelper.setRequiredComboBox(serviceProviderCategoryId, "Vendor Category");
-        
+
         TextField bankName = UIComponent.getTextField("Bank Name: ", "bankName", ServiceProviderBean.class, binder);
         TextField accountNumber = UIComponent.getTextField("Account Number:", "accountNumber", ServiceProviderBean.class, binder);
         TextField branchCode = UIComponent.getTextField("Branch Code:", "branchCode", ServiceProviderBean.class, binder);
 
         errorMessage = UIComponent.getErrorLabel();
-        
+
         GridLayout grid = new GridLayout(3, 21);
         grid.setSizeFull();
 

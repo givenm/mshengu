@@ -36,10 +36,10 @@ public class ServiceLogsNotServicedReportTab extends VerticalLayout implements
     public ServiceLogsNotServicedReportTab(MshenguMain app) {
         main = app;
         this.dtfwh = new DateTimeFormatWeeklyHelper();
-        date = dtfwh.getDate(22, 10, 2013);
+        date = new Date();
         dtfwh.setDate(date);
         startDate = dtfwh.getMondayDateFull();
-        endDate = dtfwh.getSaturdayDateFull();
+        endDate = dtfwh.getSundayDateFull();
 
         table = new NotServicedServiceLogsTable(main, startDate, endDate);
 
@@ -57,17 +57,22 @@ public class ServiceLogsNotServicedReportTab extends VerticalLayout implements
         heading.setSizeUndefined();
         heading.addStyleName("h4");
 
-        Label weekRange = new Label("Services - From : " + dtfwh.getMondayDateYYMMDD() + " To :" + dtfwh.getSundayDateYYMMDD());
-        weekRange.setSizeUndefined();
-        weekRange.addStyleName("h4");
+           Label lblFrom = new Label("From : " + dtfwh.getMondayDateYYMMDD());
+        lblFrom.setSizeUndefined();
+        lblFrom.addStyleName("h4");
+        
+        Label lblTo = new Label(" To :" + dtfwh.getSundayDateYYMMDD());
+        lblTo.setSizeUndefined();
+        lblTo.addStyleName("h4");
         GridLayout grid = new GridLayout(6, 3);
 
         grid.setSizeFull();
 
         
         grid.addComponent(topleft, 0, 0);
-        grid.addComponent(heading, 1, 1, 2, 1);
-        grid.addComponent(weekRange, 3, 1, 4, 1);
+        grid.addComponent(heading, 2, 0, 3, 0);        
+        grid.addComponent(lblFrom, 1, 1, 2, 1);
+        grid.addComponent(lblTo, 3, 1, 4, 1);
         grid.addComponent(bottomRight, 5, 2);
         addComponent(grid);
         addComponent(table);

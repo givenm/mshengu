@@ -17,10 +17,35 @@ import java.math.BigDecimal;
 public class FlagImage implements Serializable {
 
     /**
+     * Determines Flagging based on parameter and return an Embedded type (a
+     * flag) with the appropriate color
+     *
+* @param value BigDecimal
+     * @return Embedded
+     */
+    public Embedded determineFlag(BigDecimal value) {
+        // Image as a tHEME Resource
+        Embedded greenImage = new Embedded("", new ThemeResource("images/green_flag.png"));
+        Embedded redImage = new Embedded("", new ThemeResource("images/red_flag.png"));
+        Embedded yellowImage = new Embedded("", new ThemeResource("images/yellow_flag.png"));
+        Double val = value.doubleValue();
+        if (val.compareTo(new Double("0.0")) == 0) {
+            return new Embedded();
+        }
+        if (val.compareTo(new Double("7.9")) > 0) {
+            return redImage;
+        } else if (val.compareTo(new Double("6.0")) > 0) {
+            return yellowImage;
+        }
+
+        return greenImage;
+    }
+
+    /**
      * Determines Flagging based on parameter and return an image (a flag) with
      * the appropriate color
      *
-     * @param value BigDecimal
+* @param value BigDecimal
      * @return Image
      */
     public Image determineImageFlag(BigDecimal value) {
@@ -33,15 +58,67 @@ public class FlagImage implements Serializable {
         if (val.compareTo(new Double("0.0")) == 0) {
             return new Image();
         }
-        if (val.compareTo(new Double("5.0")) > 0) {
+
+        if (val.compareTo(new Double("7.9")) > 0) {
             return redImage;
-        } else if (val.compareTo(new Double("3.5")) > 0) {
+        } else if (val.compareTo(new Double("6.0")) > 0) {
             return yellowImage;
         }
 
         return greenImage;
     }
 
+//
+//    /**
+//     * Determines Flagging based on parameter and return an image (a flag) with
+//     * the appropriate color
+//     *
+//     * @param value BigDecimal
+//     * @return Image
+//     */
+//    public Image determineImageFlag(BigDecimal value) {
+//        // Image as a tHEME Resource
+//        Image greenImage = new Image("", new ThemeResource("images/green_flag.png"));
+//        Image redImage = new Image("", new ThemeResource("images/red_flag.png"));
+//        Image yellowImage = new Image("", new ThemeResource("images/yellow_flag.png"));
+//        Double val = value.doubleValue();
+//
+//        if (val.compareTo(new Double("0.0")) == 0) {
+//            return new Image();
+//        }
+//        if (val.compareTo(new Double("5.0")) > 0) {
+//            return redImage;
+//        } else if (val.compareTo(new Double("3.5")) > 0) {
+//            return yellowImage;
+//        }
+//
+//        return greenImage;
+//    }
+//
+//    /**
+//     * Determines Flagging based on parameter and return an Embedded type (a
+//     * flag) with the appropriate color
+//     *
+//     * @param value BigDecimal
+//     * @return Embedded
+//     */
+//    public Embedded determineFlag(BigDecimal value) {
+//        // Image as a tHEME Resource
+//        Embedded greenImage = new Embedded("", new ThemeResource("images/green_flag.png"));
+//        Embedded redImage = new Embedded("", new ThemeResource("images/red_flag.png"));
+//        Embedded yellowImage = new Embedded("", new ThemeResource("images/yellow_flag.png"));
+//        Double val = value.doubleValue();
+//
+//        if (val.compareTo(new Double("0.0")) == 0) {
+//            return new Embedded();
+//        }
+//        if (val.compareTo(new Double("5.0")) > 0 || val.compareTo(new Double("5.0")) == 0) {
+//            return redImage;
+//        } else if (val.compareTo(new Double("3.5")) > 0 || val.compareTo(new Double("3.5")) == 0) {
+//            return yellowImage;
+//        }
+//        return greenImage;
+//    }
     /**
      * Determines Vehicle Ranking Flagging based on parameter and return an
      * image (a flag) with the appropriate color
@@ -59,7 +136,6 @@ public class FlagImage implements Serializable {
         if (val.compareTo(new Double("0.0")) == 0) {
             return new Image();
         }
-
         if (val.compareTo(new Double("5.0")) > 0 || val.compareTo(new Double("5.0")) == 0) {
             return redImage;
         } else if (val.compareTo(new Double("3.5")) > 0 || val.compareTo(new Double("3.5")) == 0) {
@@ -69,14 +145,7 @@ public class FlagImage implements Serializable {
         return greenImage;
     }
 
-    /**
-     * Determines Flagging based on parameter and return an Embedded type (a
-     * flag) with the appropriate color
-     *
-     * @param value BigDecimal
-     * @return Embedded
-     */
-    public Embedded determineFlag(BigDecimal value) {
+    public Embedded determineFuelUsageFlag(BigDecimal value) {
         // Image as a tHEME Resource
         Embedded greenImage = new Embedded("", new ThemeResource("images/green_flag.png"));
         Embedded redImage = new Embedded("", new ThemeResource("images/red_flag.png"));
@@ -86,14 +155,10 @@ public class FlagImage implements Serializable {
         if (val.compareTo(new Double("0.0")) == 0) {
             return new Embedded();
         }
-
-        if (val.compareTo(new Double("5.0")) > 0 || val.compareTo(new Double("5.0")) == 0) {
+        if (val.compareTo(new Double("8.0")) == 0 || val.compareTo(new Double("8.0")) > 0) {
             return redImage;
-        } else if (val.compareTo(new Double("3.5")) > 0 || val.compareTo(new Double("3.5")) == 0) {
+        } else if (val.compareTo(new Double("6.0")) > 0) {
             return yellowImage;
-        }
-        if (val.compareTo(new Double("0.0")) == 0) {
-            return new Embedded();
         }
         return greenImage;
     }

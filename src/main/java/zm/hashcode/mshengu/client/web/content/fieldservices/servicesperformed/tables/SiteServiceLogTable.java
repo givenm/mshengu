@@ -5,6 +5,8 @@
 package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables;
 
 import com.vaadin.ui.Table;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.products.SiteServiceLogFacade;
@@ -39,9 +41,9 @@ public class SiteServiceLogTable extends Table {
 
         addContainerProperty("Site", String.class, null);
         addContainerProperty("Service Date", String.class, null);
-        addContainerProperty("Service Time", String.class, null);
-        addContainerProperty("Serviced By", String.class, null);
-        addContainerProperty("Truck Used", String.class, null);
+//        addContainerProperty("Service Time", String.class, null);
+//        addContainerProperty("Serviced By", String.class, null);
+//        addContainerProperty("Truck Used", String.class, null);
         addContainerProperty("Service Status", String.class, null);
         addContainerProperty("Completion Status", String.class, null);
         addContainerProperty("Total Units Serviced", Integer.class, null);
@@ -57,13 +59,13 @@ public class SiteServiceLogTable extends Table {
         setImmediate(false);
         removeAllItems();
 
-        for (SiteServiceLog siteServiceLog : siteServiceLogs) {
+        for (SiteServiceLog siteServiceLog : sortSiteServiceLog(siteServiceLogs)) {
             addItem(new Object[]{
                 siteServiceLog.getParentId(),
                 formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
-                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
-                getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
-                siteServiceLog.getVehicleNumber(),
+//                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
+//                getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
+//                siteServiceLog.getVehicleNumber(),
                 siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
                 siteServiceLog.getCompletionStatus(),
                 siteServiceLog.getNumberOfUnitsServiced(),
@@ -96,5 +98,12 @@ public class SiteServiceLogTable extends Table {
         List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getAllSiteServiceLogs(siteId, startDate, endDate);
         loadSiteServiceLog(siteServiceLogs);
 //        table
+    }
+    
+      private List<SiteServiceLog> sortSiteServiceLog(List<SiteServiceLog> siteServiceLogs) {
+        List<SiteServiceLog> siteServiceLogList = new ArrayList<>();
+        siteServiceLogList.addAll(siteServiceLogs);
+        Collections.sort(siteServiceLogList);
+        return siteServiceLogList;
     }
 }

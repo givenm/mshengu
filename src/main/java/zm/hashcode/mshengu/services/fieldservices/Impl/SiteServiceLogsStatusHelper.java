@@ -137,10 +137,6 @@ public class SiteServiceLogsStatusHelper {
 
             }
         }
-
-        System.out.println("Tomorrow Is " + dtfwh.getDayOfWeekTomorrowStr());
-        System.out.println("Is Tomorrow Next Visit Day " + isVisitDay);
-        System.out.println("Calendar.DATE " + dtfwh.getDateTodayStr());
         return isVisitDay;
     }
 

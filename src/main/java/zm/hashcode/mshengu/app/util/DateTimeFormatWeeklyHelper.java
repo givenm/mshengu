@@ -42,9 +42,6 @@ public class DateTimeFormatWeeklyHelper implements Serializable {
     private String dateTomorrowStr;
     private int minusDaysToLastSunday;
     private int minusDaysToLastSaturday;
-//    Calendar calendar = Calendar.getInstance();
-    
-        Calendar fakeCalendar = Calendar.getInstance();
 
     
     /**

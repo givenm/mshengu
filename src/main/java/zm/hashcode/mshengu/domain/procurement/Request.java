@@ -180,6 +180,7 @@ public final class Request implements Serializable, Comparable<Request> {
             this.paymentDate = request.getPaymentDate();
             this.approver = request.getApprover();
             this.emailstatus = request.isEmailstatus();
+            this.truck = request.getTruck();
             this.truckId = request.getTruckId();
             this.serviceProviderSupplierId = request.getServiceProviderSupplierId();
             return this;

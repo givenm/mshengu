@@ -250,8 +250,6 @@ public class SiteServiceImpl implements SiteService {
 //        Date date = new Date();
         calendar.setTime(date);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        System.out.println("Calendar.DAY_OF_WEEK " + dayOfWeek);
-        System.out.println("Calendar.DATE " + calendar.getTime());
         List<Site> siteList;
         switch (dayOfWeek) {
             case 1:
@@ -280,8 +278,6 @@ public class SiteServiceImpl implements SiteService {
                 break;
 
         }
-//        System.out.println("Calendar.DAY_OF_WEEK " + Calendar.DAY_OF_WEEK);
-        System.out.println("Calendar.DATE " + calendar.getTime());
         return siteList;
     }
 

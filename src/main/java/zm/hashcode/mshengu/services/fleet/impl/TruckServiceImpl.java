@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.services.fleet.impl;
 
 import com.google.common.collect.Collections2;
 import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -90,11 +91,27 @@ public class TruckServiceImpl implements TruckService {
     @Override
     public Truck findBySiteName(String siteName) {
         List<Truck> truckList = (List<Truck>) repository.findAll();
-        Collection<Truck> truckFilteredList = Collections2.filter(truckList, new SiteNameTruckPredicate(siteName));
-        Iterator<Truck> truckIterator = truckFilteredList.iterator();
-        return truckIterator.hasNext() ? truckIterator.next() : null;
+        List<Truck> truckFilteredList = convertCollectionToList(Collections2.filter(truckList, new SiteNameTruckPredicate(siteName)));
+        if ((truckFilteredList != null) && (!truckFilteredList.isEmpty())) {
+          return  truckFilteredList.get(0);
+        }else{
+            return null;
+        }
+//        Iterator<Truck> truckIterator = truckFilteredList.iterator();
+//        return truckIterator.hasNext() ? truckIterator.next() : null;
 //        return Iterator truckFilteredList.iterator().next();
 //        return ImmutableList.copyOf();
 
     }
+
+    private List<Truck> convertCollectionToList(Collection<Truck> truckCollection) {
+        List<Truck> truckList;
+        if (truckCollection instanceof List) {
+            truckList = (List) truckCollection;
+        } else {
+            truckList = new ArrayList(truckCollection);
+        }
+        return truckList;
+    }
 }
+

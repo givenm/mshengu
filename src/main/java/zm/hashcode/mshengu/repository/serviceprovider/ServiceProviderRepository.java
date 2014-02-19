@@ -11,6 +11,5 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
  *
  * @author Ferox
  */
-public interface ServiceProviderRepository extends PagingAndSortingRepository<ServiceProvider , String>{
-    
+public interface ServiceProviderRepository extends PagingAndSortingRepository<ServiceProvider, String>, ServiceProviderRepositoryCustom {
 }

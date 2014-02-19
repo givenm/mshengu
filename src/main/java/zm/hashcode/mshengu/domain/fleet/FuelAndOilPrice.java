@@ -26,7 +26,7 @@ public class FuelAndOilPrice implements Serializable {
     private BigDecimal engineOilPrice;
     private Date engineOilEffectDate;
 
-    public FuelAndOilPrice() {
+    private FuelAndOilPrice() {
     }
 
     private FuelAndOilPrice(Builder builder) {

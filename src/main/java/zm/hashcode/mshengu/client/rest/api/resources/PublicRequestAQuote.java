@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.rest.api.resources;
 
 import java.util.Date;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 
 /**
  *
@@ -68,7 +69,7 @@ public class PublicRequestAQuote {
     public void setContactPersonLastname(String contactPersonLastname) {
         this.contactPersonLastname = contactPersonLastname;
     }
-    
+
     public String getTelephoneNumberNonRequired() {
         return telephoneNumberNonRequired;
     }
@@ -331,7 +332,18 @@ public class PublicRequestAQuote {
 
     @Override
     public String toString() {
-        return "PublicRequestAQuote{" + "companyNameNonRequired=" + companyNameNonRequired + ", contactPersonFirstname=" + contactPersonFirstname + ", contactPersonLastname=" + contactPersonLastname + ", telephoneNumberNonRequired=" + telephoneNumberNonRequired + ", contactNumber=" + contactNumber + ", faxNumber=" + faxNumber + ", email=" + email + ", billingAddress=" + billingAddress + ", deliveryAddress=" + deliveryAddress + ", vatRegistrationNumberUnrequired=" + vatRegistrationNumberUnrequired + ", eventType=" + eventType + ", eventName=" + eventName + ", eventDate=" + eventDate + ", toiletsRequired1=" + toiletsRequired1 + ", quantityRequired1=" + quantityRequired1 + ", toiletsRequired2=" + toiletsRequired2 + ", quantityRequired2=" + quantityRequired2 + ", toiletsRequired3=" + toiletsRequired3 + ", quantityRequired3=" + quantityRequired3 + ", numberOfJanitors=" + numberOfJanitors + ", numberOfToiletRolls=" + numberOfToiletRolls + ", deliveryDate=" + deliveryDate + ", collectionDate=" + collectionDate + ", daysRental=" + daysRental + ", comment=" + comment + ", serviceFrequencyMon=" + serviceFrequencyMon + ", serviceFrequencyTue=" + serviceFrequencyTue + ", serviceFrequencyWed=" + serviceFrequencyWed + ", serviceFrequencyThur=" + serviceFrequencyThur + ", serviceFrequencyFri=" + serviceFrequencyFri + ", serviceFrequencySat=" + serviceFrequencySat + ", serviceFrequencySun=" + serviceFrequencySun + '}';
+        DateTimeFormatHelper formatHelper = new DateTimeFormatHelper();
+        String messageBody = new StringBuilder()
+                .append("Request for Hire: ").append("\n")
+                .append("Customer Name : ").append(getCompanyNameNonRequired()).append("\n")
+                .append("Event Name : ").append(getEventName()).append("\n")
+                .append("Event Type : ").append(getEventType()).append("\n")
+                .append("Event Date : ").append(getEventDate()).append("\n")
+                .append("Delivery Date : ").append(formatHelper.getFullFormateddateNoTime(getDeliveryDate())).append("\n")
+                .append("Collection Date : ").append(formatHelper.getFullFormateddateNoTime(getCollectionDate())).append("\n\n")
+                .append("Comments  : ").append(getComment()).append("\n")
+                .toString();
+        return messageBody;//"PublicRequestAQuote{" + "companyNameNonRequired=" + companyNameNonRequired + ", contactPersonFirstname=" + contactPersonFirstname + ", contactPersonLastname=" + contactPersonLastname + ", telephoneNumberNonRequired=" + telephoneNumberNonRequired + ", contactNumber=" + contactNumber + ", faxNumber=" + faxNumber + ", email=" + email + ", billingAddress=" + billingAddress + ", deliveryAddress=" + deliveryAddress + ", vatRegistrationNumberUnrequired=" + vatRegistrationNumberUnrequired + ", eventType=" + eventType + ", eventName=" + eventName + ", eventDate=" + eventDate + ", toiletsRequired1=" + toiletsRequired1 + ", quantityRequired1=" + quantityRequired1 + ", toiletsRequired2=" + toiletsRequired2 + ", quantityRequired2=" + quantityRequired2 + ", toiletsRequired3=" + toiletsRequired3 + ", quantityRequired3=" + quantityRequired3 + ", numberOfJanitors=" + numberOfJanitors + ", numberOfToiletRolls=" + numberOfToiletRolls + ", deliveryDate=" + deliveryDate + ", collectionDate=" + collectionDate + ", daysRental=" + daysRental + ", comment=" + comment + ", serviceFrequencyMon=" + serviceFrequencyMon + ", serviceFrequencyTue=" + serviceFrequencyTue + ", serviceFrequencyWed=" + serviceFrequencyWed + ", serviceFrequencyThur=" + serviceFrequencyThur + ", serviceFrequencyFri=" + serviceFrequencyFri + ", serviceFrequencySat=" + serviceFrequencySat + ", serviceFrequencySun=" + serviceFrequencySun + '}';
     }
 
     /**
@@ -347,8 +359,5 @@ public class PublicRequestAQuote {
     public void setDaysRental(int daysRental) {
         this.daysRental = daysRental;
     }
-    
-    
 
-    
 }

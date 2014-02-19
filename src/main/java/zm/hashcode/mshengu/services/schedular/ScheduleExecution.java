@@ -5,14 +5,11 @@
  */
 package zm.hashcode.mshengu.services.schedular;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import zm.hashcode.mshengu.app.facade.products.SiteFacade;
-import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
-import zm.hashcode.mshengu.domain.products.Site;
+import zm.hashcode.mshengu.services.asynchronous.AsyncCalls;
 
 /**
  *
@@ -21,39 +18,29 @@ import zm.hashcode.mshengu.domain.products.Site;
 @Service
 public class ScheduleExecution {
 
-    private DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
-
-    private void setTodaysDate(Date date) {
-        dtfwh.setDate(date);
-//        dtfwh.resetDayOfWeek();
-    }
+    @Autowired
+    AsyncCalls asyncCalls;
 
     /**
-     * * * * * command to be executed - - - - - | | | | | | | | | ----- Day of
-     * week (0 - 7) (Sunday=0 or 7) | | | ------- Month (1 - 12) | | ---------
-     * Day of month (1 - 31) | ----------- Hour (0 - 23) ------------- Minute (0
-     * - 59)
-     *
+     * * * * * * * command to be executed - - - - - 
+     * | | | | | | 
+     * | | | | | | 
+     * | | | | | ----- Day of * week (0 - 7) (Sunday=0 or 7) 
+     * | | | | ------- Month (1 - 12) 
+     * | | | --------- * Day of month (1 - 31) 
+     * | | ----------- Hour (0 - 23) 
+     * | ------------- Minute (0 * - 59)
+     * |.............. Seconds 
      */
 //                       * * *  * * *
-//    @Scheduled(cron = "* 15 21-23 * * MON-SAT")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday
-    @Scheduled(cron = "* * 20 * * *")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday                     
+//    @Scheduled(cron = "*  15 21-23 * * MON-SAT")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday
+      @Scheduled(cron = "00 05 18 * * *")// Run 15 Minutes Past every Hour between 21 hrs and 23 hours from Monday to Saturday                     
     public void runthisCode() {
         // Code to be execute duering Schedule
-
-      /*  Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        setTodaysDate(calendar.getTime());
-        List<Site> sitesList = SiteFacade.getSiteService().findAllWithVisitToday(dtfwh.getDateToday());
-
-        int count = 0;
-        int size = sitesList.size();
-        System.out.println("Count " + size);
-        System.out.println("\n\n================= DAY [ " + dtfwh.getDayOfWeekTodayStr() + " ] - VISIT DATE : " + calendar.getTime());
-        for (Site site : sitesList) {
-            count++;
-            System.out.println("\n\n --- Site No" + count + "/" + size + "---");
-        }*/
+        Date date = new Date();
+        asyncCalls.createLogsAsync(date);
+        asyncCalls.updateLogsAsync(date);
+        asyncCalls.closeLogsAsync(date);
 
     }
 

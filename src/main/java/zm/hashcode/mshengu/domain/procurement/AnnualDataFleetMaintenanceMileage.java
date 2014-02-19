@@ -26,7 +26,7 @@ public class AnnualDataFleetMaintenanceMileage implements Serializable, Comparab
     private Date transactionMonth;
     private Integer monthlyMileage;
 
-    public AnnualDataFleetMaintenanceMileage() {
+    private AnnualDataFleetMaintenanceMileage() {
     }
 
     public AnnualDataFleetMaintenanceMileage(Builder builder) {

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.Request;
+import zm.hashcode.mshengu.domain.ui.util.CostCentreCategoryType;
 import zm.hashcode.mshengu.services.procurement.RequestService;
 import zm.hashcode.mshengu.test.AppTest;
 
@@ -26,7 +27,6 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
     public void testAddTruckIdSupplierIdToRequest() {
         requestService = ctx.getBean(RequestService.class);
         List<Request> requests = requestService.findAll();
-
         for (Request request : requests) {
 //    if ("fleet maintenance".equalsIgnoreCase(centreType.getName()) && bean.getItemCategory() != null)
             //            if(request.getCostCentreType().getName().equalsIgnoreCase("fleet maintenance"))
@@ -41,39 +41,34 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
     public void testDb() {
         requestService = ctx.getBean(RequestService.class);
         List<Request> requests = requestService.findAll();
-
         for (Request request : requests) {
-            Truck truck = request.getTruck();
+//            Truck truck = request.getTruck();
 //            if (truck != null) {
-            System.out.println("Request Check: TruckId= " + request.getTruckId() + " | ServiceProviderId= " + request.getServiceProviderId() + " | getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber());
+            System.out.println("Request Check: TruckId= " + request.getTruckId() + " | ServiceProviderId= " + request.getServiceProviderId() + " | getId()= " + request.getId() + " | OrderDate= " + request.getOrderDate() + " | DeliveryDate= " + request.getDeliveryDate() + " | OrderNumber= " + request.getOrderNumber() + " | Payment Amt= " + request.getPaymentAmount() + " | Total= " + request.getTotal() + " | CostCenter Name= " + request.getCostCentreType().getName());
 //            }
+        }
+    }
+    
+    public String getTruckId(Truck truck){
+        if(truck != null){
+           return truck.getId();
+        }else{
+            return "Trcuk IS null";
+        }
+    }
+    
+      public String getCostCentreCategoryTypeName(CostCentreCategoryType categoryType){
+        if(categoryType != null){
+           return categoryType.getName();
+        }else{
+            return " Category Name IS null ";
         }
     }
 
     private void updateEntity(Request request) {
         final Request unUpdatedRequest = new Request.Builder(request.getPerson())
                 .request(request)
-                .approvalStatus(request.isApprovalStatus())
-                .approver(request.getApprover())
-                .categoryType(request.getCategoryType())
-                .costCentreType(request.getCostCentreType())
-                .deliveryDate(request.getDeliveryDate())
-                .deliveryInstructions(request.getDeliveryInstructions())
-                .emailstatus(request.isEmailstatus())
-                .invoiceNumber(request.getInvoiceNumber())
-                .itemCategoryType(request.getItemCategoryType())
-                .items(request.getRequestPurchaseItems())
-                .matchStatus(request.getStatus())
-                .misMatchDate(request.getMisMatchDate())
-                .orderDate(request.getOrderDate())
-                .orderNumber(request.getOrderNumber())
-                .paymentAmount(request.getPaymentAmount())
-                .paymentDate(request.getPaymentDate())
-                .reasonForDisapproval(request.getReasonForDisapproval())
-                .serviceProvider(request.getServiceProvider())
                 .serviceProviderSupplierId(request.getServiceProvider().getId())
-                .total(request.getTotal())
-                .truck(request.getTruck())
                 .truckId(request.getTruck().getId())
                 .build();
         try {
