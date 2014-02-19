@@ -23,8 +23,8 @@ public class SiteServiceLogAsyncTest extends AppTest {
     private AsyncCalls asyncCalls;
 
     private final DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
-    Date startDate = dtfwh.getDate(16, 01, 2014);
-    Date endDate = dtfwh.getDate(16, 01, 2014);
+    Date startDate = dtfwh.getDate(17, 01, 2014);
+    Date endDate = dtfwh.getDate(17, 01, 2014);
 
     private void setTodaysDate(Date date) {
         dtfwh.setDate(date);

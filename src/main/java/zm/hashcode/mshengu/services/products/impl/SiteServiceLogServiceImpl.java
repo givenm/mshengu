@@ -128,11 +128,12 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
 
     @Override
     public List<SiteServiceLog> getAllSiteServiceLogs(String siteName, Date startDate, Date endDate) {
+        dtfwh.setDate(endDate);
          Query query = new Query(Criteria
                 .where("parentId").is(siteName)
                 .andOperator(
                         Criteria.where("serviceDate").gte(startDate),
-                        Criteria.where("serviceDate").lte(endDate)));
+                        Criteria.where("serviceDate").lt(dtfwh.getTomorrowsDate_No_HTMSM())));
 //                Criteria.where("serviceStatus").is(serviceStatus)));
 //                Criteria.where("statusMessage").is("WITHIN")));
         query.with(new Sort(Sort.Direction.DESC, "serviceDate"));
