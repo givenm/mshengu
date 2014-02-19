@@ -71,7 +71,10 @@ public class MaintenanceSpendBySupplierBarChart implements Serializable {
         // Get Objects of Data
         for (TotalMaintenanceSpendBySupplier totalMaintenanceSpendBySupplier : totalMaintenanceSpendBySupplierList) {
             totalList.add(totalMaintenanceSpendBySupplier.getTotal());
-            serviceProviderNameList.add(totalMaintenanceSpendBySupplier.getSupplierName());
+            // Truncate the Names
+
+
+            serviceProviderNameList.add(truncate(totalMaintenanceSpendBySupplier.getSupplierName(), 14));
             // Add Percentage for PIE
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
@@ -92,7 +95,7 @@ public class MaintenanceSpendBySupplierBarChart implements Serializable {
 
 ////        if (chartType.equalsIgnoreCase("dashboard")) {
         series.addSeries(
-                new XYseries().setLabel("Spend/Km Travelled"));
+                new XYseries().setLabel("Spend By Supplier"));
 
         highlighter.setTooltipAxes(TooltipAxes.XY_BAR); // NB FLIP the display in the tooltip e.g. TooltipAxes.XY_BAR
 
@@ -207,5 +210,12 @@ public class MaintenanceSpendBySupplierBarChart implements Serializable {
         dChart.setWidth("600px");
         dChart.setHeight("300px");
         return dChart;
+    }
+
+    public static String truncate(String value, int length) {
+        if (value != null && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
     }
 }
