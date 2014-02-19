@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
-import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 
@@ -23,9 +22,9 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
  */
 public class PaymentTable extends Table {
 
-    private BigDecimal grandTotal;
-    private BigDecimal paidTotal;
-    private BigDecimal balanceTotal;
+    private BigDecimal grandTotal = new BigDecimal("0");
+    private BigDecimal paidTotal = new BigDecimal("0");
+    private BigDecimal balanceTotal = new BigDecimal("0");
     private DecimalFormat f = new DecimalFormat("###,###.00");
 
     public PaymentTable() {
@@ -42,18 +41,57 @@ public class PaymentTable extends Table {
         loadTable(datemonth, dateyear);
     }
 
+    private void addSubtotalRow(String month, String year) {
+        List<Request> newlist = new ArrayList<>();
+        List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
+        for (ServiceProvider serviceProvider : serviceProviders) {
+            List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+
+            for (Request request : list) {
+                if (request.getInvoiceNumber() != null) {
+                    String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
+                    String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
+                    if (datemonth.equals(month) && year.equals(dateyear)) {
+                        newlist.add(request);
+                    }
+                }
+            }
+        }
+        paidTotal = paidTotal.add(getSupplierTotal(newlist));
+        balanceTotal = balanceTotal.add(getPaidTotal(newlist));
+        addItem(new Object[]{
+            "MTD Suppliers Total",
+            f.format(paidTotal),
+            f.format(balanceTotal),
+            f.format(paidTotal.subtract(balanceTotal)),}, "subtotal");
+    }
+
+    private void performRowStyling() {
+        setCellStyleGenerator(new Table.CellStyleGenerator() {
+            @Override
+            public String getStyle(Table source, Object itemId, Object propertyId) {
+                if (propertyId != null) {
+                    return null;
+                }
+                String rowId = ((String) itemId).toString();
+                if (rowId.equals("subtotal")) {
+                    return "yellowrow";
+                }
+                return null;
+            }
+        });
+    }
+
     public final void loadTable(String month, String year) {
         grandTotal = new BigDecimal("0.00");
-//        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+        paidTotal = new BigDecimal("0.00");
+        balanceTotal = new BigDecimal("0.00");
+        addSubtotalRow(month, year);
         if (month != null) {
             List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
                 List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-                // Repository get requests by ServiceProvieder withing the Month/year specified and whose InvoiceNumber is NotNull
-//                List<Request> list = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, dateTimeFormatHelper.getDate(Integer.parseInt(year), Integer.parseInt(month)));
-
                 List<Request> newlist = new ArrayList<>();
-//                if (!list.isEmpty()) {
                 for (Request request : list) {
                     if (request.getInvoiceNumber() != null) {
                         String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
@@ -70,10 +108,10 @@ public class PaymentTable extends Table {
                         f.format(getPaidTotal(newlist)),
                         f.format(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)))}, serviceProvider.getId());
                     grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
-//                    }
                 }
             }
         }
+        performRowStyling();
     }
 
     public String getGrandTotal() {

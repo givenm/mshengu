@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.procurement.invoices;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.CostCentreTab;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.InvoicePaidTab;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.InvoicesTab;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.views.PaymentTab;
@@ -20,6 +21,7 @@ public class InvoicesMenu extends VerticalLayout {
     private MshenguMain main;
     private TabSheet tab;
     private InvoicesTab invoicesTab;
+    private CostCentreTab costCentreTab;
     private PaymentTab paymentTab;
     private InvoicePaidTab invoiceMismatchTab;
 
@@ -28,12 +30,14 @@ public class InvoicesMenu extends VerticalLayout {
         invoicesTab = new InvoicesTab(app);
         paymentTab = new PaymentTab(app);
         invoiceMismatchTab = new InvoicePaidTab(app);
+        costCentreTab = new CostCentreTab(app);
         tab = new TabSheet();
         tab.setHeight("100%");
         tab.setWidth("100%");
         tab.addTab(invoicesTab, "Invoices For Payment", null);
         tab.addTab(invoiceMismatchTab, "Invoices Paid", null);
         tab.addTab(paymentTab, "Suppliers Payments Due", null);
+        tab.addTab(costCentreTab, "Cost Centre Query", null);
         addComponent(tab);
 
         switch (selectedTab) {
@@ -45,6 +49,9 @@ public class InvoicesMenu extends VerticalLayout {
                 break;
             case "PAYMENT":
                 tab.setSelectedTab(paymentTab);
+                break;
+            case "COST_CENTRE":
+                tab.setSelectedTab(costCentreTab);
                 break;
         }
     }
