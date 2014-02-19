@@ -8,16 +8,20 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.people.PersonFacade;
+import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
+import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.DailyDieselTrackerMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.forms.DailyInputsForm;
@@ -86,7 +90,6 @@ public class DailyInputsTab extends VerticalLayout implements
 //                    }
 //                }
 //            }
-
             trucKiD = form.filterTruckId.getValue().toString();
 
             form.transactionDate.setReadOnly(false);
@@ -99,6 +102,12 @@ public class DailyInputsTab extends VerticalLayout implements
         } else if (property == form.truckId) {
             Truck truck = TruckFacade.getTruckService().findById(form.truckId.getValue().toString());
             form.driverId.setValue(truck.getDriver().getId());
+            String id = truck.getVehicleNumber();
+            if (id.substring(0, 3).equals("MMV") || id.substring(0, 3).equals("MOV")) {
+                form.speedometer.setRequired(false);
+            } else {
+                form.speedometer = UIValidatorHelper.setRequiredTextField(form.speedometer, "Closing Mileage");
+            }
         } else if (property == form.fuelLitres) {
 
             BigDecimal fuelLitres = new BigDecimal(form.fuelLitres.getValue().toString()); // .replaceAll(",", "")
@@ -176,8 +185,6 @@ public class DailyInputsTab extends VerticalLayout implements
 //        form.slipNo.setReadOnly(true);
 //        form.speedometer.setReadOnly(true);
         //
-
-
         form.truckId.addValueChangeListener((Property.ValueChangeListener) this);
 //        form.fuelLitres.addValueChangeListener((Property.ValueChangeListener) this);
 //        form.fuelCost.addValueChangeListener((Property.ValueChangeListener) this);
@@ -218,8 +225,10 @@ public class DailyInputsTab extends VerticalLayout implements
                 }
             }
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -244,8 +253,10 @@ public class DailyInputsTab extends VerticalLayout implements
                 Notification.show("Current closing mileage is LOWER or EQUALS previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
             }
         } catch (FieldGroup.CommitException e) {
-            Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
-            getHome();
+            Collection<Field<?>> fields = binder.getFields();
+            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+            helper.doValidation();
+            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
         }
 
     }
