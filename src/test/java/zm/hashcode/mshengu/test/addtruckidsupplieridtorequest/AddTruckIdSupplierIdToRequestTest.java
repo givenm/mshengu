@@ -48,19 +48,19 @@ public class AddTruckIdSupplierIdToRequestTest extends AppTest {
 //            }
         }
     }
-    
-    public String getTruckId(Truck truck){
-        if(truck != null){
-           return truck.getId();
-        }else{
+
+    public String getTruckId(Truck truck) {
+        if (truck != null) {
+            return truck.getId();
+        } else {
             return "Trcuk IS null";
         }
     }
-    
-      public String getCostCentreCategoryTypeName(CostCentreCategoryType categoryType){
-        if(categoryType != null){
-           return categoryType.getName();
-        }else{
+
+    public String getCostCentreCategoryTypeName(CostCentreCategoryType categoryType) {
+        if (categoryType != null) {
+            return categoryType.getName();
+        } else {
             return " Category Name IS null ";
         }
     }

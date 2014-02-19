@@ -23,7 +23,6 @@ public class CleanUp_SpendBySuppliers extends AppTest {
 
     /* (dependsOnMethods = {"testSheet"}) */
 //    @Test
-    
     public void cleanDatabase() {
         try {
             maintenanceSpendBySupplierService = ctx.getBean(MaintenanceSpendBySupplierService.class);

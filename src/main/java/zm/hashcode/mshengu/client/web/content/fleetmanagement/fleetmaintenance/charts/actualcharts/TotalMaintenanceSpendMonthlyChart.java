@@ -145,8 +145,7 @@ public class TotalMaintenanceSpendMonthlyChart implements Serializable {
                 .setTooltipLocation(TooltipLocations.NORTH)
                 .setTooltipAxes(TooltipAxes.XY_BAR);
 
-        Title title = new Title("Total Maintenance Spend (" + monthYearListArray[0] + " - "
-                + monthYearListArray[monthYearListArray.length - 1] + "): R " + grandTotalMaintenanceSpend);
+        Title title = new Title("Total Maintenance Cost: R " + grandTotalMaintenanceSpend);
         title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
 
@@ -160,7 +159,7 @@ public class TotalMaintenanceSpendMonthlyChart implements Serializable {
                 .setSeriesDefaults(seriesDefaults)
                 .setSeries(series)
                 //                .setLegend(legend)
-                //                .setTitle(title)
+                .setTitle(title)
                 .setHighlighter(highlighter)
                 .setAxes(axes);
 
