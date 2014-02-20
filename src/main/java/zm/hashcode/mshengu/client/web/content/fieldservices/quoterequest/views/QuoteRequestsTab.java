@@ -264,6 +264,10 @@ public class QuoteRequestsTab extends VerticalLayout implements
         bean.setVatRegistrationNumberUnrequired(rfg.getVatNumber());
         bean.setContactNumber(rfg.getContactNumber());
         bean.setFaxNumber(rfg.getFaxNumber());
+        
+        System.out.println("Docu: " + rfg);
+        System.out.println("Bean: " + bean);
+        
         return bean;
     }
     
