@@ -23,7 +23,7 @@ import zm.hashcode.mshengu.services.procurement.RequestService;
  * @author Luckbliss
  */
 @Service
-public class RequestServiceImpl implements RequestService {
+public class RequestServiceImpl implements RequestService {    
 
     @Autowired
     private RequestRepository repository;
@@ -122,6 +122,7 @@ public class RequestServiceImpl implements RequestService {
         }
         return requestList;
     }
+    
 
     private String getServiceProvider(ServiceProvider serviceProvider) {
         if (serviceProvider != null) {

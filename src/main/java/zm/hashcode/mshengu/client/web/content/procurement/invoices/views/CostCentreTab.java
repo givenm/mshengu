@@ -8,23 +8,23 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.PaymentForm;
-import zm.hashcode.mshengu.client.web.content.procurement.invoices.table.PaymentTable;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.CostCentreForm;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.table.CostCentreTable;
 
 /**
  *
  * @author Luckbliss
  */
-public class PaymentTab extends VerticalLayout implements Property.ValueChangeListener {
+public class CostCentreTab extends VerticalLayout implements Property.ValueChangeListener {
 
-    private PaymentForm form;
-    private PaymentTable table;
+    private CostCentreForm form;
     private MshenguMain main;
+    private CostCentreTable table;
 
-    public PaymentTab(MshenguMain main) {
+    public CostCentreTab(MshenguMain main) {
         setSizeFull();
-        form = new PaymentForm();
-        table = new PaymentTable();
+        form = new CostCentreForm();
+        table = new CostCentreTable();
         this.main = main;
         addComponent(form);
         addComponent(table);
@@ -35,7 +35,9 @@ public class PaymentTab extends VerticalLayout implements Property.ValueChangeLi
     @Override
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
-        if (property == form.month) {
+        if (property == form.costcentre) {
+            getValues();
+        } else if (property == form.month) {
             getValues();
         } else if (property == form.year) {
             getValues();
@@ -43,26 +45,29 @@ public class PaymentTab extends VerticalLayout implements Property.ValueChangeLi
     }
 
     private void getValues() {
-        if (form.month.getValue() != null && form.year.getValue() != null) {
+        if (form.month.getValue() != null && form.year.getValue() != null && form.costcentre.getValue() != null) {
+            String costcentreId = form.costcentre.getValue().toString();
             table.removeAllItems();
             String month = form.month.getValue().toString();
             String year = form.year.getValue().toString();
-            table.loadTable(month, year);
+            table.loadTable(costcentreId, month, year);
             getGrandTotal();
             getCurrentDate();
         } else {
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
+
         }
     }
 
     private void addListeners() {
-        //Register Button Listeners;
+        //Register Button Listeners
+        form.costcentre.addValueChangeListener((Property.ValueChangeListener) this);
         form.month.addValueChangeListener((Property.ValueChangeListener) this);
         form.year.addValueChangeListener((Property.ValueChangeListener) this);
     }
 
     public void getGrandTotal() {
-        form.grandTotal.setValue(form.total + table.getGrandTotal());
+        form.mtdTotal.setValue(form.total + table.getGrandTotal());
     }
     
     public void getCurrentDate() {

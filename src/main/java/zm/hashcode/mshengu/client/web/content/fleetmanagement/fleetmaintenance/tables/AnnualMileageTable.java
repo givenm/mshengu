@@ -151,6 +151,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
         for (int j = 1; j < truckTotalArray.length; j++) {
             getItem(0).getItemProperty(truckVehicleNumberArray[j]).setValue(truckTotalArray[j]); // serviceUtilityTrucksList.get(j-1).getVehicleNumber()
         }
+        grandTotal = 0;
 
         performTableFontSizeStyling();
 

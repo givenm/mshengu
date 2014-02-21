@@ -6,33 +6,18 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
-import org.dussan.vaadin.dcharts.base.elements.XYaxis;
-import org.dussan.vaadin.dcharts.base.elements.XYseries;
 import org.dussan.vaadin.dcharts.data.DataSeries;
-import org.dussan.vaadin.dcharts.data.Ticks;
-import org.dussan.vaadin.dcharts.metadata.TextAligns;
-import org.dussan.vaadin.dcharts.metadata.TooltipAxes;
-import org.dussan.vaadin.dcharts.metadata.XYaxes;
-import org.dussan.vaadin.dcharts.metadata.locations.TooltipLocations;
-import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
+import org.dussan.vaadin.dcharts.metadata.locations.LegendLocations;
 import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
-import org.dussan.vaadin.dcharts.metadata.renderers.TickRenderers;
-import org.dussan.vaadin.dcharts.options.Axes;
 import org.dussan.vaadin.dcharts.options.Highlighter;
 import org.dussan.vaadin.dcharts.options.Legend;
 import org.dussan.vaadin.dcharts.options.Options;
-import org.dussan.vaadin.dcharts.options.Series;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
-import org.dussan.vaadin.dcharts.options.Title;
 import org.dussan.vaadin.dcharts.renderers.series.PieRenderer;
-import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
-import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendBySupplier;
 
 /**
@@ -47,11 +32,6 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
         List<Object> percentageList = new ArrayList<>();
         BigDecimal sumOfPercentage = BigDecimal.ZERO;
         //
-        DataSeries dataSeries = new DataSeries();
-        Series series = new Series();
-        Axes axes = new Axes();
-        XYaxis xyAxis = new XYaxis();
-        Ticks ticks = new Ticks();
 
         // Get Objects of Data
         for (TotalMaintenanceSpendBySupplier totalMaintenanceSpendBySupplier : totalMaintenanceSpendBySupplierList) {
@@ -64,11 +44,11 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
         Object[] serviceProviderNameListArray = serviceProviderNameList.toArray(new Object[serviceProviderNameList.size()]);
         Object[] percentageListArray = percentageList.toArray(new Object[percentageList.size()]);
 
+        DataSeries dataSeries = new DataSeries();
         for (int i = 0; i < serviceProviderNameListArray.length; i++) {
             BigDecimal seriesPercentValue = new BigDecimal(percentageListArray[i] + "").multiply(sumOfPercentage);
             seriesPercentValue = seriesPercentValue.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
-
-            dataSeries.newSeries().add(serviceProviderNameListArray[i], seriesPercentValue);
+            dataSeries.newSeries().add(truncate(serviceProviderNameListArray[i], 14), seriesPercentValue);
         }
 
         SeriesDefaults seriesDefaults = new SeriesDefaults()
@@ -78,7 +58,8 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
                 .setShowDataLabels(true));
 
         Legend legend = new Legend()
-                .setShow(true);
+                .setShow(true)
+                .setLocation(LegendLocations.NORTH_EAST);
 
         Highlighter highlighter = new Highlighter()
                 .setShow(true)
@@ -96,7 +77,7 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
                 .setOptions(options)
                 .show();
 
-        dChart.setWidth("600px");
+        dChart.setWidth("300px");
         dChart.setHeight("300px");
 
         return dChart;
@@ -114,5 +95,13 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
             throw new IllegalArgumentException();
         }
         return value.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public static String truncate(Object value, int length) {
+        String strValue = value.toString();
+        if (strValue != null && strValue.length() > length) {
+            strValue = strValue.substring(0, length);
+        }
+        return strValue;
     }
 }
