@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.client.web.content.fieldservices.incidents.models;
 
 import java.util.Date;
-import javax.validation.constraints.NotNull;
 
 /**
  *

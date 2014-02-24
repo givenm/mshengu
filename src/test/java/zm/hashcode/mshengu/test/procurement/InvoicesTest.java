@@ -10,7 +10,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.procurement.Request;
-import zm.hashcode.mshengu.services.procurement.RequestService;
+import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
+import zm.hashcode.mshengu.services.serviceprovider.ServiceProviderService;
 import zm.hashcode.mshengu.test.AppTest;
 
 /**
@@ -20,20 +21,16 @@ import zm.hashcode.mshengu.test.AppTest;
 public class InvoicesTest extends AppTest {
 
     @Autowired
-    private RequestService requestService;
+    private ServiceProviderService providerService;
 
 //    @Test
     public void getTruckUnitsTests() {
 
-        requestService = ctx.getBean(RequestService.class);
-        List<Request> requests = requestService.findAll();
+        providerService = ctx.getBean(ServiceProviderService.class);
+        List<ServiceProvider> serviceProviders = providerService.findAll();
 
-        for (Request request : requests) {
-            if (request.getOrderNumber() != null) {
-                if (request.getOrderNumber().equals("MSH_PO-000029")) {
-                    System.out.println(request.getTotal());
-                }
-            }
+        for (ServiceProvider provider : serviceProviders) {
+            System.out.println("Id: " + provider.getId() + " Name: " + provider.getName());
         }
     }
 
@@ -45,7 +42,7 @@ public class InvoicesTest extends AppTest {
                     .deliveryDate(new Date(2014, 01, 31))
                     .total(new BigDecimal("5164.49"))
                     .build();
-            requestService.merge(newRequest);
+//            requestService.merge(newRequest);
         }
     }
 
@@ -57,7 +54,7 @@ public class InvoicesTest extends AppTest {
                     .serviceProviderSupplierId("52da02fee4b01596318b5a2c")
                     .orderDate(new Date(2014, 01, 03))
                     .build();
-            requestService.merge(newRequest);
+//            requestService.merge(newRequest);
         }
     }
 
@@ -70,9 +67,10 @@ public class InvoicesTest extends AppTest {
                     .orderDate(new Date(2014, 02, 07))
                     .total(new BigDecimal("1672.38"))
                     .build();
-            requestService.merge(newRequest);
+//            requestService.merge(newRequest);
         }
     }
+
     public void getOrder29(Request request) {
         if (request.getOrderNumber().equals("MSH_PO-0000043")) {
             Request newRequest = new Request.Builder(request.getPerson())
@@ -82,7 +80,7 @@ public class InvoicesTest extends AppTest {
                     .orderDate(new Date(2014, 02, 07))
                     .total(new BigDecimal("1672.38"))
                     .build();
-            requestService.merge(newRequest);
+//            requestService.merge(newRequest);
         }
     }
 }
