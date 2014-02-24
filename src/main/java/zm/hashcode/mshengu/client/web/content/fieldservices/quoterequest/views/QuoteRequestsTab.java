@@ -40,7 +40,7 @@ public class QuoteRequestsTab extends VerticalLayout implements
     public QuoteRequestsTab(MshenguMain app) {
         main = app;
         form = new QuoteRequestsForm();
-        table = new QuoteRequestsTable(main);
+        table = new QuoteRequestsTable(main, this);
         setSizeFull();
         addComponent(form);
         addComponent(table);
@@ -250,6 +250,7 @@ public class QuoteRequestsTab extends VerticalLayout implements
         bean.setQuantityRequired1(rfg.getQuantityRequired1());
         bean.setQuantityRequired2(rfg.getQuantityRequired2());
         bean.setQuantityRequired3(rfg.getQuantityRequired3());
+        bean.setRefNumber(rfg.getRefNumber());
         bean.setServiceFrequencySun(rfg.isSunday());
         bean.setServiceFrequencySat(rfg.isSaturday());
         bean.setServiceFrequencyFri(rfg.isFriday());
