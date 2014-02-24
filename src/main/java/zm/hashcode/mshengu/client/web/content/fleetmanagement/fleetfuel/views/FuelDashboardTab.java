@@ -14,12 +14,12 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFue
  *
  * @author Ferox
  */
-public class FleetFuelDashboardTab extends VerticalLayout implements
+public class FuelDashboardTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
 
-    public FleetFuelDashboardTab(MshenguMain app) {
+    public FuelDashboardTab(MshenguMain app) {
         main = app;
         setSizeFull();
 
