@@ -86,8 +86,8 @@ public class WebAppServiceImpl implements WebAppService {
     RequestForQuoteService requestForQuoteService;
 
     /**
-     * 
-     * @param publicContact 
+     *
+     * @param publicContact
      */
     @Override
     public void contactUs(PublicContact publicContact) {
@@ -124,8 +124,8 @@ public class WebAppServiceImpl implements WebAppService {
     }
 
     /**
-     * 
-     * @param publicIncident 
+     *
+     * @param publicIncident
      */
     @Override
     public void incidentReport(PublicIncident publicIncident) {
@@ -167,16 +167,16 @@ public class WebAppServiceImpl implements WebAppService {
     }
 
     /**
-     * 
-     * @param publicResponseToRFQ 
+     *
+     * @param publicResponseToRFQ
      */
     @Override
     public void responseToRFQ(PublicResponseToRFQ publicResponseToRFQ) {
 
         Set<RequestPurchaseItem> itemList = saveRequestItems(publicResponseToRFQ);
-        
+
         ResponseToRFQ responseToRFQ = saveResponseToRFQ(publicResponseToRFQ, itemList);
-        
+
         List<ResponseToRFQ> respondToRFQList = new ArrayList<>();
 
         RequestForQuote requestForQuote = requestForQuoteService.findByRfqNumber(publicResponseToRFQ.getRfqNumber());
@@ -200,13 +200,12 @@ public class WebAppServiceImpl implements WebAppService {
         }
 
     }
-    
-    
+
     private ResponseToRFQ saveResponseToRFQ(PublicResponseToRFQ publicResponseToRFQ, Set<RequestPurchaseItem> itemList) {
-        
+
         final MailNotifications mailNotifications = mailNotificationService.findByName("RESPOND_RFQ");
-        
-         ResponseToRFQ responseToRFQ = new ResponseToRFQ.Builder(publicResponseToRFQ.getCompanyName())
+
+        ResponseToRFQ responseToRFQ = new ResponseToRFQ.Builder(publicResponseToRFQ.getCompanyName())
                 .email(publicResponseToRFQ.getEmail())
                 .companyType(publicResponseToRFQ.getCompanyType())
                 .yearEstablishment(publicResponseToRFQ.getYearEstablishment())
@@ -216,16 +215,15 @@ public class WebAppServiceImpl implements WebAppService {
                 .webSite(publicResponseToRFQ.getWebSite())
                 .items(itemList)
                 .validityOfQuote(publicResponseToRFQ.getValidityOfQuote())
-                 .paymentTerms(publicResponseToRFQ.getPaymentTerms())
+                .paymentTerms(publicResponseToRFQ.getPaymentTerms())
                 .refNumber(getRefNumber(mailNotifications))
                 .build();
         responseToRFQService.persist(responseToRFQ);
-        
-        return  responseToRFQ;
-        
-    }   
-    
-    
+
+        return responseToRFQ;
+
+    }
+
     private Set<RequestPurchaseItem> saveRequestItems(PublicResponseToRFQ publicResponseToRFQ) {
 
         Set<RequestPurchaseItem> itemList = new HashSet<>();
@@ -248,13 +246,13 @@ public class WebAppServiceImpl implements WebAppService {
                 itemList.add(item);
             }
         }
-        
+
         return itemList;
     }
 
     /**
-     * 
-     * @param publicRequestAQuote 
+     *
+     * @param publicRequestAQuote
      */
     @Override
     public void requestForQuote(PublicRequestAQuote publicRequestAQuote) {
@@ -263,6 +261,9 @@ public class WebAppServiceImpl implements WebAppService {
         final MailNotifications mailNotifications = mailNotificationService.findByName("REQUEST_TOILET_HIRE_NOTIFCATION");
         Set<UserAction> userActions = new HashSet<>();
 
+        final UnitType toiletsRequired1 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired1());
+        final UnitType toiletsRequired2 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired2());
+        final UnitType toiletsRequired3 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired3());
 
 
         /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
@@ -275,6 +276,7 @@ public class WebAppServiceImpl implements WebAppService {
                 .companyName(publicRequestAQuote.getCompanyNameNonRequired())
                 .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
                 .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
+                .contactNumber(publicRequestAQuote.getContactNumber())
                 .daysRental(publicRequestAQuote.getDaysRental())
                 .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
                 .deliveryDate(publicRequestAQuote.getDeliveryDate())
@@ -282,6 +284,7 @@ public class WebAppServiceImpl implements WebAppService {
                 .eventDate(publicRequestAQuote.getEventDate())
                 .eventName(publicRequestAQuote.getEventName())
                 .eventType(publicRequestAQuote.getEventType())
+                .faxNumber(publicRequestAQuote.getFaxNumber())
                 .mailNotifications(mailNotifications)
                 .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
                 .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
@@ -290,14 +293,14 @@ public class WebAppServiceImpl implements WebAppService {
                 .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
                 .userAction(userActions)
                 .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
-//                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
-                
+                //                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
+
                 .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
-                .toiletsRequired1(publicRequestAQuote.getToiletsRequired1())
-                .toiletsRequired2(publicRequestAQuote.getToiletsRequired2())
-                .toiletsRequired3(publicRequestAQuote.getToiletsRequired3())
-//                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
-                
+                .toiletsRequired1(toiletsRequired1.getId())
+                .toiletsRequired2(toiletsRequired2.getId())
+                .toiletsRequired3(toiletsRequired3.getId())
+                //                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+
                 .monday(publicRequestAQuote.isServiceFrequencyMon())
                 .tuesday(publicRequestAQuote.isServiceFrequencyTue())
                 .wednesday(publicRequestAQuote.isServiceFrequencyWed())
@@ -316,16 +319,15 @@ public class WebAppServiceImpl implements WebAppService {
         sendEmailHelper.feedbackEmail(new Date(), incomingRFQ.getEmail(), incomingRFQ.getRefNumber(), publicRequestAQuote.toString());
     }
 
-    
     @Override
     public void vendoRegistration(PublicVendorRegistration publicVendorRegistration) {
-        
+
         final MailNotifications mailNotifications = mailNotificationService.findByName("VENDOR_NOTIFICATION");
         final ServiceProviderCategory serviceProviderCategory = serviceProviderCategoryService.findByCategoryName(publicVendorRegistration.getVendorCategory());
         /*Finding the contact person will not work because of the input box with name and surname in one box*/
-      
+
         ContactPerson contactPerson = saveContactPerson(publicVendorRegistration);
-        
+
         Set<ServiceProviderProduct> serviceProviderProducts = new HashSet<>();
 
         /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
@@ -352,14 +354,12 @@ public class WebAppServiceImpl implements WebAppService {
                 .vendorNumber(getRefNumber(mailNotifications))
                 .build();
 
-
-
         serviceProviderService.persist(provider);
         sendEmailHelper.feedbackEmail2(new Date(), publicVendorRegistration.getEmail(), provider.getVendorNumber());
     }
-    
+
     private ContactPerson saveContactPerson(PublicVendorRegistration publicVendorRegistration) {
-          ContactPerson contactPerson = contactPersonService.findByEmail(publicVendorRegistration.getEmail());
+        ContactPerson contactPerson = contactPersonService.findByEmail(publicVendorRegistration.getEmail());
         if (contactPerson == null) {
             contactPerson = new ContactPerson.Builder(publicVendorRegistration.getContactPersonFirstname(), publicVendorRegistration.getContactPersonLastname())
                     .address1(publicVendorRegistration.getAddressLine1())
@@ -431,7 +431,7 @@ public class WebAppServiceImpl implements WebAppService {
             return refNumber;
         }
     }
-    
+
     @Override
     public boolean checkRfqNumber(String rfqNumber) {
         boolean found = false;
