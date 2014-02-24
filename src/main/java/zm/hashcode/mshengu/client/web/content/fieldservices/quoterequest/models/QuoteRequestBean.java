@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.models;
 
 import java.util.Date;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -13,13 +12,16 @@ import javax.validation.constraints.NotNull;
  */
 public class QuoteRequestBean {
 
-    @NotNull
     private String id;
+    private String refNumber;
     private Date actionDate;
+    private Date resolvedDate;
+    private Date qualityAssuranceDate;
+
     private String companyNameNonRequired;
-    @NotNull
+
     private String contactPersonFirstname;
-    @NotNull
+
     private String contactPersonLastname;
     private String telephoneNumberNonRequired;
     private String contactNumber;
@@ -50,6 +52,39 @@ public class QuoteRequestBean {
     private boolean serviceFrequencyFri;
     private boolean serviceFrequencySat;
     private boolean serviceFrequencySun;
+    private String status;
+
+    public Date getQualityAssuranceDate() {
+        return qualityAssuranceDate;
+    }
+
+    public void setQualityAssuranceDate(Date qualityAssuranceDate) {
+        this.qualityAssuranceDate = qualityAssuranceDate;
+    }
+
+    public Date getResolvedDate() {
+        return resolvedDate;
+    }
+
+    public void setResolvedDate(Date resolvedDate) {
+        this.resolvedDate = resolvedDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRefNumber() {
+        return refNumber;
+    }
+
+    public void setRefNumber(String refNumber) {
+        this.refNumber = refNumber;
+    }
 
     public String getId() {
         return id;

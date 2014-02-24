@@ -4,17 +4,18 @@
  */
 package zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.tables;
 
-import com.vaadin.ui.Embedded;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.themes.Reindeer;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.external.IncomingRFQFacade;
-import zm.hashcode.mshengu.app.facade.incident.IncidentFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.UITableIconHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.views.PopupTotalPrice;
+import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.views.QuoteRequestsTab;
 import zm.hashcode.mshengu.domain.external.IncomingRFQ;
-import zm.hashcode.mshengu.domain.incident.Incident;
-import zm.hashcode.mshengu.domain.incident.UserAction;
 
 /**
  *
@@ -25,19 +26,21 @@ public class QuoteRequestsTable extends Table {
     private final MshenguMain main;
     private DateTimeFormatHelper formatHelper = new DateTimeFormatHelper();
     private UITableIconHelper iconHelper = new UITableIconHelper();
+    private QuoteRequestsTab tab;
 
-    public QuoteRequestsTable(MshenguMain app) {
+    public QuoteRequestsTable(MshenguMain app, final QuoteRequestsTab quoteRequestsTab) {
         this.main = app;
+        this.tab = quoteRequestsTab;
 
-        addContainerProperty("Action Date", String.class, null);
-        addContainerProperty("Company", String.class, null);
-        addContainerProperty("Firstname", String.class, null);
-        addContainerProperty("Lastname", String.class, null);
-        addContainerProperty("Event Type", String.class, null);
-        addContainerProperty("Event Name", String.class, null);
+        addContainerProperty("Reference No", String.class, null);
+        addContainerProperty("Request Date", String.class, null);
+        addContainerProperty("Delivery Date", String.class, null);
         addContainerProperty("Event Date", String.class, null);
-        addContainerProperty("Delivery Date ", String.class, null);
-
+        addContainerProperty("Customer", String.class, null);
+        addContainerProperty("Event Name", String.class, null);
+        addContainerProperty("Contact No", String.class, null);
+        addContainerProperty("Status", String.class, null);
+        addContainerProperty("Follow Up", PopupView.class, null);
 
         // Allow selecting items from the table.
         setNullSelectionAllowed(false);
@@ -47,9 +50,7 @@ public class QuoteRequestsTable extends Table {
         setImmediate(true);
         setSizeFull();
 
-        loadQuoteRequests();;
-
-
+        loadQuoteRequests();
 
     }
 
@@ -58,16 +59,21 @@ public class QuoteRequestsTable extends Table {
 
         if (incomingRFQs != null) {
             for (IncomingRFQ incomingRFQ : incomingRFQs) {
+
+                PopupView popup = new PopupView(new PopupTotalPrice(tab, main, incomingRFQ.getId()));
+                popup.setHideOnMouseOut(false);
+                popup.setData(incomingRFQ.getId());
+
                 addItem(new Object[]{
-                    //                userAction.getStatus(),
+                    incomingRFQ.getRefNumber(),
                     formatHelper.getDayMonthYear(incomingRFQ.getDateOfAction()),
-                    incomingRFQ.getCompanyName(),
-                    incomingRFQ.getContactPersonFirstname(),
-                    incomingRFQ.getContactPersonLastname(),
-                    incomingRFQ.getEventType(),
-                    incomingRFQ.getEventName(),
+                    formatHelper.getDayMonthYear(incomingRFQ.getDeliveryDate()),
                     formatHelper.getDayMonthYear(incomingRFQ.getEventDate()),
-                    formatHelper.getDayMonthYear(incomingRFQ.getDeliveryDate()),}, incomingRFQ.getId());
+                    incomingRFQ.getCompanyName(),
+                    incomingRFQ.getEventName(),
+                    incomingRFQ.getContactNumber(),
+                    incomingRFQ.getLastUserActionStatusName(),
+                    popup}, incomingRFQ.getId());
             }
         }
     }

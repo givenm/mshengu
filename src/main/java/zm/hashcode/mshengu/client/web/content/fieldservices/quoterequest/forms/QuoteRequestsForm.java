@@ -53,8 +53,12 @@ public class QuoteRequestsForm extends FormLayout {
 
         HorizontalLayout buttons = getButtons();
         buttons.setSizeFull();
-        DateField actionDate = UIComponent.getDateField("Action Date:", "actionDate", QuoteRequestBean.class, binder);
-        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Action Date");
+        
+        TextField refNumber = UIComponent.getTextField("Reference Number:", "refNumber", QuoteRequestBean.class, binder);
+        refNumber.setReadOnly(true);
+        
+        DateField actionDate = UIComponent.getDateField("Request Date:", "actionDate", QuoteRequestBean.class, binder);
+        actionDate = UIValidatorHelper.setRequiredDateField(actionDate, "Request Date");
         
         TextField companyNameNonRequired = UIComponent.getTextField("Company Name:", "companyNameNonRequired", QuoteRequestBean.class, binder);
         
@@ -133,20 +137,21 @@ public class QuoteRequestsForm extends FormLayout {
         
         grid.addComponent(errorMessage, 1, 0, 2, 0);
 
-        grid.addComponent(actionDate, 0, 1);
-        grid.addComponent(companyNameNonRequired, 1, 1);
-        grid.addComponent(vatRegistrationNumberUnrequired, 2, 1);
-
-        grid.addComponent(contactPersonFirstname, 0, 2);
-        grid.addComponent(contactPersonLastname, 1, 2);
-        grid.addComponent(telephoneNumberNonRequired, 2, 2);
-
-        grid.addComponent(email, 0, 3);
-        grid.addComponent(faxNumber, 1, 3);
-        grid.addComponent(contactNumber, 2, 3);
-
-        grid.addComponent(billingAddress, 0, 4);
-        grid.addComponent(deliveryAddress, 1, 4);
+        grid.addComponent(refNumber, 0, 1);
+        grid.addComponent(actionDate, 1, 1);
+        grid.addComponent(companyNameNonRequired, 2, 1);
+        
+        grid.addComponent(vatRegistrationNumberUnrequired, 0, 2);
+        grid.addComponent(contactPersonFirstname, 1, 2);
+        grid.addComponent(contactPersonLastname, 2, 2);
+        
+        grid.addComponent(telephoneNumberNonRequired, 0, 3);
+        grid.addComponent(email, 1, 3);
+        grid.addComponent(faxNumber, 2, 3);
+        
+        grid.addComponent(contactNumber, 0, 4);
+        grid.addComponent(billingAddress, 1, 4);
+        grid.addComponent(deliveryAddress, 2, 4);
 
         grid.addComponent(eventDate, 0, 5);
         grid.addComponent(eventType, 1, 5);
