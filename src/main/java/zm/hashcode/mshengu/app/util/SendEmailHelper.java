@@ -122,6 +122,27 @@ public class SendEmailHelper {
             Notification.show("Email Not Sent, Notification attachment not found!", Notification.Type.ERROR_MESSAGE);
         }
     }
+    
+    public void sendToNewCustomer(DataSource file, String customerEmail, String subject, String nameOfFile) {
+        if (file != null) {
+
+            String subj = subject;
+
+            ComposeEmail email = new ComposeEmail();
+            List<String> addressesTo = new ArrayList<>();
+            addressesTo.add(customerEmail);
+
+            email.setFrom("customerservice@mshengutoilethire.co.za");
+            email.setPassword("Mth@cust123");
+            email.setAddressesTo(addressesTo);
+            email.setSubject(subj);
+            email.setEmailBody("");
+            EmailUtil.sendWithAttachments(email, file, nameOfFile);
+
+        } else {
+            Notification.show("Email Not Sent, Notification attachment not found!", Notification.Type.ERROR_MESSAGE);
+        }
+    }
 
     /**
      *
@@ -178,7 +199,7 @@ public class SendEmailHelper {
         public void icomingQuoteRequest(IncomingRFQ incomingRFQ) {
         if (incomingRFQ != null) {
 //            String siteName = getSiteName(incomingRFQ.getSiteId());
-            String customerName = getCustomerName(incomingRFQ.getCompanyName());
+            String customerName = incomingRFQ.getCompanyName();
 
             String subject = "Request for Hire " + incomingRFQ.getRefNumber()+ " has been logged in the Mshengu KMIS.";
             String subject2 = "A request for hire " + incomingRFQ.getRefNumber() + " has been logged in the Mshengu KMIS.";
