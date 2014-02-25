@@ -82,7 +82,7 @@ public class InvoicePaidTable extends Table {
                             getDelivery(requests.get(i).getPaymentDate()),
                             requests.get(i).getPaymentAmount(),
                             update,}, requests.get(i).getId());
-                        grandTotal = grandTotal.add(requests.get(i).getTotal());
+                        grandTotal = grandTotal.add(requests.get(i).getPaymentAmount());
                     }
                 }
             }

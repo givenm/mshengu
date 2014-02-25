@@ -8,7 +8,6 @@ import com.vaadin.ui.Table;
 import java.util.List;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.domain.kpianalysis.KPA;
-import zm.hashcode.mshengu.domain.kpianalysis.KPIItem;
 
 /**
  *

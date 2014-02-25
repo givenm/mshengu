@@ -48,13 +48,13 @@ public class LoadAllKPIResults implements Serializable {
         List<KPIItem> foundItems = new ArrayList<>();
         for (KPIItem item : items) {            
             values = item.getValues();
-            if (values.size() < 1) { //if values do not exist in KPIValues
+            if (values == null) { //if values do not exist in KPIValues
                 for (int i = getFromYear(); i <= getToYear(); i++) {
                     for (int j = 0; j < 12; j++) {
                         String month = getMonth(j);
                         //Creating kpivalues from start of services to current date ()
-//                        initiallyInsertKPAOneValuesInDatabase(item, month, j);
-//                        initiallyInsertKPATwoValuesInDatabase(item, month, j);
+                        initiallyInsertKPAOneValuesInDatabase(item, month, j, i);
+                        initiallyInsertKPATwoValuesInDatabase(item, month, j, i);
                     }
                 }
                 //Merge current item with new KPIValues
@@ -99,33 +99,33 @@ public class LoadAllKPIResults implements Serializable {
         return foundItems;
     }
 
-    private void initiallyInsertKPAOneValuesInDatabase(KPIItem item, String month, int j) {
+    private void initiallyInsertKPAOneValuesInDatabase(KPIItem item, String month, int j, int year) {
         if (item.getKpiNumber() == 1) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(oneService.getNoServicesPerformed(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 2) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(oneService.getCompletedPercentage(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 3) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(oneService.getNoServicesNotCompleted(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 4) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(oneService.getUncompletedPercentage(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 5) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(oneService.getUnitDeployment(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
@@ -133,33 +133,33 @@ public class LoadAllKPIResults implements Serializable {
         }
     }
     
-    private void initiallyInsertKPATwoValuesInDatabase(KPIItem item, String month, int j) {
+    private void initiallyInsertKPATwoValuesInDatabase(KPIItem item, String month, int j, int year) {
         if (item.getKpiNumber() == 1) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(twoService.getNoServicesPerformed(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 2) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(twoService.getCompletedPercentage(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 3) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(twoService.getNoServicesNotCompleted(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 4) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(twoService.getUncompletedPercentage(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
             values.add(v);
         } else if (item.getKpiNumber() == 5) {
-            KPIValues v = new KPIValues.Builder(toDate)
+            KPIValues v = new KPIValues.Builder(new Date(year, getMonth(month), 1))
                     .value(twoService.getPrivateContribution(month, j))
                     .build();
             KPIValuesFacade.getKPIValuesService().persist(v);
