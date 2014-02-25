@@ -13,7 +13,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import zm.hashcode.mshengu.app.facade.products.UnitTypeFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.client.rest.api.resources.PublicContact;
 import zm.hashcode.mshengu.client.rest.api.resources.PublicIncident;

@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.customer.customer;
+package zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.customer.customer.views.CustomerContractsTab;
-import zm.hashcode.mshengu.client.web.content.customer.customer.views.CustomerDetailsTab;
+import zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.views.CustomerContractsTab;
+import zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.views.CustomerDetailsTab;
 
 /**
  *
