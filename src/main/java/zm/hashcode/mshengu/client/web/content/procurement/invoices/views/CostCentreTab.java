@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.procurement.invoices.views;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.form.CostCentreForm;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.table.CostCentreTable;

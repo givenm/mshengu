@@ -710,6 +710,28 @@ public class UIComboBoxHelper<T> implements Serializable {
         return comboBox;
     }
 
+    public ComboBox getAllCostCentreType(String fieldText, String fieldName, Class<T> fieldClass, FieldGroup binder) {
+        ComboBox comboBox = new ComboBox(fieldText);
+        List<CostCentreType> list = CostCentreTypeFacade.getCostCentreTypeService().findAll();
+
+//          Collection<Status> statusFiltered = Collections2.filter(statusTypeList, new ToiletStatusPredicate());
+        if (list != null) {
+            comboBox.addItem("all");
+            comboBox.setItemCaption("all", "All");
+            for (CostCentreType type : list) {
+                comboBox.addItem(type.getId());
+                comboBox.setItemCaption(type.getId(), type.getName());
+            }
+        }
+
+        comboBox.addValidator(new BeanValidator(fieldClass, fieldName));
+        comboBox.setImmediate(true);
+        comboBox.setNullSelectionAllowed(false);
+        comboBox.setWidth(250, Sizeable.Unit.PIXELS);
+        binder.bind(comboBox, fieldName);
+        return comboBox;
+    }
+
     public ComboBox getCostCentreCategoryType(String fieldText, String fieldName, Class<T> fieldClass, FieldGroup binder) {
         ComboBox comboBox = new ComboBox(fieldText);
         comboBox.addValidator(new BeanValidator(fieldClass, fieldName));
@@ -1125,7 +1147,28 @@ public class UIComboBoxHelper<T> implements Serializable {
     public ComboBox getMonthComboBox(String fieldText, String fieldName, Class<RequestBean> fieldClass, FieldGroup binder) {
         ComboBox comboBox = new ComboBox(fieldText);
 
+
         String[] months = new DateFormatSymbols().getMonths();
+        for (int i = 0; i < months.length; i++) {
+            comboBox.addItem(months[i]);
+            comboBox.setItemCaption(months[i], months[i]);
+        }
+
+        comboBox.addValidator(new BeanValidator(fieldClass, fieldName));
+        comboBox.setImmediate(true);
+        comboBox.setNullSelectionAllowed(false);
+        comboBox.setWidth(250, Sizeable.Unit.PIXELS);
+        binder.bind(comboBox, fieldName);
+        return comboBox;
+    }
+
+    public ComboBox getAllMonthComboBox(String fieldText, String fieldName, Class<RequestBean> fieldClass, FieldGroup binder) {
+        ComboBox comboBox = new ComboBox(fieldText);
+
+
+        String[] months = new DateFormatSymbols().getMonths();
+        comboBox.addItem("all");
+        comboBox.setItemCaption("all", "All");
         for (int i = 0; i < months.length; i++) {
             comboBox.addItem(months[i]);
             comboBox.setItemCaption(months[i], months[i]);

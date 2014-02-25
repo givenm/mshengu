@@ -4,13 +4,15 @@
  */
 package zm.hashcode.mshengu.services.kpianalysis.impl;
 
+import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.services.kpianalysis.LoadKPIFourService;
 
 /**
  *
  * @author Luckbliss
  */
-//Maintenance Managament
+//Maintenance Management
+@Service
 public class LoadKPIFourServiceImpl implements LoadKPIFourService{
 
     @Override

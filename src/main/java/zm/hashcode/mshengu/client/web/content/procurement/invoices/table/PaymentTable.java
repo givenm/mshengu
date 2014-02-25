@@ -44,19 +44,33 @@ public class PaymentTable extends Table {
     private void addSubtotalRow(String month, String year) {
         List<Request> newlist = new ArrayList<>();
         List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
-        for (ServiceProvider serviceProvider : serviceProviders) {
-            List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+        if (month.equalsIgnoreCase("all")) {
+            for (ServiceProvider serviceProvider : serviceProviders) {
+                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
 
-            for (Request request : list) {
-                if (request.getInvoiceNumber() != null) {
-                    String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-                    String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-                    if (datemonth.equals(month) && year.equals(dateyear)) {
+                for (Request request : list) {
+                    if (request.getInvoiceNumber() != null) {
                         newlist.add(request);
                     }
                 }
             }
+        } else {
+            for (ServiceProvider serviceProvider : serviceProviders) {
+                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+
+                for (Request request : list) {
+                    if (request.getInvoiceNumber() != null) {
+                        String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
+                        String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
+                        if (datemonth.equals(month) && year.equals(dateyear)) {
+                            newlist.add(request);
+                        }
+                    }
+                }
+            }
         }
+
+
         paidTotal = paidTotal.add(getSupplierTotal(newlist));
         balanceTotal = balanceTotal.add(getPaidTotal(newlist));
         addItem(new Object[]{
@@ -87,7 +101,7 @@ public class PaymentTable extends Table {
         paidTotal = new BigDecimal("0.00");
         balanceTotal = new BigDecimal("0.00");
         addSubtotalRow(month, year);
-        if (month != null) {
+        if (month != null && !month.equalsIgnoreCase("all")) {
             List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
                 List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
@@ -99,6 +113,25 @@ public class PaymentTable extends Table {
                         if (datemonth.equals(month) && year.equals(dateyear)) {
                             newlist.add(request);
                         }
+                    }
+                }
+                if (newlist.size() > 0) {
+                    addItem(new Object[]{
+                        serviceProvider.getName(),
+                        f.format(getSupplierTotal(newlist)),
+                        f.format(getPaidTotal(newlist)),
+                        f.format(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)))}, serviceProvider.getId());
+                    grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
+                }
+            }
+        } else {
+            List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
+            for (ServiceProvider serviceProvider : serviceProviders) {
+                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
+                List<Request> newlist = new ArrayList<>();
+                for (Request request : list) {
+                    if (request.getInvoiceNumber() != null) {
+                        newlist.add(request);
                     }
                 }
                 if (newlist.size() > 0) {
