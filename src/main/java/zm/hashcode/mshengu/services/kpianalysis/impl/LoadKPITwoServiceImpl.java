@@ -7,10 +7,13 @@ package zm.hashcode.mshengu.services.kpianalysis.impl;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
+import zm.hashcode.mshengu.services.customer.CustomerService;
 import zm.hashcode.mshengu.services.kpianalysis.LoadKPITwoService;
 
 /**
@@ -18,9 +21,12 @@ import zm.hashcode.mshengu.services.kpianalysis.LoadKPITwoService;
  * @author Luckbliss
  */
 //Field Services (Private)
+//@Service
 public class LoadKPITwoServiceImpl implements LoadKPITwoService {
 
-    private List<Customer> customers = CustomerFacade.getCustomerService().findByContractType("Private");
+    @Autowired
+    private CustomerService customerService;
+    private List<Customer> customers = customerService.findByContractType("Private Hire");
 
     @Override
     public double getNoServicesPerformed(String month, int year) {

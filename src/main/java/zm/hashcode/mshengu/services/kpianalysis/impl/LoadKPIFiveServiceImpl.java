@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.services.kpianalysis.impl;
 
+import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.services.kpianalysis.LoadKPIFiveService;
 
 /**
@@ -11,6 +12,7 @@ import zm.hashcode.mshengu.services.kpianalysis.LoadKPIFiveService;
  * @author Luckbliss
  */
 //Chemical Usage
+@Service
 public class LoadKPIFiveServiceImpl implements LoadKPIFiveService{
 
     @Override

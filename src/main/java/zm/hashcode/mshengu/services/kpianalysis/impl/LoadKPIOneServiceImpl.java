@@ -7,10 +7,12 @@ package zm.hashcode.mshengu.services.kpianalysis.impl;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
-import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
+import zm.hashcode.mshengu.services.customer.CustomerService;
 import zm.hashcode.mshengu.services.kpianalysis.LoadKPIOneService;
 
 /**
@@ -18,9 +20,14 @@ import zm.hashcode.mshengu.services.kpianalysis.LoadKPIOneService;
  * @author Luckbliss
  */
 //Field Services (Contract)
+//@Service
 public class LoadKPIOneServiceImpl implements LoadKPIOneService {
 
-    private List<Customer> customers = CustomerFacade.getCustomerService().findByContractType("Contract");
+    @Autowired
+    private CustomerService customerService;
+    private List<Customer> customers = customerService.findByContractType("Contract");
+
+
     @Override
     public double getNoServicesPerformed(String month, int year) {
         double number = 0;
@@ -42,7 +49,7 @@ public class LoadKPIOneServiceImpl implements LoadKPIOneService {
 
     @Override
     public double getNoServicesNotCompleted(String month, int year) {
-        double number = 0;        
+        double number = 0;
         for (Customer customer : customers) {
             Set<Site> sites = customer.getSites();
             for (Site site : sites) {

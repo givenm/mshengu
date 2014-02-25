@@ -39,8 +39,8 @@ public class CostCentreTable extends Table {
     }
 
     public final void loadTable(String costCentreId, String month, String year) {
-        grandTotal = new BigDecimal("0");
-        if (costCentreId != null) {
+        grandTotal = new BigDecimal("0");  
+        if (costCentreId != null && !costCentreId.equalsIgnoreCase("all")) {
             List<Request> newlist = new ArrayList<>();
             CostCentreType centreType = CostCentreTypeFacade.getCostCentreTypeService().findById(costCentreId);
             List<Request> list = RequestFacade.getRequestService().findAll();
