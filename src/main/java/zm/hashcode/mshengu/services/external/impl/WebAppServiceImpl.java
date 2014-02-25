@@ -288,7 +288,7 @@ public class WebAppServiceImpl implements WebAppService {
 
         }
 
-        IncomingRFQ incomingRFQ = null;
+        IncomingRFQ incomingRFQ;
         if (incomingRFQ1 == null) {
             /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
             /*NB: The ServiceProviderBean (Under web/procurement/vendors/models) has details are the same with the website and could be used*/
