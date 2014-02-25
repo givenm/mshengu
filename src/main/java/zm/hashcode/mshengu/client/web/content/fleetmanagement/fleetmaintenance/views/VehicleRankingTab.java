@@ -20,7 +20,7 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.m
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.panel.PanelStyled;
+import zm.hashcode.mshengu.app.util.panel.PanelStyled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.MonthSpendTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.RandPerKmTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.RatingTable;

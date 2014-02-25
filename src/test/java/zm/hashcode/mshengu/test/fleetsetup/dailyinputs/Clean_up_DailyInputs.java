@@ -26,7 +26,7 @@ public class Clean_up_DailyInputs extends AppTest {
     @Autowired
     private TruckService truckService; //
 
-    @Test
+//    @Test
     public void testSheet() {
 
         operatingCostService = ctx.getBean(OperatingCostService.class);
@@ -62,17 +62,17 @@ public class Clean_up_DailyInputs extends AppTest {
                     .fuelSpec(truck.getFuelSpec())
                     .id(truck.getId())
                     .build();
-            truckService.merge(updatedTruck);
+//////            truckService.merge(updatedTruck);
         }
 
         // Next Clear all OperatingCosts
         List<OperatingCost> operatingCostList = operatingCostService.findAll();
         for (OperatingCost operatingCost : operatingCostList) {
-            operatingCostService.delete(operatingCost);
+//////            operatingCostService.delete(operatingCost);
         }
     }
 
-    @Test(dependsOnMethods = {"testSheet"})
+////////    @Test(dependsOnMethods = {"testSheet"})
     public void readDatabase() {
 
         // cHECK IF operatingCosts exist for each Truck AFTER CLEAN-UP

@@ -42,7 +42,6 @@ public class TotalMaintenanceSpendPerVehicleChart implements Serializable {
 
     public DCharts createChart(List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList, String chartPeriod) {
 
-
         List<Object> totalList = new ArrayList<>();
         List<Object> numberPlateList = new ArrayList<>();
         //
