@@ -28,7 +28,7 @@ public class AddTruckIdToDailyInputTest extends AppTest {
     @Autowired
     private TruckService truckService; //
 
-//    @Test
+    @Test
     public void testAddTruckIdToDailyInput() {
         operatingCostService = ctx.getBean(OperatingCostService.class);
         truckService = ctx.getBean(TruckService.class);
@@ -44,7 +44,7 @@ public class AddTruckIdToDailyInputTest extends AppTest {
         }
     }
 
-//    @Test(dependsOnMethods = {"testAddTruckIdToDailyInput"})
+    @Test(dependsOnMethods = {"testAddTruckIdToDailyInput"})
     public void testDb() {
         operatingCostService = ctx.getBean(OperatingCostService.class);
         // Next Test all OperatingCosts for TruckId

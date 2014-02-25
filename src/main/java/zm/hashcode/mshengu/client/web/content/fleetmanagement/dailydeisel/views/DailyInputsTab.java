@@ -208,20 +208,24 @@ public class DailyInputsTab extends VerticalLayout implements
             if (trackerUtil.isThereDuplicateDailyInput(truck, transactionDate)) {
                 Notification.show("A Record for today has been ADDED<br/>Duplicates are not allowed. Consider editing this record.", Notification.Type.TRAY_NOTIFICATION);
             } else {
+                // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
+                String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
+                if (!truncate(vehicleNumber, 3).equals("MOV") || !truncate(vehicleNumber, 3).equals("MMV")) {
 
-                Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, transactionDate, transactionDate);
+                    Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, transactionDate, transactionDate);
 //                Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
-                if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
-                        || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
-                    OperatingCost operatingCost = getNewEntity(binder);
-                    OperatingCostFacade.getOperatingCostService().persist(operatingCost);
+                    if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
+                            || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
+                        OperatingCost operatingCost = getNewEntity(binder);
+                        OperatingCostFacade.getOperatingCostService().persist(operatingCost);
 
-                    updateTruckOperatingCost(operatingCost, binder);
+                        updateTruckOperatingCost(operatingCost, binder);
 
-                    getHome();
-                    Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
-                } else {
-                    Notification.show("Current closing mileage is LOWER than OR SAME as previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                        getHome();
+                        Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
+                    } else {
+                        Notification.show("Current closing mileage is LOWER than OR SAME as previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                    }
                 }
             }
         } catch (FieldGroup.CommitException e) {
@@ -236,21 +240,27 @@ public class DailyInputsTab extends VerticalLayout implements
         try {
             binder.commit();
             final Truck truck = TruckFacade.getTruckService().findById(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-            Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
-            Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, new Date(), transactionDate);
+
+            // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
+            String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
+            if (!truncate(vehicleNumber, 3).equals("MOV") || !truncate(vehicleNumber, 3).equals("MMV")) {
+
+                Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
+                Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, new Date(), transactionDate);
 //        Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
-            if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
-                    || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
-                // We can also test for mileages the exist after this date entry in case current mileage clashes
-                OperatingCost operatingCost = getUpdatedEntity(binder);
-                OperatingCostFacade.getOperatingCostService().merge(operatingCost);
+                if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
+                        || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
+                    // We can also test for mileages the exist after this date entry in case current mileage clashes
+                    OperatingCost operatingCost = getUpdatedEntity(binder);
+                    OperatingCostFacade.getOperatingCostService().merge(operatingCost);
 //                deleteTruckOperatingCost(binder);
 //                updateTruckOperatingCost(operatingCost, binder);
-                getHome();
-                Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
+                    getHome();
+                    Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
 
-            } else {
-                Notification.show("Current closing mileage is LOWER or EQUALS previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                } else {
+                    Notification.show("Current closing mileage is LOWER or EQUALS previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                }
             }
         } catch (FieldGroup.CommitException e) {
             Collection<Field<?>> fields = binder.getFields();
@@ -439,5 +449,12 @@ public class DailyInputsTab extends VerticalLayout implements
         bean.setRandPerLitre(operatingCosts.getRandPerLitre());
 
         return bean;
+    }
+
+    public static String truncate(String value, int length) {
+        if (value != null && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
     }
 }

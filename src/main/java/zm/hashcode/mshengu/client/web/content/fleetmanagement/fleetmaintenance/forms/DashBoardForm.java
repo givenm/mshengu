@@ -41,19 +41,17 @@ public class DashBoardForm extends FormLayout {
         optionGroup.setStyleName("optiongrouphorizontal");
         optionGroup.setImmediate(true);
 
-        Panel periodicPanel = new Panel("Periodic");
+        Panel periodicPanel = new Panel("Periodic Date Range Query");
 //        datePanel.setSizeUndefined();
         periodicPanel.setWidth(400, Sizeable.Unit.PIXELS);
 //        periodicPanel.addStyleName("default");
 
-
-
-        Panel datePanel = new Panel("Custom");
+        Panel datePanel = new Panel("Custom Date Range Query");
 //        datePanel.setSizeUndefined();
         datePanel.setWidth(300, Sizeable.Unit.PIXELS);
 //        datePanel.addStyleName("default");
-        FormLayout content = new FormLayout();
 
+        FormLayout content = new FormLayout();
 
         content.addComponent(startDate);
         content.addComponent(endDate);
@@ -74,6 +72,7 @@ public class DashBoardForm extends FormLayout {
 
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 4, 2, 4);
 
+//        addListeners(); // for DASHBOARD sizing of Charts
         addComponent(grid);
     }
 }
