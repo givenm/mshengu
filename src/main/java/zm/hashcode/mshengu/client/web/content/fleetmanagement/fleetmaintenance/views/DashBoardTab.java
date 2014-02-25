@@ -94,11 +94,19 @@ public class DashBoardTab extends VerticalLayout implements
         final Property property = event.getProperty();
         if (property == form.startDate) {
             startDate = fleetMaintenanceUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            try {
+                endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+            }
             if (endDate != null) {
                 getDataAndPerformCharts();
             }
         } else if (property == form.endDate) {
             endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
+            try {
+                startDate = fleetMaintenanceUtil.resetMonthToLastDay(form.startDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+            }
             if (startDate != null) {
                 getDataAndPerformCharts();
             }
@@ -177,6 +185,8 @@ public class DashBoardTab extends VerticalLayout implements
         } else {
             Notification.show("Please Specify Date Range in Approprate Order.", Notification.Type.TRAY_NOTIFICATION);
         }
+//        endDate = null;
+//        startDate = null;
     }
 
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
@@ -288,7 +298,7 @@ public class DashBoardTab extends VerticalLayout implements
         totalFleetMaintenanceSpendPanel.setSizeUndefined(); // Shrink to fit content
 
         // Create a Panel
-        Panel totalMaintenanceSpendPerVehiclePanel = new Panel("Total Fleet Maintenance Spend: " + spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear()); //
+        Panel totalMaintenanceSpendPerVehiclePanel = new Panel("Total Fleet Maintenance Spend By Vehicle: " + spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear()); //
         totalMaintenanceSpendPerVehiclePanel.setWidth("100%");
         totalMaintenanceSpendPerVehiclePanel.setHeight("100%");
         totalMaintenanceSpendPerVehiclePanel.setStyleName("bubble");
@@ -301,12 +311,12 @@ public class DashBoardTab extends VerticalLayout implements
         totalSpendBySupplierBarChartPanel.setStyleName("bubble");
         totalSpendBySupplierBarChartPanel.setSizeUndefined(); // Shrink to fit content
 
-        // Create a Panel
-        Panel totalSpendBySupplierPieChartPanel = new Panel("Total Fleet Maintenance Spend by Supplier: " + spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear()); //
-        totalSpendBySupplierPieChartPanel.setWidth("100%");
-        totalSpendBySupplierPieChartPanel.setHeight("100%");
-        totalSpendBySupplierPieChartPanel.setStyleName("bubble");
-        totalSpendBySupplierPieChartPanel.setSizeUndefined(); // Shrink to fit content
+//        // Create a Panel
+//        Panel totalSpendBySupplierPieChartPanel = new Panel("Total Fleet Maintenance Spend by Supplier: " + spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear()); //
+//        totalSpendBySupplierPieChartPanel.setWidth("100%");
+//        totalSpendBySupplierPieChartPanel.setHeight("100%");
+//        totalSpendBySupplierPieChartPanel.setStyleName("bubble");
+//        totalSpendBySupplierPieChartPanel.setSizeUndefined(); // Shrink to fit content
 
         // Create a Panel
         Panel maintenanceSpendByKmTravelledPanel = new Panel("Maintenance Spend Km Travelled(R/Km): " + spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear()); //
@@ -329,16 +339,17 @@ public class DashBoardTab extends VerticalLayout implements
         totalSpendBySupplierBarLayout.setMargin(true); //
         totalSpendBySupplierBarLayout.setSizeUndefined(); // Shrink to fit content
         totalSpendBySupplierBarLayout.addComponent(dTotalSpendBySupplierBarChart);
+        totalSpendBySupplierBarLayout.addComponent(dTotalSpendBySupplierPieChart);
         // Add item to the Panel
         totalSpendBySupplierBarChartPanel.setContent(totalSpendBySupplierBarLayout);
 
         // ========
-        HorizontalLayout totalSpendBySupplierPieLayout = new HorizontalLayout();
-        totalSpendBySupplierPieLayout.setMargin(true); //
-        totalSpendBySupplierPieLayout.setSizeUndefined(); // Shrink to fit content
-        totalSpendBySupplierPieLayout.addComponent(dTotalSpendBySupplierPieChart);
-        // Add item to the Panel
-        totalSpendBySupplierPieChartPanel.setContent(totalSpendBySupplierPieLayout);
+//        HorizontalLayout totalSpendBySupplierPieLayout = new HorizontalLayout();
+//        totalSpendBySupplierPieLayout.setMargin(true); //
+//        totalSpendBySupplierPieLayout.setSizeUndefined(); // Shrink to fit content
+//        totalSpendBySupplierPieLayout.addComponent(dTotalSpendBySupplierPieChart);
+//        // Add item to the Panel
+//        totalSpendBySupplierPieChartPanel.setContent(totalSpendBySupplierPieLayout);
 
         // =============================================================================================================================
         HorizontalLayout totalMaintenanceSpendPerVehiclePanelLayout = new HorizontalLayout();
@@ -410,12 +421,13 @@ public class DashBoardTab extends VerticalLayout implements
         chart.chartVerticalLayout.addComponent(totalFleetMaintenanceSpendPanel);
         chart.chartVerticalLayout.addComponent(totalMaintenanceSpendPerVehiclePanel);
         chart.chartVerticalLayout.addComponent(totalSpendBySupplierBarChartPanel);
-        chart.chartVerticalLayout.addComponent(totalSpendBySupplierPieChartPanel);
+//        chart.chartVerticalLayout.addComponent(totalSpendBySupplierPieChartPanel);
         chart.chartVerticalLayout.addComponent(maintenanceSpendByKmTravelledPanel);
 
         // house cleaning
         grandTotalMaintenanceMileage = BigDecimal.ZERO;
         grandTotalMaintenanceSpend = BigDecimal.ZERO;
+        endDate = startDate = null;
     }
 
     public DCharts createTotalMaintenanceCostMOnthlySpendChart() {

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.panel;
+package zm.hashcode.mshengu.app.util.panel;
 
 import com.vaadin.ui.Panel;
 

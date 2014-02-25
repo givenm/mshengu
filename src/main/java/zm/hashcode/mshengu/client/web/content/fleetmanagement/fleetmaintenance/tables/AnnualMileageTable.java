@@ -8,11 +8,9 @@ import com.vaadin.ui.Table;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlyMileageData;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
@@ -151,6 +149,7 @@ public class AnnualMileageTable extends AnnualDataSuperTable {
         for (int j = 1; j < truckTotalArray.length; j++) {
             getItem(0).getItemProperty(truckVehicleNumberArray[j]).setValue(truckTotalArray[j]); // serviceUtilityTrucksList.get(j-1).getVehicleNumber()
         }
+        grandTotal = 0;
 
         performTableFontSizeStyling();
 

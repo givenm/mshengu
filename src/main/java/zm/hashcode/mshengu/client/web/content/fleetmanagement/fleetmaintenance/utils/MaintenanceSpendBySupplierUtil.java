@@ -119,13 +119,11 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
             } else {
                 performLiveDataHarvesting(startDate, endDate);
             }
-            for (MaintenanceSpendBySupplier maintenanceSpendBySupplier : maintenanceSpendBySupplierList) {
-                System.out.println("SPEND_BY_SUPPLIER, Date= " + maintenanceSpendBySupplier.getTransactionDate() + " | Cost= " + maintenanceSpendBySupplier.getMaintenanceCost() + " | SupplierId= " + maintenanceSpendBySupplier.getSupplierId() + " | TruckId= " + maintenanceSpendBySupplier.getTruckId());
-            }
+////            for (MaintenanceSpendBySupplier maintenanceSpendBySupplier : maintenanceSpendBySupplierList) {
+////                System.out.println("SPEND_BY_SUPPLIER, Date= " + maintenanceSpendBySupplier.getTransactionDate() + " | Cost= " + maintenanceSpendBySupplier.getMaintenanceCost() + " | SupplierId= " + maintenanceSpendBySupplier.getSupplierId() + " | TruckId= " + maintenanceSpendBySupplier.getTruckId());
+////            }
             return maintenanceSpendBySupplierList;
         }
-
-
     }
 
     private void performStaticAndLiveDataHarvesting(Date startDate, Date endDate) {

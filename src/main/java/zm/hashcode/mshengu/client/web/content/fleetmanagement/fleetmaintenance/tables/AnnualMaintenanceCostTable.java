@@ -148,6 +148,8 @@ public class AnnualMaintenanceCostTable extends AnnualDataSuperTable {
             getItem(0).getItemProperty(truckVehicleNumberArray[j]).setValue(df.format(Double.parseDouble(truckTotalArray[j].toString()))); // serviceUtilityTrucksList.get(j-1).getVehicleNumber()
         }
 
+        grandTotal = BigDecimal.ZERO;
+
         performTableFontSizeStyling();
     }
 

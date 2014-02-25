@@ -9,7 +9,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.panel.PanelStyled;
+import zm.hashcode.mshengu.app.util.panel.PanelStyled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMaintenanceCostHeadingTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMaintenanceCostTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMileageTable;

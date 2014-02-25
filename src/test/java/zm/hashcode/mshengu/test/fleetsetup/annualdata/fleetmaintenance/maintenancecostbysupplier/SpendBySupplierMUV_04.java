@@ -45,7 +45,6 @@ public class SpendBySupplierMUV_04 extends AppTest {
     private static ServiceProvider serviceProvider = null;
 
 //    @Test
-    
     public void testSheet() {
         try {
             serviceProviderService = ctx.getBean(ServiceProviderService.class);
@@ -137,6 +136,15 @@ public class SpendBySupplierMUV_04 extends AppTest {
             for (MaintenanceSpendBySupplier maintenanceSpendBySupplier : maintenanceSpendBySupplierList) {
                 System.out.println("READING DATABASE - TruckId: " + maintenanceSpendBySupplier.getTruckId() + ". Date: " + maintenanceSpendBySupplier.getTransactionDate() + ". Maintenance Cost: " + maintenanceSpendBySupplier.getMaintenanceCost() + ". Supplier ID: " + maintenanceSpendBySupplier.getSupplierId());
             }
+        }
+    }
+
+//    @Test
+    public void printAllTrucks() {
+        truckService = ctx.getBean(TruckService.class);
+        List<Truck> allTrucks = truckService.findAll();
+        for (Truck truck : allTrucks) {
+            System.out.println("Vehicle Number= " + truck.getVehicleNumber() + " | Plate= " + truck.getNumberPlate() + " | TruckId= " + truck.getId());
         }
     }
 }

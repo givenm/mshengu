@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -17,23 +16,23 @@ import javax.validation.constraints.NotNull;
 public class DailyInputsBean implements Serializable {
 
     private String id;
-    @NotNull
+    
     private Date transactionDate;
-    @NotNull
+    
     private String slipNo;
-    @NotNull
+    
     private Integer speedometer;
-    @NotNull
+    
     private Double fuelLitres;
-    @NotNull
+    
     private BigDecimal fuelCost = new BigDecimal(BigInteger.ZERO);
     private Double oilLitres;
     private BigDecimal oilCost = new BigDecimal(BigInteger.ZERO);
-    @NotNull
+    
     private BigDecimal randPerLitre = new BigDecimal(BigInteger.ZERO);
-    @NotNull
+    
     private String truckId;
-    @NotNull
+    
     private String driverId;
 
     /**
