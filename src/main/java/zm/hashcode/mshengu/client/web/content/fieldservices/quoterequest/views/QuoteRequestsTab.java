@@ -141,6 +141,7 @@ public class QuoteRequestsTab extends VerticalLayout implements
                 .quantityRequired2(bean.getQuantityRequired2())
                 .quantityRequired3(bean.getQuantityRequired3())
                 .vatNumber(bean.getVatRegistrationNumberUnrequired())
+                .status("not sent")
                 .telephoneNumber(bean.getTelephoneNumberNonRequired())
                 .toiletsRequired1(bean.getToiletsRequired1())
                 .toiletsRequired2(bean.getToiletsRequired2())
@@ -265,9 +266,6 @@ public class QuoteRequestsTab extends VerticalLayout implements
         bean.setVatRegistrationNumberUnrequired(rfg.getVatNumber());
         bean.setContactNumber(rfg.getContactNumber());
         bean.setFaxNumber(rfg.getFaxNumber());
-        
-        System.out.println("Docu: " + rfg);
-        System.out.println("Bean: " + bean);
         
         return bean;
     }

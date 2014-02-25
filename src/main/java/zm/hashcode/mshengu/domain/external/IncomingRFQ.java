@@ -63,6 +63,7 @@ public class IncomingRFQ implements Serializable, Comparable<IncomingRFQ> {
     private boolean saturday;
     private boolean sunday;
     private String faxNumber;
+    private String status;
     @DBRef
     private MailNotifications mailNotifications;
     @DBRef
@@ -110,6 +111,7 @@ public class IncomingRFQ implements Serializable, Comparable<IncomingRFQ> {
         this.sunday = builder.sunday;
         this.mailNotifications = builder.mailNotifications;
         this.userAction = builder.userAction;
+        this.status = builder.status;
     }
 
     private IncomingRFQ() {
@@ -150,6 +152,10 @@ public class IncomingRFQ implements Serializable, Comparable<IncomingRFQ> {
 
     public String getContactPersonLastname() {
         return contactPersonLastname;
+    }
+    
+    public String getStatus() {
+        return status;
     }
 
     /**
@@ -457,6 +463,7 @@ public class IncomingRFQ implements Serializable, Comparable<IncomingRFQ> {
         private String faxNumber;
         private MailNotifications mailNotifications;
         private Set<UserAction> userAction = new HashSet<>();
+        private String status;
 
         public Builder incomingRFQ(IncomingRFQ incomingRFQ) {
             this.id = incomingRFQ.getId();
@@ -500,11 +507,17 @@ public class IncomingRFQ implements Serializable, Comparable<IncomingRFQ> {
             this.mailNotifications = incomingRFQ.getMailNotifications();
             this.userAction = incomingRFQ.getUserAction();
             this.refNumber = incomingRFQ.getRefNumber();
+            this.status = incomingRFQ.getStatus();
             return this;
         }
 
         public Builder(Date value) {
-            this.dateOfAction = value;
+            this.dateOfAction = value;            
+        }
+        
+        public Builder status(String status) {
+            this.status = status;
+            return this;
         }
 
         public Builder id(String value) {

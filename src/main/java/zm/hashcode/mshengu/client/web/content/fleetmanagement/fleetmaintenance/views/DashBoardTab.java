@@ -94,11 +94,19 @@ public class DashBoardTab extends VerticalLayout implements
         final Property property = event.getProperty();
         if (property == form.startDate) {
             startDate = fleetMaintenanceUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            try {
+                endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+            }
             if (endDate != null) {
                 getDataAndPerformCharts();
             }
         } else if (property == form.endDate) {
             endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
+            try {
+                startDate = fleetMaintenanceUtil.resetMonthToLastDay(form.startDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+            }
             if (startDate != null) {
                 getDataAndPerformCharts();
             }
@@ -177,6 +185,8 @@ public class DashBoardTab extends VerticalLayout implements
         } else {
             Notification.show("Please Specify Date Range in Approprate Order.", Notification.Type.TRAY_NOTIFICATION);
         }
+//        endDate = null;
+//        startDate = null;
     }
 
     private List<AnnualDataFleetMaintenanceCost> getMaintenanceCostList() {
@@ -417,6 +427,7 @@ public class DashBoardTab extends VerticalLayout implements
         // house cleaning
         grandTotalMaintenanceMileage = BigDecimal.ZERO;
         grandTotalMaintenanceSpend = BigDecimal.ZERO;
+        endDate = startDate = null;
     }
 
     public DCharts createTotalMaintenanceCostMOnthlySpendChart() {

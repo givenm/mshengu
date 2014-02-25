@@ -43,7 +43,15 @@ public class PaymentTab extends VerticalLayout implements Property.ValueChangeLi
     }
 
     private void getValues() {
-        if (form.month.getValue() != null && form.year.getValue() != null) {
+        if (form.month.getValue().toString().equalsIgnoreCase("all")) {
+            table.removeAllItems();
+            String month = form.month.getValue().toString();
+            form.year.setReadOnly(true);
+            table.loadTable(month, null);
+            getGrandTotal();
+            form.currentdate.setValue("All Outstanding Amounts");
+        } else if (form.month.getValue() != null && form.year.getValue() != null) {
+            form.year.setReadOnly(false);
             table.removeAllItems();
             String month = form.month.getValue().toString();
             String year = form.year.getValue().toString();
@@ -51,6 +59,7 @@ public class PaymentTab extends VerticalLayout implements Property.ValueChangeLi
             getGrandTotal();
             getCurrentDate();
         } else {
+            form.year.setReadOnly(false);
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
         }
     }
@@ -64,7 +73,7 @@ public class PaymentTab extends VerticalLayout implements Property.ValueChangeLi
     public void getGrandTotal() {
         form.grandTotal.setValue(form.total + table.getGrandTotal());
     }
-    
+
     public void getCurrentDate() {
         form.currentdate.setValue(form.month.getValue().toString() + " " + form.year.getValue().toString());
     }

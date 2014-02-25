@@ -4,10 +4,8 @@
  */
 package zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.tables;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.PopupView;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.themes.Reindeer;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.external.IncomingRFQFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
@@ -39,8 +37,8 @@ public class QuoteRequestsTable extends Table {
         addContainerProperty("Customer", String.class, null);
         addContainerProperty("Event Name", String.class, null);
         addContainerProperty("Contact No", String.class, null);
-        addContainerProperty("Status", String.class, null);
-        addContainerProperty("Follow Up", PopupView.class, null);
+        addContainerProperty("Sent Status", String.class, null);
+        addContainerProperty("Respond to Quote", PopupView.class, null);
 
         // Allow selecting items from the table.
         setNullSelectionAllowed(false);
@@ -72,7 +70,7 @@ public class QuoteRequestsTable extends Table {
                     incomingRFQ.getCompanyName(),
                     incomingRFQ.getEventName(),
                     incomingRFQ.getContactNumber(),
-                    incomingRFQ.getLastUserActionStatusName(),
+                    incomingRFQ.getStatus(),
                     popup}, incomingRFQ.getId());
             }
         }

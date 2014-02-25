@@ -34,6 +34,7 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderCategory;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 import zm.hashcode.mshengu.domain.ui.util.Sequence;
+import zm.hashcode.mshengu.services.customer.CustomerService;
 import zm.hashcode.mshengu.services.external.ContactUSService;
 import zm.hashcode.mshengu.services.external.IncomingRFQService;
 import zm.hashcode.mshengu.services.external.MailNotificationsService;
@@ -84,6 +85,8 @@ public class WebAppServiceImpl implements WebAppService {
     ResponseToRFQService responseToRFQService;
     @Autowired
     RequestForQuoteService requestForQuoteService;
+    @Autowired
+    CustomerService customerService;
 
     /**
      *
@@ -261,56 +264,128 @@ public class WebAppServiceImpl implements WebAppService {
         final MailNotifications mailNotifications = mailNotificationService.findByName("REQUEST_TOILET_HIRE_NOTIFCATION");
         Set<UserAction> userActions = new HashSet<>();
 
-        final UnitType toiletsRequired1 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired1());
-        final UnitType toiletsRequired2 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired2());
-        final UnitType toiletsRequired3 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired3());
+        UnitType toiletsRequired1 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired1());
+        UnitType toiletsRequired2;
+        UnitType toiletsRequired3;
 
+        //if the additional toilets are not entered, the if statememts prevent null pointers.
+        IncomingRFQ incomingRFQ2 = null;
+        IncomingRFQ incomingRFQ3 = null;
+        //Check if additional toilets are both available
+        if (publicRequestAQuote.getToiletsRequired2() != null && !publicRequestAQuote.getToiletsRequired2().equals("")) {
 
-        /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
-        /*NB: The ServiceProviderBean (Under web/procurement/vendors/models) has details are the same with the website and could be used*/
-        final IncomingRFQ incomingRFQ = new IncomingRFQ.Builder(new Date())
-                .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
-                .billingAddress(publicRequestAQuote.getBillingAddress())
-                .closed(false) /*what should be the value for clsed?*/
-                .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
-                .companyName(publicRequestAQuote.getCompanyNameNonRequired())
-                .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
-                .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
-                .contactNumber(publicRequestAQuote.getContactNumber())
-                .daysRental(publicRequestAQuote.getDaysRental())
-                .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
-                .deliveryDate(publicRequestAQuote.getDeliveryDate())
-                .email(publicRequestAQuote.getEmail())
-                .eventDate(publicRequestAQuote.getEventDate())
-                .eventName(publicRequestAQuote.getEventName())
-                .eventType(publicRequestAQuote.getEventType())
-                .faxNumber(publicRequestAQuote.getFaxNumber())
-                .mailNotifications(mailNotifications)
-                .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
-                .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
-                .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
-                .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
-                .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
-                .userAction(userActions)
-                .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
-                //                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
+            if (publicRequestAQuote.getToiletsRequired3() != null && !publicRequestAQuote.getToiletsRequired3().equals("")) {
+                //if the 2nd option is available, create its object.
+                toiletsRequired3 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired3());
+                incomingRFQ3 = new IncomingRFQ.Builder(new Date())
+                        .toiletsRequired3(toiletsRequired3.getId())
+                        .build();
+            }
 
-                .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
-                .toiletsRequired1(toiletsRequired1.getId())
-                .toiletsRequired2(toiletsRequired2.getId())
-                .toiletsRequired3(toiletsRequired3.getId())
-                //                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+            toiletsRequired2 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired2());
+            if (incomingRFQ3 != null) {
+                ///if the first & 2nd options are both available
+                incomingRFQ2 = new IncomingRFQ.Builder(new Date())
+                        .incomingRFQ(incomingRFQ3)
+                        .toiletsRequired2(toiletsRequired2.getId())
+                        .build();
+            } else {
+                incomingRFQ2 = new IncomingRFQ.Builder(new Date()) //if the first option is the only one available
+                        .toiletsRequired2(toiletsRequired2.getId())
+                        .build();
+            }
 
-                .monday(publicRequestAQuote.isServiceFrequencyMon())
-                .tuesday(publicRequestAQuote.isServiceFrequencyTue())
-                .wednesday(publicRequestAQuote.isServiceFrequencyWed())
-                .thursday(publicRequestAQuote.isServiceFrequencyThur())
-                .friday(publicRequestAQuote.isServiceFrequencyFri())
-                .saturday(publicRequestAQuote.isServiceFrequencySat())
-                .sunday(publicRequestAQuote.isServiceFrequencySun())
-                .build();
+        } else if (publicRequestAQuote.getToiletsRequired3() != null && !publicRequestAQuote.getToiletsRequired3().equals("")) {
+            //if the 2nd option is available, create its object.
+            toiletsRequired3 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired3());
+            incomingRFQ3 = new IncomingRFQ.Builder(new Date())
+                    .toiletsRequired3(toiletsRequired3.getId())
+                    .build();
+            incomingRFQ2 = new IncomingRFQ.Builder(new Date()) //if the first option is the only one available
+                        .incomingRFQ(incomingRFQ3)
+                        .build();
+        }
 
+        IncomingRFQ incomingRFQ;
+        if (incomingRFQ2 == null) { //if there are no additional toilets
+            /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
+            /*NB: The ServiceProviderBean (Under web/procurement/vendors/models) has details are the same with the website and could be used*/
+            incomingRFQ = new IncomingRFQ.Builder(new Date())
+                    .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
+                    .billingAddress(publicRequestAQuote.getBillingAddress())
+                    .closed(false) /*what should be the value for clsed?*/
+                    .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
+                    .companyName(publicRequestAQuote.getCompanyNameNonRequired())
+                    .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
+                    .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
+                    .contactNumber(publicRequestAQuote.getContactNumber())
+                    .daysRental(publicRequestAQuote.getDaysRental())
+                    .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
+                    .deliveryDate(publicRequestAQuote.getDeliveryDate())
+                    .email(publicRequestAQuote.getEmail())
+                    .eventDate(publicRequestAQuote.getEventDate())
+                    .eventName(publicRequestAQuote.getEventName())
+                    .eventType(publicRequestAQuote.getEventType())
+                    .faxNumber(publicRequestAQuote.getFaxNumber())
+                    .mailNotifications(mailNotifications)
+                    .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
+                    .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
+                    .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
+                    .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
+                    .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
+                    .userAction(userActions)
+                    .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
+                    .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
+                    .toiletsRequired1(toiletsRequired1.getId())
+                    .monday(publicRequestAQuote.isServiceFrequencyMon())
+                    .tuesday(publicRequestAQuote.isServiceFrequencyTue())
+                    .wednesday(publicRequestAQuote.isServiceFrequencyWed())
+                    .thursday(publicRequestAQuote.isServiceFrequencyThur())
+                    .friday(publicRequestAQuote.isServiceFrequencyFri())
+                    .status("not sent")
+                    .saturday(publicRequestAQuote.isServiceFrequencySat())
+                    .sunday(publicRequestAQuote.isServiceFrequencySun())
+                    .build();
 
+        } else { //if there exists additional toilet(s)
+            incomingRFQ = new IncomingRFQ.Builder(new Date())
+                    .incomingRFQ(incomingRFQ2)
+                    .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
+                    .billingAddress(publicRequestAQuote.getBillingAddress())
+                    .closed(false) /*what should be the value for clsed?*/
+                    .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
+                    .companyName(publicRequestAQuote.getCompanyNameNonRequired())
+                    .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
+                    .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
+                    .contactNumber(publicRequestAQuote.getContactNumber())
+                    .daysRental(publicRequestAQuote.getDaysRental())
+                    .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
+                    .deliveryDate(publicRequestAQuote.getDeliveryDate())
+                    .email(publicRequestAQuote.getEmail())
+                    .eventDate(publicRequestAQuote.getEventDate())
+                    .eventName(publicRequestAQuote.getEventName())
+                    .eventType(publicRequestAQuote.getEventType())
+                    .faxNumber(publicRequestAQuote.getFaxNumber())
+                    .mailNotifications(mailNotifications)
+                    .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
+                    .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
+                    .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
+                    .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
+                    .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
+                    .userAction(userActions)
+                    .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
+                    .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
+                    .toiletsRequired1(toiletsRequired1.getId())
+                    .monday(publicRequestAQuote.isServiceFrequencyMon())
+                    .tuesday(publicRequestAQuote.isServiceFrequencyTue())
+                    .wednesday(publicRequestAQuote.isServiceFrequencyWed())
+                    .thursday(publicRequestAQuote.isServiceFrequencyThur())
+                    .friday(publicRequestAQuote.isServiceFrequencyFri())
+                    .saturday(publicRequestAQuote.isServiceFrequencySat())
+                    .sunday(publicRequestAQuote.isServiceFrequencySun())
+                    .status("not sent")
+                    .build();
+        }
 
         incomingRFQService.persist(incomingRFQ);
 //        System.out.println("API TEST --  requestForQuote");

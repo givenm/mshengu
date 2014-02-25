@@ -39,7 +39,7 @@ public class CostCentreForm extends FormLayout {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
-        costcentre = UICombobox.getCostCentreType("Cost Centre Type: ", "supplier", InvoiceBean.class, binder);
+        costcentre = UICombobox.getAllCostCentreType("Cost Centre Type: ", "supplier", InvoiceBean.class, binder);
         month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
         year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
 

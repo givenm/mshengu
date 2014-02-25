@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
+import zm.hashcode.mshengu.app.facade.external.IncomingRFQFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
@@ -77,9 +78,9 @@ public class SendResonseToQuoteRequestPDFForm extends FormLayout {
 
         GridLayout layout = new GridLayout(3, 4);
         errorMessage = UIComponent.getErrorLabel();
-        
+
         layout.addComponent(errorMessage, 0, 0, 1, 0);
-        addComponent(new Label("<br>", ContentMode.HTML)); 
+        addComponent(new Label("<br>", ContentMode.HTML));
         layout.addComponent(sendemail);
         addComponent(embedded);
         addComponent(new Label("<br>", ContentMode.HTML));
@@ -102,7 +103,7 @@ public class SendResonseToQuoteRequestPDFForm extends FormLayout {
             }
         });
 
-        email.addClickListener(new Button.ClickListener() {            
+        email.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(rfqToSend, total).toByteArray());
@@ -112,8 +113,13 @@ public class SendResonseToQuoteRequestPDFForm extends FormLayout {
                     DataSource sendsource = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
                     emailHelper.sendToSupplier(sendsource, bean.getEmail(), rfqToSend.getRefNumber(), "Mshengu Response to a Quote Request");
                     Notification.show("Email sent to " + bean.getEmail(), Notification.Type.TRAY_NOTIFICATION);
+                    final IncomingRFQ incomingRFQ = new IncomingRFQ.Builder(rfqToSend.getDateOfAction())
+                            .incomingRFQ(rfqToSend)
+                            .status("sent")
+                            .build();
+                    IncomingRFQFacade.getIncomingRFQService().merge(incomingRFQ); ///update RFQ o sent
                     getHome();
-                } catch (IOException ex) { 
+                } catch (IOException ex) {
                     Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (FieldGroup.CommitException ex) {
                     Collection<Field<?>> fields = binder.getFields();

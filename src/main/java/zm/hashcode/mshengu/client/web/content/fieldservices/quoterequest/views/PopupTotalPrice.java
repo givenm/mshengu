@@ -57,6 +57,10 @@ public class PopupTotalPrice implements PopupView.Content, Button.ClickListener 
         root.addComponent(total);
         root.addComponent(new Label("<br/>", ContentMode.HTML));
         root.addComponent(followUpButton);
+        root.addComponent(new Label("<br/>", ContentMode.HTML));
+        root.addComponent(new Label("Total including VAT."));
+        
+
     }
 
     @Override
@@ -80,7 +84,7 @@ public class PopupTotalPrice implements PopupView.Content, Button.ClickListener 
 
     @Override
     public String getMinimizedValueAsHTML() {
-        return "Follow Up";
+        return "Respond";
     }
 
     @Override
