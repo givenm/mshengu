@@ -99,14 +99,12 @@ public class QuoteRequestsForm extends FormLayout {
         eventDate = UIValidatorHelper.setRequiredDateField(eventDate, "Event Date");
         
         ComboBox toiletsRequired1 = UIComboBox.getUnitTypeComboBox("Toilets Required:", "toiletsRequired1", QuoteRequestBean.class, binder);
-        
+        toiletsRequired1 = UIValidatorHelper.setRequiredComboBox(toiletsRequired1, "Toilets Required");
         
         TextField quantityRequired1 = UIComponent.getTextField("Quantity Required:", "quantityRequired1", QuoteRequestBean.class, binder);
         quantityRequired1 = UIValidatorHelper.setRequiredTextField(quantityRequired1, "Quantity Required");
         
-        ComboBox toiletsRequired2 = UIComboBox.getUnitTypeComboBox("Additional Toilets Required 1:", "toiletsRequired2", QuoteRequestBean.class, binder);
-        toiletsRequired2 = UIValidatorHelper.setRequiredComboBox(toiletsRequired2, "Additional Toilets Required 1");
-        
+        ComboBox toiletsRequired2 = UIComboBox.getUnitTypeComboBox("Additional Toilets Required 1:", "toiletsRequired2", QuoteRequestBean.class, binder);               
         TextField quantityRequired2 = UIComponent.getTextField(" Additional Quantity Required 1:", "quantityRequired2", QuoteRequestBean.class, binder);
         ComboBox toiletsRequired3 = UIComboBox.getUnitTypeComboBox("Additional Toilets Required 2:", "toiletsRequired3", QuoteRequestBean.class, binder);
         TextField quantityRequired3 = UIComponent.getTextField("Additional Quantity Required 2:", "quantityRequired3", QuoteRequestBean.class, binder);
