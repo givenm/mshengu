@@ -13,6 +13,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import zm.hashcode.mshengu.app.facade.products.UnitTypeFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.client.rest.api.resources.PublicContact;
 import zm.hashcode.mshengu.client.rest.api.resources.PublicIncident;
@@ -261,56 +262,117 @@ public class WebAppServiceImpl implements WebAppService {
         final MailNotifications mailNotifications = mailNotificationService.findByName("REQUEST_TOILET_HIRE_NOTIFCATION");
         Set<UserAction> userActions = new HashSet<>();
 
-        final UnitType toiletsRequired1 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired1());
-        final UnitType toiletsRequired2 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired2());
-        final UnitType toiletsRequired3 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired3());
+        UnitType toiletsRequired1 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired1());
+        UnitType toiletsRequired2;
+        UnitType toiletsRequired3;
 
+        //if the additional toilets are not entered, the if statememts prevent null pointers.
+        IncomingRFQ incomingRFQ1 = null;
+        IncomingRFQ incomingRFQ2 = null;
+        if (publicRequestAQuote.getToiletsRequired2() != null) {
 
-        /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
-        /*NB: The ServiceProviderBean (Under web/procurement/vendors/models) has details are the same with the website and could be used*/
-        final IncomingRFQ incomingRFQ = new IncomingRFQ.Builder(new Date())
-                .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
-                .billingAddress(publicRequestAQuote.getBillingAddress())
-                .closed(false) /*what should be the value for clsed?*/
-                .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
-                .companyName(publicRequestAQuote.getCompanyNameNonRequired())
-                .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
-                .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
-                .contactNumber(publicRequestAQuote.getContactNumber())
-                .daysRental(publicRequestAQuote.getDaysRental())
-                .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
-                .deliveryDate(publicRequestAQuote.getDeliveryDate())
-                .email(publicRequestAQuote.getEmail())
-                .eventDate(publicRequestAQuote.getEventDate())
-                .eventName(publicRequestAQuote.getEventName())
-                .eventType(publicRequestAQuote.getEventType())
-                .faxNumber(publicRequestAQuote.getFaxNumber())
-                .mailNotifications(mailNotifications)
-                .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
-                .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
-                .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
-                .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
-                .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
-                .userAction(userActions)
-                .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
-                //                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
+            if (publicRequestAQuote.getToiletsRequired3() != null) {
+                toiletsRequired3 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired3());
+                incomingRFQ2 = new IncomingRFQ.Builder(new Date())
+                        .toiletsRequired3(toiletsRequired3.getId())
+                        .build();
+            }
 
-                .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
-                .toiletsRequired1(toiletsRequired1.getId())
-                .toiletsRequired2(toiletsRequired2.getId())
-                .toiletsRequired3(toiletsRequired3.getId())
-                //                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+            if (incomingRFQ2 != null) {
+                toiletsRequired2 = unitTypeService.findByName(publicRequestAQuote.getToiletsRequired2());
+                incomingRFQ1 = new IncomingRFQ.Builder(new Date())
+                        .incomingRFQ(incomingRFQ2)
+                        .toiletsRequired2(toiletsRequired2.getId())
+                        .build();
+            }
 
-                .monday(publicRequestAQuote.isServiceFrequencyMon())
-                .tuesday(publicRequestAQuote.isServiceFrequencyTue())
-                .wednesday(publicRequestAQuote.isServiceFrequencyWed())
-                .thursday(publicRequestAQuote.isServiceFrequencyThur())
-                .friday(publicRequestAQuote.isServiceFrequencyFri())
-                .saturday(publicRequestAQuote.isServiceFrequencySat())
-                .sunday(publicRequestAQuote.isServiceFrequencySun())
-                .build();
+        }
 
+        IncomingRFQ incomingRFQ;
+        if (incomingRFQ1 == null) {
+            /*The Entity ServiceProvider has missing variables. Please consult the PublicVendorRegistration bean. */
+            /*NB: The ServiceProviderBean (Under web/procurement/vendors/models) has details are the same with the website and could be used*/
+            incomingRFQ = new IncomingRFQ.Builder(new Date())
+                    .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
+                    .billingAddress(publicRequestAQuote.getBillingAddress())
+                    .closed(false) /*what should be the value for clsed?*/
+                    .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
+                    .companyName(publicRequestAQuote.getCompanyNameNonRequired())
+                    .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
+                    .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
+                    .contactNumber(publicRequestAQuote.getContactNumber())
+                    .daysRental(publicRequestAQuote.getDaysRental())
+                    .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
+                    .deliveryDate(publicRequestAQuote.getDeliveryDate())
+                    .email(publicRequestAQuote.getEmail())
+                    .eventDate(publicRequestAQuote.getEventDate())
+                    .eventName(publicRequestAQuote.getEventName())
+                    .eventType(publicRequestAQuote.getEventType())
+                    .faxNumber(publicRequestAQuote.getFaxNumber())
+                    .mailNotifications(mailNotifications)
+                    .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
+                    .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
+                    .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
+                    .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
+                    .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
+                    .userAction(userActions)
+                    .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
+                    //                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
 
+                    .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
+                    .toiletsRequired1(toiletsRequired1.getId())
+                    //                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+
+                    .monday(publicRequestAQuote.isServiceFrequencyMon())
+                    .tuesday(publicRequestAQuote.isServiceFrequencyTue())
+                    .wednesday(publicRequestAQuote.isServiceFrequencyWed())
+                    .thursday(publicRequestAQuote.isServiceFrequencyThur())
+                    .friday(publicRequestAQuote.isServiceFrequencyFri())
+                    .saturday(publicRequestAQuote.isServiceFrequencySat())
+                    .sunday(publicRequestAQuote.isServiceFrequencySun())
+                    .build();
+        } else {
+            incomingRFQ = new IncomingRFQ.Builder(new Date())
+                    .incomingRFQ(incomingRFQ1)
+                    .refNumber(getRefNumber(mailNotifications)) /*This field does not exist on the website form*/
+                    .billingAddress(publicRequestAQuote.getBillingAddress())
+                    .closed(false) /*what should be the value for clsed?*/
+                    .collectionDate(publicRequestAQuote.getCollectionDate()).comment(publicRequestAQuote.getComment())
+                    .companyName(publicRequestAQuote.getCompanyNameNonRequired())
+                    .contactPersonFirstname(publicRequestAQuote.getContactPersonFirstname())
+                    .contactPersonLastname(publicRequestAQuote.getContactPersonLastname())
+                    .contactNumber(publicRequestAQuote.getContactNumber())
+                    .daysRental(publicRequestAQuote.getDaysRental())
+                    .deliveryAddress(publicRequestAQuote.getDeliveryAddress())
+                    .deliveryDate(publicRequestAQuote.getDeliveryDate())
+                    .email(publicRequestAQuote.getEmail())
+                    .eventDate(publicRequestAQuote.getEventDate())
+                    .eventName(publicRequestAQuote.getEventName())
+                    .eventType(publicRequestAQuote.getEventType())
+                    .faxNumber(publicRequestAQuote.getFaxNumber())
+                    .mailNotifications(mailNotifications)
+                    .numberOfJanitors(publicRequestAQuote.getNumberOfJanitors())
+                    .numberOfToiletRolls(publicRequestAQuote.getNumberOfToiletRolls())
+                    .quantityRequired1(publicRequestAQuote.getQuantityRequired1())
+                    .quantityRequired2(publicRequestAQuote.getQuantityRequired2())
+                    .quantityRequired3(publicRequestAQuote.getQuantityRequired3())
+                    .userAction(userActions)
+                    .vatNumber(publicRequestAQuote.getVatRegistrationNumberUnrequired())
+                    //                .quantityRequired4(2) /*This field does not exist. there only 3 quantities in Request a quote*/                
+
+                    .telephoneNumber(publicRequestAQuote.getTelephoneNumberNonRequired())
+                    .toiletsRequired1(toiletsRequired1.getId())
+                    //                .toiletsRequired4("This field does not exist on the website form") //*This is does not exist on the website form*/
+
+                    .monday(publicRequestAQuote.isServiceFrequencyMon())
+                    .tuesday(publicRequestAQuote.isServiceFrequencyTue())
+                    .wednesday(publicRequestAQuote.isServiceFrequencyWed())
+                    .thursday(publicRequestAQuote.isServiceFrequencyThur())
+                    .friday(publicRequestAQuote.isServiceFrequencyFri())
+                    .saturday(publicRequestAQuote.isServiceFrequencySat())
+                    .sunday(publicRequestAQuote.isServiceFrequencySun())
+                    .build();
+        }
 
         incomingRFQService.persist(incomingRFQ);
 //        System.out.println("API TEST --  requestForQuote");

@@ -29,7 +29,6 @@ import zm.hashcode.mshengu.domain.products.UnitType;
  */
 public class FollowUpRequestQuoteControl {
 
-
     private DateTimeFormatHelper formatHelper;
     private FollowUpRequestQuoteBean requestedQuoteResponse;
 
@@ -52,21 +51,28 @@ public class FollowUpRequestQuoteControl {
             requestedQuoteResponse.setQuotationDate(formatHelper.getDayMonthYear(i.getDateOfAction()));
             requestedQuoteResponse.setRfqNumber(i.getRefNumber());
 
-            System.out.println("Id1: " + i.getToiletsRequired1());
-            System.out.println("Id2: " + i.getToiletsRequired2());
-            System.out.println("Id3: " + i.getToiletsRequired3());
+//            System.out.println("Id1: " + i.getToiletsRequired1());
+//            System.out.println("Id2: " + i.getToiletsRequired2());
+//            System.out.println("Id3: " + i.getToiletsRequired3());
 
             UnitType toiletsRequired1 = UnitTypeFacade.getUnitTypeService().findById(i.getToiletsRequired1());
-            UnitType toiletsRequired2 = UnitTypeFacade.getUnitTypeService().findById(i.getToiletsRequired2());
-            UnitType toiletsRequired3 = UnitTypeFacade.getUnitTypeService().findById(i.getToiletsRequired3());
+
+            //if the additional toilets are not entered, the if statememts prevent null pointers.
+            if (i.getToiletsRequired2() != null) {
+                UnitType toiletsRequired2 = UnitTypeFacade.getUnitTypeService().findById(i.getToiletsRequired2());
+                requestedQuoteResponse.setToiletsRequired2(toiletsRequired2.getName());
+            }
+            if (i.getToiletsRequired3() != null) {
+                UnitType toiletsRequired3 = UnitTypeFacade.getUnitTypeService().findById(i.getToiletsRequired3());
+                requestedQuoteResponse.setToiletsRequired3(toiletsRequired3.getName());
+            }
 
             requestedQuoteResponse.setToiletsRequired1(toiletsRequired1.getName());
-            requestedQuoteResponse.setToiletsRequired2(toiletsRequired2.getName());
-            requestedQuoteResponse.setToiletsRequired3(toiletsRequired3.getName());
+
             requestedQuoteResponse.setCurrentDate(formatHelper.getDayMonthYear(new Date()));
 
             //calculate totale
-            requestedQuoteResponse.setTotal(String.format("%.2f", Float.parseFloat(total)));
+            requestedQuoteResponse.setTotal(String.format("%,.2f", Float.parseFloat(total)));
 
             // Open the docx Template
             String fileName = "requestedquoteresponse.docx";
