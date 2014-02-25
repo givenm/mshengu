@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.forms;
+package zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.forms;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
@@ -18,30 +18,24 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
-import zm.hashcode.mshengu.app.facade.external.IncomingRFQFacade;
 import zm.hashcode.mshengu.app.util.SendEmailHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.QuoteRequestsMenu;
-import zm.hashcode.mshengu.client.web.content.fieldservices.quoterequest.models.FollowUpRequestQuoteControl;
-import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.SendPurchasePDFForm;
-import zm.hashcode.mshengu.client.web.content.procurement.requestforquote.models.QuoteBean;
-import zm.hashcode.mshengu.domain.external.IncomingRFQ;
+import zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.CustomerMenu;
+import zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.models.NewCustomerBean;
+import zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.models.NewCustomerControl;
 
 /**
  *
  * @author Luckbliss
  */
-public class SendResonseToQuoteRequestPDFForm extends FormLayout {
+public class NewCustomerPDFForm extends FormLayout {
 
     public Button back = new Button("Cancel");
     public Button email = new Button("E-mail RFQ");
@@ -49,25 +43,24 @@ public class SendResonseToQuoteRequestPDFForm extends FormLayout {
     private static Embedded embedded = null;
     private static StreamResource streamResource = null;
     private static ByteArrayInputStream byteArrInputStream = null;
-    private FollowUpRequestQuoteControl control = new FollowUpRequestQuoteControl();
+    private NewCustomerControl control = new NewCustomerControl();
     private SendEmailHelper emailHelper = new SendEmailHelper();
     public UIComponentHelper UIComponent = new UIComponentHelper();
-    public final QuoteBean bean = new QuoteBean();
-    public final BeanItem<QuoteBean> item = new BeanItem<>(bean);
+    public final NewCustomerBean bean = new NewCustomerBean();
+    public final BeanItem<NewCustomerBean> item = new BeanItem<>(bean);
     public final FieldGroup binder = new FieldGroup(item);
     private TextField sendemail = new TextField();
-    private final String total;
     public Label errorMessage;
 
-    public SendResonseToQuoteRequestPDFForm(final MshenguMain main, final IncomingRFQ rfqToSend, final String total) {
-        this.total = total;
-        sendemail = UIComponent.getTextField("Email Address:", "email", QuoteBean.class, binder);
+    public NewCustomerPDFForm(final MshenguMain main) {
+
+        sendemail = UIComponent.getTextField("Email Address:", "email", NewCustomerBean.class, binder);
         sendemail.addValidator(UIValidatorHelper.emailValidator());
         sendemail = UIValidatorHelper.setRequiredTextField(sendemail, "Email Address");
 
         this.main = main;
         setSizeFull();
-        streamResource = new StreamResource(createStreamResource(rfqToSend), rfqToSend.getRefNumber() + ".pdf");
+        streamResource = new StreamResource(createStreamResource(), "New Customer.pdf");
         embedded = new Embedded();
         embedded.setType(Embedded.TYPE_BROWSER);
         embedded.setHeight("500");
@@ -106,21 +99,14 @@ public class SendResonseToQuoteRequestPDFForm extends FormLayout {
         email.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(rfqToSend, total).toByteArray());
                 try {
                     binder.commit();
-                    QuoteBean bean = ((BeanItem<QuoteBean>) binder.getItemDataSource()).getBean();
-                    DataSource sendsource = new ByteArrayDataSource(byteArrayInputStream, "application/pdf");
-                    emailHelper.sendToSupplier(sendsource, bean.getEmail(), rfqToSend.getRefNumber(), "Mshengu Response to a Quote Request");
+                    NewCustomerBean bean = ((BeanItem<NewCustomerBean>) binder.getItemDataSource()).getBean();
+                    DataSource sendsource = new ByteArrayDataSource(control.processPDF().toByteArray(), "application/pdf");
+                    emailHelper.sendToNewCustomer(sendsource, bean.getEmail(), "Mshengu - New Customer Form", "Mshengu - New Customer Form");
+                    
                     Notification.show("Email sent to " + bean.getEmail(), Notification.Type.TRAY_NOTIFICATION);
-                    final IncomingRFQ incomingRFQ = new IncomingRFQ.Builder(rfqToSend.getDateOfAction())
-                            .incomingRFQ(rfqToSend)
-                            .status("sent")
-                            .build();
-                    IncomingRFQFacade.getIncomingRFQService().merge(incomingRFQ); ///update RFQ o sent
                     getHome();
-                } catch (IOException ex) {
-                    Logger.getLogger(SendPurchasePDFForm.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (FieldGroup.CommitException ex) {
                     Collection<Field<?>> fields = binder.getFields();
                     OnSubmitValidationHelper validationHelper = new OnSubmitValidationHelper(fields, errorMessage);
@@ -132,17 +118,17 @@ public class SendResonseToQuoteRequestPDFForm extends FormLayout {
     }
 
     private void getHome() {
-        main.content.setSecondComponent(new QuoteRequestsMenu(main, "LANDING"));
+        main.content.setSecondComponent(new CustomerMenu(main, "LANDING"));
     }
 
-    private StreamResource.StreamSource createStreamResource(final IncomingRFQ rfq) {
+    private StreamResource.StreamSource createStreamResource() {
 
         StreamResource.StreamSource streamSource = new StreamResource.StreamSource() {
             @Override
             public InputStream getStream() {
-                byte byteArray[] = control.processFormDataToPDF(rfq, total).toByteArray();
+                byte byteArray[] = control.processPDF().toByteArray();
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
-//                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processFormDataToPDF(request).toByteArray());
+//                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(control.processPDF(request).toByteArray());
                 byteArrInputStream = byteArrayInputStream;
                 return byteArrayInputStream;
 //                InputStream fis = new ByteArrayInputStream(os.toByteArray());
