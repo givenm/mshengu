@@ -44,7 +44,7 @@ import zm.hashcode.mshengu.domain.external.IncomingRFQ;
 public class SendResonseToQuoteRequestPDFForm extends FormLayout {
 
     public Button back = new Button("Cancel");
-    public Button email = new Button("E-mail RFQ");
+    public Button email = new Button("E-Mail Form");
     private MshenguMain main;
     private static Embedded embedded = null;
     private static StreamResource streamResource = null;
