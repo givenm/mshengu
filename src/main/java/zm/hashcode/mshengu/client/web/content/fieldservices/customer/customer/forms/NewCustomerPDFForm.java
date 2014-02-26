@@ -38,7 +38,7 @@ import zm.hashcode.mshengu.client.web.content.fieldservices.customer.customer.mo
 public class NewCustomerPDFForm extends FormLayout {
 
     public Button back = new Button("Cancel");
-    public Button email = new Button("E-mail RFQ");
+    public Button email = new Button("E-Mail Form");
     private MshenguMain main;
     private static Embedded embedded = null;
     private static StreamResource streamResource = null;
