@@ -87,7 +87,7 @@ public class ServiceProviderForm extends FormLayout {
 
         CheckBox vehicleMaintenance = UIComponent.getCheckBox("Vehicle Maintenance", "vehicleMaintenance", ServiceProviderBean.class, binder);
         final CheckBox registeredForVat = UIComponent.getCheckBox("Not Registered for VAT B/E", "registeredForVat", ServiceProviderBean.class, binder);
-        registeredForVat.setHeight("20px");
+        registeredForVat.setHeight("20px"); //If clicked, then the Vat is NOT mandatory
         registeredForVat.addValueChangeListener(new ValueChangeListener() {
             @Override
             public void valueChange(ValueChangeEvent event) {
