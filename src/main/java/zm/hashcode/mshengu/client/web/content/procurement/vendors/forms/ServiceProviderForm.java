@@ -4,6 +4,8 @@
  */
 package zm.hashcode.mshengu.client.web.content.procurement.vendors.forms;
 
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.BeanValidator;
@@ -51,8 +53,6 @@ public class ServiceProviderForm extends FormLayout {
         update.setVisible(false);
         delete.setVisible(false);
 
-
-
         // UIComponent
         //General Information
         Label generalInfo = new Label("General Information");
@@ -77,16 +77,29 @@ public class ServiceProviderForm extends FormLayout {
         TextField lastNameChiefExec = UIComponent.getTextField("Last Name (Chief Executive/Proprietor):", "lastNameChiefExec", ServiceProviderBean.class, binder);
         lastNameChiefExec = UIValidatorHelper.setRequiredTextField(lastNameChiefExec, "Last Name (Chief Executive/Proprietor)");
 
-        TextField vatNum = UIComponent.getTextField("Vat Registration Number:", "vatNum", ServiceProviderBean.class, binder);
-        vatNum = UIValidatorHelper.setRequiredTextField(vatNum, "Vat Registration Number");
+        final TextField vatNum = UIComponent.getTextField("Vat Registration Number:", "vatNum", ServiceProviderBean.class, binder);
 
         TextField website = UIComponent.getTextField("Website:", "website", ServiceProviderBean.class, binder);
+        vatNum.setRequired(true);
+        vatNum.setRequiredError("Vat Registration Number is required else tick 'Not Registered for VAT B/E'.");
 
         CheckBox active = UIComponent.getCheckBox("Vendor Status (Preferred / Non-preferred)", "active", ServiceProviderBean.class, binder);
 
         CheckBox vehicleMaintenance = UIComponent.getCheckBox("Vehicle Maintenance", "vehicleMaintenance", ServiceProviderBean.class, binder);
-        CheckBox registeredForVat = UIComponent.getCheckBox("Not Registered for VAT B/E", "registeredForVat", ServiceProviderBean.class, binder);
-
+        final CheckBox registeredForVat = UIComponent.getCheckBox("Not Registered for VAT B/E", "registeredForVat", ServiceProviderBean.class, binder);
+        registeredForVat.setHeight("20px");
+        registeredForVat.addValueChangeListener(new ValueChangeListener() {
+            @Override
+            public void valueChange(ValueChangeEvent event) {
+                if (registeredForVat.getValue()) {
+                    vatNum.setRequired(false);
+                    vatNum.removeStyleName("invalid");
+                } else {
+                    vatNum.setRequired(true);
+                    vatNum.setRequiredError("Vat Registration Number is required else tick 'Not Registered for VAT B/E'.");
+                }
+            }
+        });
 
 //Contact Information
         Label contactInfo = new Label("Contact Information");
@@ -137,7 +150,7 @@ public class ServiceProviderForm extends FormLayout {
 
         errorMessage = UIComponent.getErrorLabel();
 
-        GridLayout grid = new GridLayout(3, 21);
+        GridLayout grid = new GridLayout(3, 22);
         grid.setSizeFull();
 
         grid.addComponent(errorMessage, 1, 0, 2, 0);
@@ -151,46 +164,48 @@ public class ServiceProviderForm extends FormLayout {
 
         grid.addComponent(firstNameChiefExec, 0, 4);
         grid.addComponent(lastNameChiefExec, 1, 4);
-        grid.addComponent(vatNum, 2, 4);
+        grid.addComponent(registeredForVat, 2, 4);
 
         grid.addComponent(legalForm, 0, 5);
         grid.addComponent(yearOfBus, 1, 5);
-        grid.addComponent(website, 2, 5);
+        grid.addComponent(vatNum, 2, 5);
+        
 
         grid.addComponent(active, 0, 6);
         grid.addComponent(vehicleMaintenance, 1, 6);
-        grid.addComponent(registeredForVat, 2, 6);
+        grid.addComponent(website, 2, 6);
+               
+        
+        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 8, 2, 8);
+        grid.addComponent(contactInfo, 0, 9);
+        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 10, 2, 10);
 
-        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 7, 2, 7);
-        grid.addComponent(contactInfo, 0, 8);
-        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 9, 2, 9);
+        grid.addComponent(address1, 0, 11);
+        grid.addComponent(address2, 1, 11);
+        grid.addComponent(city, 2, 11);
 
-        grid.addComponent(address1, 0, 10);
-        grid.addComponent(address2, 1, 10);
-        grid.addComponent(city, 2, 10);
+        grid.addComponent(code, 0, 12);
+        grid.addComponent(firstName, 1, 12);
+        grid.addComponent(lastName, 2, 12);
 
-        grid.addComponent(code, 0, 11);
-        grid.addComponent(firstName, 1, 11);
-        grid.addComponent(lastName, 2, 11);
+        grid.addComponent(mainNumber, 0, 13);
+        grid.addComponent(faxNumber, 1, 13);
+        grid.addComponent(otherNumber, 2, 13);
 
-        grid.addComponent(mainNumber, 0, 12);
-        grid.addComponent(faxNumber, 1, 12);
-        grid.addComponent(otherNumber, 2, 12);
+        grid.addComponent(emailAddress, 0, 14);
 
-        grid.addComponent(emailAddress, 0, 13);
+        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 15, 2, 15);
+        grid.addComponent(orgInfo, 0, 16);
+        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 17, 2, 17);
 
-        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 14, 2, 14);
-        grid.addComponent(orgInfo, 0, 15);
-        grid.addComponent(new Label("<br>", ContentMode.HTML), 0, 16, 2, 16);
+        grid.addComponent(serviceProviderCategoryId, 0, 18);
+        grid.addComponent(bankName, 1, 18);
+        grid.addComponent(accountNumber, 2, 18);
 
-        grid.addComponent(serviceProviderCategoryId, 0, 17);
-        grid.addComponent(bankName, 1, 17);
-        grid.addComponent(accountNumber, 2, 17);
+        grid.addComponent(branchCode, 0, 19);
 
-        grid.addComponent(branchCode, 0, 18);
-
-        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 19, 2, 19);
-        grid.addComponent(buttons, 0, 20, 2, 20);
+        grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 20, 2, 20);
+        grid.addComponent(buttons, 0, 21, 2, 21);
 
         addComponent(grid);
     }
