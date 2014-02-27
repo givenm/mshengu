@@ -41,9 +41,9 @@ public class FleetFuelMenu extends VerticalLayout {
         tab.setWidth("100%");
         tab.addTab(executiveDashboardTab, "Executive Dashboard", null);
         tab.addTab(fleetFuelDashboardTab, "Service Fleet Dashboard", null);
-        tab.addTab(vehicleFuelUsageTab, "Fleet Fuel", null); // Previously "Fleet Menu" , "Vehicle Fuel Usage"
-        tab.addTab(fuelAnnualDataTab, "Fuel Annual Data", null);
-        tab.addTab(monthlySpendTab, "Monthly Spend", null);
+//        tab.addTab(vehicleFuelUsageTab, "Fleet Fuel", null); // Previously "Fleet Menu" , "Vehicle Fuel Usage"
+//        tab.addTab(fuelAnnualDataTab, "Fuel Annual Data", null);
+//        tab.addTab(monthlySpendTab, "Monthly Spend", null);
         switch (selectedTab) {
             case "LANDING":
                 tab.setSelectedTab(executiveDashboardTab);

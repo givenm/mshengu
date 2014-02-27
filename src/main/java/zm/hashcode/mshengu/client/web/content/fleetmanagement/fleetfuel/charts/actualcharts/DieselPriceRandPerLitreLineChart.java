@@ -51,13 +51,13 @@ public class DieselPriceRandPerLitreLineChart implements Serializable {
             // Truncate the Names
             monthList.add(fuelSpendMonthlyCostBean.getMonth());
 ////            monthList.add(dateTimeFormatHelper.);
-            // Add Percentage for PIE
+
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
 
-        final LineChart barChart = new LineChart();
-        DCharts dBarChart = barChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue);
+        final LineChart lineChart = new LineChart();
+        DCharts dBarChart = lineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue);
 
 //        dBarChart.getOptions().getTitle().setText(title);
         dBarChart.setWidth("600px");

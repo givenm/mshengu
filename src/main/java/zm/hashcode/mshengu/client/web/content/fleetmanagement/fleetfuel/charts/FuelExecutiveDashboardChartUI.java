@@ -17,7 +17,9 @@ public class FuelExecutiveDashboardChartUI extends FormLayout {
     public VerticalLayout chartVerticalLayout = new VerticalLayout();
 
     public FuelExecutiveDashboardChartUI(MshenguMain main) {
-        chartVerticalLayout.setSizeFull();
+//        chartVerticalLayout.setSizeFull();
+        setMargin(true);
+        setSizeUndefined();
         addComponent(chartVerticalLayout);
     }
 }

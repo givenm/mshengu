@@ -124,16 +124,15 @@ public class LineChart implements Serializable {
                 new XYaxis(XYaxes.X)
                 .setRenderer(AxisRenderers.DATE)
                 .setTickOptions(
-                new AxisTickRenderer()
-                .setFormatString("%b-%Y"))
-                .setNumberTicks(monthListArray.length)
-                //
-                .setTickOptions(
                 new CanvasAxisTickRenderer()
                 .setAngle(-45)
                 .setFontSize("10pt")
                 .setShowMark(true)
                 .setShowGridline(true)) //
+                .setTickOptions(
+                new AxisTickRenderer()
+                .setFormatString("%b-%Y"))
+                .setNumberTicks(monthListArray.length) //
                 )
                 //
                 .addAxis(

@@ -129,26 +129,26 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
     public int compareTo(OperatingCost o) {
         return transactionDate.compareTo(o.transactionDate);
     }
-    public static Comparator<OperatingCost> AscOrderDateAscOrderTruckIdComparator = new Comparator<OperatingCost>() {
+    public static Comparator<OperatingCost> DescOrderDateComparator = new Comparator<OperatingCost>() {
+        @Override
+        public int compare(OperatingCost operatingCost1, OperatingCost operatingCost2) {
+            // Descending Order by Date
+            return operatingCost2.getTransactionDate().compareTo(operatingCost1.getTransactionDate());
+        }
+    };
+    public static Comparator<OperatingCost> DescOrderDateAscOrderTruckIdComparator = new Comparator<OperatingCost>() {
         @Override
         public int compare(OperatingCost operatingCost1, OperatingCost operatingCost2) {
 
             //Ascending order by Date
-            int compareOne = operatingCost1.getTransactionDate().compareTo(operatingCost2.getTransactionDate());
+            int compareOne = operatingCost2.getTransactionDate().compareTo(operatingCost1.getTransactionDate());
+//            System.out.println("(1)"
+//                    + " TruckId= " + operatingCost1.getTruckId()
+//                    + ", Date= " + operatingCost1.getTransactionDate()
+//                    + " VS (2) TruckId= " + operatingCost2.getTruckId()
+//                    + ", Date= " + operatingCost2.getTransactionDate());
             // Ascending Order by TruckId
             int compareTwo = operatingCost1.getTruckId().compareTo(operatingCost2.getTruckId());
-
-            return ((compareOne == 0) ? compareTwo : compareOne);
-        }
-    };
-    public static Comparator<OperatingCost> AscOrderTruckIdAscOrderDateComparator = new Comparator<OperatingCost>() {
-        @Override
-        public int compare(OperatingCost operatingCost1, OperatingCost operatingCost2) {
-
-            //Ascending order by TruckId
-            int compareOne = operatingCost1.getTruckId().compareTo(operatingCost2.getTruckId());
-            // Ascending Order by Date
-            int compareTwo = operatingCost1.getTransactionDate().compareTo(operatingCost2.getTransactionDate());
 
             return ((compareOne == 0) ? compareTwo : compareOne);
         }

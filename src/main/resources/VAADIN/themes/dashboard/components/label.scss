@@ -40,4 +40,39 @@
         -webkit-font-smoothing: antialiased;
     }
 
+    .dashboardLabel {
+       /* margin: 5px;
+        padding: 20px;
+        background: yellow;
+        float: left;
+        font-weight: bold;
+        background: gray;
+*/
+        text-align:right;
+        font-size: 15px;
+    }
+    .dashboardAmountLabel {
+       /* margin: 5px;
+        padding: 20px;
+        background: yellow;
+        */
+        text-align:center;
+        float: right;
+        color: blue;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .dashboardPercentageLabel {
+       /* margin: 5px;
+        padding: 20px;
+        background: yellow;
+        float: left;
+        font-weight: bold;
+*/
+        color: red;
+        text-align:right;
+        font-size: 15px;
+
+    }
 }
