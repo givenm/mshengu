@@ -15,6 +15,7 @@ import zm.hashcode.mshengu.app.util.SequenceHelper;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
+import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.repository.procurement.RequestRepository;
 import zm.hashcode.mshengu.services.procurement.RequestService;
 
@@ -23,7 +24,7 @@ import zm.hashcode.mshengu.services.procurement.RequestService;
  * @author Luckbliss
  */
 @Service
-public class RequestServiceImpl implements RequestService {    
+public class RequestServiceImpl implements RequestService {
 
     @Autowired
     private RequestRepository repository;
@@ -122,7 +123,6 @@ public class RequestServiceImpl implements RequestService {
         }
         return requestList;
     }
-    
 
     private String getServiceProvider(ServiceProvider serviceProvider) {
         if (serviceProvider != null) {
@@ -154,5 +154,30 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> getTransactedRequestsByServiceProvider(ServiceProvider serviceProvider) {
         return repository.getTransactedRequestsByServiceProvider(serviceProvider);
+    }
+
+    @Override
+    public List<Request> getProcessedRequestsWithInvoiceNumber() {
+        return repository.getProcessedRequestsWithInvoiceNumber();
+    }
+
+    @Override
+    public List<Request> getServiceProviderProcessedRequestsWithInvoiceNumber(String serviceProviderId) {
+        return repository.getServiceProviderProcessedRequestsWithInvoiceNumber(serviceProviderId);
+    }
+
+    @Override
+    public List<Request> getProcessedRequestsWithPaymentDate(Date month) {
+        return repository.getProcessedRequestsWithPaymentDate(month);
+    }
+
+    @Override
+    public List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date month) {
+        return repository.getServiceProviderProcessedRequestsWithPaymentDate(serviceProviderId, month);
+    }
+
+    @Override
+    public List<Request> getProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date month) {
+        return repository.getProcessedRequestsByCostCentreType(costCentreType, month);
     }
 }

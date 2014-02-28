@@ -7,7 +7,6 @@ package zm.hashcode.mshengu.client.web.content.procurement.invoices.table;
 import com.vaadin.ui.Table;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +23,7 @@ public class CostCentreTable extends Table {
 
     private BigDecimal grandTotal;
     private DecimalFormat f = new DecimalFormat("###,###.00");
+    private List<CostCentreType> centreTypes = CostCentreTypeFacade.getCostCentreTypeService().findAll();
 
     public CostCentreTable() {
         setSizeFull();
@@ -32,46 +32,23 @@ public class CostCentreTable extends Table {
         addContainerProperty("Total", String.class, null);
         addContainerProperty("Paid To Date", String.class, null);
 
-        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
-        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
-
-        loadTable(null, datemonth, dateyear);
+        loadTable(null, new Date());
     }
 
-    public final void loadTable(String costCentreId, String month, String year) {
-        grandTotal = new BigDecimal("0");  
+    public final void loadTable(String costCentreId, Date date) {
+        List<Request> newlist = new ArrayList<>();
+        grandTotal = new BigDecimal("0");
         if (costCentreId != null && !costCentreId.equalsIgnoreCase("all")) {
-            List<Request> newlist = new ArrayList<>();
             CostCentreType centreType = CostCentreTypeFacade.getCostCentreTypeService().findById(costCentreId);
-            List<Request> list = RequestFacade.getRequestService().findAll();
-            for (Request request : list) {
-                if (request.getInvoiceNumber() != null) {
-                    String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-                    String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-                    if (datemonth.equals(month) && year.equals(dateyear) && request.getCostCentreType().equals(centreType)) {
-                        newlist.add(request);
-                    }
-                }
-            }
+            newlist = RequestFacade.getRequestService().getProcessedRequestsByCostCentreType(centreType, date);
             addItem(new Object[]{
                 centreType.getName(),
                 f.format(getSupplierTotal(newlist)),
                 f.format(getPaidTotal(newlist)),}, centreType.getId());
             grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
         } else {
-            List<CostCentreType> centreTypes = CostCentreTypeFacade.getCostCentreTypeService().findAll();
             for (CostCentreType centreType : centreTypes) {
-                List<Request> list = RequestFacade.getRequestService().findAll();
-                List<Request> newlist = new ArrayList<>();
-                for (Request request : list) {
-                    if (request.getInvoiceNumber() != null) {
-                        String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-                        String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-                        if (datemonth.equals(month) && year.equals(dateyear) && request.getCostCentreType().equals(centreType)) {
-                            newlist.add(request);
-                        }
-                    }
-                }
+                newlist = RequestFacade.getRequestService().getProcessedRequestsByCostCentreType(centreType, date);
                 addItem(new Object[]{
                     centreType.getName(),
                     f.format(getSupplierTotal(newlist)),
