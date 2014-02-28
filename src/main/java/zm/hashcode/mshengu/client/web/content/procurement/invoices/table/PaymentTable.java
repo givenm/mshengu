@@ -6,9 +6,11 @@ package zm.hashcode.mshengu.client.web.content.procurement.invoices.table;
 
 import com.vaadin.ui.Table;
 import java.math.BigDecimal;
+import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
@@ -26,6 +28,7 @@ public class PaymentTable extends Table {
     private BigDecimal paidTotal = new BigDecimal("0");
     private BigDecimal balanceTotal = new BigDecimal("0");
     private DecimalFormat f = new DecimalFormat("###,###.00");
+    private List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
 
     public PaymentTable() {
         setSizeFull();
@@ -35,49 +38,34 @@ public class PaymentTable extends Table {
         addContainerProperty("Paid To Date", String.class, null);
         addContainerProperty("Balance Outstanding", String.class, null);
 
-        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
-        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
-
-        loadTable(datemonth, dateyear);
+        loadTable(new Date(), null);
     }
 
-    private void addSubtotalRow(String month, String year) {
-        List<Request> newlist = new ArrayList<>();
-        List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
-        if (month.equalsIgnoreCase("all")) {
+    private void addSubtotalRow(Date date, String all) {
+        List<Request> newlist = null;
+        if (all != null) {
             for (ServiceProvider serviceProvider : serviceProviders) {
-                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-
-                for (Request request : list) {
-                    if (request.getInvoiceNumber() != null) {
-                        newlist.add(request);
-                    }
-                }
+                newlist = RequestFacade.getRequestService().getTransactedRequestsByServiceProvider(serviceProvider);
+                getTotal(newlist);
+                newlist = new ArrayList<>();
             }
         } else {
             for (ServiceProvider serviceProvider : serviceProviders) {
-                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-
-                for (Request request : list) {
-                    if (request.getInvoiceNumber() != null) {
-                        String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-                        String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-                        if (datemonth.equals(month) && year.equals(dateyear)) {
-                            newlist.add(request);
-                        }
-                    }
-                }
+                newlist = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, date);
+                getTotal(newlist);
+                newlist = new ArrayList<>();
             }
         }
-
-
-        paidTotal = paidTotal.add(getSupplierTotal(newlist));
-        balanceTotal = balanceTotal.add(getPaidTotal(newlist));
         addItem(new Object[]{
             "MTD Suppliers Total",
             f.format(paidTotal),
             f.format(balanceTotal),
             f.format(paidTotal.subtract(balanceTotal)),}, "subtotal");
+    }
+
+    private void getTotal(List<Request> newlist) {
+        paidTotal = paidTotal.add(getSupplierTotal(newlist));
+        balanceTotal = balanceTotal.add(getPaidTotal(newlist));
     }
 
     private void performRowStyling() {
@@ -96,55 +84,41 @@ public class PaymentTable extends Table {
         });
     }
 
-    public final void loadTable(String month, String year) {
+    public final void loadTable(Date date, String all) {
         grandTotal = new BigDecimal("0.00");
         paidTotal = new BigDecimal("0.00");
         balanceTotal = new BigDecimal("0.00");
-        addSubtotalRow(month, year);
-        if (month != null && !month.equalsIgnoreCase("all")) {
-            List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
+        addSubtotalRow(date, all);
+        List<Request> newlist = null;
+        if (all != null) {
             for (ServiceProvider serviceProvider : serviceProviders) {
-                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-                List<Request> newlist = new ArrayList<>();
-                for (Request request : list) {
-                    if (request.getInvoiceNumber() != null) {
-                        String datemonth = new SimpleDateFormat("MMMM").format(request.getDeliveryDate());
-                        String dateyear = new SimpleDateFormat("YYYY").format(request.getDeliveryDate());
-                        if (datemonth.equals(month) && year.equals(dateyear)) {
-                            newlist.add(request);
-                        }
-                    }
-                }
+                newlist = RequestFacade.getRequestService().getTransactedRequestsByServiceProvider(serviceProvider);
                 if (newlist.size() > 0) {
-                    addItem(new Object[]{
-                        serviceProvider.getName(),
-                        f.format(getSupplierTotal(newlist)),
-                        f.format(getPaidTotal(newlist)),
-                        f.format(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)))}, serviceProvider.getId());
-                    grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
+                    addItemToTable(serviceProvider, newlist);
                 }
+                newlist = new ArrayList<>();
             }
         } else {
-            List<ServiceProvider> serviceProviders = ServiceProviderFacade.getServiceProviderService().findAll();
             for (ServiceProvider serviceProvider : serviceProviders) {
-                List<Request> list = RequestFacade.getRequestService().findByServiceProvider(serviceProvider.getId());
-                List<Request> newlist = new ArrayList<>();
-                for (Request request : list) {
-                    if (request.getInvoiceNumber() != null) {
-                        newlist.add(request);
-                    }
-                }
+                newlist = RequestFacade.getRequestService().getTransactedRequestsByServiceProviderByMonth(serviceProvider, date);
                 if (newlist.size() > 0) {
-                    addItem(new Object[]{
-                        serviceProvider.getName(),
-                        f.format(getSupplierTotal(newlist)),
-                        f.format(getPaidTotal(newlist)),
-                        f.format(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)))}, serviceProvider.getId());
-                    grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
+                    addItemToTable(serviceProvider, newlist);
                 }
+                newlist = new ArrayList<>();
             }
         }
         performRowStyling();
+    }
+
+    private void addItemToTable(ServiceProvider serviceProvider, List<Request> newlist) {
+        addItem(new Object[]{
+            serviceProvider.getName(),
+            f.format(getSupplierTotal(newlist)),
+            f.format(getPaidTotal(newlist)),
+            f.format(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)))}, serviceProvider.getId());
+        grandTotal = grandTotal.add(getSupplierTotal(newlist).subtract(getPaidTotal(newlist)));
+
+
     }
 
     public String getGrandTotal() {
@@ -154,11 +128,7 @@ public class PaymentTable extends Table {
     private BigDecimal getSupplierTotal(List<Request> requests) {
         BigDecimal total = BigDecimal.ZERO;
         for (Request request : requests) {
-            // Null check done at Repository Level
-
-            if (request.getInvoiceNumber() != null) {
-                total = total.add(request.getTotal());
-            }
+            total = total.add(request.getTotal());
         }
         return total;
     }
@@ -166,10 +136,8 @@ public class PaymentTable extends Table {
     private BigDecimal getPaidTotal(List<Request> requests) {
         BigDecimal total = BigDecimal.ZERO;
         for (Request request : requests) {
-            if (request.getInvoiceNumber() != null) {
-                if (request.getPaymentAmount() != null) {
-                    total = total.add(request.getPaymentAmount());
-                }
+            if (request.getPaymentAmount() != null) {
+                total = total.add(request.getPaymentAmount());
             }
         }
         return total;
