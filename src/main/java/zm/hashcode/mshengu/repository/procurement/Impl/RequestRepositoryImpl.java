@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.repository.procurement.Impl;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,6 +15,7 @@ import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
+import zm.hashcode.mshengu.domain.ui.util.CostCentreType;
 import zm.hashcode.mshengu.repository.procurement.RequestRepositoryCustom;
 
 /**
@@ -141,6 +143,100 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
          }
          //        System.out.println("--==--");
          */
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getProcessedRequestsWithInvoiceNumber() {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("InvoiceNumber").ne(null)
+                .andOperator(Criteria.where("PaymentDate").exists(false)));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getServiceProviderProcessedRequestsWithInvoiceNumber(String serviceProviderId) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("serviceProviderSupplierId").is(serviceProviderId)
+                .andOperator(Criteria.where("InvoiceNumber").ne(null),
+                Criteria.where("PaymentDate").exists(false)));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getServiceProviderProcessedRequestsByMonth(ServiceProvider serviceProvider, Date month) {
+        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+        Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
+        Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+
+        return getServiceProviderProcessedRequests(serviceProvider, from, to);
+    }
+
+    private List<Request> getServiceProviderProcessedRequests(ServiceProvider serviceProvider, Date from, Date to) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("serviceProviderSupplierId").is(serviceProvider.getId())
+                .andOperator(Criteria.where("PaymentDate").exists(true), Criteria.where("InvoiceNumber").ne(null)));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getProcessedRequestsWithPaymentDate(Date month) {
+        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+        Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
+        Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+
+        return getAllServiceProviderProcessedRequestsWithPaymentDate(from, to);
+    }
+
+    private List<Request> getAllServiceProviderProcessedRequestsWithPaymentDate(Date from, Date to) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("PaymentDate").exists(true)
+                .andOperator(Criteria.where("DeliveryDate").gte(from),
+                Criteria.where("DeliveryDate").lte(to)));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date month) {
+        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+        Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
+        Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+
+        return getServiceProviderProcessedRequestsWithPaymentDate(serviceProviderId, from, to);
+    }
+
+    private List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date from, Date to) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("serviceProviderSupplierId").is(serviceProviderId)
+                .andOperator(Criteria.where("PaymentDate").exists(true), Criteria.where("DeliveryDate").gte(from),
+                Criteria.where("DeliveryDate").lte(to)));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date month) {
+        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+        Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
+        Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+
+        return getServiceProviderProcessedRequestsByCostCentreType(costCentreType, from, to);
+    }
+
+    private List<Request> getServiceProviderProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date from, Date to) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("costCentreType").is(costCentreType)
+                .andOperator(Criteria.where("InvoiceNumber").ne(null), Criteria.where("DeliveryDate").gte(from),
+                Criteria.where("DeliveryDate").lte(to)));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 }

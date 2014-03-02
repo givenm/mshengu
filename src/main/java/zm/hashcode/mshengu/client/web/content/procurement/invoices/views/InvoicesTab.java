@@ -48,17 +48,14 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
     }
 
     private void getValues() {
-//        if (form.month.getValue() != null && form.year.getValue() != null && form.supplier.getValue() != null) {
         if (form.supplier.getValue() != null) {
             String supplierId = form.supplier.getValue().toString();
             table.removeAllItems();
-//            String month = form.month.getValue().toString();
-//            String year = form.year.getValue().toString();
             List<Request> requests = null;
             if (supplierId.equalsIgnoreCase("all")) {
-                requests = RequestFacade.getRequestService().findAll();
+                requests = RequestFacade.getRequestService().getProcessedRequestsWithInvoiceNumber();
             } else {
-                requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
+                requests = RequestFacade.getRequestService().getServiceProviderProcessedRequestsWithInvoiceNumber(supplierId);
             }
             table.loadTable(requests);
             getGrandTotal();
@@ -75,7 +72,7 @@ public class InvoicesTab extends VerticalLayout implements Property.ValueChangeL
         form.year.addValueChangeListener((Property.ValueChangeListener) this);
     }
 
-    public void getGrandTotal() {
+    public final void getGrandTotal() {
         form.mtdTotal.setValue(form.total + table.getGrandTotal());
     }
 }
