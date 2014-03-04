@@ -35,7 +35,7 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
     private static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
 //    public static BigDecimal grandTotalMonthlySpend = BigDecimal.ZERO;
-    private static List<ServiceProvider> fleetServiceProviderList;
+    private static List<ServiceProvider> fleetServiceProviderList = new ArrayList<>();
     private static List<TotalMaintenanceSpendBySupplier> totalMaintenanceSpendBySupplierList = new ArrayList<>();
     private static List<MaintenanceSpendBySupplier> maintenanceSpendBySupplierList = new ArrayList<>();
     // from December 1st 2013, MaintenanceCost is collected from persisted life data captured from UI (Procurement > Request)
@@ -43,6 +43,12 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
     // from December 1st 2013, MaintenanceCost is collected from persisted life data captured from UI (Procurement > Request)
     private final Date staticDataStartDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 7, 2012));
     private final Date staticDataEndDate = this.resetMonthToLastDay(dateTimeFormatHelper.getDate(31, 10, 2013));   // 10 = Nov, 11 = Dec
+
+    public void findFleetServiceProviderList() {
+        if (fleetServiceProviderList.isEmpty()) {
+            fleetServiceProviderList = ServiceProviderFacade.getServiceProviderService().getVehicleMaintenanceServiceProvders();// ????????????????????????????????????????????????
+        }
+    }
 
     /**
      * pass the current date and the amount of months to be calculated backward
@@ -53,10 +59,9 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
      *
      */
     public void determineDateRange(Date endDate, int dateRange) {
+        findFleetServiceProviderList();
         // Range is calculated as ending with Month before current month,
         // and counting into the past number of months specified in dateRange
-        fleetServiceProviderList = ServiceProviderFacade.getServiceProviderService().getVehicleMaintenanceServiceProvders();// ????????????????????????????????????????????????
-
         Calendar calendarEndDate = Calendar.getInstance();
         Calendar calendarStartDate = Calendar.getInstance();
 
@@ -86,6 +91,7 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
     }
 
     public List<MaintenanceSpendBySupplier> findMaintenanceSpendBySupplierBetweenTwoDates(Date startDate, Date endDate) {
+        findFleetServiceProviderList();
         maintenanceSpendBySupplierList.clear();
         if (endDate.before(staticDataEndDate) || endDate.compareTo(staticDataEndDate) == 0) {
             return MaintenanceSpendBySupplierFacade.getMaintenanceSpendBySupplierService().getMaintenanceSpendBetweenTwoDates(startDate, endDate);

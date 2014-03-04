@@ -41,7 +41,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     private final AnnualMaintenanceCostHeadingTable annualMaintenanceCostHeadingTable;
     private final AnnualMaintenanceCostTable annualMaintenanceCostTable;
     private final AnnualMileageTable annualMileageTable;
-    private static List<Truck> serviceTrucks = null;
+    private static List<Truck> serviceTrucks = new ArrayList<>();
     //
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
@@ -82,8 +82,14 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         annualMaintenanceCostHeadingTable.addColumnResizeListener(this);
     }
 
+    public void findServiceTrucks() {
+        if (serviceTrucks.isEmpty()) {
+            serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
+        }
+    }
+
     public void generateData() {
-        serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
+        findServiceTrucks();
 //        Date endDate = new Date();
         int year = Integer.parseInt(dateTimeFormatHelper.getYearNumber(new Date()));
 

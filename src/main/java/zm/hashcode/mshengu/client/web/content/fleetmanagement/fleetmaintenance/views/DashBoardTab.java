@@ -99,6 +99,7 @@ public class DashBoardTab extends VerticalLayout implements
             } catch (java.lang.NullPointerException ex) {
             }
             if (endDate != null) {
+                fleetMaintenanceUtil.findServiceTrucks();
                 getDataAndPerformCharts();
             }
         } else if (property == form.endDate) {
@@ -108,10 +109,12 @@ public class DashBoardTab extends VerticalLayout implements
             } catch (java.lang.NullPointerException ex) {
             }
             if (startDate != null) {
+                fleetMaintenanceUtil.findServiceTrucks();
                 getDataAndPerformCharts();
             }
         } else if (property == form.optionGroup) {
             if (form.optionGroup.getValue() == "3-Monthly") {
+                fleetMaintenanceUtil.findServiceTrucks();
                 fleetMaintenanceUtil.determineDateRange(new Date(), 3);
                 maintenanceSpendBySupplierUtil.determineDateRange(new Date(), 3);
                 maintenanceCostList = getMaintenanceCostList();
@@ -128,6 +131,7 @@ public class DashBoardTab extends VerticalLayout implements
                     Notification.show("No Maintenance Cost found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
                 }
             } else if (form.optionGroup.getValue() == "6-Monthly") {
+                fleetMaintenanceUtil.findServiceTrucks();
                 fleetMaintenanceUtil.determineDateRange(new Date(), 6);
                 maintenanceSpendBySupplierUtil.determineDateRange(new Date(), 6);
                 maintenanceCostList = getMaintenanceCostList();
@@ -144,6 +148,7 @@ public class DashBoardTab extends VerticalLayout implements
                     Notification.show("No Maintenance Cost found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
                 }
             } else if (form.optionGroup.getValue() == "12-Monthly") {
+                fleetMaintenanceUtil.findServiceTrucks();
                 fleetMaintenanceUtil.determineDateRange(new Date(), 12);
                 maintenanceSpendBySupplierUtil.determineDateRange(new Date(), 12);
                 maintenanceCostList = getMaintenanceCostList();

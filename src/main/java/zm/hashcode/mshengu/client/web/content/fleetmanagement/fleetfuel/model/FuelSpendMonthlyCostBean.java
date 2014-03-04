@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  *
- * @author Coline
+ * @author Colin
  */
 public class FuelSpendMonthlyCostBean implements Serializable, Comparable<FuelSpendMonthlyCostBean> {
 

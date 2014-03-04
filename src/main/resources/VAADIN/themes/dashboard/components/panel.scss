@@ -94,6 +94,42 @@
      .v-panel-content-white {
             padding-top: 0px;
     }
+/*????????????????????????????????????????*/
+ .v-panel-panelEfficiency  {
+        margin-top:5px;
+     /*   margin-left:5px; */
+        border-style:solid;
+        border-width:2px;
+        border-color: rgb(219, 109, 54);
+    }
 
+    .v-panel-panelEfficiency .v-panel-captionwrap,
+    .v-panel-panelEfficiency .v-panel-deco
+    {
+        background-color: rgb(249,249,249);
+    }
+
+
+
+/* Caption Area */
+    .v-panel-panelEfficiency .v-panel-caption {
+        background-color: rgb(219, 109, 54);
+        color: rgb(247,248,249);
+        /*text-shadow: 0 -1px 0 rgb(46,90,132);*/
+        text-align:left;
+        font-weight: bold;
+        font-size: 12px;
+        padding-left: 5px;
+        padding-right: 3px;
+        padding-top:5px;
+        padding-bottom:8px;
+        height: 16px;
+    }
+
+    .v-panel-content-panelEfficiency {
+            padding-top: 0px;
+    }
+
+/*????????????????????????????????????????*/
 }
 

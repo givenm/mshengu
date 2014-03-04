@@ -35,7 +35,7 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
  */
 public class BarChart implements Serializable {
 
-    public DCharts buildBarChart(Object[] totalListArray, Object[] nameListArray, float tickInterval, String label, Object minTickValue) {
+    public DCharts buildBarChart(Object[] totalListArray, Object[] nameListArray, float tickInterval, String label, Object minTickValue, String chartTitle) {
 
         DataSeries dataSeries = new DataSeries();
         Series series = new Series();
@@ -100,6 +100,11 @@ public class BarChart implements Serializable {
         Title title = new Title("");
         title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
+        title.setShow(true);
+
+        if (chartTitle != null) {
+            title.setText(chartTitle);
+        }
 
         Options options = new Options()
                 .setCaptureRightClick(true)

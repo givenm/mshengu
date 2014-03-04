@@ -37,9 +37,15 @@ public class FleetMaintenanceUtil implements Serializable {
     private static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
     public static BigDecimal grandTotalMonthlySpend = BigDecimal.ZERO;
-    private static List<Truck> serviceTrucks;
+    private static List<Truck> serviceTrucks = new ArrayList<>();
 
     public FleetMaintenanceUtil() {
+    }
+
+    public void findServiceTrucks() {
+        if (serviceTrucks.isEmpty()) {
+            serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
+        }
     }
 
     /**
@@ -53,8 +59,6 @@ public class FleetMaintenanceUtil implements Serializable {
     public void determineDateRange(Date endDate, int dateRange) {
         // Range is calculated as ending with Month before current month,
         // and counting into the past number of months specified in dateRange
-        serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
-
         Calendar calendarEndDate = Calendar.getInstance();
         Calendar calendarStartDate = Calendar.getInstance();
 
