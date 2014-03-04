@@ -42,44 +42,35 @@ public class InvoiceTable extends Table {
         addContainerProperty("Total", String.class, null);
         addContainerProperty("Update", Button.class, null);
 
-//        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
-//        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
-
-        loadTable(RequestFacade.getRequestService().findAll());
+        loadTable(RequestFacade.getRequestService().getProcessedRequestsWithInvoiceNumber());
     }
 
     public final void loadTable(List<Request> requests) {
         grandTotal = new BigDecimal("0.00");
         if (requests != null) {
-            for (int i = requests.size() - 1; i >= 0; i--) {
-                if (requests.get(i).getInvoiceNumber() != null && requests.get(i).getPaymentAmount() == null) {
-//                    String datemonth = new SimpleDateFormat("MMMM").format(requests.get(i).getDeliveryDate());
-//                    String dateyear = new SimpleDateFormat("YYYY").format(requests.get(i).getDeliveryDate());
-//                    if (datemonth.equals(month) && year.equals(dateyear)) {
-                    Button update = new Button("Effect Payment");
-                    update.setData(requests.get(i).getId());
-                    update.setStyleName(Reindeer.BUTTON_LINK);
-                    update.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(Button.ClickEvent event) {
-                            String itemId = event.getButton().getData().toString();
-                            Request request = RequestFacade.getRequestService().findById(itemId);
-                            UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
-                            tab.removeAllComponents();
-                            tab.addComponent(form);
-                        }
-                    });
-                    addItem(new Object[]{
-                        getDelivery(requests.get(i).getOrderDate()),
-                        getDelivery(requests.get(i).getDeliveryDate()),
-                        requests.get(i).getOrderNumber(),
-                        requests.get(i).getServiceProviderName(),
-                        requests.get(i).getInvoiceNumber(),
-                        f.format(requests.get(i).getTotal()),
-                        update,}, requests.get(i).getId());
-                    grandTotal = grandTotal.add(requests.get(i).getTotal());
-//                    }
-                }
+            for (Request request: requests) {
+                Button update = new Button("Effect Payment");
+                update.setData(request.getId());
+                update.setStyleName(Reindeer.BUTTON_LINK);
+                update.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent event) {
+                        String itemId = event.getButton().getData().toString();
+                        Request request = RequestFacade.getRequestService().findById(itemId);
+                        UpdatePaymentForm form = new UpdatePaymentForm(main, request, tab);
+                        tab.removeAllComponents();
+                        tab.addComponent(form);
+                    }
+                });
+                addItem(new Object[]{
+                    getDelivery(request.getOrderDate()),
+                    getDelivery(request.getDeliveryDate()),
+                    request.getOrderNumber(),
+                    request.getServiceProviderName(),
+                    request.getInvoiceNumber(),
+                    f.format(request.getTotal()),
+                    update,}, request.getId());
+                grandTotal = grandTotal.add(request.getTotal());
             }
         }
     }
