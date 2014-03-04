@@ -10,16 +10,16 @@ import com.vaadin.ui.Panel;
  *
  * @author Colin
  */
-public class PanelStyled extends Panel {
+public class PanelEfficiency extends Panel {
 
-    public PanelStyled(String caption) {
+    public PanelEfficiency(String caption) {
         setCaption(caption);
-        setStyleName("panelorange");
+        setStyleName("panelEfficiency");
         setSizeUndefined(); // Shrink to fit content
     }
 
-    public PanelStyled() {
-        setStyleName("panelorange");
+    public PanelEfficiency() {
+        setStyleName("panelEfficiency");
         setSizeUndefined(); // Shrink to fit content
     }
 }

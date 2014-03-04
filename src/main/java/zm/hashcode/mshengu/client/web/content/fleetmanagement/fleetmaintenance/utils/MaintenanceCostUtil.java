@@ -42,7 +42,7 @@ public class MaintenanceCostUtil implements Serializable {
      * @return List AnnualDataFleetMaintenanceCost
      */
     public List<AnnualDataFleetMaintenanceCost> findMaintenanceCostBetweenTwoDates(Date startDate, Date endDate, List<Truck> serviceTrucks) {
-        this.serviceTrucks = serviceTrucks;
+        MaintenanceCostUtil.serviceTrucks = serviceTrucks;
         maintenanceCostList.clear();
         if (endDate.before(staticDataEndDate) || endDate.compareTo(staticDataEndDate) == 0) {
             maintenanceCostList.addAll(AnnualDataFleetMaintenanceCostFacade.getAnnualDataFleetMaintenanceCostService().getAnnualDataCostBetweenTwoDates(startDate, endDate));
