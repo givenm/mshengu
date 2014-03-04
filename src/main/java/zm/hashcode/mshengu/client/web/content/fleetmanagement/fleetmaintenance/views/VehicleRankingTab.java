@@ -91,6 +91,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     }
 
     public void generateData() {
+        fleetMaintenanceUtil.findServiceTrucks();
         fleetMaintenanceUtil.determineDateRange(new Date(), 12);
 //        fleetMaintenanceUtil.determineDateRange(getDate(1, 10, 2013), 12); Testing the for months with DATA
         maintenanceCostList = getMaintenanceCostList();

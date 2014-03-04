@@ -10,12 +10,19 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 /**
  *
  * @author Colin
  */
 public class AnnualFuelSpendLayout extends VerticalLayout {
+
+    final Locale locale = new Locale("za", "ZA");
+    // Format a decimal value for a specific locale
+    final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
     public VerticalLayout getFuelSpendLayout(BigDecimal annualTotalFuelSpend, BigDecimal serviceTotalFuelSpend,
             BigDecimal operationalTotalFuelSpend, BigDecimal nonOperationalTotalFuelSpend,
@@ -24,10 +31,10 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
         HorizontalLayout annualTotalHorizontalLayout = new HorizontalLayout();
 //        annualTotalHorizontalLayout.setSizeFull();
         Label totalLabel = new Label("Total");
-        totalLabel.setWidth(110, Unit.PIXELS);
+        totalLabel.setWidth(115, Unit.PIXELS);
 //        totalLabel.setStyleName("dashboardLabel");
 
-        Label totalAmountLabel = new Label(annualTotalFuelSpend + "");
+        Label totalAmountLabel = new Label(df.format(Double.parseDouble(annualTotalFuelSpend.toString())));
         totalAmountLabel.setWidth(100, Unit.PIXELS);
         totalAmountLabel.setStyleName("dashboardLabel");
 
@@ -40,10 +47,10 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
 //        serviceTotalHorizontalLayout.setSizeFull();
 
         Label serviceTotalLabel = new Label("Service");
-        serviceTotalLabel.setWidth(110, Unit.PIXELS);
+        serviceTotalLabel.setWidth(115, Unit.PIXELS);
 //        serviceTotalLabel.setStyleName("dashboardLabel");
 
-        Label serviceAmountLabel = new Label(serviceTotalFuelSpend + "");
+        Label serviceAmountLabel = new Label(df.format(Double.parseDouble(serviceTotalFuelSpend.toString())));
         serviceAmountLabel.setWidth(100, Unit.PIXELS);
         serviceAmountLabel.setStyleName("dashboardLabel");
 
@@ -62,10 +69,10 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
         HorizontalLayout operationalTotalHorizontalLayout = new HorizontalLayout();
 
         Label operationalTotalLabel = new Label("Operational");
-        operationalTotalLabel.setWidth(110, Unit.PIXELS);
+        operationalTotalLabel.setWidth(115, Unit.PIXELS);
 //        totalLabel.setStyleName("dashboardLabel");
 
-        Label operationalAmountLabel = new Label(operationalTotalFuelSpend + "");
+        Label operationalAmountLabel = new Label(df.format(Double.parseDouble(operationalTotalFuelSpend.toString())));//
         operationalAmountLabel.setWidth(100, Unit.PIXELS);
         operationalAmountLabel.setStyleName("dashboardLabel");
 
@@ -82,10 +89,10 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
         HorizontalLayout nonOperationalTotalHorizontalLayout = new HorizontalLayout();
 
         Label nonOperationalTotalLabel = new Label("Non-Operational");
-        nonOperationalTotalLabel.setWidth(110, Unit.PIXELS);
+        nonOperationalTotalLabel.setWidth(115, Unit.PIXELS);
 //        totalLabel.setStyleName("dashboardLabel");
 
-        Label nonOperationalAmountLabel = new Label(nonOperationalTotalFuelSpend + "");
+        Label nonOperationalAmountLabel = new Label(df.format(Double.parseDouble(nonOperationalTotalFuelSpend.toString())));
         nonOperationalAmountLabel.setWidth(100, Unit.PIXELS);
         nonOperationalAmountLabel.setStyleName("dashboardLabel");
 

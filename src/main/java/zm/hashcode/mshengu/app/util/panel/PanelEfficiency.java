@@ -13,17 +13,12 @@ import com.vaadin.ui.Panel;
 public class PanelEfficiency extends Panel {
 
     public PanelEfficiency(String caption) {
-        setCaption("  " + caption + "  ");
-//        setWidth("100%");
-//        setHeight("100%");
+        setCaption(caption);
         setStyleName("panelEfficiency");
         setSizeUndefined(); // Shrink to fit content
     }
 
     public PanelEfficiency() {
-//        setCaption(caption);
-//        setWidth("100%");
-//        setHeight("100%");
         setStyleName("panelEfficiency");
         setSizeUndefined(); // Shrink to fit content
     }

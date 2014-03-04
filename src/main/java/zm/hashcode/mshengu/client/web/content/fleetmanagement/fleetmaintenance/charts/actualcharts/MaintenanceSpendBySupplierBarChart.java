@@ -52,7 +52,7 @@ public class MaintenanceSpendBySupplierBarChart implements Serializable {
         Object[] serviceProviderNameListArray = serviceProviderNameList.toArray(new Object[serviceProviderNameList.size()]);
 
         final BarChart barChart = new BarChart();
-        DCharts dBarChart = barChart.buildBarChart(totalListArray, serviceProviderNameListArray, tickInterval, label, minTickValue);
+        DCharts dBarChart = barChart.buildBarChart(totalListArray, serviceProviderNameListArray, tickInterval, label, minTickValue, null);
         dBarChart.setWidth("600px");
         dBarChart.setHeight("300px");
         dBarChart.show();

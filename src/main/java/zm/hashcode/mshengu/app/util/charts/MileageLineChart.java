@@ -95,7 +95,7 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
  %t      \t                  Tab
  %%      %                   Percent Symbol
  */
-public class LineChart implements Serializable {
+public class MileageLineChart implements Serializable {
 
     public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, String chartTitle) {
 
@@ -143,7 +143,7 @@ public class LineChart implements Serializable {
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%.2f")) // .setFormatString("R%.2f")
+                .setFormatString("%.0f")) // .setFormatString("R%.2f")
                 );
 
         Highlighter highlighter = new Highlighter()
@@ -151,7 +151,7 @@ public class LineChart implements Serializable {
                 .setSizeAdjust(10)
                 .setTooltipLocation(TooltipLocations.NORTH)
                 .setTooltipAxes(TooltipAxes.Y)
-                //	.setTooltipFormatString("<b><i><span style='color:red;'>hello</span></i></b> %.2f")
+                .setTooltipFormatString("<b><i><span style='color:red;'>Mileage:</span></i></b> %.0f")
                 .setUseAxesFormatters(false);
 
         Cursor cursor = new Cursor()

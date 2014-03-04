@@ -160,7 +160,7 @@ public class TrackerUtil implements Serializable {
         Integer previousClosingMileage = calculatePreviousMonthClosingMileage(truck);
         for (OperatingCost operatingCost : monthOperatingCostList) {
             tripMileageSum += operatingCost.getSpeedometer() - previousClosingMileage;
-//            previousClosingMileage = operatingCost.getSpeedometer();
+//            previousClosingMileage = operatingCost.getSpeedometer(); // why was this line commented. SEEMS VALID TO ME. CHECK WITH Mr P
         }
         return tripMileageSum;
     }
