@@ -36,7 +36,7 @@ public class PaymentForm extends FormLayout {
         setSizeFull();
         GridLayout gridlayout = new GridLayout(3, 10);
         gridlayout.setSizeFull();
-        month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
+        month = UICombobox.getAllMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
         year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
         
         gridlayout.addComponent(month, 0, 0);

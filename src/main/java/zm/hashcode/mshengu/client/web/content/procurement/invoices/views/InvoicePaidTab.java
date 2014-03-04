@@ -7,6 +7,9 @@ package zm.hashcode.mshengu.client.web.content.procurement.invoices.views;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
@@ -54,17 +57,30 @@ public class InvoicePaidTab extends VerticalLayout implements Property.ValueChan
             String month = form.month.getValue().toString();
             String year = form.year.getValue().toString();
             List<Request> requests = null;
+            Date date = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.MONTH, getMonth(month));
+            cal.set(Calendar.YEAR, Integer.parseInt(year));
             if (supplierId.equalsIgnoreCase("all")) {
-                requests = RequestFacade.getRequestService().findAll();
+                requests = RequestFacade.getRequestService().getProcessedRequestsWithPaymentDate(cal.getTime());
             } else {
-                requests = RequestFacade.getRequestService().findByServiceProvider(supplierId);
+                requests = RequestFacade.getRequestService().getServiceProviderProcessedRequestsWithPaymentDate(supplierId, cal.getTime());
             }
-            table.loadTable(requests, month, year);
+            table.loadTable(requests);
             getGrandTotal();
         } else {
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
 
         }
+    }
+    private int getMonth(String month) {
+        String[] months = new DateFormatSymbols().getMonths();
+        for (int i = 0; i < months.length; i++) {
+            if (month.equals(months[i]))
+            return i;
+        }
+        return 0;
     }
 
     private void addListeners() {

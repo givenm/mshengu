@@ -4,13 +4,20 @@
  */
 package zm.hashcode.mshengu.services.kpianalysis.impl;
 
+import com.google.common.collect.Collections2;
+import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
+import zm.hashcode.mshengu.app.util.predicates.customer.ContractTypePredicate;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
+import zm.hashcode.mshengu.repository.customer.CustomerRepository;
 import zm.hashcode.mshengu.services.kpianalysis.LoadKPITwoService;
 
 /**
@@ -18,9 +25,20 @@ import zm.hashcode.mshengu.services.kpianalysis.LoadKPITwoService;
  * @author Luckbliss
  */
 //Field Services (Private)
+//@Service
 public class LoadKPITwoServiceImpl implements LoadKPITwoService {
 
-    private List<Customer> customers = CustomerFacade.getCustomerService().findByContractType("Private");
+    @Autowired
+    private CustomerRepository customerRepository;
+    private Iterable<Customer> customers;
+
+    public LoadKPITwoServiceImpl() {
+        customers = initialise("Private Hire");
+    }
+
+    private List<Customer> initialise(String contractTypeName) {
+        return CustomerFacade.getCustomerService().findByContractType(contractTypeName);
+    }
 
     @Override
     public double getNoServicesPerformed(String month, int year) {

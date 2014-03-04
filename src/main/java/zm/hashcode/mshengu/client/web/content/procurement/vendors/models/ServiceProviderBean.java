@@ -15,46 +15,46 @@ import zm.hashcode.mshengu.domain.external.MailNotifications;
 public final class ServiceProviderBean implements Serializable {
 
     private String id;
-    @NotNull
+    
     private String name;
     private String vendorNumber;
     private MailNotifications mailNotifications;
-    @NotNull
+    
     private String registrationNum;
-    @NotNull
+    
     private String legalForm;
-    @NotNull
+    
     private String yearsOfBus;
-    @NotNull
+    
     private String firstNameChiefExec;
-    @NotNull
+    
     private String lastNameChiefExec;
-    @NotNull
+    
     private String vatNum;
     private String website;
     private boolean active;
     private boolean preferedVendor;
     private boolean vehicleMaintenance;
     private boolean registeredForVat;
-    @NotNull
+    
     private String address1;
     private String address2;
-    @NotNull
+    
     private String city;
-    @NotNull
+    
     private String code;
     private String contactPersonId;
-    @NotNull
+    
     private String firstName;
-    @NotNull
+    
     private String lastName;
-    @NotNull
+    
     private String mainNumber;
     private String faxNumber;
     private String otherNumber;
-    @NotNull
+    
     private String emailAddress;
-    @NotNull
+    
     private String serviceProviderCategoryId;
     private String bankName;
     private String accountNumber;
