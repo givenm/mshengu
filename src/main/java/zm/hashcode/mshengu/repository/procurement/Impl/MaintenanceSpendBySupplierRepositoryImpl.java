@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.repository.procurement.Impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,27 @@ import zm.hashcode.mshengu.repository.procurement.MaintenanceSpendBySupplierRepo
  */
 public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpendBySupplierRepositoryCustom {
 
+    final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     @Autowired
     private MongoOperations mongoOperation;
 
     @Override
     public List<MaintenanceSpendBySupplier> getMaintenanceSpendBetweenTwoDates(Date from, Date to) {
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
         Query maintenanceSpendListQuery = new Query();
         maintenanceSpendListQuery.addCriteria(
                 Criteria.where("transactionDate").exists(true)
-                .andOperator(Criteria.where("transactionDate").gte(from),
-                Criteria.where("transactionDate").lte(to)));
+                .andOperator(Criteria.where("transactionDate").gte(fromDate),
+                Criteria.where("transactionDate").lte(calendar.getTime())));
 
         /*
          List<MaintenanceSpendBySupplier> maintenanceSpendList = mongoOperation.find(maintenanceSpendListQuery, MaintenanceSpendBySupplier.class);
@@ -51,30 +63,61 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
 
     @Override
     public List<MaintenanceSpendBySupplier> getMaintenanceSpendByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
-        return getTruckMaintenanceSpend(truck, from, to);
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
+        return getTruckMaintenanceSpend(truck, fromDate, calendar.getTime());
     }
 
     @Override
     public List<MaintenanceSpendBySupplier> getMaintenanceSpendByTruckForMonth(Truck truck, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
 
-        return getTruckMaintenanceSpend(truck, from, to);
+        return getTruckMaintenanceSpend(truck, from, calendar.getTime());
     }
 
     @Override
     public List<MaintenanceSpendBySupplier> getMaintenanceSpendBySupplierBetweenTwoDates(ServiceProvider serviceProvider, Date from, Date to) {
-        return getSupplierMaintenanceSpend(serviceProvider, from, to);
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+        return getSupplierMaintenanceSpend(serviceProvider, fromDate, calendar.getTime());
     }
 
     @Override
     public List<MaintenanceSpendBySupplier> getMaintenanceSpendBySupplierForMonth(ServiceProvider serviceProvider, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
 
-        return getSupplierMaintenanceSpend(serviceProvider, from, to);
+        return getSupplierMaintenanceSpend(serviceProvider, from, calendar.getTime());
     }
 
     private List<MaintenanceSpendBySupplier> getTruckMaintenanceSpend(Truck truck, Date from, Date to) {

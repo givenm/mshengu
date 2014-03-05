@@ -60,12 +60,13 @@ public class DailyInputsTable extends Table {
     public void populateDailyInputTable(List<OperatingCost> operatingCostList, Truck truck) {
         this.removeAllItems();
         for (OperatingCost operatingCost : operatingCostList) {
+            System.out.println(formatHelper.getYearMonthDay(operatingCost.getTransactionDate()) + " | " + truck.getVehicleNumber() + " | " + operatingCost.getSpeedometer());
             addItem(new Object[]{
                 formatHelper.getYearMonthDay(operatingCost.getTransactionDate()),
                 truck.getVehicleNumber() + " (" + truck.getNumberPlate() + ")",
-                operatingCost.getSlipNo(),
-                operatingCost.getSpeedometer(),
-                operatingCost.getDriver().getLastname(),
+                operatingCost.getSlipNo() == null ? "" : operatingCost.getSlipNo(),
+                operatingCost.getSpeedometer() == null ? "" : operatingCost.getSpeedometer(),
+                operatingCost.getDriver().getLastname() == null ? null : operatingCost.getDriver().getLastname(),
                 operatingCost.getFuelLitres() == null ? "" : df.format((Double) operatingCost.getFuelLitres()),
                 operatingCost.getFuelCost() == null ? "" : df.format(Double.parseDouble(operatingCost.getFuelCost().toString())),
                 operatingCost.getRandPerLitre() == null ? "" : df.format(Double.parseDouble(operatingCost.getRandPerLitre().toString())),

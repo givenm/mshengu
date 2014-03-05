@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.repository.fleet.Impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,28 @@ import zm.hashcode.mshengu.repository.fleet.OperatingCostRepositoryCustom;
  */
 public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCustom {
 
+    final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     @Autowired
     private MongoOperations mongoOperation;
 
     @Override
     public List<OperatingCost> findOperatingCostBetweenTwoDates(Date from, Date to) {
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
         Query operatingCostListQuery = new Query();
         operatingCostListQuery.addCriteria(
                 Criteria.where("transactionDate").exists(true)
-                .andOperator(Criteria.where("transactionDate").gte(from),
-                Criteria.where("transactionDate").lte(to)));
+                .andOperator(Criteria.where("transactionDate").gte(fromDate),
+                Criteria.where("transactionDate").lte(calendar.getTime())));
 
         /*
          List<OperatingCost> operatingCostList = mongoOperation.find(operatingCostListQuery, OperatingCost.class);
@@ -50,16 +63,32 @@ public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCusto
 
     @Override
     public List<OperatingCost> getOperatingCostByTruckByMonth(Truck truck, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
 
-        return getOperatingCosts(truck, from, to);
+        return getOperatingCosts(truck, from, calendar.getTime());
     }
 
     @Override
     public List<OperatingCost> getOperatingCostByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
-        return getOperatingCosts(truck, from, to);
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
+        return getOperatingCosts(truck, fromDate, calendar.getTime());
     }
 
     private List<OperatingCost> getOperatingCosts(Truck truck, Date from, Date to) {

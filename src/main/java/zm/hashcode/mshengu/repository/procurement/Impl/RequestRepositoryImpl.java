@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.repository.procurement.Impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import zm.hashcode.mshengu.repository.procurement.RequestRepositoryCustom;
  */
 public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
+    final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     @Autowired
     private MongoOperations mongoOperation;
 
@@ -50,11 +52,21 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
     @Override
     public List<Request> getTransactedRequestsBtnTwoDates(Date start, Date end) {
+        Date startDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
         Query transactedRequestListQuery = new Query();
         transactedRequestListQuery.addCriteria(
                 Criteria.where("deliveryDate").exists(true)
-                .andOperator(Criteria.where("deliveryDate").gte(start),
-                Criteria.where("deliveryDate").lte(end)));
+                .andOperator(Criteria.where("deliveryDate").gte(startDate),
+                Criteria.where("deliveryDate").lte(calendar.getTime())));
 
         /*
          List<Request> transactedRequestList = mongoOperation.find(transactedRequestListQuery, Request.class);
@@ -74,30 +86,62 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
     @Override
     public List<Request> getTransactedRequestsByTruckBtnTwoDates(Truck truck, Date start, Date end) {
-        return getTruckTransactedRequests(truck, start, end);
+        Date startDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+        return getTruckTransactedRequests(truck, startDate, calendar.getTime());
     }
 
     @Override
     public List<Request> getTransactedRequestsByTruckByMonth(Truck truck, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
 
-        return getTruckTransactedRequests(truck, from, to);
+        return getTruckTransactedRequests(truck, from, calendar.getTime());
     }
 
     @Override
     public List<Request> getTransactedRequestsByServiceProviderBtnTwoDates(ServiceProvider serviceProvider, Date start, Date end) {
-        return getServiceProviderTransactedRequest(serviceProvider, start, end);
+        Date startDate = dateTimeFormatHelper.resetTimeAndMonthStart(start);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(end);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
+        return getServiceProviderTransactedRequest(serviceProvider, startDate, calendar.getTime());
     }
 
     @Override
     public List<Request> getTransactedRequestsByServiceProviderByMonth(ServiceProvider serviceProvider, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
 
-        return getServiceProviderTransactedRequest(serviceProvider, from, to);
+        return getServiceProviderTransactedRequest(serviceProvider, from, calendar.getTime());
     }
 
     private List<Request> getTruckTransactedRequests(Truck truck, Date from, Date to) {
@@ -169,11 +213,17 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
     @Override
     public List<Request> getServiceProviderProcessedRequestsByMonth(ServiceProvider serviceProvider, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
 
-        return getServiceProviderProcessedRequests(serviceProvider, from, to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+        return getServiceProviderProcessedRequests(serviceProvider, from, calendar.getTime());
     }
 
     private List<Request> getServiceProviderProcessedRequests(ServiceProvider serviceProvider, Date from, Date to) {
@@ -186,11 +236,18 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
     @Override
     public List<Request> getProcessedRequestsWithPaymentDate(Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
 
-        return getAllServiceProviderProcessedRequestsWithPaymentDate(from, to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
+        return getAllServiceProviderProcessedRequestsWithPaymentDate(from, calendar.getTime());
     }
 
     private List<Request> getAllServiceProviderProcessedRequestsWithPaymentDate(Date from, Date to) {
@@ -205,11 +262,18 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
     @Override
     public List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
 
-        return getServiceProviderProcessedRequestsWithPaymentDate(serviceProviderId, from, to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+
+        return getServiceProviderProcessedRequestsWithPaymentDate(serviceProviderId, from, calendar.getTime());
     }
 
     private List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date from, Date to) {
@@ -224,11 +288,17 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
 
     @Override
     public List<Request> getProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
 
-        return getServiceProviderProcessedRequestsByCostCentreType(costCentreType, from, to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 250);
+        return getServiceProviderProcessedRequestsByCostCentreType(costCentreType, from, calendar.getTime());
     }
 
     private List<Request> getServiceProviderProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date from, Date to) {

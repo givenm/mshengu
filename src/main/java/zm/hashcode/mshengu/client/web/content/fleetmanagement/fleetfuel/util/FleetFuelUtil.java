@@ -157,7 +157,7 @@ public class FleetFuelUtil implements Serializable {
     public Date resetMonthToFirstDay(Date date) {
         final Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
-        calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
+//        calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
 
         return calendarDate.getTime();
     }
@@ -165,7 +165,7 @@ public class FleetFuelUtil implements Serializable {
     public Date resetMonthToLastDay(Date date) {
         final Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
-        calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
+//        calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
 
         return calendarDate.getTime();
     }

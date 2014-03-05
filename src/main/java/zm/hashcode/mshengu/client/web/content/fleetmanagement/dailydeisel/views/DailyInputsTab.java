@@ -118,23 +118,30 @@ public class DailyInputsTab extends VerticalLayout implements
             }
         } else if (property == form.filterTransactionDate) {
             filteredTransactionDate = form.filterTransactionDate.getValue();
-            if (form.filterTruckId.getValue().toString() != null) {
-                Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
-                List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
-
-                populateDailyInputsTable(dailyInputList, truck);
-                resetDailyInputBean();
+            try {
+                filteredTruckId = form.filterTruckId.getValue().toString();
+            } catch (java.lang.NullPointerException ex) {
+            }
+            if (filteredTruckId != null) {
+                getPopulateTableAndReset();
             }
         } else if (property == form.filterTruckId) {
             filteredTruckId = form.filterTruckId.getValue().toString();
-            if (form.filterTransactionDate.getValue() != null) {
-                Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
-                List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
-
-                populateDailyInputsTable(dailyInputList, truck);
-                resetDailyInputBean();
+            try {
+                filteredTransactionDate = form.filterTransactionDate.getValue();
+            } catch (java.lang.NullPointerException ex) {
+            }
+            if (filteredTransactionDate != null) {
+                getPopulateTableAndReset();
             }
         }
+    }
+
+    private void getPopulateTableAndReset() {
+        Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
+        List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
+        populateDailyInputsTable(dailyInputList, truck);
+        resetDailyInputBean();
     }
 
     private void resetDailyInputBean() {
@@ -183,6 +190,8 @@ public class DailyInputsTab extends VerticalLayout implements
         table.populateDailyInputTable(dailyInputList, truck);
         table.addValueChangeListener((Property.ValueChangeListener) this);
 
+        filteredTransactionDate = null;
+        filteredTruckId = null;
     }
 
     private void saveForm(FieldGroup binder) {
@@ -192,7 +201,7 @@ public class DailyInputsTab extends VerticalLayout implements
             Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
             // Check if a record for current date exists, if true asks for record to be edited
             if (trackerUtil.isThereDuplicateDailyInput(truck, transactionDate)) {
-                Notification.show("A Record for today has been ADDED<br/>Duplicates are not allowed. Consider editing this record.", Notification.Type.TRAY_NOTIFICATION);
+                Notification.show("A Record matching this date has been ADDED. Duplicates not allowed. Consider editing this record.", Notification.Type.TRAY_NOTIFICATION);
             } else {
                 // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
                 Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, transactionDate, transactionDate);

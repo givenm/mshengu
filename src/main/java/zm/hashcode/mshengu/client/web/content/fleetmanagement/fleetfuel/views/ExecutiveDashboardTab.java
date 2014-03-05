@@ -365,7 +365,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
                 found = true;
             }
             // if Date changes, then it is no longer End Date as we sorted in Desc Order
-            if (found && fleetFuelUtil.resetMonthToFirstDay(date).before(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
+            if (found && fleetFuelUtil.resetMonthToFirstDay(date).after(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
                 break;
             }
         }
@@ -393,7 +393,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
             }
 
             // if Date is before startDate, then looping stops as we sorted operatingCostTwelveMonthsList in Desc Order
-            if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).before(fleetFuelUtil.resetMonthToFirstDay(startDatee))) {
+            if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).after(fleetFuelUtil.resetMonthToFirstDay(startDatee))) {
                 break;
             }
         }
