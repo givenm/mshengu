@@ -57,7 +57,7 @@ public class ApproveRFQForm extends FormLayout {
         Label vatRegistrationNumber = new Label("Vat Registration Number: " + responseToRFQ.getVatRegistrationNumber());
         Label yearEstablishment = new Label("Years of Establishment: " + responseToRFQ.getYearEstablishment());
 
-        DisplayItemsTable table = new DisplayItemsTable(responseToRFQ.getItems());
+        DisplayItemsTable table = new DisplayItemsTable(responseToRFQ.getItems(), null);
         gridlayout.addComponent(companyName, 0, 0);
         gridlayout.addComponent(companyType, 1, 0);
         gridlayout.addComponent(chiefExecutive, 2, 0);

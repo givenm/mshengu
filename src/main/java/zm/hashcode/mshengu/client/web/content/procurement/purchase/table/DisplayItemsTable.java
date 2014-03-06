@@ -6,7 +6,9 @@ package zm.hashcode.mshengu.client.web.content.procurement.purchase.table;
 
 import com.vaadin.ui.Table;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.domain.procurement.RequestPurchaseItem;
 
 /**
@@ -15,7 +17,12 @@ import zm.hashcode.mshengu.domain.procurement.RequestPurchaseItem;
  */
 public class DisplayItemsTable extends Table {
 
-    public DisplayItemsTable(Set<RequestPurchaseItem> items) {
+    private BigDecimal total = new BigDecimal("0");
+    private DecimalFormat f = new DecimalFormat("###,###.00");
+
+    public DisplayItemsTable(Set<RequestPurchaseItem> items, BigDecimal total) {
+
+        this.total = total;
         setSizeFull();
 
         addContainerProperty("Item Description", String.class, null);
@@ -27,9 +34,14 @@ public class DisplayItemsTable extends Table {
         addContainerProperty("Total", BigDecimal.class, null);
 
         loadTable(items);
+        if (total != null) {
+            performRowStyling();
+        }
+
     }
 
     private void loadTable(Set<RequestPurchaseItem> items) {
+        addSubtotalRow();
         if (items != null) {
             for (RequestPurchaseItem item : items) {
                 if (item.getProduct() != null) {
@@ -53,5 +65,34 @@ public class DisplayItemsTable extends Table {
                 }
             }
         }
+    }
+
+    private void addSubtotalRow() {
+        if (total != null) {
+            addItem(new Object[]{
+                "Total",
+                "",
+                "",
+                "",
+                "",
+                null,
+                total,}, "subtotal");
+        }
+    }
+
+    private void performRowStyling() {
+        setCellStyleGenerator(new Table.CellStyleGenerator() {
+            @Override
+            public String getStyle(Table source, Object itemId, Object propertyId) {
+                if (propertyId != null) {
+                    return null;
+                }
+                String rowId = ((String) itemId).toString();
+                if (rowId.equals("subtotal")) {
+                    return "yellowrow";
+                }
+                return null;
+            }
+        });
     }
 }

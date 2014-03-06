@@ -67,7 +67,7 @@ public class DisapprovedRequestsForm extends FormLayout implements
         layout.addComponent(reason, 0, 10);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 11);
 
-        DisplayItemsTable table = new DisplayItemsTable(request.getRequestPurchaseItems());
+        DisplayItemsTable table = new DisplayItemsTable(request.getRequestPurchaseItems(), request.getTotal());
         table.setSizeFull();
         layout.addComponent(table, 0, 12, 2, 12);
 

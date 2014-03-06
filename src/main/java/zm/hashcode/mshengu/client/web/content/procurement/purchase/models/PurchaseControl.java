@@ -130,6 +130,6 @@ public class PurchaseControl {
         if (costCentre != null) {
             return costCentre.getName();
         }
-        return null;
+        return "";
     }
 }

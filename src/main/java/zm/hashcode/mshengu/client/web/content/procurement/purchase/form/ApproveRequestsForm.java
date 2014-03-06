@@ -13,6 +13,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.security.GetUserCredentials;
@@ -95,7 +96,7 @@ public class ApproveRequestsForm extends FormLayout implements
         layout.addComponent(buttons, 0, 10, 2, 10);
         layout.addComponent(new Label("<br>", ContentMode.HTML), 0, 11);
 
-        DisplayItemsTable table = new DisplayItemsTable(request.getRequestPurchaseItems());
+        DisplayItemsTable table = new DisplayItemsTable(request.getRequestPurchaseItems(), request.getTotal());
         table.setSizeFull();
 
         layout.addComponent(table, 0, 12, 2, 12);
