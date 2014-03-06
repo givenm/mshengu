@@ -255,6 +255,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
             // getMTDAct for Truck
             if (truckMonthOperatingCostList.size() > 0) {
                 mtdActTotal = mtdActTotal.add(fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
+//                System.out.println("Month= " + truckMonthOperatingCostList.get(0).getTransactionDate() + ", Truck= " + truck.getVehicleNumber() + ", MTDAct= " + fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
                 counter++; // Counter should increment per truck with Data for specified period
             }
         }

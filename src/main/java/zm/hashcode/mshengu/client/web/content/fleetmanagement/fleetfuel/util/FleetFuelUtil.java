@@ -32,6 +32,7 @@ public class FleetFuelUtil implements Serializable {
     public static List<Truck> serviceTrucks = new ArrayList<>();
 //    public static List<Truck> movTrucks = new ArrayList<>();
 //    public static List<Truck> mmvTrucks = new ArrayList<>();
+    public static List<Truck> msvTrucks = new ArrayList<>();
     public static List<OperatingCost> operatingCostList = new ArrayList<>();
 
     public void getTrucks() {
@@ -39,6 +40,9 @@ public class FleetFuelUtil implements Serializable {
             allTrucks = TruckFacade.getTruckService().findAll();
             //        serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
             serviceTrucks.clear();
+            msvTrucks.clear();
+//            movTrucks.clear();
+//            mmvTrucks.clear();
             for (Truck truck : allTrucks) {
 //            if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV")) {
 //                movTrucks.add(truck);
@@ -48,7 +52,9 @@ public class FleetFuelUtil implements Serializable {
                 if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
                     serviceTrucks.add(truck);
                 }
-
+                if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV")) {
+                    msvTrucks.add(truck);
+                }
             }
         }
     }
