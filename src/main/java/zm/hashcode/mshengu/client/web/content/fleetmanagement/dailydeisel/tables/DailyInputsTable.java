@@ -60,7 +60,7 @@ public class DailyInputsTable extends Table {
     public void populateDailyInputTable(List<OperatingCost> operatingCostList, Truck truck) {
         this.removeAllItems();
         for (OperatingCost operatingCost : operatingCostList) {
-            System.out.println(formatHelper.getYearMonthDay(operatingCost.getTransactionDate()) + " | " + truck.getVehicleNumber() + " | " + operatingCost.getSpeedometer());
+//            System.out.println(formatHelper.getYearMonthDay(operatingCost.getTransactionDate()) + " | " + truck.getVehicleNumber() + " | " + operatingCost.getSpeedometer());
             addItem(new Object[]{
                 formatHelper.getYearMonthDay(operatingCost.getTransactionDate()),
                 truck.getVehicleNumber() + " (" + truck.getNumberPlate() + ")",

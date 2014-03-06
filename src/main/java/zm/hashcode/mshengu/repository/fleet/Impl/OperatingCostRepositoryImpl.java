@@ -37,7 +37,7 @@ public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCusto
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         Query operatingCostListQuery = new Query();
         operatingCostListQuery.addCriteria(
@@ -71,7 +71,7 @@ public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCusto
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getOperatingCosts(truck, from, calendar.getTime());
     }
@@ -86,7 +86,7 @@ public class OperatingCostRepositoryImpl implements OperatingCostRepositoryCusto
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getOperatingCosts(truck, fromDate, calendar.getTime());
     }

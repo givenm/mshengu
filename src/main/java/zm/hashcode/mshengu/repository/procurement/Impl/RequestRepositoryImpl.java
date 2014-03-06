@@ -60,7 +60,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         Query transactedRequestListQuery = new Query();
         transactedRequestListQuery.addCriteria(
@@ -94,7 +94,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
         return getTruckTransactedRequests(truck, startDate, calendar.getTime());
     }
 
@@ -109,7 +109,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getTruckTransactedRequests(truck, from, calendar.getTime());
     }
@@ -124,7 +124,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getServiceProviderTransactedRequest(serviceProvider, startDate, calendar.getTime());
     }
@@ -139,7 +139,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getServiceProviderTransactedRequest(serviceProvider, from, calendar.getTime());
     }
@@ -222,7 +222,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
         return getServiceProviderProcessedRequests(serviceProvider, from, calendar.getTime());
     }
 
@@ -245,7 +245,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getAllServiceProviderProcessedRequestsWithPaymentDate(from, calendar.getTime());
     }
@@ -271,7 +271,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getServiceProviderProcessedRequestsWithPaymentDate(serviceProviderId, from, calendar.getTime());
     }
@@ -297,7 +297,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
         return getServiceProviderProcessedRequestsByCostCentreType(costCentreType, from, calendar.getTime());
     }
 

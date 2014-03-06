@@ -37,7 +37,7 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         Query maintenanceSpendListQuery = new Query();
         maintenanceSpendListQuery.addCriteria(
@@ -71,7 +71,7 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getTruckMaintenanceSpend(truck, fromDate, calendar.getTime());
     }
@@ -86,7 +86,7 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getTruckMaintenanceSpend(truck, from, calendar.getTime());
     }
@@ -101,7 +101,7 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
         return getSupplierMaintenanceSpend(serviceProvider, fromDate, calendar.getTime());
     }
 
@@ -115,7 +115,7 @@ public class MaintenanceSpendBySupplierRepositoryImpl implements MaintenanceSpen
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getSupplierMaintenanceSpend(serviceProvider, from, calendar.getTime());
     }

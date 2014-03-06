@@ -36,7 +36,7 @@ public class AnnualDataFleetMaintenanceMileageRepositoryImpl implements AnnualDa
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
         //
         Query truckAnnualDataMileageListQuery = new Query();
         truckAnnualDataMileageListQuery.addCriteria(
@@ -70,7 +70,7 @@ public class AnnualDataFleetMaintenanceMileageRepositoryImpl implements AnnualDa
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
 
         return getAnnualDataMileages(truck, fromDate, calendar.getTime());
     }
@@ -86,7 +86,7 @@ public class AnnualDataFleetMaintenanceMileageRepositoryImpl implements AnnualDa
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 250);
+        calendar.set(Calendar.MILLISECOND, 999);
         return getAnnualDataMileages(truck, from, calendar.getTime());
     }
 

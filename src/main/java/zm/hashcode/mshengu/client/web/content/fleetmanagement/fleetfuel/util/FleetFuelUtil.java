@@ -60,7 +60,7 @@ public class FleetFuelUtil implements Serializable {
         Calendar calendarEndDate = Calendar.getInstance();
         calendarEndDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDatee));
 //        calendarEndDate.add(Calendar.MONTH, -1);
-        endDate = resetMonthToLastDay(calendarEndDate.getTime());
+        endDate = calendarEndDate.getTime();
 
         Calendar calendarStartDate = Calendar.getInstance();
         calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDatee));
@@ -133,16 +133,18 @@ public class FleetFuelUtil implements Serializable {
         return operatingCosts;
     }
 
-    public List<OperatingCost> getOperatingCostsForSpecDates(Date startDate, Date endDate, List<OperatingCost> operatingCostList) {
+    public List<OperatingCost> getOperatingCostsForSpecDates(Date startDate, Date endDate, List<OperatingCost> operatingCostTwentyFiveMonthsList) {
         boolean found = true;
+        Date nuStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(startDate);
+        Date nuEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(endDate);
         List<OperatingCost> operatingCosts = new ArrayList<>();
-        Collections.sort(operatingCostList, OperatingCost.DescOrderDateComparator);
+//        Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateComparator);
 
-        for (OperatingCost operatingCost : operatingCostList) {
-            Date operationDate = resetMonthToFirstDay(operatingCost.getTransactionDate());
-            if (operationDate.compareTo(startDate) == 0
-                    || (operationDate.after(startDate) && operationDate.before(endDate))
-                    || operationDate.compareTo(endDate) == 0) {
+        for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
+            Date operationDate = operatingCost.getTransactionDate();
+            if (operationDate.compareTo(nuStartDate) == 0
+                    || (operationDate.after(nuStartDate) && operationDate.before(nuEndDate))
+                    || operationDate.compareTo(nuEndDate) == 0) {
                 operatingCosts.add(operatingCost);
             } else {
                 found = false;
@@ -155,19 +157,17 @@ public class FleetFuelUtil implements Serializable {
     }
 
     public Date resetMonthToFirstDay(Date date) {
-        final Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
-//        calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
-
-        return calendarDate.getTime();
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 
     public Date resetMonthToLastDay(Date date) {
-        final Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
+//        final Calendar calendarDate = Calendar.getInstance();
+//        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
 //        calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
+//
+//        return calendarDate.getTime();
 
-        return calendarDate.getTime();
+        return dateTimeFormatHelper.resetTimeAndMonthEnd(date);
     }
 
     public BigDecimal getMtdAct(List<OperatingCost> truckMonthOperatingCostList, Truck truck) {
@@ -184,7 +184,7 @@ public class FleetFuelUtil implements Serializable {
 
         // Calculate Sum of Trips
         if (mileageCalc > 0 && (fuelCostSum.compareTo(BigDecimal.ZERO) > 0)) { // if(Monthly Mileage >0 && Monthly Amount > 0)
-            System.out.println(truck.getVehicleNumber() + "Fuel Cost Sum: " + fuelCostSum + "/ Total Mileage: " + mileageCalc + " = " + fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, RoundingMode.HALF_UP));
+//            System.out.println(truck.getVehicleNumber() + "Fuel Cost Sum: " + fuelCostSum + "/ Total Mileage: " + mileageCalc + " = " + fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, RoundingMode.HALF_UP));
             return fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, RoundingMode.HALF_UP);
         } else {
             // DO TEH mtdAct CALCULATION
@@ -335,7 +335,7 @@ public class FleetFuelUtil implements Serializable {
 
     public Date determineStartDate(Date endDate, int monthRange) {
         Calendar calendarStartDate = Calendar.getInstance();
-        calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
+//        calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
         calendarStartDate.add(Calendar.MONTH, -(monthRange - 1));
         return resetMonthToFirstDay(calendarStartDate.getTime());
     }
@@ -348,22 +348,22 @@ public class FleetFuelUtil implements Serializable {
         Integer lastClosingMileage = truckMonthOperatingCostList.get(0).getSpeedometer();
 
         if (previousClosingMileage.compareTo(new Integer("0")) > 0 && lastClosingMileage.compareTo(new Integer("0")) > 0) {
-////            System.out.println("Truck= " + truck.getVehicleNumber() + " Month =" + queriedDate + " Previous Month closing Mileage= " + previousClosingMileage + " Current Month closing Mileage= " + lastClosingMileage);
-////            System.out.println("============================================ ");
+//            System.out.println("Truck= " + truck.getVehicleNumber() + " Month =" + queriedDate + " Previous Month closing Mileage= " + previousClosingMileage + " Current Month closing Mileage= " + lastClosingMileage);
+//            System.out.println("============================================ ");
             return lastClosingMileage - previousClosingMileage;
         }
         return 0;
     }
 
     public Integer calculatePreviousMonthEndingMileage(Truck truck, OperatingCost LastOperatingCost, Date queriedDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(this.resetMonthToLastDay(queriedDate));
-        calendar.add(Calendar.MONTH, -1);
+        Calendar previousMonthCalendar = Calendar.getInstance();
+        previousMonthCalendar.setTime(this.resetMonthToFirstDay(queriedDate));
+        previousMonthCalendar.add(Calendar.MONTH, -1);
 
         // Get the last Closing Mileage for previous Month
         //  EXAMPLE: The operatingCostList parameter in next line was derived from Table clsss may not apply here:  VehicleFuelUsageTable.java
         // but make sure it is set or else would yield undesireable results:  trackerUtil.setOperatingCostList(truck.getOperatingCosts());
-        List<OperatingCost> previousMonthOperatingCostList = findPreviousMonthOperatingCostList(truck, operatingCostList, calendar.getTime());
+        List<OperatingCost> previousMonthOperatingCostList = findPreviousMonthOperatingCostList(truck, previousMonthCalendar.getTime());
         if (previousMonthOperatingCostList.isEmpty()) {
             return truck.getStartMileage();
         }
@@ -377,49 +377,49 @@ public class FleetFuelUtil implements Serializable {
 //        return 0;
     }
 
-    public List<OperatingCost> findPreviousMonthOperatingCostList(Truck truck, List<OperatingCost> operatingCostList, Date date) {
+    private List<OperatingCost> findPreviousMonthOperatingCostList(Truck truck, Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
         Collections.sort(operatingCostList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
         boolean found = false;
         List<OperatingCost> queriedMonthOperatingCostList = new ArrayList<>();
         for (OperatingCost operatingCost : operatingCostList) {
             if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
-                if (truck.getId().equals(operatingCost.getTruckId()) && this.resetMonthToFirstDay(date).compareTo(this.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
+                if (truck.getId().equals(operatingCost.getTruckId()) && date.compareTo(this.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
                     queriedMonthOperatingCostList.add(operatingCost);
                     found = true;
                 }
             }
-            if (found) {
-                if (this.resetMonthToFirstDay(date).after(this.resetMonthToFirstDay(operatingCost.getTransactionDate()))) { // Dae has changed
-                    break;
-                }
+            if (found && resetMonthToFirstDay(operatingCost.getTransactionDate()).before(date)) { // Date has changed
+                break;
             }
+
         }
 
         if (queriedMonthOperatingCostList.isEmpty()) {
             found = false;
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
             calendar.add(Calendar.MONTH, -1);
 
-            for (int i = 0; i < 2; i++) { // 2 more times to loop bc 15 months OperatingCosts were fetched
+            Calendar loopCalendar = Calendar.getInstance();
+            for (loopCalendar.setTime(calendar.getTime()); loopCalendar.getTime().after(startDate) || loopCalendar.getTime().compareTo(startDate) == 0; loopCalendar.add(Calendar.MONTH, -1)) {
+
+//            for (int i = 0; i < 12; i++).. { // 12 more times to loop bc 25 months OperatingCosts were fetched
                 for (OperatingCost operatingCost : operatingCostList) {
                     if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
-                        if (truck.getId().equals(operatingCost.getTruckId()) && this.resetMonthToFirstDay(calendar.getTime()).compareTo(this.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
+                        if (truck.getId().equals(operatingCost.getTruckId()) && loopCalendar.getTime().compareTo(this.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
                             queriedMonthOperatingCostList.add(operatingCost);
                             found = true;
                         }
                     }
-                    if (found) {
-                        if (this.resetMonthToFirstDay(date).after(this.resetMonthToFirstDay(operatingCost.getTransactionDate()))) { // Dae has changed
-                            break;
-                        }
+                    if (found && loopCalendar.getTime().after(this.resetMonthToFirstDay(operatingCost.getTransactionDate()))) { // Date has changed
+                        break;
                     }
+
                 }
                 if (!queriedMonthOperatingCostList.isEmpty()) {
                     return queriedMonthOperatingCostList;
                 }
                 found = false;
-                calendar.add(Calendar.MONTH, -1);
             }
         }
         return queriedMonthOperatingCostList;
