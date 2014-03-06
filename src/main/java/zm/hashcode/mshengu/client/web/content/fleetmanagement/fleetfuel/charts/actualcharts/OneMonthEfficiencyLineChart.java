@@ -32,6 +32,7 @@ public class OneMonthEfficiencyLineChart implements Serializable {
 //        String title = "Total Mileage for last " + serviceFleetOneMonthlyEfficiencyBeanList.size() + " Month(s):    " + formattedGrandTotalMileage + " Km";
         float tickInterval = Float.parseFloat("2.00");
         Object minTickValue = 0.00;
+//        Object maxTickValue = 0.00;
         BigDecimal highestEfficiencyValue = BigDecimal.ZERO;
         // finding the highest Mileage figure
         for (ServiceFleetOneMonthlyEfficiencyBean serviceFleetOneMonthlyEfficiencyBean : serviceFleetOneMonthlyEfficiencyBeanList) {
@@ -40,10 +41,10 @@ public class OneMonthEfficiencyLineChart implements Serializable {
             }
         }
 
-        if (highestEfficiencyValue.compareTo(new BigDecimal("14.00")) < 0) {
+        if (highestEfficiencyValue.compareTo(new BigDecimal("12.00")) > 0) {
             tickInterval = Float.parseFloat("2.50");
 //            minTickValue = 0;
-        } else if (highestEfficiencyValue.compareTo(new BigDecimal("12.00")) < 0) {
+        } else {
             tickInterval = Float.parseFloat("2.00");
 //            minTickValue = 0;
         }
@@ -60,7 +61,7 @@ public class OneMonthEfficiencyLineChart implements Serializable {
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
 
         final ServiceFleetEfficiencyLineChart serviceFleetEfficiencyLineChart = new ServiceFleetEfficiencyLineChart();
-        DCharts dLineChart = serviceFleetEfficiencyLineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue, null);
+        DCharts dLineChart = serviceFleetEfficiencyLineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue,/* maxTickValue, */ null);
 
 //        dBarChart.getOptions().getTitle().setText(title);
         dLineChart.setWidth("300px");

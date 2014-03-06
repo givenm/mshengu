@@ -144,11 +144,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
                 operatingCostTwentyFiveMonthsList.addAll(fleetFuelUtil.getOperatingCostByTruckBetweenTwoDates(FleetFuelUtil.startDate, FleetFuelUtil.endDate));
                 Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
                 // Extract date Range for Charts only
-//                if (monthCount == 12) {
-//                    dateRangeOperatingCostList.addAll(operatingCostTwentyFiveMonthsList);
-//                } else {
                 dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForSpecDates(startDate, endDate, operatingCostTwentyFiveMonthsList));
-//                }
                 if (!dateRangeOperatingCostList.isEmpty()) {
                     buildFuelSpendMonthlyCostBeanList(); // used for both Bar n Line Charts
 
@@ -319,7 +315,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
         try {
             return totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, RoundingMode.HALF_UP);
         } catch (ArithmeticException a) {
-            System.out.println("totalFuelCostAllTrucks (" + totalFuelCostAllTrucks + ") / totalMileageSumAllTrucks (" + allTrucksTotalMileageSum + ") | A Divide By Zero exception (ArithmeticException) caught");
+            System.out.println("Total Fuel Cost All Trucks (" + totalFuelCostAllTrucks + ") / Total Mileage Sum All Trucks (" + allTrucksTotalMileageSum + ") | A Divide By Zero exception (ArithmeticException) caught");
 //            Notification.show("Error. A Calculation is trying to divide by ZERO. Reason for 0.00 per KM.", Notification.Type.TRAY_NOTIFICATION);
             return BigDecimal.ZERO;
         }
@@ -400,17 +396,17 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
     }
 
     public List<OperatingCost> getOneMonthlyOperatingCostForTruck(List<OperatingCost> operatingCostList, Date date, Truck truck) {
-        boolean found = false;
+//        boolean found = false;
         List<OperatingCost> truckMonthOperatingCostList = new ArrayList<>();
         truckMonthOperatingCostList.clear();
         for (OperatingCost operatingCost : operatingCostList) {
             if (operatingCost.getTruckId().equals(truck.getId())
                     && date.compareTo(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
                 truckMonthOperatingCostList.add(operatingCost);
-                found = true;
+//                found = true;
             }
             // if Date changes, then it is no longer End Date as we sorted in Desc Order
-            if (found && (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).before(date))) {
+            if (/*found &&*/fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).before(date)) {
                 break;
             }
         }

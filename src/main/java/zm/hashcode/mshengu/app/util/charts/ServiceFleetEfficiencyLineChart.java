@@ -105,7 +105,7 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
  */
 public class ServiceFleetEfficiencyLineChart implements Serializable {
 
-    public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, String chartTitle) {
+    public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, /* Object maxTickValue, */ String chartTitle) {
 
         DataSeries dataSeries = new DataSeries();
         dataSeries.newSeries();
@@ -149,6 +149,7 @@ public class ServiceFleetEfficiencyLineChart implements Serializable {
                 .addAxis(
                 new XYaxis(XYaxes.Y)
                 .setMin(minTickValue)
+                //                .setMax(maxTickValue)
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
@@ -199,7 +200,7 @@ public class ServiceFleetEfficiencyLineChart implements Serializable {
 
 
         Options options = new Options()
-                .addOption(seriesDefaults)
+                //                .addOption(seriesDefaults)
                 .setTitle(title)
                 .setSeries(series)
                 .setAxesDefaults(axesDefaults)

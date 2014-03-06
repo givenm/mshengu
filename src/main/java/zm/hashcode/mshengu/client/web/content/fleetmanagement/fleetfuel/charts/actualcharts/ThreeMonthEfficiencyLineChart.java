@@ -40,10 +40,10 @@ public class ThreeMonthEfficiencyLineChart implements Serializable {
             }
         }
 
-        if (highestEfficiencyValue.compareTo(new BigDecimal("14.00")) < 0) {
+        if (highestEfficiencyValue.compareTo(new BigDecimal("12.00")) > 0) {
             tickInterval = Float.parseFloat("2.50");
 //            minTickValue = 0;
-        } else if (highestEfficiencyValue.compareTo(new BigDecimal("12.00")) < 0) {
+        } else {
             tickInterval = Float.parseFloat("2.00");
 //            minTickValue = 0;
         }
