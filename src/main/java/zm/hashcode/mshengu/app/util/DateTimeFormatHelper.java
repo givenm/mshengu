@@ -213,10 +213,15 @@ public class DateTimeFormatHelper implements Serializable {
     public Date resetTimeAndMonthEnd(Date inDate) {
         //
         Calendar cal = Calendar.getInstance();
-        cal.setTime(resetTimeOfDate(inDate));
+        cal.setTime(inDate);
 
         // will reset to Last day of current month
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        // Set time fields to last hour:minute:second:millisecond
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
 
         return cal.getTime();
 

@@ -17,6 +17,7 @@ import org.dussan.vaadin.dcharts.metadata.TextAligns;
 import org.dussan.vaadin.dcharts.metadata.TooltipAxes;
 import org.dussan.vaadin.dcharts.metadata.XYaxes;
 import org.dussan.vaadin.dcharts.metadata.directions.AnimationDirections;
+import org.dussan.vaadin.dcharts.metadata.directions.BarDirections;
 import org.dussan.vaadin.dcharts.metadata.locations.PointLabelLocations;
 import org.dussan.vaadin.dcharts.metadata.locations.TooltipLocations;
 import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
@@ -32,6 +33,7 @@ import org.dussan.vaadin.dcharts.options.Series;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.dussan.vaadin.dcharts.options.Title;
 import org.dussan.vaadin.dcharts.renderers.axis.LinearAxisRenderer;
+import org.dussan.vaadin.dcharts.renderers.series.BarRenderer;
 import org.dussan.vaadin.dcharts.renderers.series.LineRenderer;
 import org.dussan.vaadin.dcharts.renderers.series.animations.LineAnimation;
 import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
@@ -101,15 +103,14 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
  %t      \t                  Tab
  %%      %                   Percent Symbol
  */
-public class MileageLineChart implements Serializable {
+public class ServiceFleetEfficiencyLineChart implements Serializable {
 
-    public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, String chartTitle) {
+    public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, /* Object maxTickValue, */ String chartTitle) {
 
         DataSeries dataSeries = new DataSeries();
         dataSeries.newSeries();
         for (int i = 0; i < totalListArray.length; i++) {
             dataSeries.add(monthListArray[i], totalListArray[i]);
-//            System.out.println("Month " + monthListArray[i] + "= " + totalListArray[i]);
         }
 
         Series series = new Series()
@@ -140,23 +141,30 @@ public class MileageLineChart implements Serializable {
                 .setTickOptions(
                 new AxisTickRenderer()
                 .setFormatString("%b-%Y"))
-                .setNumberTicks(monthListArray.length) //
+                //                .setDrawMinorGridlines(true)
+                .setDrawMajorTickMarks(true) // NB SKIPPING TICKS
+                //                .setDrawMinorTickMarks(true)//                .setNumberTicks(monthListArray.length) //
                 )
                 //
                 .addAxis(
                 new XYaxis(XYaxes.Y)
                 .setMin(minTickValue)
+                //                .setMax(maxTickValue)
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%.0f")) // .setFormatString("R%.2f")
+                .setFormatString("%.2f")) // .setFormatString("R%.2f")
                 );
 
         Highlighter highlighter = new Highlighter()
                 .setShow(true)
+                //                .setShowTooltip(true)
+                //                .setTooltipAlwaysVisible(true)
+                //                .setKeepTooltipInsideChart(true)
                 .setSizeAdjust(10)
                 .setTooltipLocation(TooltipLocations.NORTH)
-                .setTooltipAxes(TooltipAxes.XY) //                .setTooltipFormatString("<b><i><span style='color:red;'>Mileage:</span></i></b> %.0f")
+                .setTooltipAxes(TooltipAxes.XY) //  XY Shows both axes value in the Tooltip. try XY_BAR
+                //                .setTooltipFormatString("<b><i><span style='color:red;'>Value:</span></i></b> %.2f")
                 //                .setUseAxesFormatters(false)
                 ;
 
@@ -189,8 +197,10 @@ public class MileageLineChart implements Serializable {
                 new LineRenderer()
                 .setAnimation(lineAnimation));
 
+
+
         Options options = new Options()
-                .addOption(seriesDefaults)
+                //                .addOption(seriesDefaults)
                 .setTitle(title)
                 .setSeries(series)
                 .setAxesDefaults(axesDefaults)

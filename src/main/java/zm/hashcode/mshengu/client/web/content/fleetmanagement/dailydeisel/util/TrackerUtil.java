@@ -395,7 +395,7 @@ public class TrackerUtil implements Serializable {
         List<OperatingCost> currentMonthOperatingCostList = getQueriedMonthOperatingCostList(truck.getOperatingCosts(), date);
         if (!currentMonthOperatingCostList.isEmpty()) {
             for (OperatingCost operatingCost : currentMonthOperatingCostList) {
-                if (dateTimeFormatHelper.resetTimeOfDate(date).equals(dateTimeFormatHelper.resetTimeOfDate(operatingCost.getTransactionDate()))) {
+                if (operatingCost.getTruckId().equals(truck.getId()) && dateTimeFormatHelper.resetTimeOfDate(date).compareTo(dateTimeFormatHelper.resetTimeOfDate(operatingCost.getTransactionDate())) == 0) {
                     return true;
                 }
             }
