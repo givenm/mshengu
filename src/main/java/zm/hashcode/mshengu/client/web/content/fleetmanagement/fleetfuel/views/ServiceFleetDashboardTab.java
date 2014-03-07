@@ -451,9 +451,8 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         horizontalLayout.setSpacing(true);
         horizontalLayout.addComponent(oneMonthEfficiencyPanel);
         horizontalLayout.addComponent(threeMonthEfficiencyPanel);
-        horizontalLayout.addComponent(driverEfficiencyPanel);
-
         chart.chartVerticalLayout.addComponent(horizontalLayout);
+        chart.chartVerticalLayout.addComponent(driverEfficiencyPanel);
         // house cleaning
         grandTotalFuelSpend = BigDecimal.ZERO;
         grandTotalMileage = new Integer("0");

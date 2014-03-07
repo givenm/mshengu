@@ -15,6 +15,7 @@ import org.dussan.vaadin.dcharts.metadata.LegendPlacements;
 import org.dussan.vaadin.dcharts.metadata.TextAligns;
 import org.dussan.vaadin.dcharts.metadata.TooltipAxes;
 import org.dussan.vaadin.dcharts.metadata.XYaxes;
+import org.dussan.vaadin.dcharts.metadata.directions.AnimationDirections;
 import org.dussan.vaadin.dcharts.metadata.locations.TooltipLocations;
 import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
 import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
@@ -26,6 +27,8 @@ import org.dussan.vaadin.dcharts.options.Options;
 import org.dussan.vaadin.dcharts.options.Series;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.dussan.vaadin.dcharts.options.Title;
+import org.dussan.vaadin.dcharts.renderers.series.BarRenderer;
+import org.dussan.vaadin.dcharts.renderers.series.animations.BarAnimation;
 import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
 import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
 
@@ -91,7 +94,13 @@ public class DriverEfficiencyBarChart implements Serializable {
         //
         SeriesDefaults seriesDefaults = new SeriesDefaults();
         seriesDefaults.setFillToZero(true)
-                .setRenderer(SeriesRenderers.BAR);
+                .setRenderer(SeriesRenderers.BAR)
+                //
+                .setRendererOptions(
+                new BarRenderer()
+                //                .setWaterfall(true)
+                .setVaryBarColor(true)
+                .setAnimation(new BarAnimation().setDirection(AnimationDirections.LEFT)));
 
         Legend legend = new Legend()
                 .setShow(true)
@@ -101,6 +110,7 @@ public class DriverEfficiencyBarChart implements Serializable {
         title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
         title.setShow(true);
+        title.setFontSize("9");
 
         if (chartTitle != null) {
             title.setText(chartTitle);

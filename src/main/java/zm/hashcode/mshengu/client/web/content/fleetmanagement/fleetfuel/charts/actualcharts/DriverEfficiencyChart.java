@@ -64,8 +64,8 @@ public class DriverEfficiencyChart implements Serializable {
 
         final DriverEfficiencyBarChart barChart = new DriverEfficiencyBarChart();
         DCharts dBarChart = barChart.buildBarChart(totalListArray, monthListArray, tickInterval, label, minTickValue, title);
-        dBarChart.setWidth("300px");
-        dBarChart.setHeight("150px");
+        dBarChart.setWidth("600px");
+        dBarChart.setHeight("300px");
         dBarChart.show();
 
         // USEFUL Statement
@@ -80,8 +80,12 @@ public class DriverEfficiencyChart implements Serializable {
 
     public static String truncate(String value) {
         if (value != null) {
-            String[] stringArray = value.split(" ", 2);
-            return stringArray[0];
+            String[] stringArray = value.split(" "); // String[] stringArray = value.split(" ", 2);
+            if (stringArray[0].equals(" ")) {
+                return stringArray[1];
+            } else {
+                return stringArray[0];
+            }
         }
         return value;
     }
