@@ -38,7 +38,7 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
  */
 public class DriverEfficiencyBarChart implements Serializable {
 
-    public DCharts buildBarChart(Object[] totalListArray, Object[] nameListArray, float tickInterval, String label, Object minTickValue, String chartTitle) {
+    public DCharts buildBarChart(Object[] totalListArray, Object[] nameListArray, String[] colorRatingListArray, float tickInterval, String label, Object minTickValue, String chartTitle) {
 
         DataSeries dataSeries = new DataSeries();
         Series series = new Series();
@@ -107,10 +107,10 @@ public class DriverEfficiencyBarChart implements Serializable {
                 .setPlacement(LegendPlacements.OUTSIDE_GRID);
 
         Title title = new Title("");
-        title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
         title.setShow(true);
-        title.setFontSize("9");
+        title.setFontSize("9pt");
+        title.setTextColor("blue");
 
         if (chartTitle != null) {
             title.setText(chartTitle);
@@ -120,6 +120,15 @@ public class DriverEfficiencyBarChart implements Serializable {
                 .setCaptureRightClick(true)
                 .setSeriesDefaults(seriesDefaults)
                 .setSeries(series)
+                .setSeriesColors(colorRatingListArray) // Coloring each Bar. Each bar is recognised as a Series
+                /*
+                 * // For .setSeriesColors(String[] colorRatingListArray) to work, you must set SeriesDefault as below
+                 * // NOTICE THE ".setVaryBarColor(true)"
+                 * .setRendererOptions(
+                 new BarRenderer()
+                 .setVaryBarColor(true)
+                 );
+                 */
                 //                .setLegend(legend)
                 .setTitle(title)
                 .setHighlighter(highlighter)

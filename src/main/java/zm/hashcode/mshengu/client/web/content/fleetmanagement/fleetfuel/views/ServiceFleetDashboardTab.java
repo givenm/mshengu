@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
 import zm.hashcode.mshengu.app.util.panel.PanelEfficiency;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFuelMenu;
@@ -51,6 +52,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     private final ServiceFleetDashboardChartUI chart;
     private final FleetFuelUtil fleetFuelUtil = new FleetFuelUtil();
     private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+    private final FlagImage flagImage = new FlagImage();
     public static Date startDate = null;
     public static Date endDate = null;
     public static List<OperatingCost> operatingCostTwentyFiveMonthsList = new ArrayList<>();
@@ -76,7 +78,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         addComponent(form);
         addComponent(chart);
         addListeners(); // for Dashboard chart sizing
-
     }
 
     @Override
@@ -94,7 +95,16 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             } catch (java.lang.NullPointerException ex) {
             }
             if (endDate != null) {
-                getDataAndPerformCharts();
+                if (endDate.before(fleetFuelUtil.resetMonthToFirstDay(new Date()))) {
+                    int monthCount = fleetFuelUtil.countMonthsInRange(startDate, endDate);
+                    if (monthCount > 0 && monthCount <= 12) {
+                        getDataAndPerformCharts();
+                    } else {
+                        Notification.show("Please Specify Date Range in Approprate Order and at most 12 months.", Notification.Type.TRAY_NOTIFICATION);
+                    }
+                } else {
+                    Notification.show("Error. Select any month before Current Month as End Date.", Notification.Type.TRAY_NOTIFICATION);
+                }
             }
         } else if (property == form.endDate) {
             endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
@@ -103,7 +113,16 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             } catch (java.lang.NullPointerException ex) {
             }
             if (startDate != null) {
-                getDataAndPerformCharts();
+                if (endDate.before(fleetFuelUtil.resetMonthToFirstDay(new Date()))) {
+                    int monthCount = fleetFuelUtil.countMonthsInRange(startDate, endDate);
+                    if (monthCount > 0 && monthCount <= 12) {
+                        getDataAndPerformCharts();
+                    } else {
+                        Notification.show("Please Specify Date Range in Approprate Order and at most 12 months.", Notification.Type.TRAY_NOTIFICATION);
+                    }
+                } else {
+                    Notification.show("Error. Select any month before Current Month as End Date.", Notification.Type.TRAY_NOTIFICATION);
+                }
             }
         }
     }
@@ -111,34 +130,25 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     private void getDataAndPerformCharts() {
         dateRangeOperatingCostList.clear();
         operatingCostTwentyFiveMonthsList.clear();
-        if (endDate.before(fleetFuelUtil.resetMonthToFirstDay(new Date()))) {
-            // Determine date range for other calculations on this Tab, extra 3 month for Previous month mileage
-            // or get StartMileage for Car
-            fleetFuelUtil.determineDateRange(endDate, 25); // Determine date range for other calculations on this Tab
-            int monthCount = fleetFuelUtil.countMonthsInRange(startDate, endDate);
-            if (monthCount > 0 && monthCount <= 12) {
-                fleetFuelUtil.getTrucks();
-                operatingCostTwentyFiveMonthsList.addAll(fleetFuelUtil.getOperatingCostByTruckBetweenTwoDates(FleetFuelUtil.startDate, FleetFuelUtil.endDate));
-                Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
-                // Extract date Range for Charts only
-                dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForSpecDates(startDate, endDate, operatingCostTwentyFiveMonthsList));
-                if (!dateRangeOperatingCostList.isEmpty()) {
-                    buildFuelSpendMonthlyCostBeanList(); // used for Bar Chart
-                    buildMonthlyMileageTotalBeanList(); // used for Line Chart
-                    buildServiceFleetOneMonthEfficiencyBeanList();
-                    buildServiceFleetThreeMonthEfficiencyBeanList();
-                    buildDriverEfficiencyBeanList();
-                    Collections.sort(driverEfficiencyBeanList, DriverEfficiencyBean.DescendingEfficiencyComparator);
-                    //
-                    displayCharts();
-                } else {
-                    Notification.show("No Daily input Found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
-                }
-            } else {
-                Notification.show("Please Specify Date Range in Approprate Order and at most 12 months.", Notification.Type.TRAY_NOTIFICATION);
-            }
+        // Determine date range for other calculations on this Tab, extra 3 month for Previous month mileage
+        // or get StartMileage for Car
+        fleetFuelUtil.determineDateRange(endDate, 25); // Determine date range for other calculations on this Tab
+        fleetFuelUtil.getTrucks();
+        operatingCostTwentyFiveMonthsList.addAll(fleetFuelUtil.getOperatingCostByTruckBetweenTwoDates(FleetFuelUtil.startDate, FleetFuelUtil.endDate));
+        Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
+        // Extract date Range for Charts only
+        dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForSpecDates(startDate, endDate, operatingCostTwentyFiveMonthsList));
+        if (!dateRangeOperatingCostList.isEmpty()) {
+            buildFuelSpendMonthlyCostBeanList(); // used for Bar Chart
+            buildMonthlyMileageTotalBeanList(); // used for Line Chart
+            buildServiceFleetOneMonthEfficiencyBeanList();
+            buildServiceFleetThreeMonthEfficiencyBeanList();
+            buildDriverEfficiencyBeanList();
+            Collections.sort(driverEfficiencyBeanList, DriverEfficiencyBean.DescendingEfficiencyComparator);
+            //
+            displayCharts();
         } else {
-            Notification.show("Error. Select any month before Current Month as End Date.", Notification.Type.TRAY_NOTIFICATION);
+            Notification.show("No Daily input Found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -564,7 +574,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             // getMTDAct for Truck
             if (truckMonthOperatingCostList.size() > 0) {
                 BigDecimal mtdAct = fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck);
-                System.out.println("Month= " + truckMonthOperatingCostList.get(0).getTransactionDate() + ", Truck= " + truck.getVehicleNumber() + ", MTDAct= " + fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
+//                System.out.println("Month= " + truckMonthOperatingCostList.get(0).getTransactionDate() + ", Truck= " + truck.getVehicleNumber() + ", MTDAct= " + fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
                 buildDriverEfficiencyBean(truck, mtdAct, newEndDate, counter);
                 counter++; // Counter should increment per truck with Data for specified period
             } else {
@@ -583,6 +593,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         driverEfficiencyBean.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(date.toString()));
         driverEfficiencyBean.setMonthlyEfficiencyValue(mtdAct);
         driverEfficiencyBean.setTransactionMonth(date);
+        driverEfficiencyBean.setMonthlyEfficiencyColor(flagImage.determineFlagColor(mtdAct));
         driverEfficiencyBeanList.add(driverEfficiencyBean);
     }
 }

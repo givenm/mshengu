@@ -20,6 +20,7 @@ public class DriverEfficiencyBean implements Serializable, Comparable<DriverEffi
     private String month;
     private BigDecimal monthlyEfficiencyValue = BigDecimal.ZERO;
     private String driverName;
+    private String monthlyEfficiencyColor;
 
     /**
      * @return the id
@@ -109,4 +110,18 @@ public class DriverEfficiencyBean implements Serializable, Comparable<DriverEffi
             return DriverEfficiencyBean2.getMonthlyEfficiencyValue().compareTo(DriverEfficiencyBean1.getMonthlyEfficiencyValue());
         }
     };
+
+    /**
+     * @return the monthlyEfficiencyColor
+     */
+    public String getMonthlyEfficiencyColor() {
+        return monthlyEfficiencyColor;
+    }
+
+    /**
+     * @param monthlyEfficiencyColor the monthlyEfficiencyColor to set
+     */
+    public void setMonthlyEfficiencyColor(String monthlyEfficiencyColor) {
+        this.monthlyEfficiencyColor = monthlyEfficiencyColor;
+    }
 }
