@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.app.util.charts;
 
 import java.io.Serializable;
 import org.dussan.vaadin.dcharts.DCharts;
+import org.dussan.vaadin.dcharts.base.elements.PointLabels;
 import org.dussan.vaadin.dcharts.base.elements.Trendline;
 import org.dussan.vaadin.dcharts.base.elements.XYaxis;
 import org.dussan.vaadin.dcharts.base.elements.XYseries;
@@ -15,9 +16,12 @@ import org.dussan.vaadin.dcharts.data.Ticks;
 import org.dussan.vaadin.dcharts.metadata.TextAligns;
 import org.dussan.vaadin.dcharts.metadata.TooltipAxes;
 import org.dussan.vaadin.dcharts.metadata.XYaxes;
+import org.dussan.vaadin.dcharts.metadata.directions.AnimationDirections;
+import org.dussan.vaadin.dcharts.metadata.locations.PointLabelLocations;
 import org.dussan.vaadin.dcharts.metadata.locations.TooltipLocations;
 import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
 import org.dussan.vaadin.dcharts.metadata.renderers.LabelRenderers;
+import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
 import org.dussan.vaadin.dcharts.metadata.styles.MarkerStyles;
 import org.dussan.vaadin.dcharts.options.Axes;
 import org.dussan.vaadin.dcharts.options.AxesDefaults;
@@ -28,6 +32,8 @@ import org.dussan.vaadin.dcharts.options.Series;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.dussan.vaadin.dcharts.options.Title;
 import org.dussan.vaadin.dcharts.renderers.axis.LinearAxisRenderer;
+import org.dussan.vaadin.dcharts.renderers.series.LineRenderer;
+import org.dussan.vaadin.dcharts.renderers.series.animations.LineAnimation;
 import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
 import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
 
@@ -150,12 +156,12 @@ public class MileageLineChart implements Serializable {
                 .setShow(true)
                 .setSizeAdjust(10)
                 .setTooltipLocation(TooltipLocations.NORTH)
-                .setTooltipAxes(TooltipAxes.Y)
-                .setTooltipFormatString("<b><i><span style='color:red;'>Mileage:</span></i></b> %.0f")
-                .setUseAxesFormatters(false);
+                .setTooltipAxes(TooltipAxes.XY) //                .setTooltipFormatString("<b><i><span style='color:red;'>Mileage:</span></i></b> %.0f")
+                //                .setUseAxesFormatters(false)
+                ;
 
-        Cursor cursor = new Cursor()
-                .setShow(true);
+//        Cursor cursor = new Cursor()
+//                .setShow(true);
 
         Title title = new Title("");
         title.setFontSize("13pt");
@@ -166,15 +172,31 @@ public class MileageLineChart implements Serializable {
             title.setText(chartTitle);
         }
 
+        LineAnimation lineAnimation = new LineAnimation();
+        lineAnimation.setDirection(AnimationDirections.DOWN);
+
+        SeriesDefaults seriesDefaults = new SeriesDefaults();
+        seriesDefaults.setRenderer(SeriesRenderers.LINE)
+                .setPointLabels(
+                new PointLabels()
+                .setFormatString("%.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
+                .setShow(true)
+                .setLocation(PointLabelLocations.NORTH)
+                .setEdgeTolerance(-15))
+                .setShadowAngle(135)
+                //                .setColor("red")
+                .setRendererOptions(
+                new LineRenderer()
+                .setAnimation(lineAnimation));
 
         Options options = new Options()
-                //                .addOption(seriesDefaults)
+                .addOption(seriesDefaults)
                 .setTitle(title)
                 .setSeries(series)
                 .setAxesDefaults(axesDefaults)
                 .addOption(axes)
-                .addOption(highlighter)
-                .addOption(cursor);
+                .addOption(highlighter) //                .addOption(cursor)
+                ;
 
         DCharts chart = new DCharts()
                 .setDataSeries(dataSeries)

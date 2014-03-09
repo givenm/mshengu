@@ -20,6 +20,7 @@ import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.people.PersonFacade;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
@@ -46,6 +47,7 @@ public class DailyInputsTab extends VerticalLayout implements
     private TrackerUtil trackerUtil = new TrackerUtil();
     public static Date filteredTransactionDate = null;
     public static String filteredTruckId;
+    public static Date formTransactionDate = null;
 
     public DailyInputsTab(MshenguMain app) {
         main = app;
@@ -118,23 +120,37 @@ public class DailyInputsTab extends VerticalLayout implements
             }
         } else if (property == form.filterTransactionDate) {
             filteredTransactionDate = form.filterTransactionDate.getValue();
-            if (form.filterTruckId.getValue().toString() != null) {
-                Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
-                List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
-
-                populateDailyInputsTable(dailyInputList, truck);
-                resetDailyInputBean();
+            try {
+                filteredTruckId = form.filterTruckId.getValue().toString();
+            } catch (java.lang.NullPointerException ex) {
+            }
+            if (filteredTruckId != null) {
+                getPopulateTableAndReset();
             }
         } else if (property == form.filterTruckId) {
             filteredTruckId = form.filterTruckId.getValue().toString();
-            if (form.filterTransactionDate.getValue() != null) {
-                Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
-                List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
-
-                populateDailyInputsTable(dailyInputList, truck);
-                resetDailyInputBean();
+            try {
+                filteredTransactionDate = form.filterTransactionDate.getValue();
+            } catch (java.lang.NullPointerException ex) {
+            }
+            if (filteredTransactionDate != null) {
+                getPopulateTableAndReset();
+            }
+        } else if (property == form.transactionDate) {
+            formTransactionDate = form.transactionDate.getValue();
+            if (formTransactionDate != null) {
+                if (!(formTransactionDate.before(resetMonthToFirstDay(new Date())) || formTransactionDate.compareTo(resetMonthToFirstDay(new Date())) == 0)) {
+                    Notification.show("Error. Select any date before Current date. No future entries allowed", Notification.Type.ERROR_MESSAGE);
+                }
             }
         }
+    }
+
+    private void getPopulateTableAndReset() {
+        Truck truck = TruckFacade.getTruckService().findById(filteredTruckId);
+        List<OperatingCost> dailyInputList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckByMonth(truck, filteredTransactionDate);
+        populateDailyInputsTable(dailyInputList, truck);
+        resetDailyInputBean();
     }
 
     private void resetDailyInputBean() {
@@ -183,74 +199,85 @@ public class DailyInputsTab extends VerticalLayout implements
         table.populateDailyInputTable(dailyInputList, truck);
         table.addValueChangeListener((Property.ValueChangeListener) this);
 
+        filteredTransactionDate = null;
+        filteredTruckId = null;
     }
 
     private void saveForm(FieldGroup binder) {
-        try {
-            binder.commit();
-            final Truck truck = TruckFacade.getTruckService().findById(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-            Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
-            // Check if a record for current date exists, if true asks for record to be edited
-            if (trackerUtil.isThereDuplicateDailyInput(truck, transactionDate)) {
-                Notification.show("A Record for today has been ADDED<br/>Duplicates are not allowed. Consider editing this record.", Notification.Type.TRAY_NOTIFICATION);
-            } else {
-                // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
-                Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, transactionDate, transactionDate);
-                String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-                if (!(truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
-                    previousClosingMileage = new Integer("-1");
-                }
-//                    Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
-                if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
-                        || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
-                    OperatingCost operatingCost = getNewEntity(binder);
-                    OperatingCostFacade.getOperatingCostService().persist(operatingCost);
+        if (formTransactionDate.before(resetMonthToFirstDay(new Date())) || formTransactionDate.compareTo(resetMonthToFirstDay(new Date())) == 0) {
 
-                    updateTruckOperatingCost(operatingCost, binder);
-
-                    getHome();
-                    Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
+            try {
+                binder.commit();
+                final Truck truck = TruckFacade.getTruckService().findById(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
+                Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
+                // Check if a record for current date exists, if true asks for record to be edited
+                if (trackerUtil.isThereDuplicateDailyInput(truck, transactionDate)) {
+                    Notification.show("A Record matching this date has been ADDED. Duplicates not allowed. Consider editing this record.", Notification.Type.TRAY_NOTIFICATION);
                 } else {
-                    Notification.show("Current closing mileage is LOWER than OR SAME as previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                    // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
+                    Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, transactionDate, transactionDate);
+                    String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
+                    if (!(truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
+                        previousClosingMileage = new Integer("-1");
+                    }
+//                    Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
+                    if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
+                            || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
+                        OperatingCost operatingCost = getNewEntity(binder);
+                        OperatingCostFacade.getOperatingCostService().persist(operatingCost);
+
+                        updateTruckOperatingCost(operatingCost, binder);
+
+                        getHome();
+                        Notification.show("Record ADDED!", Notification.Type.TRAY_NOTIFICATION);
+                    } else {
+                        Notification.show("Current closing mileage is LOWER than OR SAME as previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                    }
                 }
+            } catch (FieldGroup.CommitException e) {
+                Collection<Field<?>> fields = binder.getFields();
+                OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+                helper.doValidation();
+                Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
             }
-        } catch (FieldGroup.CommitException e) {
-            Collection<Field<?>> fields = binder.getFields();
-            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
-            helper.doValidation();
-            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
+        } else {
+            Notification.show("Error. Select any date before Current date. No future entries allowed", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
     private void saveEditedForm(FieldGroup binder) {
-        try {
-            binder.commit();
-            final Truck truck = TruckFacade.getTruckService().findById(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-            Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
-            Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, new Date(), transactionDate);
-            // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
-            String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-            if (!(truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
-                previousClosingMileage = new Integer("-1");
-            }
+        if (formTransactionDate.before(resetMonthToFirstDay(new Date())) || formTransactionDate.compareTo(resetMonthToFirstDay(new Date())) == 0) {
+            try {
+                binder.commit();
+                final Truck truck = TruckFacade.getTruckService().findById(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
+                Date transactionDate = ((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTransactionDate();
+                Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, new Date(), transactionDate);
+                // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
+                String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
+                if (!(truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
+                    previousClosingMileage = new Integer("-1");
+                }
 //        Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
-            if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
-                    || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
-                // We can also test for mileages the exist after this date entry in case current mileage clashes
-                OperatingCost operatingCost = getUpdatedEntity(binder);
-                OperatingCostFacade.getOperatingCostService().merge(operatingCost);
+                if (previousClosingMileage < (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())
+                        || previousClosingMileage == (((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getSpeedometer())) {
+                    // We can also test for mileages the exist after this date entry in case current mileage clashes
+                    OperatingCost operatingCost = getUpdatedEntity(binder);
+                    OperatingCostFacade.getOperatingCostService().merge(operatingCost);
 //                deleteTruckOperatingCost(binder);
 //                updateTruckOperatingCost(operatingCost, binder);
-                getHome();
-                Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
-            } else {
-                Notification.show("Current closing mileage is LOWER or EQUALS previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                    getHome();
+                    Notification.show("Record UPDATED!", Notification.Type.TRAY_NOTIFICATION);
+                } else {
+                    Notification.show("Current closing mileage is LOWER or EQUALS previous closing mileage! : " + previousClosingMileage, Notification.Type.ERROR_MESSAGE);
+                }
+            } catch (FieldGroup.CommitException e) {
+                Collection<Field<?>> fields = binder.getFields();
+                OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
+                helper.doValidation();
+                Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
             }
-        } catch (FieldGroup.CommitException e) {
-            Collection<Field<?>> fields = binder.getFields();
-            OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
-            helper.doValidation();
-            Notification.show("Please Correct Red Colored Inputs!", Notification.Type.TRAY_NOTIFICATION);
+        } else {
+            Notification.show("Error. Select any date before Current date. No future entries allowed", Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -413,6 +440,7 @@ public class DailyInputsTab extends VerticalLayout implements
         form.fuelCost.addValueChangeListener((Property.ValueChangeListener) this);
         form.filterTransactionDate.addValueChangeListener((Property.ValueChangeListener) this);
         form.filterTruckId.addValueChangeListener((Property.ValueChangeListener) this);
+        form.transactionDate.addValueChangeListener((Property.ValueChangeListener) this);
         //Register Table Listerners
         table.addValueChangeListener((Property.ValueChangeListener) this);
     }
@@ -439,5 +467,10 @@ public class DailyInputsTab extends VerticalLayout implements
             value = value.substring(0, length);
         }
         return value;
+    }
+
+    public Date resetMonthToFirstDay(Date date) {
+        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 }

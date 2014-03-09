@@ -10,7 +10,7 @@ import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views.ServiceFleetDashboardTab;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views.FuelAnnualDataTab;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views.ExecutiveDashboardTab;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views.MonthlySpendTab;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views.MonthlyFuelExpenseTab;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views.VehicleFuelUsageTab;
 
 /**
@@ -25,7 +25,7 @@ public class FleetFuelMenu extends VerticalLayout {
     private ServiceFleetDashboardTab fleetFuelDashboardTab;
     private VehicleFuelUsageTab vehicleFuelUsageTab;
     private FuelAnnualDataTab fuelAnnualDataTab;
-    private MonthlySpendTab monthlySpendTab;
+    private MonthlyFuelExpenseTab monthlyFuelExpenseTab;
 
     public FleetFuelMenu(MshenguMain app, String selectedTab) {
         main = app;
@@ -34,7 +34,7 @@ public class FleetFuelMenu extends VerticalLayout {
         fleetFuelDashboardTab = new ServiceFleetDashboardTab(main);
         vehicleFuelUsageTab = new VehicleFuelUsageTab(main);
         fuelAnnualDataTab = new FuelAnnualDataTab(main);
-        monthlySpendTab = new MonthlySpendTab(main);
+        monthlyFuelExpenseTab = new MonthlyFuelExpenseTab(main);
 
         tab = new TabSheet();
         tab.setHeight("100%");
@@ -43,7 +43,7 @@ public class FleetFuelMenu extends VerticalLayout {
         tab.addTab(fleetFuelDashboardTab, "Service Fleet Dashboard", null);
 //        tab.addTab(vehicleFuelUsageTab, "Fleet Fuel", null); // Previously "Fleet Menu" , "Vehicle Fuel Usage"
 //        tab.addTab(fuelAnnualDataTab, "Fuel Annual Data", null);
-//        tab.addTab(monthlySpendTab, "Monthly Spend", null);
+        tab.addTab(monthlyFuelExpenseTab, "Monthly Fuel Expense", null);
         switch (selectedTab) {
             case "LANDING":
                 tab.setSelectedTab(executiveDashboardTab);
@@ -58,7 +58,7 @@ public class FleetFuelMenu extends VerticalLayout {
                 tab.setSelectedTab(fuelAnnualDataTab);
                 break;
             case "MONTHLY":
-                tab.setSelectedTab(monthlySpendTab);
+                tab.setSelectedTab(monthlyFuelExpenseTab);
                 break;
         }
 
