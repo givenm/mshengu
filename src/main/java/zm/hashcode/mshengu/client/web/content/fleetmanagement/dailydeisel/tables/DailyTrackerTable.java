@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
-import zm.hashcode.mshengu.app.util.FlagImage;
+import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.DailyTrackerTableData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;

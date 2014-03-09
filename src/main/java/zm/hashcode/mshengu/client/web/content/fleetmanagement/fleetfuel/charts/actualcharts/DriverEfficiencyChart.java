@@ -31,7 +31,8 @@ public class DriverEfficiencyChart implements Serializable {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
         String label = "Total Fuel Spend";
 //        String grandTotalAmount = df.format(Double.parseDouble(grandTotal.toString()));
-        title = "< R6.00/Km = Green  |  R6.00 - R8.00/Km = Yellow  |  >R8.00/Km = Red";
+        title = "KEY:  Green (R6.00/Km & below)  |  Yellow ( above R6.00 & below R8.00/Km)  |  Red ( R8.00/Km & above)";
+//        "KEY IN USE :     <= 6.00/Km = Green  |  > 6.00 - < 8.00/Km = Yellow  |  >= 8.00/Km = Red
         float tickInterval = Float.parseFloat("1");
         Object minTickValue = 0;
         BigDecimal highestEfficiency = BigDecimal.ZERO;
@@ -51,19 +52,23 @@ public class DriverEfficiencyChart implements Serializable {
 
         List<Object> totalList = new ArrayList<>();
         List<Object> monthList = new ArrayList<>();
+        List<String> colorRatingList = new ArrayList<>();
 
         // Get Objects of Data
         for (DriverEfficiencyBean driverEfficiencyBean : driverEfficiencyBeanList) {
             totalList.add(driverEfficiencyBean.getMonthlyEfficiencyValue());
             // Truncate the Names
             monthList.add(truncate(driverEfficiencyBean.getDriverName()));
-            // Add Percentage for PIE
+            // Add color rating for dRIVER
+            colorRatingList.add(driverEfficiencyBean.getMonthlyEfficiencyColor());
+//            System.out.println("Driver= " + driverEfficiencyBean.getDriverName() + ", RATING= " + driverEfficiencyBean.getMonthlyEfficiencyColor());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
+        String[] colorRatingListArray = colorRatingList.toArray(new String[colorRatingList.size()]);
 
         final DriverEfficiencyBarChart barChart = new DriverEfficiencyBarChart();
-        DCharts dBarChart = barChart.buildBarChart(totalListArray, monthListArray, tickInterval, label, minTickValue, title);
+        DCharts dBarChart = barChart.buildBarChart(totalListArray, monthListArray, colorRatingListArray, tickInterval, label, minTickValue, title);
         dBarChart.setWidth("600px");
         dBarChart.setHeight("300px");
         dBarChart.show();

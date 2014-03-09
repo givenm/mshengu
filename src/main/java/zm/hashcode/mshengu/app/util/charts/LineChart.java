@@ -160,7 +160,6 @@ public class LineChart implements Serializable {
                 //                .setUseAxesFormatters(false)
                 ;
 
-
 //        Cursor cursor = new Cursor()
 //                .setShow(true);
 

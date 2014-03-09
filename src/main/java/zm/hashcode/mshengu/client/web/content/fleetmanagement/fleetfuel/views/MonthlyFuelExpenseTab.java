@@ -14,12 +14,12 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFue
  *
  * @author Ferox
  */
-public class MonthlySpendTab extends VerticalLayout implements
+public class MonthlyFuelExpenseTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
 
-    public MonthlySpendTab(MshenguMain app) {
+    public MonthlyFuelExpenseTab(MshenguMain app) {
         main = app;
         setSizeFull();
 

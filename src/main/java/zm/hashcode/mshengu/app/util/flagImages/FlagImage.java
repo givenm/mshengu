@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.app.util;
+package zm.hashcode.mshengu.app.util.flagImages;
 
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Embedded;
@@ -20,7 +20,7 @@ public class FlagImage implements Serializable {
      * Determines Flagging based on parameter and return an Embedded type (a
      * flag) with the appropriate color
      *
-* @param value BigDecimal
+     * @param value BigDecimal
      * @return Embedded
      */
     public Embedded determineFlag(BigDecimal value) {
@@ -45,7 +45,7 @@ public class FlagImage implements Serializable {
      * Determines Flagging based on parameter and return an image (a flag) with
      * the appropriate color
      *
-* @param value BigDecimal
+     * @param value BigDecimal
      * @return Image
      */
     public Image determineImageFlag(BigDecimal value) {
@@ -161,5 +161,25 @@ public class FlagImage implements Serializable {
             return yellowImage;
         }
         return greenImage;
+    }
+
+    /**
+     * Determines Ranking Flagging based on parameter and return an string (e.g.
+     * "red", "green", "yellow") for the appropriate flag color
+     *
+     * @param value BigDecimal
+     * @return String
+     */
+    public String determineFlagColor(BigDecimal value) {
+//    KEY:     "< R6.00/Km = Green  |  R6.00 - R8.00/Km = Yellow  |  >R8.00/Km = Red"
+
+//    KEY IN USE :     "<= R6.00/Km = Green  |  > 6.00 - < 8.00/Km = Yellow  |  >= 8.00/Km = Red"
+        Double val = value.doubleValue();
+        if (val.compareTo(new Double("8.0")) == 0 || val.compareTo(new Double("8.0")) > 0) {
+            return "red";
+        } else if (val.compareTo(new Double("6.0")) > 0) {
+            return "yellow";
+        }
+        return "green";
     }
 }
