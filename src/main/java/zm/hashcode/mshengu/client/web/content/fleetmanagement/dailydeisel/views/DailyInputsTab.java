@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
@@ -45,6 +46,7 @@ public class DailyInputsTab extends VerticalLayout implements
     private final DailyInputsTable table;
     private static String trucKiD;
     private TrackerUtil trackerUtil = new TrackerUtil();
+    final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     public static Date filteredTransactionDate = null;
     public static String filteredTruckId;
     public static Date formTransactionDate = null;
@@ -139,7 +141,7 @@ public class DailyInputsTab extends VerticalLayout implements
         } else if (property == form.transactionDate) {
             formTransactionDate = form.transactionDate.getValue();
             if (formTransactionDate != null) {
-                if (!(formTransactionDate.before(resetMonthToFirstDay(new Date())) || formTransactionDate.compareTo(resetMonthToFirstDay(new Date())) == 0)) {
+                if (!(formTransactionDate.before(resetToDayEnd(new Date())) || formTransactionDate.compareTo(resetToDayEnd(new Date())) == 0)) {
                     Notification.show("Error. Select any date before Current date. No future entries allowed", Notification.Type.ERROR_MESSAGE);
                 }
             }
@@ -204,7 +206,7 @@ public class DailyInputsTab extends VerticalLayout implements
     }
 
     private void saveForm(FieldGroup binder) {
-        if (formTransactionDate.before(resetMonthToFirstDay(new Date())) || formTransactionDate.compareTo(resetMonthToFirstDay(new Date())) == 0) {
+        if (formTransactionDate.before(resetToDayEnd(new Date())) || formTransactionDate.compareTo(resetToDayEnd(new Date())) == 0) {
 
             try {
                 binder.commit();
@@ -246,7 +248,7 @@ public class DailyInputsTab extends VerticalLayout implements
     }
 
     private void saveEditedForm(FieldGroup binder) {
-        if (formTransactionDate.before(resetMonthToFirstDay(new Date())) || formTransactionDate.compareTo(resetMonthToFirstDay(new Date())) == 0) {
+        if (formTransactionDate.before(resetToDayEnd(new Date())) || formTransactionDate.compareTo(resetToDayEnd(new Date())) == 0) {
             try {
                 binder.commit();
                 final Truck truck = TruckFacade.getTruckService().findById(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
@@ -470,7 +472,32 @@ public class DailyInputsTab extends VerticalLayout implements
     }
 
     public Date resetMonthToFirstDay(Date date) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         return dateTimeFormatHelper.resetTimeAndMonthStart(date);
+    }
+
+    public Date resetMonthToLastDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthEnd(date);
+    }
+
+    /*
+     * reset the time of a Date to 23:59:59:999 and resets the day to the
+     * last second of the day
+     *
+     * @param dateIn Date
+     * @return Date
+     */
+    public Date resetToDayEnd(Date inDate) {
+        //
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(inDate);
+
+        // Set time fields to last hour:minute:second:millisecond
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+
+        return cal.getTime();
+
     }
 }

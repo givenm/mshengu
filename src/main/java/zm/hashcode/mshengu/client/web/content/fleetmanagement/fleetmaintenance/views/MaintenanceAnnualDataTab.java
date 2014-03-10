@@ -77,7 +77,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     }
 
     private void addListeners() {
-//        //Register Button Listeners
+        //Register Button Listeners
         form.generateButton.addClickListener((Button.ClickListener) this);
         annualMaintenanceCostHeadingTable.addColumnResizeListener(this);
     }

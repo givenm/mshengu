@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts;
+package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.servicefleetdashboard;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,30 +13,31 @@ import java.util.List;
 import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.charts.ServiceFleetEfficiencyLineChart;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.ServiceFleetThreeMonthlyEfficiencyBean;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.ServiceFleetOneMonthlyEfficiencyBean;
 
 /**
  *
  * @author Colin
  */
-public class ThreeMonthEfficiencyLineChart implements Serializable {
+public class OneMonthEfficiencyLineChart implements Serializable {
 
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
     final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
-    public DCharts createChart(List<ServiceFleetThreeMonthlyEfficiencyBean> serviceFleetThreeMonthlyEfficiencyBeanList) {
+    public DCharts createChart(List<ServiceFleetOneMonthlyEfficiencyBean> serviceFleetOneMonthlyEfficiencyBeanList) {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
 //        String label = "Service Vehicles - Monthly Mileages";
 //        String formattedGrandTotalMileage = df.format(Double.parseDouble(grandTotalMileage.toString()));
 //        String title = "Total Mileage for last " + serviceFleetOneMonthlyEfficiencyBeanList.size() + " Month(s):    " + formattedGrandTotalMileage + " Km";
         float tickInterval = Float.parseFloat("2.00");
         Object minTickValue = 0.00;
+//        Object maxTickValue = 0.00;
         BigDecimal highestEfficiencyValue = BigDecimal.ZERO;
         // finding the highest Mileage figure
-        for (ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBean : serviceFleetThreeMonthlyEfficiencyBeanList) {
-            if (serviceFleetThreeMonthlyEfficiencyBean.getMonthlyEfficiencyValue().compareTo(highestEfficiencyValue) > 0) {
-                highestEfficiencyValue = serviceFleetThreeMonthlyEfficiencyBean.getMonthlyEfficiencyValue();
+        for (ServiceFleetOneMonthlyEfficiencyBean serviceFleetOneMonthlyEfficiencyBean : serviceFleetOneMonthlyEfficiencyBeanList) {
+            if (serviceFleetOneMonthlyEfficiencyBean.getMonthlyEfficiencyValue().compareTo(highestEfficiencyValue) > 0) {
+                highestEfficiencyValue = serviceFleetOneMonthlyEfficiencyBean.getMonthlyEfficiencyValue();
             }
         }
 
@@ -52,15 +53,15 @@ public class ThreeMonthEfficiencyLineChart implements Serializable {
         List<Object> monthList = new ArrayList<>();
 
         // Get Objects of Data
-        for (ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBean : serviceFleetThreeMonthlyEfficiencyBeanList) {
-            totalList.add(serviceFleetThreeMonthlyEfficiencyBean.getMonthlyEfficiencyValue());
-            monthList.add(serviceFleetThreeMonthlyEfficiencyBean.getMonth());
+        for (ServiceFleetOneMonthlyEfficiencyBean serviceFleetOneMonthlyEfficiencyBean : serviceFleetOneMonthlyEfficiencyBeanList) {
+            totalList.add(serviceFleetOneMonthlyEfficiencyBean.getMonthlyEfficiencyValue());
+            monthList.add(serviceFleetOneMonthlyEfficiencyBean.getMonth());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
 
         final ServiceFleetEfficiencyLineChart serviceFleetEfficiencyLineChart = new ServiceFleetEfficiencyLineChart();
-        DCharts dLineChart = serviceFleetEfficiencyLineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue, null);
+        DCharts dLineChart = serviceFleetEfficiencyLineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue,/* maxTickValue, */ null);
 
 //        dBarChart.getOptions().getTitle().setText(title);
         dLineChart.setWidth("300px");

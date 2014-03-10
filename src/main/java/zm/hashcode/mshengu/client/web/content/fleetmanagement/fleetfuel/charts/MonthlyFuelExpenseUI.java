@@ -12,13 +12,16 @@ import zm.hashcode.mshengu.client.web.MshenguMain;
  *
  * @author Colin
  */
-public class FuelExecutiveDashboardChartUI extends FormLayout {
+public class MonthlyFuelExpenseUI extends FormLayout {
 
+    public VerticalLayout tableVerticalLayout = new VerticalLayout();
     public VerticalLayout chartVerticalLayout = new VerticalLayout();
 
-    public FuelExecutiveDashboardChartUI(MshenguMain main) {
+    public MonthlyFuelExpenseUI(MshenguMain main) {
         setMargin(true);
         setSizeUndefined();
+
+        addComponent(tableVerticalLayout);
         addComponent(chartVerticalLayout);
     }
 }

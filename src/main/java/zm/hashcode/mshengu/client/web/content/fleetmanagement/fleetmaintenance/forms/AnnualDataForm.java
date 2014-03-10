@@ -17,7 +17,7 @@ import com.vaadin.ui.Label;
  */
 public class AnnualDataForm extends FormLayout {
 
-    public Button generateButton = new Button("Generate Annual Data");
+    public Button generateButton = new Button("Show Annual Data");
 
     public AnnualDataForm() {
         HorizontalLayout buttons = getButtons();

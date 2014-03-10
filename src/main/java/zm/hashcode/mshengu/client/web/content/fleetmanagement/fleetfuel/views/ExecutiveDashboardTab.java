@@ -28,10 +28,10 @@ import zm.hashcode.mshengu.app.util.panel.PanelStyled;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFuelMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.FuelExecutiveDashboardChartUI;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.DieselPriceRandPerLitreLineChart;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.TotalFleetFuelSpendBarChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.executivedashboard.DieselPriceRandPerLitreLineChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.executivedashboard.TotalFleetFuelSpendBarChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.forms.FuelExecutiveDashboardForm;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.FuelSpendMonthlyCostBean;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.executivedashboard.FuelSpendMonthlyCostBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.AnnualFuelSpendLayout;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.EfficiencylLayout;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.FleetFuelUtil;
@@ -514,11 +514,11 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
         dieselPriceRandPerLitrePanel.setContent(dieselPriceRandPerLitreLayout);
         // ========
 
-        PanelEfficiency oneMonthEfficiencyPanel = new PanelEfficiency("Total Fleet 1M Efficiency");
-        PanelEfficiency threeMonthEfficiencyPanel = new PanelEfficiency("Total Fleet 3M Efficiency");
-        PanelEfficiency twelveMonthEfficiencyPanel = new PanelEfficiency("Total Fleet 12M Efficiency");
+        PanelEfficiency oneMonthEfficiencyPanel = new PanelEfficiency("Service Fleet 1M Efficiency");
+        PanelEfficiency threeMonthEfficiencyPanel = new PanelEfficiency("Service Fleet 3M Efficiency");
+        PanelEfficiency twelveMonthEfficiencyPanel = new PanelEfficiency("Service Fleet 12M Efficiency");
         PanelEfficiency fuelSpendPanel = new PanelEfficiency("Fuel Spend");
-        PanelEfficiency annualFuelSpendPanel = new PanelEfficiency("Annual Fuel Spend");
+        PanelEfficiency annualFuelSpendPanel = new PanelEfficiency("Annual Fuel Spend: " + chartPeriod);
         //
         EfficiencylLayout efficiencylLayout = new EfficiencylLayout();
         oneMonthEfficiencyPanel.setContent(efficiencylLayout.getEfficiencyLayout(oneMonthEfficiency, oneMonthEfficiencyFlag));
