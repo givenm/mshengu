@@ -36,16 +36,27 @@ public class ServiceUnitServiceLogTest extends AppTest {
     @Autowired
     SiteServiceLogService siteServiceLogService;
     DateTimeFormatWeeklyHelper dtfwh = new DateTimeFormatWeeklyHelper();
+    
 
-//    @Test
+    @Test
     public void testVistDateQuery() {
         siteServiceLogService = ctx.getBean(SiteServiceLogService.class);
+        
+        Date date = dtfwh.getDate(05,02,2014);
+        dtfwh.setDate(date);
 //        serviceUnit = ctx.getBean(ServiceUnit.class);
-
+System.out.println("Date " + dtfwh.getTodaysDate_No_HTMSM());
         Date serviceDateStart = dtfwh.getTodaysDate_No_HTMSM();
-        Date serviceDateEnd = dtfwh.getTomorrowsDate_No_HTMSM();
-        long count = siteServiceLogService.getTotalUnitsServiced("Du Noon - Doornbach", "WITHIN", serviceDateStart, serviceDateEnd);
-        System.out.println("testVistDateQuery ==== > \n Count  = " + count);
+        Date serviceDateEnd = dtfwh.getTomorrowsDate_No_HTMSM();        
+        String message = "WITHIN";//User Away From UNIT"; //WITHIN
+        long countBaySidePTI = siteServiceLogService.getTotalUnitsServiced("Bay Side PTI", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Bay Side PTI logs Count ==== >Count  = " + countBaySidePTI);
+        long countBarcelona = siteServiceLogService.getTotalUnitsServiced("Barcelona", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Barcelona logs Count ==== >Count  = " + countBarcelona);
+        long countVygekraal = siteServiceLogService.getTotalUnitsServiced("Vygekraal", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Vygekraal logs Count ==== >Count  = " + countVygekraal);        
+        long countJoeSlovo = siteServiceLogService.getTotalUnitsServiced("Joe Slovo", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Joe Slovo logs Count ==== >Count  = " + countJoeSlovo);
 //        return calendar;
     }
 
