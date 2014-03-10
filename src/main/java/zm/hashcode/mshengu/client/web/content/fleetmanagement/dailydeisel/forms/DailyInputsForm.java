@@ -69,42 +69,40 @@ public class DailyInputsForm extends FormLayout {
 
         // UIComponent
         filterTransactionDate = new DateField("Month Filter");
-        
-        filterTruckId = getVehicleComboBox("Truck Filter");
 
+        filterTruckId = getVehicleComboBox("Truck Filter");
 
         transactionDate = UIComponent.getDateField("Invoice Date", "transactionDate", DailyInputsBean.class, binder);
         transactionDate = UIValidatorHelper.setRequiredDateField(transactionDate, "Invoice Date");
-        
+
         slipNo = UIComponent.getTextField("Invoice Number:", "slipNo", DailyInputsBean.class, binder);
         slipNo = UIValidatorHelper.setRequiredTextField(slipNo, "Invoice Number");
-        
+
         speedometer = UIComponent.getTextField("Closing Mileage:", "speedometer", DailyInputsBean.class, binder);
-        
+
         fuelLitres = UIComponent.getTextField("Litres (Fuel):", "fuelLitres", DailyInputsBean.class, binder);
         fuelLitres = UIValidatorHelper.setRequiredTextField(fuelLitres, "Litres (Fuel)");
-        
+
         oilLitres = UIComponent.getTextField("Litres (Oil):", "oilLitres", DailyInputsBean.class, binder);
-        
+
         fuelCost = UIComponent.getBigDecimalTextField("Cost (Fuel):", "fuelCost", DailyInputsBean.class, binder);
         fuelCost = UIValidatorHelper.setRequiredTextField(fuelCost, "Cost (Fuel)");
-        
+
         oilCost = UIComponent.getBigDecimalTextField("Cost (Oil):", "oilCost", DailyInputsBean.class, binder);
-        
+
         randPerLitreCalc = UIComponent.getBigDecimalTextField("Rand/Litre :", "randPerLitre", DailyInputsBean.class, binder);
         randPerLitreCalc = UIValidatorHelper.setRequiredTextField(randPerLitreCalc, "Rand/Litre");
-        
+
         driverId = UIComboBox.getVehicleDriversComboBox("Driver:", "driverId", DailyInputsBean.class, binder);
         driverId = UIValidatorHelper.setRequiredComboBox(driverId, "Driver");
-        
+
         truckId = UIComboBox.getVehicleComboBox("Truck:", "truckId", DailyInputsBean.class, binder);
         truckId = UIValidatorHelper.setRequiredComboBox(truckId, "Truck");
-        
+
 //        NumberFormat.getCurrencyInstance().format(subtotal);
         filterTransactionDate.setWidth(250, Sizeable.Unit.PIXELS);
         filterTransactionDate.setImmediate(true);
         filterTransactionDate.setDateFormat("MMM-yyyy");
-
 
         transactionDate.setValue(new Date());
         fuelCost.setValue("0.00");
@@ -112,7 +110,7 @@ public class DailyInputsForm extends FormLayout {
         fuelLitres.setValue("0.00");
         oilLitres.setValue("0.00");
         oilCost.setValue("0.00");
-        
+
         errorMessage = UIComponent.getErrorLabel();
 
         GridLayout grid = new GridLayout(4, 10);
@@ -122,7 +120,7 @@ public class DailyInputsForm extends FormLayout {
         filterCaptionLabel.setStyleName("captionLabel");
 
         grid.addComponent(errorMessage, 1, 0, 2, 0);
-        
+
         grid.addComponent(filterCaptionLabel, 0, 1);
         grid.addComponent(filterTransactionDate, 1, 1);
         grid.addComponent(filterTruckId, 2, 1);
@@ -136,11 +134,9 @@ public class DailyInputsForm extends FormLayout {
         grid.addComponent(driverId, 1, 4);
         grid.addComponent(speedometer, 2, 4);
 
-
         grid.addComponent(fuelCost, 0, 5);
         grid.addComponent(fuelLitres, 1, 5);
         grid.addComponent(randPerLitreCalc, 2, 5);
-
 
         grid.addComponent(oilCost, 0, 6);
         grid.addComponent(oilLitres, 1, 6);

@@ -227,6 +227,28 @@ public class DateTimeFormatHelper implements Serializable {
 
     }
 
+    /*
+     * reset the time of a Date to 23:59:59:999 and resets the day to the
+     * last second of the day
+     *
+     * @param dateIn Date
+     * @return Date
+     */
+    public Date resetToDayEnd(Date inDate) {
+        //
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(inDate);
+
+        // Set time fields to last hour:minute:second:millisecond
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+
+        return cal.getTime();
+
+    }
+
     /**
      *
      * @param dateIn Date (any format format) e.g. 2010-07-14 09:45

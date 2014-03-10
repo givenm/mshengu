@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts;
+package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.servicefleetdashboard;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.charts.BarChart;
 import zm.hashcode.mshengu.app.util.charts.DriverEfficiencyBarChart;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.DriverEfficiencyBean;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.DriverEfficiencyBean;
 
 /**
  *
@@ -31,7 +31,7 @@ public class DriverEfficiencyChart implements Serializable {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
         String label = "Total Fuel Spend";
 //        String grandTotalAmount = df.format(Double.parseDouble(grandTotal.toString()));
-        title = "KEY:  Green (R6.00/Km & below)  |  Yellow ( above R6.00 & below R8.00/Km)  |  Red ( R8.00/Km & above)";
+        title = "KEY:  Green (R6.00/Km & below) -==- Yellow (above R6.00 & below R8.00/Km) -==- Red (R8.00/Km & above)";
 //        "KEY IN USE :     <= 6.00/Km = Green  |  > 6.00 - < 8.00/Km = Yellow  |  >= 8.00/Km = Red
         float tickInterval = Float.parseFloat("1");
         Object minTickValue = 0;
