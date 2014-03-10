@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model;
+package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.executivedashboard;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
