@@ -321,6 +321,24 @@ public class DateTimeFormatHelper implements Serializable {
         return time;
     }
 
+    public String getMediumDateYearWithTwoDigits(String dateIn) {
+        DateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy"); // // "Mon Sep 30 00:00:00 SAST 2013"
+//        DateFormat readFormat = new SimpleDateFormat( "EEE MMM dd yyyy hh:mm aaa");
+        //    DateFormat writeFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+        DateFormat writeFormat = new SimpleDateFormat("MMM-yy");
+        String mediumDateYearWithTwoDigits = "";
+        try {
+//            Date d = df.parse("Sat May 22 00:00:00 CEST 1993");
+            Date dateInReadFormat = readFormat.parse(dateIn);
+//            dateOut = new SimpleDateFormat(otherStandardDateFormat).parse(dateIn);
+//            time = new SimpleDateFormat(returnMonthYearFormat).format(d);
+            mediumDateYearWithTwoDigits = writeFormat.format(dateInReadFormat);
+        } catch (ParseException ex) {
+            Logger.getLogger(DateTimeFormatHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mediumDateYearWithTwoDigits;
+    }
+
     /**
      *
      * @param date Date (any format format) e.g. 2010-07-14 09:45

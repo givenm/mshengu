@@ -26,6 +26,7 @@ public class TotalMonthlyMileageLineChart implements Serializable {
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
     final DecimalFormat df = new DecimalFormat("###,###,##0", new DecimalFormatSymbols(locale));
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public DCharts createChart(List<MonthlyMileageTotalBean> monthlyMileageTotalBeanList, Integer grandTotalMileage) {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
@@ -56,7 +57,8 @@ public class TotalMonthlyMileageLineChart implements Serializable {
         // Get Objects of Data
         for (MonthlyMileageTotalBean monthlyMileageTotalBean : monthlyMileageTotalBeanList) {
             totalList.add(monthlyMileageTotalBean.getMonthlyMileageTotal());
-            monthList.add(monthlyMileageTotalBean.getMonth());
+            // Truncate Year from yyyy to yy
+            monthList.add(dateTimeFormatHelper.getMediumDateYearWithTwoDigits(monthlyMileageTotalBean.getTransactionMonth().toString()));
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);

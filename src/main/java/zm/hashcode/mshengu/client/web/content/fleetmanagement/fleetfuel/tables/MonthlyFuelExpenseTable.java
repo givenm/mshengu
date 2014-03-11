@@ -7,8 +7,10 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.tables;
 import com.vaadin.ui.Table;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.MonthlyFuelExpenseBean;
 
 /**
  *
@@ -24,19 +26,28 @@ public class MonthlyFuelExpenseTable extends Table {
 
     public MonthlyFuelExpenseTable(MshenguMain main) {
         this.main = main;
-//////        // Hide Column Header
-//////       //        setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
-//////        setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         setStyleName("panelTable");
-        addContainerProperty("", String.class, null);
+        //
+        addContainerProperty("Month", String.class, null);
+        addContainerProperty("Non-Operational", String.class, null);
+        addContainerProperty("Operational", String.class, null);
+        addContainerProperty("Service Fleet", String.class, null);
+        addContainerProperty("Total", String.class, null);
         // Allow selecting items from the table.
 //        setNullSelectionAllowed(false);
         setSelectable(false);
 //        // Send changes in selection immediately to server.
 //        setImmediate(false);
         // Alignments
-        setColumnAlignment("", Table.Align.RIGHT);
-        addItem(new Object[]{"0.00"}, new Integer("1"));
+//        setColumnAlignment("", Table.Align.RIGHT);
+////        addItem(new Object[]{"0.00"}, new Integer("1"));
 
+    }
+
+    public Table createTable(List<MonthlyFuelExpenseBean> monthlyFuelExpenseBeanList) {
+
+
+
+        return this;
     }
 }

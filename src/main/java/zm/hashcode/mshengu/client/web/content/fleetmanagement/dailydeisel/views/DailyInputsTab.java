@@ -219,7 +219,7 @@ public class DailyInputsTab extends VerticalLayout implements
                     // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
                     Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, transactionDate, transactionDate);
                     String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-                    if (!(truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
+                    if ((truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
                         previousClosingMileage = new Integer("-1");
                     }
 //                    Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
@@ -256,7 +256,7 @@ public class DailyInputsTab extends VerticalLayout implements
                 Integer previousClosingMileage = trackerUtil.getPreviousDailyInputClosingMileage(truck, new Date(), transactionDate);
                 // TEST FOR MOV AND MMV Trucks. Allow non-checking for Mileage ?????????????????????????????????????????????????????????????????????/
                 String vehicleNumber = form.truckId.getItemCaption(((BeanItem<DailyInputsBean>) binder.getItemDataSource()).getBean().getTruckId());
-                if (!(truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
+                if ((truncate(vehicleNumber, 3).equals("MOV") || truncate(vehicleNumber, 3).equals("MMV"))) {
                     previousClosingMileage = new Integer("-1");
                 }
 //        Notification.show("Current closing mileage: " + previousClosingMileage + " for " + truck.getVehicleNumber(), Notification.Type.HUMANIZED_MESSAGE);
