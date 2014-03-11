@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.repository.procurement.Impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,28 @@ import zm.hashcode.mshengu.repository.procurement.AnnualDataFleetMaintenanceCost
  */
 public class AnnualDataFleetMaintenanceCostRepositoryImpl implements AnnualDataFleetMaintenanceCostRepositoryCustom {
 
+    final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     @Autowired
     private MongoOperations mongoOperation;
 
     @Override
     public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostBetweenTwoDates(Date from, Date to) {
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
         Query truckAnnualDataCostListQuery = new Query();
         truckAnnualDataCostListQuery.addCriteria(
                 Criteria.where("transactionMonth").exists(true)
-                .andOperator(Criteria.where("transactionMonth").gte(from),
-                Criteria.where("transactionMonth").lte(to)));
+                .andOperator(Criteria.where("transactionMonth").gte(fromDate),
+                Criteria.where("transactionMonth").lte(calendar.getTime())));
 
         /*
          List<AnnualDataFleetMaintenanceCost> truckAnnualDataCostList = mongoOperation.find(truckAnnualDataCostListQuery, AnnualDataFleetMaintenanceCost.class);
@@ -50,16 +63,33 @@ public class AnnualDataFleetMaintenanceCostRepositoryImpl implements AnnualDataF
 
     @Override
     public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostByTruckBetweenTwoDates(Truck truck, Date from, Date to) {
-        return getAnnualDataCosts(truck, from, to);
+        Date fromDate = dateTimeFormatHelper.resetTimeAndMonthStart(from);
+        Date toDate = dateTimeFormatHelper.resetTimeAndMonthEnd(to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        return getAnnualDataCosts(truck, fromDate, calendar.getTime());
     }
 
     @Override
     public List<AnnualDataFleetMaintenanceCost> getAnnualDataCostByTruckForMonth(Truck truck, Date month) {
-        final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
         Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
 
-        return getAnnualDataCosts(truck, from, to);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        return getAnnualDataCosts(truck, from, calendar.getTime());
     }
 
     private List<AnnualDataFleetMaintenanceCost> getAnnualDataCosts(Truck truck, Date from, Date to) {
