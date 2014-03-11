@@ -75,19 +75,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> findByMisMatchStatus() {
-        List<Request> list = findAll();
-        List<Request> newList = null;
-        if (list != null) {
-            newList = new ArrayList<>();
-            for (Request request : list) {
-                if (request.getStatus() != null) {
-                    if (request.getStatus().equalsIgnoreCase("mismatch")) {
-                        newList.add(request);
-                    }
-                }
-            }
-        }
-        return newList;
+        return repository.findByMisMatchStatus();
     }
 
     @Override
@@ -189,5 +177,15 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> getDisApprovedRequests() {
         return repository.getDisApprovedRequests();
+    }
+
+    @Override
+    public List<Request> getApprovedRequests(Date month) {
+        return repository.getApprovedRequests(month);
+    }
+
+    @Override
+    public List<Request> getApprovedRequestsBySupplier(String serviceProviderId, Date month) {
+        return repository.getApprovedRequestsBySupplier(serviceProviderId, month);
     }
 }

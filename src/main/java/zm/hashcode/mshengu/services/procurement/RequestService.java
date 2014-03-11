@@ -58,4 +58,8 @@ public interface RequestService {
     public List<Request> getPendingRequests();
     
     public List<Request> getDisApprovedRequests();
+    
+    public List<Request> getApprovedRequests(Date month);
+    
+    public List<Request> getApprovedRequestsBySupplier(String serviceProviderId, Date month);
 }
