@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.charts.ServiceFleetEfficiencyLineChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.ServiceFleetOneMonthlyEfficiencyBean;
 
@@ -24,6 +25,7 @@ public class OneMonthEfficiencyLineChart implements Serializable {
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
     final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public DCharts createChart(List<ServiceFleetOneMonthlyEfficiencyBean> serviceFleetOneMonthlyEfficiencyBeanList) {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
@@ -55,7 +57,8 @@ public class OneMonthEfficiencyLineChart implements Serializable {
         // Get Objects of Data
         for (ServiceFleetOneMonthlyEfficiencyBean serviceFleetOneMonthlyEfficiencyBean : serviceFleetOneMonthlyEfficiencyBeanList) {
             totalList.add(serviceFleetOneMonthlyEfficiencyBean.getMonthlyEfficiencyValue());
-            monthList.add(serviceFleetOneMonthlyEfficiencyBean.getMonth());
+            // Truncate Year from yyyy to yy
+            monthList.add(dateTimeFormatHelper.getMediumDateYearWithTwoDigits(serviceFleetOneMonthlyEfficiencyBean.getTransactionMonth().toString()));
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
