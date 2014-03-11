@@ -239,4 +239,20 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 Criteria.where("DeliveryDate").lte(to)));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
+
+    @Override
+    public List<Request> getPendingRequests() {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("approver").exists(false));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getDisApprovedRequests() {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("reasonForDisapproval").exists(true));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
 }

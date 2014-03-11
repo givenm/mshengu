@@ -180,4 +180,14 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> getProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date month) {
         return repository.getProcessedRequestsByCostCentreType(costCentreType, month);
     }
+
+    @Override
+    public List<Request> getPendingRequests() {
+        return repository.getPendingRequests();
+    }
+
+    @Override
+    public List<Request> getDisApprovedRequests() {
+        return repository.getDisApprovedRequests();
+    }
 }

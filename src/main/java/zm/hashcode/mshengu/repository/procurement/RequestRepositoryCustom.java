@@ -40,4 +40,8 @@ public interface RequestRepositoryCustom {
     public List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date month);
 
     public List<Request> getProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date month);
+    
+    public List<Request> getPendingRequests();
+    
+    public List<Request> getDisApprovedRequests();
 }
