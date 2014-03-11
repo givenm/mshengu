@@ -137,7 +137,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         operatingCostTwentyFiveMonthsList.addAll(fleetFuelUtil.getOperatingCostByTruckBetweenTwoDates(FleetFuelUtil.startDate, FleetFuelUtil.endDate));
         Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
         // Extract date Range for Charts only
-        dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForSpecDates(startDate, endDate, operatingCostTwentyFiveMonthsList));
+        dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForDateRange(startDate, endDate, operatingCostTwentyFiveMonthsList));
         if (!dateRangeOperatingCostList.isEmpty()) {
             buildFuelSpendMonthlyCostBeanList(); // used for Bar Chart
             buildMonthlyMileageTotalBeanList(); // used for Line Chart
@@ -548,7 +548,8 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         return truckMonthOperatingCostList;
     }
 
-    private void buildDriverEfficiencyBeanList() { // endDate has been reset to 1st of month from calling method
+    private void buildDriverEfficiencyBeanList() { // This method is for End Month ONLY
+        // endDate has been reset to 1st of month from calling method
         Date newEndDate = fleetFuelUtil.resetMonthToFirstDay(endDate);
         driverEfficiencyBeanList.clear();
         List<OperatingCost> truckMonthOperatingCostList = new ArrayList<>();
