@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -60,11 +61,33 @@ public class DieselPriceRandPerLitreLineChart implements Serializable {
         List<Object> totalList = new ArrayList<>();
         List<Object> monthList = new ArrayList<>();
 
+        // Add element at start and end of List to force axis to be inside chart rather than be at border and cannot be read by user
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fuelSpendMonthlyCostBeanList.get(0).getTransactionMonth());
+        calendar.add(Calendar.MONTH, -1);
+        //
+        FuelSpendMonthlyCostBean FuelSpendMonthlyCostBeann = new FuelSpendMonthlyCostBean();
+        FuelSpendMonthlyCostBeann.setId(new Integer("-1") + "");
+        FuelSpendMonthlyCostBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        FuelSpendMonthlyCostBeann.setMonthRandPerLiter(BigDecimal.ZERO);
+        FuelSpendMonthlyCostBeann.setMonthlyAmountSpend(BigDecimal.ZERO);
+        FuelSpendMonthlyCostBeann.setTransactionMonth(calendar.getTime());
+        fuelSpendMonthlyCostBeanList.add(0, FuelSpendMonthlyCostBeann);
+        //
+        calendar.setTime(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - 1).getTransactionMonth());
+        calendar.add(Calendar.MONTH, 1);
+        //
+        FuelSpendMonthlyCostBeann.setId(new Integer((fuelSpendMonthlyCostBeanList.size() + 1) + "") + "");
+        FuelSpendMonthlyCostBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        FuelSpendMonthlyCostBeann.setMonthRandPerLiter(BigDecimal.ZERO);
+        FuelSpendMonthlyCostBeann.setMonthlyAmountSpend(BigDecimal.ZERO);
+        FuelSpendMonthlyCostBeann.setTransactionMonth(calendar.getTime());
+        fuelSpendMonthlyCostBeanList.add(FuelSpendMonthlyCostBeann);
+
         // Get Objects of Data
         for (FuelSpendMonthlyCostBean fuelSpendMonthlyCostBean : fuelSpendMonthlyCostBeanList) {
             totalList.add(fuelSpendMonthlyCostBean.getMonthRandPerLiter());
-            // Truncate Year from yyyy to yy
-            monthList.add(dateTimeFormatHelper.getMediumDateYearWithTwoDigits(fuelSpendMonthlyCostBean.getTransactionMonth().toString()));
+            monthList.add(fuelSpendMonthlyCostBean.getTransactionMonth());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);

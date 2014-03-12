@@ -76,14 +76,17 @@ public class DailyTrackerTab extends VerticalLayout implements
                 form.driverId.setValue(truck.getDriver().getId());
                 TrackerUtil trackerUtil = new TrackerUtil();
                 BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(truck.getOperatingCosts(), transactDate);
-                BigDecimal OperatingSpec = (BigDecimal.valueOf(truck.getManufacturingSpec() / 100)).multiply(RandPerLitre);
-                form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100));
-                form.operatingSpec.setValue(OperatingSpec.setScale(2, BigDecimal.ROUND_HALF_UP).toString()); // ?????????????????????????????????????????// ?????????????????????????????????????????
-                BigDecimal operatingAllowance = trackerUtil.getOperationalAllowance();
-                form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-                form.grid.removeComponent(2, 2);
-                form.grid.addComponent(DailyTrackerTable.monthRatingFlagImage, 2, 2);
-                form.MTD.setValue(df.format(Double.parseDouble(DailyTrackerTable.randsPerKilometreCalc.toString())));
+                if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+                    BigDecimal OperatingSpec = (BigDecimal.valueOf(truck.getManufacturingSpec() / 100)).multiply(RandPerLitre);
+                    form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100));
+                    form.operatingSpec.setValue(OperatingSpec.setScale(2, BigDecimal.ROUND_HALF_UP).toString()); // ?????????????????????????????????????????// ?????????????????????????????????????????
+                    BigDecimal operatingAllowance = trackerUtil.getOperationalAllowance();
+
+                    form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+                    form.grid.removeComponent(2, 2);
+                    form.grid.addComponent(DailyTrackerTable.monthRatingFlagImage, 2, 2);
+                    form.MTD.setValue(df.format(Double.parseDouble(DailyTrackerTable.randsPerKilometreCalc.toString())));
+                }
             } catch (Exception ex) {
             }
 
@@ -105,20 +108,26 @@ public class DailyTrackerTab extends VerticalLayout implements
             Truck truck = TruckFacade.getTruckService().findById(form.truckId.getValue().toString());
 
             form.driverId.setValue(truck.getDriverId());
-            form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100)); // ?????????????????????????????????????????// ?????????????????????????????????????????
+
             Date transactDate = form.transactionDate.getValue();
             TrackerUtil trackerUtil = new TrackerUtil();
             BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(truck.getOperatingCosts(), transactDate);
             BigDecimal OperatingSpec = (BigDecimal.valueOf(truck.getManufacturingSpec() / 100)).multiply(RandPerLitre);
-
-            form.operatingSpec.setValue(OperatingSpec.setScale(2, BigDecimal.ROUND_HALF_UP).toString()); // ?????????????????????????????????????????// ?????????????????????????????????????????
-            BigDecimal operatingAllowance = trackerUtil.getOperationalAllowance();
-            form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-
+            BigDecimal operatingAllowance = BigDecimal.ZERO;
+            if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+                form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100)); // ?????????????????????????????????????????
+                form.operatingSpec.setValue(OperatingSpec.setScale(2, BigDecimal.ROUND_HALF_UP).toString()); // ?????????????????????????????????????????// ?????????????????????????????????????????
+                operatingAllowance = trackerUtil.getOperationalAllowance();
+                form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            } else {
+                form.manufacturerSpec.setValue("0.00");
+                form.operatingSpec.setValue("0.00");
+                form.targetSpec.setValue("0.00");
+            }
             try {
                 table.removeAllItems();
                 table.loadDailyTrackerData(transactDate, truck);
-                form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+//                form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
                 form.MTD.setValue(df.format(Double.parseDouble(DailyTrackerTable.randsPerKilometreCalc.toString())));
 //                form.monthlyFlag.setValue(" <img src=\"" + DailyTrackerTable.monthRatingFlag + "\"/>");
                 form.grid.removeComponent(2, 2);
@@ -135,9 +144,13 @@ public class DailyTrackerTab extends VerticalLayout implements
 
     }
 
-    private void getHome() {
-        main.content.setSecondComponent(new DailyDieselTrackerMenu(main, "DAILY_TRACKER"));
+    public static String truncate(String value, int length) {
+        if (value != null && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
     }
+    //
 
     private void addListeners() {
         //Register Button Listeners

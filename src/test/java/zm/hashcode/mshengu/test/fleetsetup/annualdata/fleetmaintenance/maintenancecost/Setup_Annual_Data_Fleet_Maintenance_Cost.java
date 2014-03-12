@@ -124,10 +124,10 @@ public class Setup_Annual_Data_Fleet_Maintenance_Cost extends AppTest {
 //                            stringTokenizer = new StringTokenizer(mileageToken, ".");
 //                            closingMileage = Integer.parseInt(stringTokenizer.nextElement().toString());
                             //
-                            System.out.println("TruckId: " + truckId + ". Date: " + datee + ". Maintenance Cost: " + monthMaintenanceCost.setScale(2, RoundingMode.HALF_UP) + ". Driver Person ID: " + driverPersonId); // . Closing Mileage: " + closingMileage + "
+                            System.out.println("TruckId: " + truckId + ". Date: " + datee + ". Maintenance Cost: " + monthMaintenanceCost.setScale(2, BigDecimal.ROUND_HALF_UP) + ". Driver Person ID: " + driverPersonId); // . Closing Mileage: " + closingMileage + "
 
                             // Build and Persist the AnnualDataFleetFuel Object
-                            AnnualDataFleetMaintenanceCost annualData = createAnnualDataFleetMaintenanceCostEntity(datee, monthMaintenanceCost.setScale(2, RoundingMode.HALF_UP), truckId, driverPersonId); // closingMileage,
+                            AnnualDataFleetMaintenanceCost annualData = createAnnualDataFleetMaintenanceCostEntity(datee, monthMaintenanceCost.setScale(2, BigDecimal.ROUND_HALF_UP), truckId, driverPersonId); // closingMileage,
                             annualDataFleetMaintenanceCostService.persist(annualData);
                             // Build and Update the Truck Object
 //                    addTruckAnnualData(annualData);

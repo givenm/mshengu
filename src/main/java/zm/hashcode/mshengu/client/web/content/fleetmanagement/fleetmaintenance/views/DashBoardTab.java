@@ -374,7 +374,7 @@ public class DashBoardTab extends VerticalLayout implements
         Label totalFleetLabel = new Label("Total spend in Maintenance for the last " + chartPeriodCount + " months for every Km travelled");
         totalFleetLabel.setWidth(360, Sizeable.Unit.PIXELS);
 
-        BigDecimal totalMaintenanceSpendPerKm = grandTotalMaintenanceSpend.divide(grandTotalMaintenanceMileage, 2, RoundingMode.HALF_UP);
+        BigDecimal totalMaintenanceSpendPerKm = grandTotalMaintenanceSpend.divide(grandTotalMaintenanceMileage, 2, BigDecimal.ROUND_HALF_UP);
         Label totalPerKmLabel = new Label("<b style=\"color:red; font-size:25px;\">R " + totalMaintenanceSpendPerKm + "</b>", Label.CONTENT_XHTML);
         totalPerKmLabel.setWidth(100, Sizeable.Unit.PIXELS);
         totalPerKmLabel.setHeight(25, Sizeable.Unit.PIXELS);
