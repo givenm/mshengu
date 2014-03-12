@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.views
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.DailyDieselTrackerMenu;
@@ -60,7 +61,7 @@ public class VehicleFuelUsageTab extends VerticalLayout implements
             if (form.truckId.getValue().equals("all")) {
                 table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
                 form.mtdActAverage.setReadOnly(false);
-                form.mtdActAverage.setValue(table.mtdActAverageCalc.setScale(2, RoundingMode.HALF_UP) + "");
+                form.mtdActAverage.setValue(table.mtdActAverageCalc.setScale(2, BigDecimal.ROUND_HALF_UP) + "");
                 form.mtdActAverage.setReadOnly(true);
             } else {
                 table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());
@@ -75,7 +76,7 @@ public class VehicleFuelUsageTab extends VerticalLayout implements
                 if (form.truckId.getValue().equals("all")) {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
                     form.mtdActAverage.setReadOnly(false);
-                    form.mtdActAverage.setValue(table.mtdActAverageCalc.setScale(2, RoundingMode.HALF_UP) + "");
+                    form.mtdActAverage.setValue(table.mtdActAverageCalc.setScale(2, BigDecimal.ROUND_HALF_UP) + "");
                     form.mtdActAverage.setReadOnly(true);
                 } else {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());

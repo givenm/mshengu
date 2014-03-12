@@ -121,8 +121,8 @@ public class DailyTrackerTable extends Table {
             // Create a calendar object and set year and month
             Calendar dateCal = Calendar.getInstance();
             dateCal.set(Integer.parseInt(dateTimeFormatHelper.getYearNumber(date)), Integer.parseInt(dateTimeFormatHelper.getMonthNumber(date)), 1);
-            int daysCount = dateCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-            for (int i = 1; i <= daysCount; i++) {
+            int monthDaysCount = dateCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            for (int i = 1; i <= monthDaysCount; i++) {
                 boolean dateMatch = false;
                 Date dateCalDate = dateTimeFormatHelper.resetTimeOfDate(dateTimeFormatHelper.getDate(i, dateCal.get(Calendar.MONTH), dateCal.get(Calendar.YEAR)));
                 Date transactDate;
@@ -138,7 +138,12 @@ public class DailyTrackerTable extends Table {
                         dailyTrackerTableData.setAmount(operatingCost.getFuelCost());
                         dailyTrackerTableData.setLitres(operatingCost.getFuelLitres());
                         dailyTrackerTableData.setRandsPerLiter(trackerUtil.getRandPerLitre(operatingCost.getFuelCost(), operatingCost.getFuelLitres()));
-                        dailyTrackerTableData.setClosingMileage(operatingCost.getSpeedometer());
+
+                        if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+                            dailyTrackerTableData.setClosingMileage(operatingCost.getSpeedometer());
+                        } else {
+                            dailyTrackerTableData.setClosingMileage(0);
+                        }
                         dailyTrackerTableData.setTrip(Integer.valueOf("0"));
                         dailyTrackerTableData.setRandsPerKilometer(new BigDecimal("0.00"));
                         dailyTrackerTableData.setRating(new Embedded());
@@ -164,10 +169,14 @@ public class DailyTrackerTable extends Table {
                     dailyTrackerTableData.setAmount(new BigDecimal("0.00"));
                     dailyTrackerTableData.setLitres(Double.valueOf("0.00"));
                     dailyTrackerTableData.setRandsPerLiter(new BigDecimal("0.00"));
-                    if (i == 1) {
-                        dailyTrackerTableData.setClosingMileage(trackerUtil.calculatePreviousMonthClosingMileage(truck));
+                    if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+                        if (i == 1) {
+                            dailyTrackerTableData.setClosingMileage(trackerUtil.calculatePreviousMonthClosingMileage(truck));
+                        } else {
+                            dailyTrackerTableData.setClosingMileage(dailyTrackerTableDataList.get(dailyTrackerTableDataList.size() - 1).getClosingMileage());
+                        }
                     } else {
-                        dailyTrackerTableData.setClosingMileage(dailyTrackerTableDataList.get(dailyTrackerTableDataList.size() - 1).getClosingMileage());
+                        dailyTrackerTableData.setClosingMileage(0);
                     }
                     dailyTrackerTableData.setTrip(Integer.valueOf("0"));
                     dailyTrackerTableData.setRandsPerKilometer(new BigDecimal("0.00"));
@@ -186,7 +195,7 @@ public class DailyTrackerTable extends Table {
             }
 // -- =============================================================================================================================
             for (DailyTrackerTableData dailyTrackerTableData : dailyTrackerTableDataList) {
-                dailyTrackerTableDataListFinal.add(setDailyTrackerTableDataFinal(dailyTrackerTableDataList, dailyTrackerTableData));
+                dailyTrackerTableDataListFinal.add(buildDailyTrackerTableDataFinalObject(dailyTrackerTableDataList, dailyTrackerTableData));
             }
 
             // Calculation for SubTotals
@@ -225,26 +234,7 @@ public class DailyTrackerTable extends Table {
         }
     }
 
-//    private DailyTrackerTableData setDailyTrackerTableData(List<OperatingCost> queriedMonthOperatingCostList, OperatingCost operatingCost) {
-//        DailyTrackerTableData dailyTrackerTableData = new DailyTrackerTableData();
-//        dailyTrackerTableData.setId(operatingCost.getId());
-//        dailyTrackerTableData.setTransactionDate(dateTimeFormatHelper.getYearMonthDay(operatingCost.getTransactionDate()));
-//        dailyTrackerTableData.setTransactDate(operatingCost.getTransactionDate());
-//        dailyTrackerTableData.setAmount(operatingCost.getFuelCost());
-//        dailyTrackerTableData.setLitres(operatingCost.getFuelLitres());
-//        dailyTrackerTableData.setRandsPerLiter(trackerUtil.getRandPerLitre(operatingCost.getFuelCost(), operatingCost.getFuelLitres()));
-//        dailyTrackerTableData.setClosingMileage(operatingCost.getSpeedometer());
-//        dailyTrackerTableData.setTrip(trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck));
-//        dailyTrackerTableData.setRandsPerKilometer(trackerUtil.getRandPerKilometre(operatingCost.getFuelCost(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck)));
-//        dailyTrackerTableData.setRating(trackerUtil.determineFuelUsageFlag(trackerUtil.getRandPerKilometre(operatingCost.getFuelCost(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck))));
-//        dailyTrackerTableData.setLitresPerKilometer(trackerUtil.getLitrePerKilometer(operatingCost.getFuelLitres(), trackerUtil.calculateOperatingCostTrip(queriedMonthOperatingCostList, operatingCost, truck)));
-//        dailyTrackerTableData.setDriverId(operatingCost.getDriver().getId());
-//        dailyTrackerTableData.setDriverName(operatingCost.getDriver().getFirstname() + " " + truck.getDriver().getLastname());
-//        dailyTrackerTableData.setTruckId(truck.getId());
-//        dailyTrackerTableData.setTruckPlateNumber(truck.getNumberPlate());
-//        return dailyTrackerTableData;
-//    }
-    private DailyTrackerTableData setDailyTrackerTableDataFinal(List<DailyTrackerTableData> dailyTrackerTableDataList, DailyTrackerTableData dailyTrackerData) {
+    private DailyTrackerTableData buildDailyTrackerTableDataFinalObject(List<DailyTrackerTableData> dailyTrackerTableDataList, DailyTrackerTableData dailyTrackerData) {
         DailyTrackerTableData dailyTrackerTableData = new DailyTrackerTableData();
         dailyTrackerTableData.setId(dailyTrackerData.getId());
         dailyTrackerTableData.setTransactionDate(dailyTrackerData.getTransactionDate());
@@ -253,20 +243,34 @@ public class DailyTrackerTable extends Table {
         dailyTrackerTableData.setLitres(dailyTrackerData.getLitres());
 //        dailyTrackerTableData.setRandsPerLiter(trackerUtil.getRandPerLitre(dailyTrackerData.getAmount(), dailyTrackerData.getLitres()));
         dailyTrackerTableData.setRandsPerLiter(dailyTrackerData.getRandsPerLiter());
-        dailyTrackerTableData.setClosingMileage(dailyTrackerData.getClosingMileage());
-        dailyTrackerTableData.setTrip(trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck));
-        dailyTrackerTableData.setRandsPerKilometer(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
-        dailyTrackerTableData.setRating(flagImage.determineFuelUsageFlag(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck))));
-        dailyTrackerTableData.setLitresPerKilometer(trackerUtil.getLitrePerKilometer(dailyTrackerData.getLitres(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
+
+        if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+            dailyTrackerTableData.setClosingMileage(dailyTrackerData.getClosingMileage());
+            dailyTrackerTableData.setTrip(trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck));
+            dailyTrackerTableData.setRandsPerKilometer(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
+            dailyTrackerTableData.setRating(flagImage.determineFuelUsageFlag(trackerUtil.getRandPerKilometre(dailyTrackerData.getAmount(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck))));
+            dailyTrackerTableData.setLitresPerKilometer(trackerUtil.getLitrePerKilometer(dailyTrackerData.getLitres(), trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck)));
+        } else {
+            dailyTrackerTableData.setClosingMileage(0);
+            dailyTrackerTableData.setTrip(0);
+            dailyTrackerTableData.setRandsPerKilometer(BigDecimal.ZERO);
+            dailyTrackerTableData.setRating(new Embedded());
+            dailyTrackerTableData.setLitresPerKilometer(Double.valueOf("0.00"));
+        }
+
         dailyTrackerTableData.setDriverId(dailyTrackerData.getDriverId());
         dailyTrackerTableData.setDriverName(dailyTrackerData.getDriverName());
         dailyTrackerTableData.setTruckId(truck.getId());
         dailyTrackerTableData.setTruckPlateNumber(truck.getNumberPlate());
-// Subtotaling
+        // Subtotaling
         amountSum = amountSum.add(dailyTrackerData.getAmount());
         litresSum += dailyTrackerData.getLitres();
-        tripSum += trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck);
-//
+        if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+            tripSum += trackerUtil.calculateTrip(dailyTrackerTableDataList, dailyTrackerData, truck);
+        } else {
+            tripSum += 0;
+        }
+
         return dailyTrackerTableData;
     }
 
@@ -284,36 +288,45 @@ public class DailyTrackerTable extends Table {
 
     public void performSubtotals(List<OperatingCost> queriedMonthOperatingCostList) {
         // Calculation for SubTotals
-        randsPerLiterCalc = amountSum.divide(new BigDecimal(litresSum), 2, RoundingMode.HALF_UP);
-        closingMileageCalc = trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck);
-        //
-        if (amountSum.compareTo(BigDecimal.ZERO) > 0 && closingMileageCalc > 0) {
-            randsPerKilometreCalc = amountSum.divide(new BigDecimal(closingMileageCalc), 2, RoundingMode.HALF_UP);
-//                randsPerKilometreCalc.setScale(2, RoundingMode.HALF_UP);
-        } else {
-            try {
-                randsPerKilometreCalc = amountSum.divide(new BigDecimal(tripSum), 2, RoundingMode.HALF_UP);
-            } catch (ArithmeticException ae) {
-                System.out.println("ArithmeticException occured!  Attempt to divide by ZERO");
+        randsPerLiterCalc = amountSum.divide(new BigDecimal(litresSum), 2, BigDecimal.ROUND_HALF_UP);
+        if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+            closingMileageCalc = trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck);
+            //
+            if (amountSum.compareTo(BigDecimal.ZERO) > 0 && closingMileageCalc > 0) {
+                randsPerKilometreCalc = amountSum.divide(new BigDecimal(closingMileageCalc), 2, BigDecimal.ROUND_HALF_UP);
+//                randsPerKilometreCalc.setScale(2, BigDecimal.ROUND_HALF_UP);
+            } else {
+                try {
+                    randsPerKilometreCalc = amountSum.divide(new BigDecimal(tripSum), 2, BigDecimal.ROUND_HALF_UP);
+                } catch (ArithmeticException ae) {
+                    System.out.println("ArithmeticException occured!  Attempt to divide by ZERO");
 //                System.out.println(ae.printStackTrace()+"");
-                randsPerKilometreCalc = new BigDecimal("0.00");
+                    randsPerKilometreCalc = new BigDecimal("0.00");
+                }
             }
-        }
-        //
-        monthRatingFlag = flagImage.determineFlag(randsPerKilometreCalc);
-        // Get flag to show in Layout in FOrm
-        monthRatingFlagImage = flagImage.determineImageFlag(randsPerKilometreCalc);
+            //
+            monthRatingFlag = flagImage.determineFlag(randsPerKilometreCalc);
+            // Get flag to show in Layout in FOrm
+            monthRatingFlagImage = flagImage.determineImageFlag(randsPerKilometreCalc);
 
-        if (litresSum > 0 && closingMileageCalc > 0) {
-            litresPerKilometerCalc = litresSum / closingMileageCalc;
+            if (litresSum > 0 && closingMileageCalc > 0) {
+                litresPerKilometerCalc = litresSum / closingMileageCalc;
+            } else {
+                try {
+                    litresPerKilometerCalc = litresSum / tripSum;
+                } catch (ArithmeticException ae) {
+                    System.out.println("ArithmeticException occured! Attempt to divide by ZERO");
+                    litresPerKilometerCalc = 0.00;
+                }
+
+            }
         } else {
-            try {
-                litresPerKilometerCalc = litresSum / tripSum;
-            } catch (ArithmeticException ae) {
-                System.out.println("ArithmeticException occured! Attempt to divide by ZERO");
-                litresPerKilometerCalc = 0.00;
-            }
-
+            closingMileageCalc = 0;
+            randsPerKilometreCalc = BigDecimal.ZERO; // new BigDecimal("0.00");
+            monthRatingFlag = new Embedded();
+            // Get flag to show in Layout in FOrm
+            monthRatingFlagImage = new Image();
+            litresPerKilometerCalc = Double.valueOf("0.00");
         }
     }
 
@@ -347,6 +360,13 @@ public class DailyTrackerTable extends Table {
                 return null;
             }
         });
-
     }
+
+    public static String truncate(String value, int length) {
+        if (value != null && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
+    }
+    //
 }

@@ -190,11 +190,11 @@ public class FleetFuelUtil implements Serializable {
 
         // Calculate Sum of Trips
         if (mileageCalc > 0 && (fuelCostSum.compareTo(BigDecimal.ZERO) > 0)) { // if(Monthly Mileage >0 && Monthly Amount > 0)
-//            System.out.println(truck.getVehicleNumber() + "Fuel Cost Sum: " + fuelCostSum + "/ Total Mileage: " + mileageCalc + " = " + fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, RoundingMode.HALF_UP));
-            return fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, RoundingMode.HALF_UP);
+//            System.out.println(truck.getVehicleNumber() + "Fuel Cost Sum: " + fuelCostSum + "/ Total Mileage: " + mileageCalc + " = " + fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, BigDecimal.ROUND_HALF_UP));
+            return fuelCostSum.divide(new BigDecimal(mileageCalc + ""), 2, BigDecimal.ROUND_HALF_UP); // RoundingMode.HALF_UP
         } else {
             // DO TEH mtdAct CALCULATION
-            return fuelCostSum.divide(new BigDecimal(tripMileageSum.toString()), 2, RoundingMode.HALF_UP);
+            return fuelCostSum.divide(new BigDecimal(tripMileageSum.toString()), 2, BigDecimal.ROUND_HALF_UP); //RoundingMode.HALF_UP
         }
     }
 
@@ -204,7 +204,7 @@ public class FleetFuelUtil implements Serializable {
         for (OperatingCost operatingCost : truckMonthOperatingCostList) {
             fuelCostSum = fuelCostSum.add(operatingCost.getFuelCost());
         }
-        return fuelCostSum;
+        return fuelCostSum.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public Integer doMileageCalculation(List<OperatingCost> truckMonthOperatingCostList, Truck truck) {
@@ -308,7 +308,7 @@ public class FleetFuelUtil implements Serializable {
 
     public BigDecimal performMtdActAverageCalc(BigDecimal mtdActAverageCalc, int counter) {
         try {
-            mtdActAverageCalc = mtdActAverageCalc.divide(new BigDecimal(counter + ""), 2, RoundingMode.HALF_UP);
+            mtdActAverageCalc = mtdActAverageCalc.divide(new BigDecimal(counter + ""), 2, BigDecimal.ROUND_HALF_UP);
         } catch (ArithmeticException a) {
             System.out.println("mtd Act Average Calc (" + mtdActAverageCalc + ") / counter (" + counter + ")  | A Divide By Zero exception (ArithmeticException) caught");
 //            Notification.show("Error. A Calculation is trying to divide by ZERO. Reason for 0.00 per KM.", Notification.Type.TRAY_NOTIFICATION);
@@ -325,9 +325,9 @@ public class FleetFuelUtil implements Serializable {
     }
 
     public BigDecimal performFuelSpendPercentage(BigDecimal grandTotal, BigDecimal fractionTotal) {
-        BigDecimal percentageCalc = fractionTotal.divide(new BigDecimal(grandTotal.toString()), 2, RoundingMode.HALF_UP);
+        BigDecimal percentageCalc = fractionTotal.divide(new BigDecimal(grandTotal.toString()), 2, BigDecimal.ROUND_HALF_UP);
         percentageCalc = percentageCalc.multiply(new BigDecimal("100"));
-        return percentageCalc.setScale(0, BigDecimal.ROUND_UP);
+        return percentageCalc.setScale(0, BigDecimal.ROUND_HALF_UP);
     }
 
     public Truck findTruckFromAllTruckListById(String truckId) {

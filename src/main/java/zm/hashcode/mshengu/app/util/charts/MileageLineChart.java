@@ -115,7 +115,7 @@ public class MileageLineChart implements Serializable {
         Series series = new Series()
                 .addSeries(
                 new XYseries()
-                .setLineWidth(5)
+                .setLineWidth(2)
                 .setMarkerOptions(
                 new MarkerRenderer()
                 .setStyle(MarkerStyles.FILLED_SQUARE)
@@ -139,7 +139,7 @@ public class MileageLineChart implements Serializable {
                 .setShowGridline(true)) //
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%b-%Y"))
+                .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
                 .setNumberTicks(monthListArray.length) //
                 )
                 //

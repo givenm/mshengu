@@ -193,9 +193,9 @@ public class MaintenanceCostUtil implements Serializable {
 
     public BigDecimal getTotalExcludingVAT(BigDecimal totalWithVAT) {
         BigDecimal VATValue = new BigDecimal("0.14").multiply(totalWithVAT);
-        VATValue.setScale(2, BigDecimal.ROUND_UP);
+        VATValue = VATValue.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         totalWithVAT = totalWithVAT.subtract(VATValue);
-        return totalWithVAT.setScale(2, BigDecimal.ROUND_UP);
+        return totalWithVAT.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 }

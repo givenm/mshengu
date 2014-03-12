@@ -237,7 +237,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 
     private void performSubTotal(BigDecimal monthTotal, List<OperatingCost> dateRangeOperatingCostList, OperatingCost operatingCost, BigDecimal randPerLitre, int counter) {
         // Subtotal
-        monthTotal.setScale(2, BigDecimal.ROUND_UP);
+        monthTotal = monthTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
         grandTotalFuelSpend = grandTotalFuelSpend.add(monthTotal);
         // Build FuelSpendMonthlyCostBean and add to ArrayList
         int currentIndex = dateRangeOperatingCostList.indexOf(operatingCost);
@@ -333,10 +333,10 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 
 
 
-////        System.out.println("3 M Efficiency: FUEL COST SUM= " + totalFuelCostAllTrucks + " / 3 M Efficiency: MILEAGE SUM= " + allTrucksTotalMileageSum + " ANS - " + (totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, RoundingMode.HALF_UP)));
+////        System.out.println("3 M Efficiency: FUEL COST SUM= " + totalFuelCostAllTrucks + " / 3 M Efficiency: MILEAGE SUM= " + allTrucksTotalMileageSum + " ANS - " + (totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, BigDecimal.ROUND_HALF_UP)));
 
         try {
-            return totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, RoundingMode.HALF_UP);
+            return totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, BigDecimal.ROUND_HALF_UP);
         } catch (ArithmeticException a) {
             System.out.println("Total Fuel Cost All Trucks (" + totalFuelCostAllTrucks + ") / Total Mileage Sum All Trucks (" + allTrucksTotalMileageSum + ") | A Divide By Zero exception (ArithmeticException) caught");
 //            Notification.show("Error. A Calculation is trying to divide by ZERO. Reason for 0.00 per KM.", Notification.Type.TRAY_NOTIFICATION);
@@ -399,11 +399,11 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 ////        System.out.println("12 Month Efficiency: MILEAGE SUM= " + annualMileageSumAllTrucks);
 
 
-//        System.out.println("12 M Efficiency: FUEL COST SUM= " + annualTotalFuelSpend + " / 12 M Efficiency: MILEAGE SUM= " + annualMileageSumAllTrucks + " ANS - " + (annualTotalFuelSpend.divide(new BigDecimal(annualMileageSumAllTrucks + ""), 2, RoundingMode.HALF_UP)));
+//        System.out.println("12 M Efficiency: FUEL COST SUM= " + annualTotalFuelSpend + " / 12 M Efficiency: MILEAGE SUM= " + annualMileageSumAllTrucks + " ANS - " + (annualTotalFuelSpend.divide(new BigDecimal(annualMileageSumAllTrucks + ""), 2, BigDecimal.ROUND_HALF_UP)));
 
 
         try {
-            return annualTotalFuelSpend.divide(new BigDecimal(annualMileageSumAllTrucks + ""), 2, RoundingMode.HALF_UP);
+            return annualTotalFuelSpend.divide(new BigDecimal(annualMileageSumAllTrucks + ""), 2, BigDecimal.ROUND_HALF_UP);
         } catch (ArithmeticException a) {
             System.out.println("annualTotalFuelSpend (" + annualTotalFuelSpend + ") / annualMileageSumAllTrucks (" + annualMileageSumAllTrucks + ") | A Divide By Zero exception (ArithmeticException) caught");
 //            Notification.show("Error. A Calculation is trying to divide by ZERO. Reason for 0.00 per KM.", Notification.Type.TRAY_NOTIFICATION);

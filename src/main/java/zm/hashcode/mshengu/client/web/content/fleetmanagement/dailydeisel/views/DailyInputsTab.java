@@ -102,11 +102,11 @@ public class DailyInputsTab extends VerticalLayout implements
             }
         } else if (property == form.fuelLitres) {
             BigDecimal fuelLitres = new BigDecimal(form.fuelLitres.getValue().toString()); // .replaceAll(",", "")
-            fuelLitres.setScale(2, RoundingMode.HALF_UP);
+            fuelLitres = fuelLitres.setScale(2, BigDecimal.ROUND_HALF_UP);
             try {
                 BigDecimal fuelCost = new BigDecimal(form.fuelCost.getValue().toString());
                 form.randPerLitreCalc.setReadOnly(false);
-                form.randPerLitreCalc.setValue(fuelCost.divide(fuelLitres, 2, RoundingMode.HALF_UP).toString());
+                form.randPerLitreCalc.setValue(fuelCost.divide(fuelLitres, 2, BigDecimal.ROUND_HALF_UP).toString());
                 form.randPerLitreCalc.setReadOnly(true);
             } catch (Exception ex) {
             }
@@ -114,9 +114,9 @@ public class DailyInputsTab extends VerticalLayout implements
             BigDecimal fuelCost = new BigDecimal(form.fuelCost.getValue().toString());
             try {
                 BigDecimal fuelLitres = new BigDecimal(form.fuelLitres.getValue().toString());
-                fuelLitres.setScale(2, RoundingMode.HALF_UP);
+                fuelLitres = fuelLitres.setScale(2, BigDecimal.ROUND_HALF_UP);
                 form.randPerLitreCalc.setReadOnly(false);
-                form.randPerLitreCalc.setValue(fuelCost.divide(fuelLitres, 2, RoundingMode.HALF_UP).toString()); //toString
+                form.randPerLitreCalc.setValue(fuelCost.divide(fuelLitres, 2, BigDecimal.ROUND_HALF_UP).toString()); //toString
                 form.randPerLitreCalc.setReadOnly(true);
             } catch (Exception ex) {
             }

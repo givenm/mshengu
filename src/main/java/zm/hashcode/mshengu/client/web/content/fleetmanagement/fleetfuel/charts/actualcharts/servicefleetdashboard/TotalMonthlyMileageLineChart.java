@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
@@ -23,10 +25,10 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.se
  */
 public class TotalMonthlyMileageLineChart implements Serializable {
 
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     final Locale locale = new Locale("za", "ZA");
     // Format a decimal value for a specific locale
     final DecimalFormat df = new DecimalFormat("###,###,##0", new DecimalFormatSymbols(locale));
-    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public DCharts createChart(List<MonthlyMileageTotalBean> monthlyMileageTotalBeanList, Integer grandTotalMileage) {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
@@ -54,11 +56,32 @@ public class TotalMonthlyMileageLineChart implements Serializable {
         List<Object> totalList = new ArrayList<>();
         List<Object> monthList = new ArrayList<>();
 
+        // Add element at start and end of List to force axis to be inside chart rather than be at border and cannot be read by user
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(monthlyMileageTotalBeanList.get(0).getTransactionMonth());
+        calendar.add(Calendar.MONTH, -1);
+        //
+        MonthlyMileageTotalBean monthlyMileageTotalBeann = new MonthlyMileageTotalBean();
+        monthlyMileageTotalBeann.setId(new Integer("-1") + "");
+        monthlyMileageTotalBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        monthlyMileageTotalBeann.setMonthlyMileageTotal(0);
+        monthlyMileageTotalBeann.setTransactionMonth(calendar.getTime());
+        monthlyMileageTotalBeanList.add(0, monthlyMileageTotalBeann);
+        //
+        calendar.setTime(monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - 1).getTransactionMonth());
+        calendar.add(Calendar.MONTH, 1);
+        //
+        monthlyMileageTotalBeann.setId(new Integer(monthlyMileageTotalBeanList.size() + "") + "");
+        monthlyMileageTotalBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        monthlyMileageTotalBeann.setMonthlyMileageTotal(0);
+        monthlyMileageTotalBeann.setTransactionMonth(calendar.getTime());
+        monthlyMileageTotalBeanList.add(monthlyMileageTotalBeann);
+
         // Get Objects of Data
         for (MonthlyMileageTotalBean monthlyMileageTotalBean : monthlyMileageTotalBeanList) {
             totalList.add(monthlyMileageTotalBean.getMonthlyMileageTotal());
             // Truncate Year from yyyy to yy
-            monthList.add(dateTimeFormatHelper.getMediumDateYearWithTwoDigits(monthlyMileageTotalBean.getTransactionMonth().toString()));
+            monthList.add(monthlyMileageTotalBean.getTransactionMonth());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);

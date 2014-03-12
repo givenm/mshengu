@@ -192,7 +192,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
 
     private void performFleetFuelSpendSubTotal(BigDecimal monthTotal, List<OperatingCost> dateRangeOperatingCostList, OperatingCost operatingCost, BigDecimal randPerLitre, int counter) {
         // Subtotal
-        monthTotal.setScale(2, BigDecimal.ROUND_UP);
+        monthTotal = monthTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
         grandTotalFuelSpend = grandTotalFuelSpend.add(monthTotal);
         // Build FuelSpendMonthlyCostBean and add to ArrayList
         int currentIndex = dateRangeOperatingCostList.indexOf(operatingCost);
@@ -387,8 +387,8 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             }
         }
         try {
-//            System.out.println(monthDate + " - " + threeMonthStartDate + ": 3M Fuel Efficiency: FUEL COST SUM= " + allTruckFuelCostTotal + " / 3M Fuel Efficiency: MILEAGE SUM= " + allTruckMileageSum + " ANS - " + (allTruckFuelCostTotal.divide(new BigDecimal(allTruckMileageSum + ""), 2, RoundingMode.HALF_UP)));
-            return allTruckFuelCostTotal.divide(new BigDecimal(allTruckMileageSum + ""), 2, RoundingMode.HALF_UP);
+//            System.out.println(monthDate + " - " + threeMonthStartDate + ": 3M Fuel Efficiency: FUEL COST SUM= " + allTruckFuelCostTotal + " / 3M Fuel Efficiency: MILEAGE SUM= " + allTruckMileageSum + " ANS - " + (allTruckFuelCostTotal.divide(new BigDecimal(allTruckMileageSum + ""), 2, BigDecimal.ROUND_HALF_UP)));
+            return allTruckFuelCostTotal.divide(new BigDecimal(allTruckMileageSum + ""), 2, BigDecimal.ROUND_HALF_UP);
         } catch (ArithmeticException a) {
             System.out.println("All Truck Fuel Cost Total (" + allTruckFuelCostTotal + ") / All Truck Mileage Sum (" + allTruckMileageSum + ") | A Divide By Zero exception (ArithmeticException) caught");
 //            Notification.show("Error. A Calculation is trying to divide by ZERO. Reason for 0.00 per KM.", Notification.Type.TRAY_NOTIFICATION);
