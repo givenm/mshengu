@@ -57,8 +57,7 @@ public class VehicleFuelUsageForm extends FormLayout {
 
     private ComboBox getVehicleComboBox() {
         truckId = new ComboBox("Select a Truck");
-        List<Truck> truckList = TruckFacade.getTruckService().findAll();
-        //  Collection<Location> cities = Collections2.filter(locations, new CityPredicate());
+        List<Truck> truckList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
         truckId.addItem("all");
         truckId.setItemCaption("all", "All");
         for (Truck truck : truckList) {

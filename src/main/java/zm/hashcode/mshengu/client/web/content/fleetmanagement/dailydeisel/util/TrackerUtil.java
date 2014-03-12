@@ -43,9 +43,9 @@ public class TrackerUtil implements Serializable {
         if (fuelCost.compareTo(new BigDecimal("0.00")) == 0) {
             return new BigDecimal("0.00");
         }
-        fuelCost = fuelCost.divide(new BigDecimal(litres.toString()), 2, RoundingMode.HALF_UP);
-//        fuelCost.setScale(2, RoundingMode.HALF_UP);
-        return fuelCost.setScale(2, RoundingMode.HALF_UP);
+        fuelCost = fuelCost.divide(new BigDecimal(litres.toString()), 2, BigDecimal.ROUND_HALF_UP);
+//        fuelCost.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return fuelCost.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -58,8 +58,8 @@ public class TrackerUtil implements Serializable {
      */
     public BigDecimal getRandPerKilometre(BigDecimal fuelCost, Integer trip) {
         if (fuelCost.compareTo(new BigDecimal("0.00")) == 1 && trip > 0) {
-            fuelCost = fuelCost.divide(new BigDecimal(trip.toString()), 2, RoundingMode.HALF_UP);
-            return fuelCost.setScale(2, RoundingMode.HALF_UP);
+            fuelCost = fuelCost.divide(new BigDecimal(trip.toString()), 2, BigDecimal.ROUND_HALF_UP);
+            return fuelCost.setScale(2, BigDecimal.ROUND_HALF_UP);
         }
         return BigDecimal.ZERO;
     }
@@ -81,11 +81,11 @@ public class TrackerUtil implements Serializable {
      * @return BigDecimal
      */
     public BigDecimal getFuelSpecRandPerKilometre(BigDecimal fuelSpec, BigDecimal randPerLiter) {
-        BigDecimal percentageCalc = fuelSpec.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+        BigDecimal percentageCalc = fuelSpec.divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
 //        System.out.println("\n\nFuel Spec Percent is: " + percentageCalc + ". Highest petrol price for month : " + randPerLiter + "\n\n");
 
         randPerLiter = randPerLiter.multiply(percentageCalc);
-        return randPerLiter.setScale(2, BigDecimal.ROUND_UP);
+        return randPerLiter.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -97,7 +97,7 @@ public class TrackerUtil implements Serializable {
      */
     public BigDecimal getTarget(BigDecimal randPerLitre, BigDecimal operationalAllowance) {
         randPerLitre = randPerLitre.add(operationalAllowance);
-        return randPerLitre.setScale(2, RoundingMode.HALF_UP);
+        return randPerLitre.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -126,10 +126,10 @@ public class TrackerUtil implements Serializable {
         Integer tripMileageSum = calculateTripMileageSum(monthOperatingCostList, truck);
         // Calculate Sum of Trips
         if (mileageCalc > 0 && (fuelCostSum.compareTo(new BigDecimal("0.00")) == 1)) { // if(Monthly Mileage >0 && Monthly Amount > 0)
-            return fuelCostSum.divide(BigDecimal.valueOf(mileageCalc), 2, RoundingMode.HALF_UP);
+            return fuelCostSum.divide(BigDecimal.valueOf(mileageCalc), 2, BigDecimal.ROUND_HALF_UP);
         } else {
             // DO TEH mtdAct CALCULATION
-            return fuelCostSum.divide(new BigDecimal(tripMileageSum.toString()), 2, RoundingMode.HALF_UP);
+            return fuelCostSum.divide(new BigDecimal(tripMileageSum.toString()), 2, BigDecimal.ROUND_HALF_UP);
         }
     }
 

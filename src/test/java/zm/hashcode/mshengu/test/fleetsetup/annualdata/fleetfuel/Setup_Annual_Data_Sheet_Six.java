@@ -118,10 +118,10 @@ public class Setup_Annual_Data_Sheet_Six extends AppTest {
                         stringTokenizer = new StringTokenizer(mileageToken, ".");
                         closingMileage = Integer.parseInt(stringTokenizer.nextElement().toString());
                         //
-                        System.out.println("TruckId: " + truckId + ". Date: " + datee + ". Amount: " + amount.setScale(2, RoundingMode.HALF_UP) + ". Closing Mileage: " + closingMileage + ". Driver Person ID: " + driverPersonId);
+                        System.out.println("TruckId: " + truckId + ". Date: " + datee + ". Amount: " + amount.setScale(2, BigDecimal.ROUND_HALF_UP) + ". Closing Mileage: " + closingMileage + ". Driver Person ID: " + driverPersonId);
 
                         // Build and Persist the AnnualDataFleetFuel Object
-                        AnnualDataFleetFuel annualData = createAnnualDataEntity(datee, amount.setScale(2, RoundingMode.HALF_UP), closingMileage, truckId, driverPersonId);
+                        AnnualDataFleetFuel annualData = createAnnualDataEntity(datee, amount.setScale(2, BigDecimal.ROUND_HALF_UP), closingMileage, truckId, driverPersonId);
                         annualDataService.persist(annualData);
 //                    // Build and Update the Truck Object
 //                    addTruckAnnualData(annualData);
