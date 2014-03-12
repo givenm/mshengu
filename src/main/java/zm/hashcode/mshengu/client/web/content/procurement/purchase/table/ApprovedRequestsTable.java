@@ -8,7 +8,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.Reindeer;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
@@ -47,9 +46,7 @@ public class ApprovedRequestsTable extends Table {
         setImmediate(true);
         setSizeFull();
 
-        String datemonth = new SimpleDateFormat("MMMM").format(new Date());
-        String dateyear = new SimpleDateFormat("YYYY").format(new Date());
-        loadTable(RequestFacade.getRequestService().findAll(), datemonth, dateyear);
+        loadTable(RequestFacade.getRequestService().getApprovedRequests(new Date()));
     }
 
     private void displayPDF(Object object) {
@@ -60,34 +57,28 @@ public class ApprovedRequestsTable extends Table {
         tab.addComponent(form);
     }
 
-    public final void loadTable(List<Request> items, String month, String year) {
-        for (int i = items.size() - 1; i >= 0; i--) {
-            if (items.get(i).isApprovalStatus() && items.get(i).getOrderDate() != null) {
-                String datemonth = new SimpleDateFormat("MMMM").format(items.get(i).getOrderDate());
-                String dateyear = new SimpleDateFormat("YYYY").format(items.get(i).getOrderDate());
-                if (datemonth.equals(month) && year.equals(dateyear)) {
-                    Button showDetails = new Button("View PO");
-                    showDetails.setData(items.get(i));
-                    showDetails.setStyleName(Reindeer.BUTTON_LINK);
-                    showDetails.setImmediate(true);
-                    showDetails.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(Button.ClickEvent event) {
-                            displayPDF(event.getButton().getData());
-                        }
-                    });
-                    addItem(new Object[]{
-                        items.get(i).getApprover(),
-                        getDelivery(items.get(i).getOrderDate()),
-                        items.get(i).getOrderNumber(),
-                        items.get(i).getPersonName(),
-                        items.get(i).getServiceProviderName(),
-                        items.get(i).getTotal(),
-                        getEmailMessage(items.get(i)),
-                        getGRNMessage(items.get(i)),
-                        showDetails,}, items.get(i).getId());
+    public final void loadTable(List<Request> items) {
+        for (Request request: items) {
+            Button showDetails = new Button("View PO");
+            showDetails.setData(request);
+            showDetails.setStyleName(Reindeer.BUTTON_LINK);
+            showDetails.setImmediate(true);
+            showDetails.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    displayPDF(event.getButton().getData());
                 }
-            }
+            });
+            addItem(new Object[]{
+                request.getApprover(),
+                getDelivery(request.getOrderDate()),
+                request.getOrderNumber(),
+                request.getPersonName(),
+                request.getServiceProviderName(),
+                request.getTotal(),
+                getEmailMessage(request),
+                getGRNMessage(request),
+                showDetails,}, request.getId());       
         }
     }
 
@@ -98,6 +89,7 @@ public class ApprovedRequestsTable extends Table {
             return "not sent";
         }
     }
+
     private String getGRNMessage(Request request) {
         if (request.getInvoiceNumber() != null) {
             return "Yes";

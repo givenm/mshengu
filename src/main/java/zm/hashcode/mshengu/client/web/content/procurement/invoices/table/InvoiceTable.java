@@ -9,7 +9,6 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.Reindeer;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
