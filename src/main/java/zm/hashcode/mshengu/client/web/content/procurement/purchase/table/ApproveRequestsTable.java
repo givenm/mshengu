@@ -45,28 +45,26 @@ public class ApproveRequestsTable extends Table {
     }
 
     private void displayRequests() {
-        List<Request> requestList = RequestFacade.getRequestService().findAll();
+        List<Request> requestList = RequestFacade.getRequestService().getPendingRequests();
         if (requestList != null) {
             for (Request request : requestList) {
-                if (!request.isApprovalStatus() && request.getReasonForDisapproval() == null) {
-                    Button approve = new Button("More Details");
-                    approve.setData(request.getId());
-                    approve.setStyleName(Reindeer.BUTTON_LINK);
-                    approve.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(Button.ClickEvent event) {
-                            String itemId = event.getButton().getData().toString();
-                            ApproveRequestsForm form = new ApproveRequestsForm(itemId, tab, main);
-                            tab.removeAllComponents();
-                            tab.addComponent(form);
-                        }
-                    });
-                    addItem(new Object[]{
-                        request.getPersonName(),
-                        request.getServiceProviderName(),
-                        request.getTotal(),
-                        approve,}, request.getId());
-                }
+                Button approve = new Button("More Details");
+                approve.setData(request.getId());
+                approve.setStyleName(Reindeer.BUTTON_LINK);
+                approve.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent event) {
+                        String itemId = event.getButton().getData().toString();
+                        ApproveRequestsForm form = new ApproveRequestsForm(itemId, tab, main);
+                        tab.removeAllComponents();
+                        tab.addComponent(form);
+                    }
+                });
+                addItem(new Object[]{
+                    request.getPersonName(),
+                    request.getServiceProviderName(),
+                    request.getTotal(),
+                    approve,}, request.getId());
             }
         }
     }

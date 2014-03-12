@@ -196,7 +196,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
         transactedRequestListQuery.addCriteria(
                 Criteria.where("InvoiceNumber").ne(null)
                 .andOperator(Criteria.where("PaymentDate").exists(false)));
-        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
@@ -207,7 +207,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 Criteria.where("serviceProviderSupplierId").is(serviceProviderId)
                 .andOperator(Criteria.where("InvoiceNumber").ne(null),
                 Criteria.where("PaymentDate").exists(false)));
-        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
@@ -308,5 +308,81 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 .andOperator(Criteria.where("InvoiceNumber").ne(null), Criteria.where("DeliveryDate").gte(from),
                 Criteria.where("DeliveryDate").lte(to)));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getPendingRequests() {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("approver").exists(false));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getDisApprovedRequests() {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("reasonForDisapproval").exists(true));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getApprovedRequests(Date month) {
+        Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
+        Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return getProcessedApprovedRequests(from, calendar.getTime());
+    }
+
+    private List<Request> getProcessedApprovedRequests(Date from, Date to) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("orderNumber").exists(true)
+                .andOperator(Criteria.where("orderDate").ne(null), Criteria.where("orderDate").gte(from),
+                Criteria.where("orderDate").lte(to), Criteria.where("orderDate").ne(null)));
+         transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> getApprovedRequestsBySupplier(String serviceProviderId, Date month) {
+        Date from = dateTimeFormatHelper.resetTimeAndMonthStart(month);
+        Date to = dateTimeFormatHelper.resetTimeAndMonthEnd(month);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(to);
+        // Set time fields to last hour:minute:second:millisecond
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return getProcessedApprovedRequestsBySupplier(serviceProviderId, from, calendar.getTime());
+    }
+
+    private List<Request> getProcessedApprovedRequestsBySupplier(String serviceProviderId, Date from, Date to) {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("orderNumber").exists(true)
+                .andOperator(Criteria.where("OrderDate").ne(null), Criteria.where("OrderDate").gte(from),
+                Criteria.where("OrderDate").lte(to), Criteria.where("serviceProviderSupplierId").is(serviceProviderId)));
+         transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
+        return mongoOperation.find(transactedRequestListQuery, Request.class);
+    }
+
+    @Override
+    public List<Request> findByMisMatchStatus() {
+        Query transactedRequestListQuery = new Query();
+        transactedRequestListQuery.addCriteria(
+                Criteria.where("matchStatus").gte("mismatch"));
+         transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
+         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 }
