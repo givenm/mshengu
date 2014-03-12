@@ -13,8 +13,7 @@ import java.util.Date;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.forms.CustomerSiteFiledServicesForm;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.SiteServiceLogTable;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.VehicleServiceLogTable;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.ServiceSchedulingMenu;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.forms.SiteDetailsForm;
 import zm.hashcode.mshengu.domain.products.Site;
@@ -23,27 +22,26 @@ import zm.hashcode.mshengu.domain.products.Site;
  *
  * @author Ferox
  */
-public class SiteSiteServiceLogTab extends VerticalLayout implements
+public class VehicleServiceLogsTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
     private final SiteDetailsForm form;
-    private final SiteServiceLogTable table;
+    private final VehicleServiceLogTable table;
     private String parentId = null;
     private final DateTimeFormatWeeklyHelper dtfwh;
     private final Label lblFrom;
     private final Label lblTo;
-    private final CustomerSiteFiledServicesForm selectCustomerSite;
     Date date;
 
-    public SiteSiteServiceLogTab(MshenguMain app, CustomerSiteFiledServicesForm selectCustomerSite) {
+    public VehicleServiceLogsTab(MshenguMain app) {
         main = app;
         this.dtfwh = new DateTimeFormatWeeklyHelper();
         date = new Date();
         dtfwh.setDate(date);
         form = new SiteDetailsForm();
-        this.selectCustomerSite = selectCustomerSite;
-        table = new SiteServiceLogTable(main);
+
+        table = new VehicleServiceLogTable(main);
         Label topleft = new Label("");
         topleft.setSizeUndefined();
         topleft.addStyleName("h4");
@@ -167,9 +165,6 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate) {
         setServiceLogRange(startDate, endDate);
         table.loadServiceLogDetails(siteId, startDate, endDate);
-        if (siteId != null && !siteId.equals("")) {
-            selectCustomerSite.displayTotals(siteId, startDate, endDate, siteId);
-        }
     }
 
     private void setServiceLogRange(Date startDate, Date endDate) {
