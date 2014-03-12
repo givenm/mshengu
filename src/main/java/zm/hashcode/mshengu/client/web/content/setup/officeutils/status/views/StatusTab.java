@@ -138,6 +138,7 @@ public class StatusTab extends VerticalLayout implements
         form.cancel.addClickListener((Button.ClickListener) this);
         form.update.addClickListener((Button.ClickListener) this);
         form.delete.addClickListener((Button.ClickListener) this);
+        
         //Register Table Listerners
         table.addValueChangeListener((Property.ValueChangeListener) this);
     }
