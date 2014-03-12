@@ -8,6 +8,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.Reindeer;
 import java.math.BigDecimal;
+import java.util.List;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.form.DisapprovedRequestsForm;
 import zm.hashcode.mshengu.client.web.content.procurement.purchase.views.DisapprovedRequestsTab;
@@ -42,8 +43,9 @@ public class DisapproveRequestsTable extends Table {
     }
 
     private void displayRequests() {
-        if (RequestFacade.getRequestService().findAll() != null) {
-            for (Request request : RequestFacade.getRequestService().findAll()) {
+        List<Request> requests = RequestFacade.getRequestService().getDisApprovedRequests();
+        if (requests != null) {
+            for (Request request : requests) {
                 if (request.getReasonForDisapproval() != null) {
                     Button showDetails = new Button("More Details");
                     showDetails.setData(request.getId());

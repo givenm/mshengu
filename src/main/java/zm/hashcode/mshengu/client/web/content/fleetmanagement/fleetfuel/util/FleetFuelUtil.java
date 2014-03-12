@@ -25,7 +25,7 @@ import zm.hashcode.mshengu.domain.fleet.Truck;
  */
 public class FleetFuelUtil implements Serializable {
 
-    private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     public static Date startDate = null;
     public static Date endDate = null;
     public static List<Truck> allTrucks = new ArrayList<>();
@@ -139,7 +139,7 @@ public class FleetFuelUtil implements Serializable {
         return operatingCosts;
     }
 
-    public List<OperatingCost> getOperatingCostsForSpecDates(Date startDate, Date endDate, List<OperatingCost> operatingCostTwentyFiveMonthsList) {
+    public List<OperatingCost> getOperatingCostsForDateRange(Date startDate, Date endDate, List<OperatingCost> operatingCostTwentyFiveMonthsList) {
         boolean found = true;
         Date nuStartDate = dateTimeFormatHelper.resetTimeAndMonthStart(startDate);
         Date nuEndDate = dateTimeFormatHelper.resetTimeAndMonthEnd(endDate);

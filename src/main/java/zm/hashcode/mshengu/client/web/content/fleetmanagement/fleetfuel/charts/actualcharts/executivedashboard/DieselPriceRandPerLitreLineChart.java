@@ -6,9 +6,16 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.dussan.vaadin.dcharts.DCharts;
+import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.charts.LineChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.executivedashboard.FuelSpendMonthlyCostBean;
 
@@ -17,6 +24,8 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.ex
  * @author Colin
  */
 public class DieselPriceRandPerLitreLineChart implements Serializable {
+
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     public DCharts createChart(List<FuelSpendMonthlyCostBean> fuelSpendMonthlyCostBeanList /*, BigDecimal grandTotal*/) {
         // Deciding Ticks e.g. .5, 1, 1.5, 2, 2.5 ... etc
@@ -54,10 +63,8 @@ public class DieselPriceRandPerLitreLineChart implements Serializable {
         // Get Objects of Data
         for (FuelSpendMonthlyCostBean fuelSpendMonthlyCostBean : fuelSpendMonthlyCostBeanList) {
             totalList.add(fuelSpendMonthlyCostBean.getMonthRandPerLiter());
-            // Truncate the Names
-            monthList.add(fuelSpendMonthlyCostBean.getMonth());
-////            monthList.add(dateTimeFormatHelper.);
-
+            // Truncate Year from yyyy to yy
+            monthList.add(dateTimeFormatHelper.getMediumDateYearWithTwoDigits(fuelSpendMonthlyCostBean.getTransactionMonth().toString()));
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);

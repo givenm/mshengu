@@ -13,7 +13,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.ui.util.SequenceFacade;
 import zm.hashcode.mshengu.app.security.GetUserCredentials;
