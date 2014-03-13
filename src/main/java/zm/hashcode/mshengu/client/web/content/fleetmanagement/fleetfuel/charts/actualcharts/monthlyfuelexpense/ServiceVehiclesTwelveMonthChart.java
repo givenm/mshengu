@@ -10,12 +10,15 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.app.util.charts.NonServiceVehiclesTwelveMonthLineChart;
 import zm.hashcode.mshengu.app.util.charts.LineChart;
 import zm.hashcode.mshengu.app.util.charts.MileageLineChart;
+import zm.hashcode.mshengu.app.util.charts.ServiceVehiclesTwelveMonthLineChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.ServiceVehiclesTwelveMonthBean;
 
 /**
@@ -62,37 +65,37 @@ public class ServiceVehiclesTwelveMonthChart implements Serializable {
 
         // Add element at start and end of List to force axis to be inside chart rather than be at border and cannot be read by user
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(serviceVehiclesTwelveMonthBeanList.get(0).getTransactionMonth());
+        calendar.setTime(resetMonthToFirstDay(serviceVehiclesTwelveMonthBeanList.get(0).getTransactionMonth()));
         calendar.add(Calendar.MONTH, -1);
         //
         ServiceVehiclesTwelveMonthBean ServiceVehiclesTwelveMonthBeann = new ServiceVehiclesTwelveMonthBean();
         ServiceVehiclesTwelveMonthBeann.setId(new Integer("-1") + "");
         ServiceVehiclesTwelveMonthBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-        ServiceVehiclesTwelveMonthBeann.setTotalAmount(BigDecimal.ZERO);
+        ServiceVehiclesTwelveMonthBeann.setTotalAmount(serviceVehiclesTwelveMonthBeanList.get(0).getTotalAmount());
         ServiceVehiclesTwelveMonthBeann.setTransactionMonth(calendar.getTime());
         serviceVehiclesTwelveMonthBeanList.add(0, ServiceVehiclesTwelveMonthBeann);
         //
-        calendar.setTime(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth());
+        calendar.setTime(resetMonthToFirstDay(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth()));
         calendar.add(Calendar.MONTH, 1);
         //
-        ServiceVehiclesTwelveMonthBeann.setId(new Integer((serviceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
-        ServiceVehiclesTwelveMonthBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-        ServiceVehiclesTwelveMonthBeann.setTotalAmount(BigDecimal.ZERO);
-        ServiceVehiclesTwelveMonthBeann.setTransactionMonth(calendar.getTime());
-        serviceVehiclesTwelveMonthBeanList.add(ServiceVehiclesTwelveMonthBeann);
+        ServiceVehiclesTwelveMonthBean ServiceVehiclesTwelveMonthBeann1 = new ServiceVehiclesTwelveMonthBean();
+        ServiceVehiclesTwelveMonthBeann1.setId(new Integer((serviceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
+        ServiceVehiclesTwelveMonthBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        ServiceVehiclesTwelveMonthBeann1.setTotalAmount(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTotalAmount());
+        ServiceVehiclesTwelveMonthBeann1.setTransactionMonth(calendar.getTime());
+        serviceVehiclesTwelveMonthBeanList.add(ServiceVehiclesTwelveMonthBeann1);
 
         // Get Objects of Data
         for (ServiceVehiclesTwelveMonthBean serviceVehiclesTwelveMonthBean : serviceVehiclesTwelveMonthBeanList) {
             totalList.add(serviceVehiclesTwelveMonthBean.getTotalAmount());
-            // Truncate Year from yyyy to yy
-            monthList.add(serviceVehiclesTwelveMonthBean.getTransactionMonth());
+            monthList.add(serviceVehiclesTwelveMonthBean.getMonth());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
 
-        final MileageLineChart mileageLineChart = new MileageLineChart();
-        DCharts dBarChart = mileageLineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue, null); // null for Chart Title
 
+        final ServiceVehiclesTwelveMonthLineChart serviceVehiclesTwelveMonthLineChart = new ServiceVehiclesTwelveMonthLineChart();
+        DCharts dBarChart = serviceVehiclesTwelveMonthLineChart.buildLineChart(totalListArray, monthListArray, tickInterval, minTickValue, null); // null for Chart Title
 //        dBarChart.getOptions().getTitle().setText(title);
         dBarChart.setWidth("450px");
         dBarChart.setHeight("225px");
@@ -106,5 +109,9 @@ public class ServiceVehiclesTwelveMonthChart implements Serializable {
 //        dBarChart.getOptions().setTitle("");
 
         return dBarChart;
+    }
+
+    public Date resetMonthToFirstDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 }

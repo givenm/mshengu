@@ -10,11 +10,12 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
-import zm.hashcode.mshengu.app.util.charts.FuelExpenseLineChart;
+import zm.hashcode.mshengu.app.util.charts.NonServiceVehiclesTwelveMonthLineChart;
 import zm.hashcode.mshengu.app.util.charts.MileageLineChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.NonServiceVehiclesTwelveMonthBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.ServiceVehiclesTwelveMonthBean;
@@ -65,39 +66,40 @@ public class NonServiceVehiclesTwelveMonthChart implements Serializable {
         if (!nonServiceVehiclesTwelveMonthBeanList.isEmpty()) {
             // Add element at start and end of List to force axis to be inside chart rather than be at border and cannot be read by user
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(nonServiceVehiclesTwelveMonthBeanList.get(0).getTransactionMonth());
+            calendar.setTime(resetMonthToFirstDay(nonServiceVehiclesTwelveMonthBeanList.get(0).getTransactionMonth()));
             calendar.add(Calendar.MONTH, -1);
             //
             NonServiceVehiclesTwelveMonthBean nonServiceVehiclesTwelveMonthBeann = new NonServiceVehiclesTwelveMonthBean();
             nonServiceVehiclesTwelveMonthBeann.setId(new Integer("-1") + "");
             nonServiceVehiclesTwelveMonthBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-            nonServiceVehiclesTwelveMonthBeann.setNonOperationalTotalAmount(BigDecimal.ZERO);
-            nonServiceVehiclesTwelveMonthBeann.setOperationalTotalAmount(BigDecimal.ZERO);
+            nonServiceVehiclesTwelveMonthBeann.setNonOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(0).getNonOperationalTotalAmount());
+            nonServiceVehiclesTwelveMonthBeann.setOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(0).getOperationalTotalAmount());
             nonServiceVehiclesTwelveMonthBeann.setTransactionMonth(calendar.getTime());
             nonServiceVehiclesTwelveMonthBeanList.add(0, nonServiceVehiclesTwelveMonthBeann);
             //
-            calendar.setTime(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth());
+            calendar.setTime(resetMonthToFirstDay(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth()));
             calendar.add(Calendar.MONTH, 1);
             //
-            nonServiceVehiclesTwelveMonthBeann.setId(new Integer((nonServiceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
-            nonServiceVehiclesTwelveMonthBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-            nonServiceVehiclesTwelveMonthBeann.setNonOperationalTotalAmount(BigDecimal.ZERO);
-            nonServiceVehiclesTwelveMonthBeann.setOperationalTotalAmount(BigDecimal.ZERO);
-            nonServiceVehiclesTwelveMonthBeann.setTransactionMonth(calendar.getTime());
-            nonServiceVehiclesTwelveMonthBeanList.add(nonServiceVehiclesTwelveMonthBeann);
+            NonServiceVehiclesTwelveMonthBean nonServiceVehiclesTwelveMonthBeann1 = new NonServiceVehiclesTwelveMonthBean();
+            nonServiceVehiclesTwelveMonthBeann1.setId(new Integer((nonServiceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
+            nonServiceVehiclesTwelveMonthBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+            nonServiceVehiclesTwelveMonthBeann1.setNonOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getNonOperationalTotalAmount());
+            nonServiceVehiclesTwelveMonthBeann1.setOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getOperationalTotalAmount());
+            nonServiceVehiclesTwelveMonthBeann1.setTransactionMonth(calendar.getTime());
+            nonServiceVehiclesTwelveMonthBeanList.add(nonServiceVehiclesTwelveMonthBeann1);
         }
         // Get Objects of Data
         for (NonServiceVehiclesTwelveMonthBean nonServiceVehiclesTwelveMonthBean : nonServiceVehiclesTwelveMonthBeanList) {
             nonOperationalTotalList.add(nonServiceVehiclesTwelveMonthBean.getNonOperationalTotalAmount());
             operationalTotalList.add(nonServiceVehiclesTwelveMonthBean.getOperationalTotalAmount());
-            monthList.add(nonServiceVehiclesTwelveMonthBean.getTransactionMonth());
+            monthList.add(nonServiceVehiclesTwelveMonthBean.getMonth());
         }
         Object[] nonOperationalTotalListArray = nonOperationalTotalList.toArray(new Object[nonOperationalTotalList.size()]);
         Object[] operationalTotalListArray = operationalTotalList.toArray(new Object[operationalTotalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
 
-        final FuelExpenseLineChart fuelExpenseLineChart = new FuelExpenseLineChart();
-        DCharts dBarChart = fuelExpenseLineChart.buildLineChart(nonOperationalTotalListArray, operationalTotalListArray, monthListArray, tickInterval, minTickValue, null); // null for Chart Title
+        final NonServiceVehiclesTwelveMonthLineChart nonServiceVehiclesTwelveMonthLineChart = new NonServiceVehiclesTwelveMonthLineChart();
+        DCharts dBarChart = nonServiceVehiclesTwelveMonthLineChart.buildLineChart(nonOperationalTotalListArray, operationalTotalListArray, monthListArray, tickInterval, minTickValue, null); // null for Chart Title
 
 //        dBarChart.getOptions().getTitle().setText(title);
         dBarChart.setWidth("450px");
@@ -110,5 +112,9 @@ public class NonServiceVehiclesTwelveMonthChart implements Serializable {
 //        dBarChart.setMarginTop(-3);
 //        dBarChart.getOptions().setTitle("");
         return dBarChart;
+    }
+
+    public Date resetMonthToFirstDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 }

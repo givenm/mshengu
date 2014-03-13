@@ -140,6 +140,7 @@ public class ServiceFleetEfficiencyLineChart implements Serializable {
                 .setShowGridline(true)) //
                 .setTickOptions(
                 new AxisTickRenderer()
+                .setFontSize("8pt")
                 .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
                 //                .setDrawMinorGridlines(true)
                 .setDrawMajorTickMarks(true) // NB SKIPPING TICKS
