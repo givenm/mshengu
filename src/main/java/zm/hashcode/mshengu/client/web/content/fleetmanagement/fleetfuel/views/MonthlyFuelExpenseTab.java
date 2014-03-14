@@ -307,7 +307,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
     }
 
     private void buildServiceVehiclesTwelveMonthBeanList() {
-        nonServiceVehiclesTwelveMonthBeanList.clear();
+        serviceVehiclesTwelveMonthBeanList.clear();
         List<OperatingCost> serviceTrucksOperatingCostList = new ArrayList<>();
 
         for (OperatingCost operatingCost : operatingCostTwelveMonthsList) {

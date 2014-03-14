@@ -134,11 +134,12 @@ public class LineChart implements Serializable {
                 .setTickOptions(
                 new CanvasAxisTickRenderer()
                 .setAngle(-45)
-                .setFontSize("10pt")
+                .setFontSize("8pt")
                 .setShowMark(true)
                 .setShowGridline(true)) //
                 .setTickOptions(
                 new AxisTickRenderer()
+                .setFontSize("8pt")
                 .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
                 .setNumberTicks(monthListArray.length) //
                 )

@@ -37,7 +37,7 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
  *
  * @author Colin
  */
-public class FuelExpenseLineChart implements Serializable {
+public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
 
     public DCharts buildLineChart(Object[] nonOperationalTotalListArray, Object[] operationalTotalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, String chartTitle) {
 
@@ -47,7 +47,7 @@ public class FuelExpenseLineChart implements Serializable {
             dataSeries.add(monthListArray[i], nonOperationalTotalListArray[i]);
 //            System.out.println("Month " + monthListArray[i] + "= " + nonOperationalTotalListArray[i]);
         }
-
+        dataSeries.newSeries();
         for (int i = 0; i < operationalTotalListArray.length; i++) {
             dataSeries.add(monthListArray[i], operationalTotalListArray[i]);
 //            System.out.println("Month " + monthListArray[i] + "= " + operationalTotalListArray[i]);
@@ -101,8 +101,9 @@ public class FuelExpenseLineChart implements Serializable {
                 .setShowGridline(true)) //
                 .setTickOptions(
                 new AxisTickRenderer()
+                .setFontSize("8pt")
                 .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
-                .setNumberTicks(monthListArray.length) //
+                .setDrawMajorTickMarks(true) // NB SKIPPING TICKS
                 )
                 //
                 .addAxis(

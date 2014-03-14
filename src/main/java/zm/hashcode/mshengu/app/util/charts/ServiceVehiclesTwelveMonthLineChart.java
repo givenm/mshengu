@@ -7,12 +7,10 @@ package zm.hashcode.mshengu.app.util.charts;
 import java.io.Serializable;
 import org.dussan.vaadin.dcharts.DCharts;
 import org.dussan.vaadin.dcharts.base.elements.PointLabels;
-import org.dussan.vaadin.dcharts.base.elements.Trendline;
 import org.dussan.vaadin.dcharts.base.elements.XYaxis;
 import org.dussan.vaadin.dcharts.base.elements.XYseries;
 import org.dussan.vaadin.dcharts.base.renderers.MarkerRenderer;
 import org.dussan.vaadin.dcharts.data.DataSeries;
-import org.dussan.vaadin.dcharts.data.Ticks;
 import org.dussan.vaadin.dcharts.metadata.TextAligns;
 import org.dussan.vaadin.dcharts.metadata.TooltipAxes;
 import org.dussan.vaadin.dcharts.metadata.XYaxes;
@@ -20,12 +18,10 @@ import org.dussan.vaadin.dcharts.metadata.directions.AnimationDirections;
 import org.dussan.vaadin.dcharts.metadata.locations.PointLabelLocations;
 import org.dussan.vaadin.dcharts.metadata.locations.TooltipLocations;
 import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
-import org.dussan.vaadin.dcharts.metadata.renderers.LabelRenderers;
 import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
 import org.dussan.vaadin.dcharts.metadata.styles.MarkerStyles;
 import org.dussan.vaadin.dcharts.options.Axes;
 import org.dussan.vaadin.dcharts.options.AxesDefaults;
-import org.dussan.vaadin.dcharts.options.Cursor;
 import org.dussan.vaadin.dcharts.options.Highlighter;
 import org.dussan.vaadin.dcharts.options.Options;
 import org.dussan.vaadin.dcharts.options.Series;
@@ -40,76 +36,15 @@ import org.dussan.vaadin.dcharts.renderers.tick.CanvasAxisTickRenderer;
 /**
  *
  * @author Colin
- *
  */
+public class ServiceVehiclesTwelveMonthLineChart implements Serializable {
 
-/*
- FOUND @ http://www.jqplot.com/docs/files/plugins/jqplot-dateAxisRenderer-js.html
- Dates can be passed into the axis in almost any recognizable value and will be parsed.  They will be rendered on the axis in the format specified by tickOptions.formatString.  e.g. tickOptions.formatString = ‘%Y-%m-%d’.
-
- Accecptable format codes are:
-
- Code    Result                  Description
- == Years ==
- %Y      2008                Four-digit year
- %y      08                  Two-digit year
- == Months ==
- %m      09                  Two-digit month
- %#m     9                   One or two-digit month
- %B      September           Full month name
- %b      Sep                 Abbreviated month name
- == Days ==
- %d      05                  Two-digit day of month
- %#d     5                   One or two-digit day of month
- %e      5                   One or two-digit day of month
- %A      Sunday              Full name of the day of the week
- %a      Sun                 Abbreviated name of the day of the week
- %w      0                   Number of the day of the week (0 = Sunday, 6 = Saturday)
- %o      th                  The ordinal suffix string following the day of the month
- == Hours ==
- %H      23                  Hours in 24-hour format (two digits)
- %#H     3                   Hours in 24-hour integer format (one or two digits)
- %I      11                  Hours in 12-hour format (two digits)
- %#I     3                   Hours in 12-hour integer format (one or two digits)
- %p      PM                  AM or PM
- == Minutes ==
- %M      09                  Minutes (two digits)
- %#M     9                   Minutes (one or two digits)
- == Seconds ==
- %S      02                  Seconds (two digits)
- %#S     2                   Seconds (one or two digits)
- %s      1206567625723       Unix timestamp (Seconds past 1970-01-01 00:00:00)
- == Milliseconds ==
- %N      008                 Milliseconds (three digits)
- %#N     8                   Milliseconds (one to three digits)
- == Timezone ==
- %O      360                 difference in minutes between local time and GMT
- %Z      Mountain Standard Time  Name of timezone as reported by browser
- %G      -06:00              Hours and minutes between GMT
- == Shortcuts ==
- %F      2008-03-26          %Y-%m-%d
- %T      05:06:30            %H:%M:%S
- %X      05:06:30            %H:%M:%S
- %x      03/26/08            %m/%d/%y
- %D      03/26/08            %m/%d/%y
- %#c     Wed Mar 26 15:31:00 2008  %a %b %e %H:%M:%S %Y
- %v      3-Sep-2008          %e-%b-%Y
- %R      15:31               %H:%M
- %r      3:31:00 PM          %I:%M:%S %p
- == Characters ==
- %n      \n                  Newline
- %t      \t                  Tab
- %%      %                   Percent Symbol
- */
-public class MileageLineChart implements Serializable {
-
-    public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, String chartTitle) {
+    public DCharts buildLineChart(Object[] totalListArray, Object[] monthListArray, float tickInterval, Object minTickValue, /* Object maxTickValue, */ String chartTitle) {
 
         DataSeries dataSeries = new DataSeries();
         dataSeries.newSeries();
         for (int i = 0; i < totalListArray.length; i++) {
             dataSeries.add(monthListArray[i], totalListArray[i]);
-//            System.out.println("Month " + monthListArray[i] + "= " + totalListArray[i]);
         }
 
         Series series = new Series()
@@ -141,23 +76,30 @@ public class MileageLineChart implements Serializable {
                 new AxisTickRenderer()
                 .setFontSize("8pt")
                 .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
-                .setNumberTicks(monthListArray.length) //
+                //                .setDrawMinorGridlines(true)
+                .setDrawMajorTickMarks(true) // NB SKIPPING TICKS
+                //                .setDrawMinorTickMarks(true)//                .setNumberTicks(monthListArray.length) //
                 )
                 //
                 .addAxis(
                 new XYaxis(XYaxes.Y)
                 .setMin(minTickValue)
+                //                .setMax(maxTickValue)
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%.0f")) // .setFormatString("R%.2f")
+                .setFormatString("%.2f")) // .setFormatString("R%.2f")
                 );
 
         Highlighter highlighter = new Highlighter()
                 .setShow(true)
+                //                .setShowTooltip(true)
+                //                .setTooltipAlwaysVisible(true)
+                //                .setKeepTooltipInsideChart(true)
                 .setSizeAdjust(10)
                 .setTooltipLocation(TooltipLocations.NORTH)
-                .setTooltipAxes(TooltipAxes.XY) //                .setTooltipFormatString("<b><i><span style='color:red;'>Mileage:</span></i></b> %.0f")
+                .setTooltipAxes(TooltipAxes.XY) //  XY Shows both axes value in the Tooltip. try XY_BAR
+                //                .setTooltipFormatString("<b><i><span style='color:red;'>Value:</span></i></b> %.2f")
                 //                .setUseAxesFormatters(false)
                 ;
 
@@ -180,7 +122,7 @@ public class MileageLineChart implements Serializable {
         seriesDefaults.setRenderer(SeriesRenderers.LINE)
                 .setPointLabels(
                 new PointLabels()
-                .setFormatString("%.0f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
+                .setFormatString("%.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
                 .setShow(true)
                 .setLocation(PointLabelLocations.NORTH)
                 .setEdgeTolerance(-15))
@@ -190,8 +132,10 @@ public class MileageLineChart implements Serializable {
                 new LineRenderer()
                 .setAnimation(lineAnimation));
 
+
+
         Options options = new Options()
-                .addOption(seriesDefaults)
+                //                .addOption(seriesDefaults)
                 .setTitle(title)
                 .setSeries(series)
                 .setAxesDefaults(axesDefaults)

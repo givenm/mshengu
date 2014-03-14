@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Date;
 
 /**

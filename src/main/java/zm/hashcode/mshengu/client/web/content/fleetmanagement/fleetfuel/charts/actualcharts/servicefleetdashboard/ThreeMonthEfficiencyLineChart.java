@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
@@ -56,30 +57,30 @@ public class ThreeMonthEfficiencyLineChart implements Serializable {
 
         // Add element at start and end of List to force axis to be inside chart rather than be at border and cannot be read by user
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(serviceFleetThreeMonthlyEfficiencyBeanList.get(0).getTransactionMonth());
+        calendar.setTime(resetMonthToFirstDay(serviceFleetThreeMonthlyEfficiencyBeanList.get(0).getTransactionMonth()));
         calendar.add(Calendar.MONTH, -1);
         //
         ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBeann = new ServiceFleetThreeMonthlyEfficiencyBean();
         serviceFleetThreeMonthlyEfficiencyBeann.setId(new Integer("-1") + "");
         serviceFleetThreeMonthlyEfficiencyBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-        serviceFleetThreeMonthlyEfficiencyBeann.setMonthlyEfficiencyValue(BigDecimal.ZERO);
+        serviceFleetThreeMonthlyEfficiencyBeann.setMonthlyEfficiencyValue(serviceFleetThreeMonthlyEfficiencyBeanList.get(0).getMonthlyEfficiencyValue());
         serviceFleetThreeMonthlyEfficiencyBeann.setTransactionMonth(calendar.getTime());
         serviceFleetThreeMonthlyEfficiencyBeanList.add(0, serviceFleetThreeMonthlyEfficiencyBeann);
         //
-        calendar.setTime(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getTransactionMonth());
-        calendar.add(Calendar.MONTH, 1);
-        //
-        serviceFleetThreeMonthlyEfficiencyBeann.setId(new Integer(serviceFleetThreeMonthlyEfficiencyBeanList.size() + "") + "");
-        serviceFleetThreeMonthlyEfficiencyBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-        serviceFleetThreeMonthlyEfficiencyBeann.setMonthlyEfficiencyValue(BigDecimal.ZERO);
-        serviceFleetThreeMonthlyEfficiencyBeann.setTransactionMonth(calendar.getTime());
-        serviceFleetThreeMonthlyEfficiencyBeanList.add(serviceFleetThreeMonthlyEfficiencyBeann);
+////        calendar.setTime(resetMonthToFirstDay(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getTransactionMonth()));
+////        calendar.add(Calendar.MONTH, 1);
+////        //
+////        ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBeann1 = new ServiceFleetThreeMonthlyEfficiencyBean();
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setId(new Integer(serviceFleetThreeMonthlyEfficiencyBeanList.size() + "") + "");
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setMonthlyEfficiencyValue(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getMonthlyEfficiencyValue());
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setTransactionMonth(calendar.getTime());
+////        serviceFleetThreeMonthlyEfficiencyBeanList.add(serviceFleetThreeMonthlyEfficiencyBeann1);
 
         // Get Objects of Data
         for (ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBean : serviceFleetThreeMonthlyEfficiencyBeanList) {
             totalList.add(serviceFleetThreeMonthlyEfficiencyBean.getMonthlyEfficiencyValue());
-            // Truncate Year from yyyy to yy
-            monthList.add(serviceFleetThreeMonthlyEfficiencyBean.getTransactionMonth());
+            monthList.add(serviceFleetThreeMonthlyEfficiencyBean.getMonth());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
@@ -100,5 +101,9 @@ public class ThreeMonthEfficiencyLineChart implements Serializable {
 //        dBarChart.getOptions().setTitle("");
 
         return dLineChart;
+    }
+
+    public Date resetMonthToFirstDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 }
