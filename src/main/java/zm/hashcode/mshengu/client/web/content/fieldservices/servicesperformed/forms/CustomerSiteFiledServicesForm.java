@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.f
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -18,8 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import zm.hashcode.mshengu.app.facade.customer.ContractTypeFacade;
 import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
+import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
 import zm.hashcode.mshengu.app.facade.products.SiteServiceLogFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
@@ -27,11 +28,11 @@ import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
+import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.models.AssignDriversBean;
 import zm.hashcode.mshengu.client.web.content.setup.user.util.CustomerSiteUnitBean;
-import zm.hashcode.mshengu.domain.customer.ContractType;
 import zm.hashcode.mshengu.domain.customer.Customer;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.products.Site;
-import zm.hashcode.mshengu.domain.products.SiteServiceContractLifeCycle;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
 
 /**
@@ -51,6 +52,8 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
     public Button btnLoadLogs = new Button("Load Service Performed Logs");
     public ComboBox comboBoxSelectSite;
     public ComboBox comboBoxSelectCustomer;
+    public ComboBox comboBoxSelectVehicle;
+    public GridLayout grid;
     public DateField startDate;
     public DateField endDate;
     public Date date;
@@ -90,6 +93,9 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         comboBoxSelectContractType = UIComboBox.getContractTypeComboBox("Select Hire Type", "contractType", CustomerSiteUnitBean.class, binder);
         comboBoxSelectContractType = UIValidatorHelper.setRequiredComboBox(comboBoxSelectContractType, "Select Hire Type");
         comboBoxSelectSite = new ComboBox("Select Site");
+        comboBoxSelectSite.setWidth(250, Sizeable.Unit.PIXELS);
+        comboBoxSelectVehicle = new ComboBox("Select Vehicle");
+        comboBoxSelectVehicle.setWidth(250, Sizeable.Unit.PIXELS);
         comboBoxSelectCustomer = new ComboBox("Select Customer");
         startDate = UIComponent.getDateField("Start Date", "startDate", CustomerSiteUnitBean.class, binder);
         endDate = UIComponent.getDateField("End Date", "endDate", CustomerSiteUnitBean.class, binder);
@@ -178,7 +184,7 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
 
         errorMessage = UIComponent.getErrorLabel();
 
-        GridLayout grid = new GridLayout(4, 10);
+        grid = new GridLayout(4, 10);
 
         grid.setSizeFull();
 
@@ -188,6 +194,7 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         grid.addComponent(comboBoxSelectContractType, 0, 2);
         grid.addComponent(comboBoxSelectCustomer, 1, 2);
         grid.addComponent(comboBoxSelectSite, 2, 2);
+//        grid.addComponent(comboBoxSelectVehicle, 2, 2);
         grid.addComponent(startDate, 0, 3);
         grid.addComponent(endDate, 1, 3);
         grid.addComponent(getButtons(), 2, 3);
@@ -199,6 +206,31 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         grid.addComponent(new Label("<hr/>", ContentMode.HTML), 0, 7, 2, 7);
         grid.addComponent(gridTotals2, 0, 8, 2, 8);
         addComponent(grid);
+    }
+
+    public void loadVehiclesOnComboboxTemp(String customerId) {
+        List<Truck> truckList = TruckFacade.getTruckService().findAll();
+
+        for (Truck truck : truckList) {
+            String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
+            comboBoxSelectVehicle.addItem(truck.getId());
+            comboBoxSelectVehicle.setItemCaption(truck.getId(), truckName);
+        }
+    }
+
+    public void loadVehiclesOnCombobox(String customerId) {
+        Customer customer = CustomerFacade.getCustomerService().findById(customerId);
+        Set<Site> sites = customer.getSites();
+        for (Site site : sites) {
+            Set<SiteServiceLog> siteServiceLogs = site.getSiteServiceLog();
+            for (SiteServiceLog siteServiceLog : siteServiceLogs) {
+                if (siteServiceLog.getServicedBy() != null) { //serviced by always giving an error
+                    String truckName = siteServiceLog.getServicedBy().getVehicleNumber() + " - (" + siteServiceLog.getServicedBy().getNumberPlate() + ")";
+                    comboBoxSelectVehicle.addItem(siteServiceLog.getTruckId());
+                    comboBoxSelectVehicle.setItemCaption(siteServiceLog.getTruckId(), truckName);
+                }
+            }
+        }
     }
 
     public void loadCustomerSites(String customerId) {
@@ -227,6 +259,7 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
 
     public void displayTotals(String siteName, Date start, Date end, String optionalCustomerId) {
         int totalUnitsOnSite = 0;
+        int totalUnitsOnSiteForAll = 0;
         int totalUnitsServiced = 0;
         int totalUnitsNotServiced = 0;
         int totalServicesPerformed = 0;
@@ -238,18 +271,21 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         if (siteName.equals("All")) {
             Customer customer = CustomerFacade.getCustomerService().findById(optionalCustomerId);
             Set<Site> sites = customer.getSites();
+            // PENDING, SERVICED, OUTSTANDING             
+
             if (sites != null) {
-                for (Site site : sites) {                    
-                    
-                    if (site.getLastSiteServiceLog().getNumberOfUnitsServiced() > 0){
-                        totalSitesServiced++;
-                    }
-                    
-                    scheduledServices = calculateScheduledServices(site, end, start, scheduledServices, totalUnitsOnSite);
+                for (Site site : sites) {
+                    siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getSiteServiceLogsException(site.getName(), start, date, "SERVICED");
+                    totalSitesServiced += siteServiceLogs.size(); //total sites serviced
+                    totalUnitsOnSite = site.getLastSiteServiceContractLifeCycle().getExpectedNumberOfUnits();
+                    totalUnitsOnSiteForAll += totalUnitsOnSite;
+                    scheduledServices += calculateScheduledServices(site, end, start, scheduledServices, totalUnitsOnSite);
                     calculateSiteTotals(siteServiceLogs, totalUnitsServiced, totalUnitsNotServiced, totalServicesPerformed, site.getName(), start, end);
+
                 }
             }
             siteServiceLogValue.setValue("All Sites");
+            totalUnitsOnSite = totalUnitsOnSiteForAll; //assign back for display
         } else {
             Site site = SiteFacade.getSiteService().findById(comboBoxSelectSite.getValue().toString());
             totalUnitsOnSite = site.getLastSiteServiceContractLifeCycle().getExpectedNumberOfUnits();
@@ -267,7 +303,11 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
         fromDateValue.setValue(getDate(start));
         toDateValue.setValue(getDate(end));
 
-        totalSitesValue.setValue(totalSitesServiced + "");
+        if (totalSitesServiced > 0) {
+            totalSitesValue.setValue(totalSitesServiced + "");
+        } else {
+            totalSitesValue.setValue("");
+        }
         totalUnitsValue.setValue(totalUnitsOnSite + "");
         totalServicesValue.setValue(totalServicesPerformedGlobal + "");
         totalMissedServicesValue.setValue(totalMissedServicesGlobal + "");

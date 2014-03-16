@@ -6,16 +6,21 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.v
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
+import java.util.List;
+import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.forms.CustomerSiteFiledServicesForm;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.VehicleServiceLogTable;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.ServiceSchedulingMenu;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.forms.SiteDetailsForm;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.products.Site;
 
 /**
@@ -33,8 +38,10 @@ public class VehicleServiceLogsTab extends VerticalLayout implements
     private final Label lblFrom;
     private final Label lblTo;
     Date date;
+    public CustomerSiteFiledServicesForm fieldServicesForm;
 
-    public VehicleServiceLogsTab(MshenguMain app) {
+    public VehicleServiceLogsTab(MshenguMain app, CustomerSiteFiledServicesForm fieldServicesForm) {
+        this.fieldServicesForm = fieldServicesForm;
         main = app;
         this.dtfwh = new DateTimeFormatWeeklyHelper();
         date = new Date();
@@ -76,7 +83,8 @@ public class VehicleServiceLogsTab extends VerticalLayout implements
     }
 
     @Override
-    public void buttonClick(Button.ClickEvent event) {
+    public void buttonClick(Button.ClickEvent event
+    ) {
         final Button source = event.getButton();
         if (source == form.save) {
 //            saveForm(form.binder);
@@ -92,7 +100,8 @@ public class VehicleServiceLogsTab extends VerticalLayout implements
     }
 
     @Override
-    public void valueChange(Property.ValueChangeEvent event) {
+    public void valueChange(Property.ValueChangeEvent event
+    ) {
         final Property property = event.getProperty();
         if (property == table) {
             final Site site = SiteFacade.getSiteService().findById(table.getValue().toString());
