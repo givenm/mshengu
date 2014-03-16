@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -60,11 +61,37 @@ public class DieselPriceRandPerLitreLineChart implements Serializable {
         List<Object> totalList = new ArrayList<>();
         List<Object> monthList = new ArrayList<>();
 
+        // Add element at start and end of List to force axis to be inside chart rather than be at border and cannot be read by user
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(resetMonthToFirstDay(fuelSpendMonthlyCostBeanList.get(0).getTransactionMonth()));
+//        System.out.println("-===- " + calendar.getTime());
+        calendar.add(Calendar.MONTH, -1);
+        //
+        FuelSpendMonthlyCostBean FuelSpendMonthlyCostBeann = new FuelSpendMonthlyCostBean();
+        FuelSpendMonthlyCostBeann.setId(new Integer("-1") + "");
+        FuelSpendMonthlyCostBeann.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        FuelSpendMonthlyCostBeann.setMonthRandPerLiter(fuelSpendMonthlyCostBeanList.get(0).getMonthRandPerLiter()); //new BigDecimal("0.00")
+        FuelSpendMonthlyCostBeann.setMonthlyAmountSpend(new BigDecimal("0.00"));
+        FuelSpendMonthlyCostBeann.setTransactionMonth(calendar.getTime());
+        fuelSpendMonthlyCostBeanList.add(0, FuelSpendMonthlyCostBeann);
+        //
+        calendar.setTime(resetMonthToFirstDay(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - 1).getTransactionMonth()));
+//        System.out.println("-===- " + calendar.getTime());
+        calendar.add(Calendar.MONTH, 1);
+        //
+        FuelSpendMonthlyCostBean FuelSpendMonthlyCostBean1 = new FuelSpendMonthlyCostBean();
+        FuelSpendMonthlyCostBean1.setId(new Integer((fuelSpendMonthlyCostBeanList.size() + 1) + "") + "");
+        FuelSpendMonthlyCostBean1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+        FuelSpendMonthlyCostBean1.setMonthRandPerLiter(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - 1).getMonthRandPerLiter()); //new BigDecimal("0.00")
+        FuelSpendMonthlyCostBean1.setMonthlyAmountSpend(new BigDecimal("0.00"));
+        FuelSpendMonthlyCostBean1.setTransactionMonth(calendar.getTime());
+        fuelSpendMonthlyCostBeanList.add(FuelSpendMonthlyCostBean1);
+
         // Get Objects of Data
         for (FuelSpendMonthlyCostBean fuelSpendMonthlyCostBean : fuelSpendMonthlyCostBeanList) {
             totalList.add(fuelSpendMonthlyCostBean.getMonthRandPerLiter());
-            // Truncate Year from yyyy to yy
-            monthList.add(dateTimeFormatHelper.getMediumDateYearWithTwoDigits(fuelSpendMonthlyCostBean.getTransactionMonth().toString()));
+            monthList.add(fuelSpendMonthlyCostBean.getMonth());
+//            System.out.println(fuelSpendMonthlyCostBean.getMonth() + "-" + fuelSpendMonthlyCostBean.getMonthRandPerLiter());
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);
@@ -85,5 +112,9 @@ public class DieselPriceRandPerLitreLineChart implements Serializable {
 //        dBarChart.getOptions().setTitle("");
 
         return dBarChart;
+    }
+
+    public Date resetMonthToFirstDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 }

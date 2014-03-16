@@ -33,7 +33,7 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
     private String trucckId;
     private final TrucksTable table;
     final TwinColSelect select = new TwinColSelect();
-    private final Button assignTrucksButton = new Button("Add Routes");
+    private final Button assignTrucksButton = new Button("Add Sites");
     private HorizontalLayout assignLayout = new HorizontalLayout();
     private AssignedSitesTable assignedSitesTable;
     private HorizontalLayout assingPanel = new HorizontalLayout();
@@ -47,8 +47,8 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
         assignTrucksButton.addClickListener((Button.ClickListener) this);
         table = new TrucksTable(main);
 
-        select.setLeftColumnCaption("Select Routes");
-        select.setRightColumnCaption(" Selected Routes");
+        select.setLeftColumnCaption("Select Sites");
+        select.setRightColumnCaption(" Selected Sites");
         select.setSizeFull();
         select.setImmediate(true);
         select.setNewItemsAllowed(false);
@@ -103,7 +103,7 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
             trucckId = tId;
             assingPanel.removeAllComponents();
             assignedSitesTable = new AssignedSitesTable(main, trucckId);
-            assignedSitesTable.setCaption("Added Routes");
+            assignedSitesTable.setCaption("Added Sites");
             assingPanel.addComponent(assignedSitesTable);
         }
     }

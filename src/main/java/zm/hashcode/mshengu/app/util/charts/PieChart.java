@@ -29,7 +29,7 @@ public class PieChart implements Serializable {
         DataSeries dataSeries = new DataSeries();
         for (int i = 0; i < nameListArray.length; i++) {
             BigDecimal seriesPercentValue = new BigDecimal(percentageListArray[i] + "").multiply(sumOfPercentage);
-            seriesPercentValue = seriesPercentValue.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+            seriesPercentValue = seriesPercentValue.divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
             dataSeries.newSeries().add(nameListArray[i], seriesPercentValue);
         }
 

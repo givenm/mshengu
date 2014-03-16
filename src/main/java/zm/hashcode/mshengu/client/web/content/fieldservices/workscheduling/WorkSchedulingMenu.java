@@ -38,8 +38,8 @@ public class WorkSchedulingMenu extends VerticalLayout {
         tab.setHeight("100%");
         tab.setWidth("100%");
         
-        tab.addTab(workSchedulingTab, "WorkScheduling Routes", null);
-        tab.addTab(assignDriversTab, "Assing Drivers to Vehicle", null);
+        tab.addTab(workSchedulingTab, "Scheduled Routes", null);
+        tab.addTab(assignDriversTab, "Assign Driver to Vehicle", null);
         tab.addTab(manageRoutesTab, "Manage Routes", null);
         tab.addTab(vehicleSchedulingTab, "Fleet Weekly Work Schedule", null);
 

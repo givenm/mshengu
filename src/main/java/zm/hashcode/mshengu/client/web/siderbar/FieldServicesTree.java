@@ -28,11 +28,11 @@ public class FieldServicesTree extends Tree implements ItemClickEvent.ItemClickL
     public static final Object SERVICE_SCHEDULE = "Service Schedule";
     public static final Object WORK_SCHEDULE = "Work Scheduling";
     public static final Object SERVICES_PERFORMED = "Services Performed";
-    public static final Object SERVICES_REQUEST = "Service Request";
-    public static final Object INCIDENTS = "Incidents";
-    public static final Object CONTACT_US = "Contacts";
+    public static final Object SERVICES_REQUEST = "Service Request Management";
+    public static final Object INCIDENTS = "Incident Management";
+    public static final Object CONTACT_US = "Customer Contact Management";
     private static final String LANDING_TAB = "LANDING";
-    private static final String QUOTE_REQUESTS = "Quote Request";
+    private static final String QUOTE_REQUESTS = "Quote Management";
 
     public FieldServicesTree(MshenguMain main) {
         this.main = main;

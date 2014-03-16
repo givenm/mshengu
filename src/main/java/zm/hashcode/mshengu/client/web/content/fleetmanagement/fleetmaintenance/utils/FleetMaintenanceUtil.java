@@ -270,7 +270,7 @@ public class FleetMaintenanceUtil implements Serializable {
             for (TotalMaintenanceSpendByVehicle totalMaintenanceSpendByVehicle : spendByVehicleChartDataList) {
                 if (totalMaintenanceSpendByVehicle.getNumberPlate().equalsIgnoreCase(numberPlate)) {
                     try {
-                        randPerKilometre = totalMaintenanceSpendByVehicle.getTotal().divide(new BigDecimal(truckMileageTotal.toString()), 2, RoundingMode.HALF_UP);
+                        randPerKilometre = totalMaintenanceSpendByVehicle.getTotal().divide(new BigDecimal(truckMileageTotal.toString()), 2, BigDecimal.ROUND_HALF_UP);
                     } catch (java.lang.ArithmeticException ex) {
                         // Trying to divide by Zero for Trucks that have no entry
                     }
