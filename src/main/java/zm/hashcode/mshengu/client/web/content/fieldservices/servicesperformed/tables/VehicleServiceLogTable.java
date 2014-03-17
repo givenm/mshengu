@@ -48,7 +48,8 @@ public class VehicleServiceLogTable extends Table {
         addContainerProperty("Completion Status", String.class, null);
         addContainerProperty("Total Units Serviced", Integer.class, null);
         addContainerProperty("Total Units Not Serviced", Integer.class, null);
-         List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getAllServiceLogs(startDate, endDate);
+        //        PENDING, SERVICED, OUTSTANDING
+        List<SiteServiceLog> siteServiceLogs = SiteServiceLogFacade.getSiteServiceLogService().getAllServiceLogsException(startDate, endDate, "SERVICED");
         loadSiteServiceLog(siteServiceLogs);
 
     }
@@ -63,10 +64,7 @@ public class VehicleServiceLogTable extends Table {
             addItem(new Object[]{
                 siteServiceLog.getParentId(),
                 formatHelper.getYearMonthDay(siteServiceLog.getServiceDate()),
-//                formatHelper.getHourMinute(siteServiceLog.getServiceTime()),
-//                getDriverNmeNullCheck(siteServiceLog.getServicedBy()),
-//                siteServiceLog.getVehicleNumber(),
-                siteServiceLog.getStatus(), //  customer.getContactPerson().get(),
+                siteServiceLog.getStatus(),
                 siteServiceLog.getCompletionStatus(),
                 siteServiceLog.getNumberOfUnitsServiced(),
                 siteServiceLog.getNumberOfUnitsNotServiced(),}, siteServiceLog.getId());
@@ -99,8 +97,8 @@ public class VehicleServiceLogTable extends Table {
         loadSiteServiceLog(siteServiceLogs);
 //        table
     }
-    
-      private List<SiteServiceLog> sortSiteServiceLog(List<SiteServiceLog> siteServiceLogs) {
+
+    private List<SiteServiceLog> sortSiteServiceLog(List<SiteServiceLog> siteServiceLogs) {
         List<SiteServiceLog> siteServiceLogList = new ArrayList<>();
         siteServiceLogList.addAll(siteServiceLogs);
         Collections.sort(siteServiceLogList);

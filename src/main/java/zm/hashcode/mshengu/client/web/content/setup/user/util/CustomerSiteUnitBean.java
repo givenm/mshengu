@@ -14,23 +14,21 @@ import javax.validation.constraints.NotNull;
  */
 public final class CustomerSiteUnitBean implements Serializable {
 
-    
     private String contractType;
-    
+
     @NotNull
     private String customerId;
     @NotNull
     private String siteId;
     @NotNull
+    private String truckId;
+    @NotNull
     private String siteUnitId;
     private Date startDate;
     private Date endDate;
-    
-    
-    
-     
+
     private String qtyAsServiceSchedule;
-    private String qtyDeployed; 
+    private String qtyDeployed;
     private String unitIdRange;
     private int customerTotal;
 
@@ -173,4 +171,13 @@ public final class CustomerSiteUnitBean implements Serializable {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public String getTruckId() {
+        return truckId;
+    }
+
+    public void setTruckId(String truckId) {
+        this.truckId = truckId;
+    }
+ 
 }
