@@ -14,9 +14,11 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
 import zm.hashcode.mshengu.client.web.MshenguMain;
@@ -101,16 +103,25 @@ public class DailyTrackerTable extends Table {
         setColumnWidth("Rands/Km", 70);
     }
 
+    public Date calendarTenMonthsBackward(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -10);
+        return calendar.getTime();
+    }
+
     public void loadDailyTrackerData(Date date, Truck truck) {
         clearSubtotals();
         this.date = date;
         this.truck = truck;
         trackerUtil.setQueriedDate(date);
 
-        List<OperatingCost> truckOperatingCostList = truck.getOperatingCosts();
+        List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(date), dateTimeFormatHelper.resetTimeAndMonthEnd(date));
+//        List<OperatingCost> truckOperatingCostList = truck.getOperatingCosts();
         // Add Data Columns
+        Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
         trackerUtil.setOperatingCostList(truckOperatingCostList);
-        List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(truckOperatingCostList, date); // truck.getOperatingCosts()
+        List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(/*truckOperatingCostList,*/date); // truck.getOperatingCosts()
 
 // -- =============================================================================================================================
         if (!queriedMonthOperatingCostList.isEmpty()) {

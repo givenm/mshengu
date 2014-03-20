@@ -76,17 +76,17 @@ public class NonServiceVehiclesTwelveMonthChart implements Serializable {
             nonServiceVehiclesTwelveMonthBeann.setOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(0).getOperationalTotalAmount());
             nonServiceVehiclesTwelveMonthBeann.setTransactionMonth(calendar.getTime());
             nonServiceVehiclesTwelveMonthBeanList.add(0, nonServiceVehiclesTwelveMonthBeann);
-            //
-            calendar.setTime(resetMonthToFirstDay(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth()));
-            calendar.add(Calendar.MONTH, 1);
-            //
-            NonServiceVehiclesTwelveMonthBean nonServiceVehiclesTwelveMonthBeann1 = new NonServiceVehiclesTwelveMonthBean();
-            nonServiceVehiclesTwelveMonthBeann1.setId(new Integer((nonServiceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
-            nonServiceVehiclesTwelveMonthBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-            nonServiceVehiclesTwelveMonthBeann1.setNonOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getNonOperationalTotalAmount());
-            nonServiceVehiclesTwelveMonthBeann1.setOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getOperationalTotalAmount());
-            nonServiceVehiclesTwelveMonthBeann1.setTransactionMonth(calendar.getTime());
-            nonServiceVehiclesTwelveMonthBeanList.add(nonServiceVehiclesTwelveMonthBeann1);
+//            //
+//            calendar.setTime(resetMonthToFirstDay(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth()));
+//            calendar.add(Calendar.MONTH, 1);
+//            //
+//            NonServiceVehiclesTwelveMonthBean nonServiceVehiclesTwelveMonthBeann1 = new NonServiceVehiclesTwelveMonthBean();
+//            nonServiceVehiclesTwelveMonthBeann1.setId(new Integer((nonServiceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
+//            nonServiceVehiclesTwelveMonthBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+//            nonServiceVehiclesTwelveMonthBeann1.setNonOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getNonOperationalTotalAmount());
+//            nonServiceVehiclesTwelveMonthBeann1.setOperationalTotalAmount(nonServiceVehiclesTwelveMonthBeanList.get(nonServiceVehiclesTwelveMonthBeanList.size() - 1).getOperationalTotalAmount());
+//            nonServiceVehiclesTwelveMonthBeann1.setTransactionMonth(calendar.getTime());
+//            nonServiceVehiclesTwelveMonthBeanList.add(nonServiceVehiclesTwelveMonthBeann1);
         }
         // Get Objects of Data
         for (NonServiceVehiclesTwelveMonthBean nonServiceVehiclesTwelveMonthBean : nonServiceVehiclesTwelveMonthBeanList) {

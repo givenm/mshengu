@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
@@ -28,19 +29,20 @@ public class MileageUtil implements Serializable {
     private final List<AnnualDataFleetMaintenanceMileage> annualDataFleetMaintenanceMileageList = new ArrayList<>();
     private final Date liveDataStartDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 0, 2014)); // 1, 0, 2014    Test Live ON LOCAL: 1, 11, 2013 // 10 = Nov, 11 = Dec, 0 = Jan
     // from December 1st 2013, MaintenanceCost is collected from persisted life data captured from UI (Procurement > Request)
-    private final Date staticDataStartDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 7, 2012));
+//    private final Date staticDataStartDate = resetMonthToFirstDay(dateTimeFormatHelper.getDate(1, 7, 2012)); // No start Date. Record can be entered for past dates anytime
     private final Date staticDataEndDate = this.resetMonthToLastDay(dateTimeFormatHelper.getDate(31, 11, 2013)); // 31, 11, 2013    Test Live ON LOCAL: 31, 10, 2013   // 10 = Nov, 11 = Dec
     private static List<Truck> serviceTrucks;
 
-    public Date calendarOneMonthBackward(Date date) {
+    public Date calendarTenMonthsBackward(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.MONTH, -1);
+        calendar.add(Calendar.MONTH, -10);
         return calendar.getTime();
     }
 
-    public List<AnnualDataFleetMaintenanceMileage> findMaintenanceMileageBetweenTwoDates(Date startDate, Date endDate, List<Truck> serviceTrucks) {
+    public List<AnnualDataFleetMaintenanceMileage> findMileagesBetweenTwoDates(Date startDate, Date endDate, List<Truck> serviceTrucks) {
 //        System.out.println("STATIC DATA StartDate: " + staticDataStartDate + " | STATIC DATA endDate: " + staticDataEndDate);
+//        System.out.println(" | STATIC DATA endDate: " + staticDataEndDate);
 //        System.out.println("LIVE DATA StartDate: " + liveDataStartDate);
 //        System.out.println("YOUR SEARCH StartDate: " + startDate + " | YOUR endDate: " + endDate);
         this.serviceTrucks = serviceTrucks;
@@ -112,13 +114,16 @@ public class MileageUtil implements Serializable {
         for (startCalendar.setTime(liveDataStartDate); startCalendar.getTime().before(endDate) || startCalendar.getTime().compareTo(endDate) == 0; startCalendar.add(Calendar.MONTH, 1)) {
             for (Truck truck : serviceTrucks) {
                 // get Daily Inputs for (NB)previous and current month so that (NB) previousMonthClosing mileage can be gotten
-                List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarOneMonthBackward(startCalendar.getTime()), dateTimeFormatHelper.resetTimeAndMonthEnd(startCalendar.getTime()));
+                List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(startCalendar.getTime()), dateTimeFormatHelper.resetTimeAndMonthEnd(startCalendar.getTime()));
                 Integer truckClosingMileage = new Integer("0");
                 if (truckOperatingCostList.size() > 0) {
                     // Calculate the Mileage for current Truck for current Month // These three steps must be considered
+                    Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
                     trackerUtil.setOperatingCostList(truckOperatingCostList);
                     trackerUtil.setQueriedDate(startCalendar.getTime());
-                    truckClosingMileage = trackerUtil.doMileageCalculation(truckOperatingCostList, truck);
+                    List<OperatingCost> monthOperatingCosts = trackerUtil.getQueriedMonthOperatingCostList(startCalendar.getTime());
+
+                    truckClosingMileage = trackerUtil.doMileageCalculation(monthOperatingCosts, truck);
                     // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
                     counter++;
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, truckClosingMileage));
@@ -140,14 +145,16 @@ public class MileageUtil implements Serializable {
         for (startCalendar.setTime(startDate); startCalendar.getTime().before(endDate) || startCalendar.getTime().compareTo(endDate) == 0; startCalendar.add(Calendar.MONTH, 1)) {
             for (Truck truck : serviceTrucks) {
                 // get Daily Inputs for previous and current month so that previousMonthClosing mileage can be gotten
-                List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarOneMonthBackward(startCalendar.getTime()), dateTimeFormatHelper.resetTimeAndMonthEnd(startCalendar.getTime()));
+                List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(startCalendar.getTime()), dateTimeFormatHelper.resetTimeAndMonthEnd(startCalendar.getTime()));
                 Integer truckClosingMileage = new Integer("0");
 
                 if (truckOperatingCostList.size() > 0) {
                     // Calculate the Mileage for current Truck for current Month // These three steps must be considered
+                    Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
                     trackerUtil.setOperatingCostList(truckOperatingCostList);
                     trackerUtil.setQueriedDate(startCalendar.getTime());
-                    truckClosingMileage = trackerUtil.doMileageCalculation(truckOperatingCostList, truck);
+                    List<OperatingCost> monthOperatingCosts = trackerUtil.getQueriedMonthOperatingCostList(startCalendar.getTime());
+                    truckClosingMileage = trackerUtil.doMileageCalculation(monthOperatingCosts, truck);
                     // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
                     counter++;
                     annualDataFleetMaintenanceMileageList.add(buildAnnualDataFleetMaintenanceMileageList(counter, truck, startCalendar, truckClosingMileage));
@@ -174,18 +181,10 @@ public class MileageUtil implements Serializable {
     }
 
     public Date resetMonthToFirstDay(Date date) {
-        Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
-        calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
-
-        return calendarDate.getTime();
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 
     public Date resetMonthToLastDay(Date date) {
-        Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
-        calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
-
-        return calendarDate.getTime();
+        return dateTimeFormatHelper.resetTimeAndMonthEnd(date);
     }
 }

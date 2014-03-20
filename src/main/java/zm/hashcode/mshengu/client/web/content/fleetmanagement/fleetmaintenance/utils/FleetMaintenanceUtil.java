@@ -6,7 +6,6 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -14,8 +13,6 @@ import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlyMileageData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
@@ -32,9 +29,8 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 public class FleetMaintenanceUtil implements Serializable {
 
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-    private TrackerUtil trackerUtil = new TrackerUtil();
-    private static Date startDate = null;
-    private static Date endDate = null;
+    private static Date startDate = new Date();
+    private static Date endDate = new Date();
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
     public static BigDecimal grandTotalMonthlySpend = BigDecimal.ZERO;
     private static List<Truck> serviceTrucks = new ArrayList<>();
@@ -62,13 +58,13 @@ public class FleetMaintenanceUtil implements Serializable {
         Calendar calendarEndDate = Calendar.getInstance();
         Calendar calendarStartDate = Calendar.getInstance();
 
-        calendarEndDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
+        calendarEndDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(endDate));
         calendarEndDate.add(Calendar.MONTH, -1);
         FleetMaintenanceUtil.setEndDate(resetMonthToLastDay(calendarEndDate.getTime()));
 
-        calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(endDate));
+        calendarStartDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(endDate));
         calendarStartDate.add(Calendar.MONTH, -dateRange);
-        setStartDate(resetMonthToFirstDay(calendarStartDate.getTime()));
+        setStartDate(calendarStartDate.getTime());
 //
 //        System.out.println("StartDate: " + startDate + " | EndDate: " + this.endDate);
 
@@ -87,9 +83,9 @@ public class FleetMaintenanceUtil implements Serializable {
         return maintenanceCostUtil.findMaintenanceCostBetweenTwoDates(startDate, endDate, serviceTrucks);
     }
 
-    public List<AnnualDataFleetMaintenanceMileage> findMaintenanceMileageBetweenTwoDates(Date startDate, Date endDate) {
+    public List<AnnualDataFleetMaintenanceMileage> findMileagesBetweenTwoDates(Date startDate, Date endDate) {
         final MileageUtil mileageUtil = new MileageUtil();
-        return mileageUtil.findMaintenanceMileageBetweenTwoDates(startDate, endDate, serviceTrucks);
+        return mileageUtil.findMileagesBetweenTwoDates(startDate, endDate, serviceTrucks);
     }
 
     public List<TotalMaintenanceSpendMonthly> getMaintenanceSpendMonthlyChartData(List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList, Date startDate, int monthCount) {
@@ -290,19 +286,11 @@ public class FleetMaintenanceUtil implements Serializable {
     }
 
     public Date resetMonthToFirstDay(Date date) {
-        final Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
-        calendarDate.set(Calendar.DAY_OF_MONTH, 1); // ! reset to 1ST of Month
-
-        return calendarDate.getTime();
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
     }
 
     public Date resetMonthToLastDay(Date date) {
-        final Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(dateTimeFormatHelper.resetTimeAndMonthEnd(date));
-        calendarDate.set(Calendar.DAY_OF_MONTH, calendarDate.getActualMaximum(Calendar.DAY_OF_MONTH)); // ! reset to LAST of Month (28,29,30,31)
-
-        return calendarDate.getTime();
+        return dateTimeFormatHelper.resetTimeAndMonthEnd(date);
     }
 
     public List<MonthlySpendData> buildTwelvethMonthMaintenanceSpend(List<AnnualDataFleetMaintenanceCost> annualDataFleetMaintenanceCostList) {

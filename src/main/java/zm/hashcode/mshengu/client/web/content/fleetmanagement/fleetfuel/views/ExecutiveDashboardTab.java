@@ -422,7 +422,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
         List<OperatingCost> monthsOperatingCostList = new ArrayList<>();
         for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
             // Omit ZERO OBJECTS
-            if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
+            if (!(operatingCost.getSpeedometer() == 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0 && operatingCost.getSlipNo().equals("0000") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) == 0)) {
                 if (operatingCost.getTransactionDate().compareTo(startDate) == 0
                         || (operatingCost.getTransactionDate().after(startDate) && operatingCost.getTransactionDate().before(endDate))
                         || operatingCost.getTransactionDate().compareTo(endDate) == 0) {
@@ -561,7 +561,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 ////    public void clearZeroObjects() {
 ////        // Clear objects with zeros for  mileage, fuelCost, fuelLitres, .slipNo("0000") in operatingCostTwentyFiveMonthsList and dateRangeOperatingCostList
 ////        for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
-////            if (operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0) {
+////            if (!(operatingCost.getSpeedometer() == 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0 && operatingCost.getSlipNo().equals("0000") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) == 0)) {
 ////                int index = operatingCostTwentyFiveMonthsList.indexOf(operatingCost);
 //////                operatingCostTwentyFiveMonthsList.remove(operatingCost);
 ////                operatingCostTwentyFiveMonthsList.remove(index);
@@ -569,7 +569,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 ////        }
 ////
 //////        for (OperatingCost operatingCost : dateRangeOperatingCostList) {
-//////            if (operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0) {
+//////            if (!(operatingCost.getSpeedometer() == 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0 && operatingCost.getSlipNo().equals("0000") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) == 0)) {
 //////                int index = dateRangeOperatingCostList.indexOf(operatingCost);
 ////////                dateRangeOperatingCostList.remove(operatingCost);
 //////                dateRangeOperatingCostList.remove(index);

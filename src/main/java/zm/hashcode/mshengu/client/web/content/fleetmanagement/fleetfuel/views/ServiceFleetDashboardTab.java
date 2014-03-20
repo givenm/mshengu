@@ -167,7 +167,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         int counter = 0;
         List<OperatingCost> serviceTruckOperatingCostList = new ArrayList<>();
         for (OperatingCost operatingCost : dateRangeOperatingCostList) {
-
             Truck truck = fleetFuelUtil.findTruckFromAllTruckListById(operatingCost.getTruckId());
             if (truck != null) {
                 if (FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV") || FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
@@ -235,7 +234,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         //
         Calendar calendar = Calendar.getInstance();
         for (calendar.setTime(endDatee); calendar.getTime().after(startDatee) || calendar.getTime().compareTo(startDatee) == 0; calendar.add(Calendar.MONTH, -1)) {
-            for (Truck truck : FleetFuelUtil.serviceTrucks) { // this TAB for Service/Utility Trucks Only
+            for (Truck truck : FleetFuelUtil.serviceTrucks) { // this TAB for Service/Utility Trucks Only // msvTrucks, serviceTrucks
                 truckMonthOperatingCostList.clear();
                 truckMonthOperatingCostList.addAll(getOneMonthOperatingCostForTruck(dateRangeOperatingCostList, calendar.getTime(), truck));
 
@@ -245,7 +244,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
                     monthlyMileageTotal += fleetFuelUtil.calculateMonthMileageTotal(truckMonthOperatingCostList, truck);
                 }
 //                //======= DELETE =========
-//                System.out.println("Truck Monthly Mileage Total: Truck= " + truck.getVehicleNumber() + " " + truckMonthOperatingCostList.get(0).getTruckId() + " Month= " + calendar.getTime() + " Mileage Total= " + monthMileageSum);
+//                System.out.println("Truck Monthly Mileage Total: Truck= " + truck.getVehicleNumber() + " " + truckMonthOperatingCostList.get(0).getTruckId() + " Month= " + calendar.getTime() + " Mileage Total= " + fleetFuelUtil.calculateMonthMileageTotal(truckMonthOperatingCostList, truck));
 //                // ======= DELETE =========
             }
 
@@ -277,17 +276,15 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     }
 
     public List<OperatingCost> getOneMonthOperatingCostForTruck(List<OperatingCost> dateRangeOperatingCostList, Date date, Truck truck) {
-        boolean found = false;
         List<OperatingCost> truckMonthOperatingCostList = new ArrayList<>();
-        truckMonthOperatingCostList.clear();
+//        truckMonthOperatingCostList.clear();
         for (OperatingCost operatingCost : dateRangeOperatingCostList) {
             if (operatingCost.getTruckId().equals(truck.getId())
                     && date.compareTo(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
                 truckMonthOperatingCostList.add(operatingCost);
-                found = true;
             }
             // if Date changes, then it is no longer End Date as we sorted in Desc Order
-            if (found && date.after(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
+            if (date.after(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
                 break;
             }
         }
@@ -519,7 +516,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         Date nuEndDate = fleetFuelUtil.resetMonthToLastDay(endDate);
         for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
             // Omit ZERO OBJECTS
-            if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
+            if (!(operatingCost.getSpeedometer() == 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0 && operatingCost.getSlipNo().equals("0000") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) == 0)) {
                 if (truck.getId().equals(operatingCost.getTruckId())
                         && (operatingCost.getTransactionDate().compareTo(nuStartDate) == 0
                         || (operatingCost.getTransactionDate().after(nuStartDate)

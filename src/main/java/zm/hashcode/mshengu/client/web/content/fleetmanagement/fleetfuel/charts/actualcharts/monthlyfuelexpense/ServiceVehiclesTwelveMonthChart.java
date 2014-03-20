@@ -74,16 +74,16 @@ public class ServiceVehiclesTwelveMonthChart implements Serializable {
         ServiceVehiclesTwelveMonthBeann.setTotalAmount(serviceVehiclesTwelveMonthBeanList.get(0).getTotalAmount());
         ServiceVehiclesTwelveMonthBeann.setTransactionMonth(calendar.getTime());
         serviceVehiclesTwelveMonthBeanList.add(0, ServiceVehiclesTwelveMonthBeann);
-        //
-        calendar.setTime(resetMonthToFirstDay(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth()));
-        calendar.add(Calendar.MONTH, 1);
-        //
-        ServiceVehiclesTwelveMonthBean ServiceVehiclesTwelveMonthBeann1 = new ServiceVehiclesTwelveMonthBean();
-        ServiceVehiclesTwelveMonthBeann1.setId(new Integer((serviceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
-        ServiceVehiclesTwelveMonthBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-        ServiceVehiclesTwelveMonthBeann1.setTotalAmount(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTotalAmount());
-        ServiceVehiclesTwelveMonthBeann1.setTransactionMonth(calendar.getTime());
-        serviceVehiclesTwelveMonthBeanList.add(ServiceVehiclesTwelveMonthBeann1);
+//        //
+//        calendar.setTime(resetMonthToFirstDay(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTransactionMonth()));
+//        calendar.add(Calendar.MONTH, 1);
+//        //
+//        ServiceVehiclesTwelveMonthBean ServiceVehiclesTwelveMonthBeann1 = new ServiceVehiclesTwelveMonthBean();
+//        ServiceVehiclesTwelveMonthBeann1.setId(new Integer((serviceVehiclesTwelveMonthBeanList.size() + 1) + "") + "");
+//        ServiceVehiclesTwelveMonthBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+//        ServiceVehiclesTwelveMonthBeann1.setTotalAmount(serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getTotalAmount());
+//        ServiceVehiclesTwelveMonthBeann1.setTransactionMonth(calendar.getTime());
+//        serviceVehiclesTwelveMonthBeanList.add(ServiceVehiclesTwelveMonthBeann1);
 
         // Get Objects of Data
         for (ServiceVehiclesTwelveMonthBean serviceVehiclesTwelveMonthBean : serviceVehiclesTwelveMonthBeanList) {

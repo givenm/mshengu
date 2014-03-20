@@ -188,7 +188,7 @@ public class ServiceFleetEfficiencyLineChart implements Serializable {
         seriesDefaults.setRenderer(SeriesRenderers.LINE)
                 .setPointLabels(
                 new PointLabels()
-                .setFormatString("%.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
+                .setFormatString("%'.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
                 .setShow(true)
                 .setLocation(PointLabelLocations.NORTH)
                 .setEdgeTolerance(-15))

@@ -25,7 +25,7 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
 
         // Get Objects of Data
         for (TotalMaintenanceSpendBySupplier totalMaintenanceSpendBySupplier : totalMaintenanceSpendBySupplierList) {
-            serviceProviderNameList.add(truncate(totalMaintenanceSpendBySupplier.getSupplierName(), 14));
+            serviceProviderNameList.add(truncateNames(totalMaintenanceSpendBySupplier.getSupplierName()));
             percentageList.add(totalMaintenanceSpendBySupplier.getSpendPercentage());
             sumOfPercentage = sumOfPercentage.add(totalMaintenanceSpendBySupplier.getSpendPercentage());
         }
@@ -51,5 +51,20 @@ public class MaintenanceSpendBySupplierPieChart implements Serializable {
             strValue = strValue.substring(0, length);
         }
         return strValue;
+    }
+
+    public static String truncateNames(String allNames) {
+        if (allNames.length() < 11) {
+            return allNames;
+        } else {
+            String[] stringArray = allNames.split(" "); // String[] stringArray = allNames.split(" ", 2);
+            if (stringArray[0].equals(" ")) {
+                char aChar = stringArray[2].charAt(0);
+                return stringArray[1] + " " + aChar + ".";
+            } else {
+                char aChar = stringArray[1].charAt(0);
+                return stringArray[0] + " " + aChar + ".";
+            }
+        }
     }
 }

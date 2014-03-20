@@ -45,7 +45,7 @@ public class DailyInputsTab extends VerticalLayout implements
     private final DailyInputsForm form;
     private final DailyInputsTable table;
     private static String trucKiD;
-    private TrackerUtil trackerUtil = new TrackerUtil();
+    private final TrackerUtil trackerUtil = new TrackerUtil();
     final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     public static Date filteredTransactionDate = null;
     public static String filteredTruckId;
@@ -82,7 +82,7 @@ public class DailyInputsTab extends VerticalLayout implements
         final Property property = event.getProperty();
         if (property == table) {
             final OperatingCost operatingCost = OperatingCostFacade.getOperatingCostService().findById(table.getValue().toString());
-            trucKiD = form.filterTruckId.getValue().toString();
+            trucKiD = operatingCost.getTruckId();
 
             form.transactionDate.setReadOnly(false);
             form.randPerLitreCalc.setReadOnly(false);
@@ -449,17 +449,19 @@ public class DailyInputsTab extends VerticalLayout implements
 
     private DailyInputsBean getBean(OperatingCost operatingCosts) {
         DailyInputsBean bean = new DailyInputsBean();
-        bean.setSlipNo(operatingCosts.getSlipNo());
+
+        bean.setDriverId(operatingCosts.getDriverId());
         bean.setFuelCost(operatingCosts.getFuelCost());
         bean.setFuelLitres(operatingCosts.getFuelLitres());
+        bean.setId(operatingCosts.getId());
         bean.setOilCost(operatingCosts.getOilCost());
         bean.setOilLitres(operatingCosts.getOilLitres());
+        bean.setRandPerLitre(operatingCosts.getRandPerLitre());
+        bean.setSlipNo(operatingCosts.getSlipNo());
         bean.setSpeedometer(operatingCosts.getSpeedometer());
         bean.setTransactionDate(operatingCosts.getTransactionDate());
-        bean.setDriverId(operatingCosts.getDriverId());
-        bean.setTruckId(trucKiD);
-        bean.setId(operatingCosts.getId());
-        bean.setRandPerLitre(operatingCosts.getRandPerLitre());
+        bean.setTruckId(operatingCosts.getTruckId());// not trucKiD;
+
 
         return bean;
     }
