@@ -6,7 +6,7 @@ package zm.hashcode.mshengu.client.web.content.assets.siteunit.models;
 
 import java.io.Serializable;
 import java.util.Date;
-import zm.hashcode.mshengu.domain.people.Person;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
  *
@@ -16,7 +16,7 @@ public final class SiteUnitSiteUnitServiceLogBean implements Serializable {
     private String id;
     private Date serviceDate;
     private Date serviceTime;
-    private Person servicedBy;
+    private Truck servicedBy;
    
     private String statusMessage;
     private String  incident;
@@ -70,14 +70,14 @@ public final class SiteUnitSiteUnitServiceLogBean implements Serializable {
     /**
      * @return the servicedBy
      */
-    public Person getServicedBy() {
+    public Truck getServicedBy() {
         return servicedBy;
     }
 
     /**
      * @param servicedBy the servicedBy to set
      */
-    public void setServicedBy(Person servicedBy) {
+    public void setServicedBy(Truck servicedBy) {
         this.servicedBy = servicedBy;
     }
 
