@@ -372,14 +372,13 @@ public class FleetFuelUtil implements Serializable {
         if (previousMonthOperatingCostList.isEmpty()) {
             return truck.getStartMileage();
         }
-        try {
-            return previousMonthOperatingCostList.get(0).getSpeedometer();
-        } catch (Exception ex) {
-            // meaning This is the first Month of Data Capture
-            // There for return current Month First Mileage
-            return truck.getStartMileage();
-        }
-//        return 0;
+//        try {
+        return previousMonthOperatingCostList.get(0).getSpeedometer();
+//        } catch (Exception ex) {
+//            // meaning This is the first Month of Data Capture
+//            // There for return current Month First Mileage
+//            return truck.getStartMileage();
+//        }
     }
 
     private List<OperatingCost> findPreviousMonthOperatingCostList(Truck truck, Date date) {

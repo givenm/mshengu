@@ -117,12 +117,11 @@ public class MileageUtil implements Serializable {
                 List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(startCalendar.getTime()), dateTimeFormatHelper.resetTimeAndMonthEnd(startCalendar.getTime()));
                 Integer truckClosingMileage = new Integer("0");
                 if (truckOperatingCostList.size() > 0) {
-                    // Calculate the Mileage for current Truck for current Month // These three steps must be considered
+                    // Calculate the Mileage for current Truck for current Month // These FIVE steps must be considered
                     Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
                     trackerUtil.setOperatingCostList(truckOperatingCostList);
                     trackerUtil.setQueriedDate(startCalendar.getTime());
                     List<OperatingCost> monthOperatingCosts = trackerUtil.getQueriedMonthOperatingCostList(startCalendar.getTime());
-
                     truckClosingMileage = trackerUtil.doMileageCalculation(monthOperatingCosts, truck);
                     // Build the AnnualDataFleetMaintenanceMileage for current Truck for current Month
                     counter++;
@@ -149,7 +148,7 @@ public class MileageUtil implements Serializable {
                 Integer truckClosingMileage = new Integer("0");
 
                 if (truckOperatingCostList.size() > 0) {
-                    // Calculate the Mileage for current Truck for current Month // These three steps must be considered
+                    // Calculate the Mileage for current Truck for current Month // These five steps must be considered
                     Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
                     trackerUtil.setOperatingCostList(truckOperatingCostList);
                     trackerUtil.setQueriedDate(startCalendar.getTime());
