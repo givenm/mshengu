@@ -28,9 +28,9 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.T
  */
 public class DailyTrackerForm extends FormLayout {
 
-    private UIComponentHelper UIComponent = new UIComponentHelper();
-    private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
-    private TrackerUtil trackerUtil = new TrackerUtil();
+    private final UIComponentHelper UIComponent = new UIComponentHelper();
+    private final UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
+    private final TrackerUtil trackerUtil = new TrackerUtil();
     //
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
@@ -103,24 +103,4 @@ public class DailyTrackerForm extends FormLayout {
         addComponent(grid);
 
     }
-//    private HorizontalLayout getButtons() {
-//        HorizontalLayout buttons = new HorizontalLayout();
-//        save.setSizeFull();
-//        edit.setSizeFull();
-//        cancel.setSizeFull();
-//        update.setSizeFull();
-//        delete.setSizeFull();
-//
-//    save.setStyleName("default");
-//        edit.setStyleName("default");
-//        cancel.setStyleName("default");
-//        update.setStyleName("default");
-//        delete.setStyleName("default");
-//        buttons.addComponent(save);
-//        buttons.addComponent(edit);
-//        buttons.addComponent(cancel);
-//        buttons.addComponent(update);
-//        buttons.addComponent(delete);
-//        return buttons;
-//    }
 }

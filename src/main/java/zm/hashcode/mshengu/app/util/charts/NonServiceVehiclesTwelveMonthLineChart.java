@@ -9,8 +9,10 @@ import org.dussan.vaadin.dcharts.DCharts;
 import org.dussan.vaadin.dcharts.base.elements.PointLabels;
 import org.dussan.vaadin.dcharts.base.elements.XYaxis;
 import org.dussan.vaadin.dcharts.base.elements.XYseries;
+import org.dussan.vaadin.dcharts.base.renderers.LegendRenderer;
 import org.dussan.vaadin.dcharts.base.renderers.MarkerRenderer;
 import org.dussan.vaadin.dcharts.data.DataSeries;
+import org.dussan.vaadin.dcharts.metadata.LegendPlacements;
 import org.dussan.vaadin.dcharts.metadata.TextAligns;
 import org.dussan.vaadin.dcharts.metadata.TooltipAxes;
 import org.dussan.vaadin.dcharts.metadata.XYaxes;
@@ -18,11 +20,13 @@ import org.dussan.vaadin.dcharts.metadata.directions.AnimationDirections;
 import org.dussan.vaadin.dcharts.metadata.locations.PointLabelLocations;
 import org.dussan.vaadin.dcharts.metadata.locations.TooltipLocations;
 import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
+import org.dussan.vaadin.dcharts.metadata.renderers.LegendRenderers;
 import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
 import org.dussan.vaadin.dcharts.metadata.styles.MarkerStyles;
 import org.dussan.vaadin.dcharts.options.Axes;
 import org.dussan.vaadin.dcharts.options.AxesDefaults;
 import org.dussan.vaadin.dcharts.options.Highlighter;
+import org.dussan.vaadin.dcharts.options.Legend;
 import org.dussan.vaadin.dcharts.options.Options;
 import org.dussan.vaadin.dcharts.options.Series;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
@@ -69,6 +73,7 @@ public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
                 //					.setStyle(MarkerStyles.X)))
                 .addSeries(
                 new XYseries()
+                .setLabel("Non-Operational")
                 .setLineWidth(2)
                 .setMarkerOptions(
                 new MarkerRenderer()
@@ -77,6 +82,7 @@ public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
                 //
                 .addSeries(
                 new XYseries()
+                .setLabel("Operational")
                 .setLineWidth(2)
                 .setMarkerOptions(
                 new MarkerRenderer()
@@ -112,7 +118,7 @@ public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%.2f")) // .setFormatString("R%.2f")
+                .setFormatString("%'.2f")) // .setFormatString("R%.2f")
                 );
 
         Highlighter highlighter = new Highlighter()
@@ -142,7 +148,7 @@ public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
         seriesDefaults.setRenderer(SeriesRenderers.LINE)
                 .setPointLabels(
                 new PointLabels()
-                .setFormatString("%.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
+                .setFormatString("%'.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
                 .setShow(true)
                 .setLocation(PointLabelLocations.NORTH)
                 .setEdgeTolerance(-15))
@@ -152,6 +158,12 @@ public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
                 new LineRenderer()
                 .setAnimation(lineAnimation));
 
+        Legend legend = new Legend()
+                //                .setLabels(labels) // String[] labels // i.e if you did not set label for the series
+                .setFontSize("8pt")
+                .setPlacement(LegendPlacements.INSIDE_GRID)
+                .setShow(true);
+
         Options options = new Options()
                 //                .addOption(seriesDefaults)
                 .setTitle(title)
@@ -159,7 +171,7 @@ public class NonServiceVehiclesTwelveMonthLineChart implements Serializable {
                 .setAxesDefaults(axesDefaults)
                 .addOption(axes)
                 .addOption(highlighter) //                .addOption(cursor)
-                ;
+                .addOption(legend);
 
         DCharts chart = new DCharts()
                 .setDataSeries(dataSeries)

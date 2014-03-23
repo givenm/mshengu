@@ -37,6 +37,7 @@ public class DriverEfficiencyChart implements Serializable {
         Object minTickValue = 0;
         BigDecimal highestEfficiency = BigDecimal.ZERO;
         for (DriverEfficiencyBean driverEfficiencyBean : driverEfficiencyBeanList) {
+//            System.out.println(driverEfficiencyBean.getDriverName() + " : " + driverEfficiencyBean.getMonthlyEfficiencyValue() + "-" + driverEfficiencyBean.getMonthlyEfficiencyColor());
             if (driverEfficiencyBean.getMonthlyEfficiencyValue().compareTo(highestEfficiency) > 0) {
                 highestEfficiency = driverEfficiencyBean.getMonthlyEfficiencyValue();
             }
@@ -87,9 +88,11 @@ public class DriverEfficiencyChart implements Serializable {
         if (value != null) {
             String[] stringArray = value.split(" "); // String[] stringArray = value.split(" ", 2);
             if (stringArray[0].equals(" ")) {
-                return stringArray[1];
+                char aChar = stringArray[2].charAt(0);
+                return stringArray[1] + " " + aChar + ".";
             } else {
-                return stringArray[0];
+                char aChar = stringArray[1].charAt(0);
+                return stringArray[0] + " " + aChar + ".";
             }
         }
         return value;

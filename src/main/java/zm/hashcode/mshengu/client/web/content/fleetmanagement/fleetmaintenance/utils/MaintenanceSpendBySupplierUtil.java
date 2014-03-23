@@ -6,8 +6,6 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -17,7 +15,6 @@ import zm.hashcode.mshengu.app.facade.procurement.MaintenanceSpendBySupplierFaca
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendBySupplier;
 import zm.hashcode.mshengu.domain.procurement.MaintenanceSpendBySupplier;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -30,7 +27,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 public class MaintenanceSpendBySupplierUtil implements Serializable {
 
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-//    private TrackerUtil trackerUtil = new TrackerUtil();
     private static Date startDate = null;
     private static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;

@@ -31,30 +31,21 @@ public class MonthlyFuelExpenseTable extends Table {
 
     public MonthlyFuelExpenseTable(MshenguMain main) {
         this.main = main;
-//        setStyleName("panelTable");
-        //
+        // Send changes in selection immediately to server.
+        setImmediate(true);
+        setStyleName("monthlyFuelExpenseTable");
+        ////        // Allow selecting items from the table.
+//        setNullSelectionAllowed(false);
+//        setSelectable(false);
         addContainerProperty("Month", String.class, null);
         addContainerProperty("Non-Operational", String.class, null);
         addContainerProperty("Operational", String.class, null);
         addContainerProperty("Service Fleet", String.class, null);
         addContainerProperty("Total", String.class, null);
-        // Allow selecting items from the table.
-        //        setNullSelectionAllowed(false);
-        setSelectable(false);
-
-        // Send changes in selection immediately to server.
-        //        setImmediate(false);
-
-        // Alignments
-        setColumnAlignment("Non-Operational", Table.Align.RIGHT);
-        setColumnAlignment("Operational", Table.Align.RIGHT);
-        setColumnAlignment("Service Fleet", Table.Align.RIGHT);
-        setColumnAlignment("Total", Table.Align.RIGHT);
-//        addItem(new Object[]{"0.00"}, new Integer("1"));
 
     }
 
-    public Table createTable(List<MonthlyFuelExpenseBean> monthlyFuelExpenseBeanList) {
+    public void createTable(List<MonthlyFuelExpenseBean> monthlyFuelExpenseBeanList) {
         int counter = 0;
         this.removeAllItems();
         for (MonthlyFuelExpenseBean monthlyFuelExpenseBean : monthlyFuelExpenseBeanList) {
@@ -62,9 +53,21 @@ public class MonthlyFuelExpenseTable extends Table {
             populateDailyInputTable(monthlyFuelExpenseBean, counter);
         }
         addTotalRow();
-        performTableCellStyling();
         resetColumnWidths();
-        return this;
+        performTableCellStyling();
+
+        // Alignments
+        setColumnAlignment("Month", Table.Align.RIGHT);
+        setColumnAlignment("Non-Operational", Table.Align.RIGHT);
+        setColumnAlignment("Operational", Table.Align.RIGHT);
+        setColumnAlignment("Service Fleet", Table.Align.RIGHT);
+        setColumnAlignment("Total", Table.Align.RIGHT);
+
+        // RESET
+        nonOperationalTwelveMonthTotal = BigDecimal.ZERO;
+        operationalTwelveMonthTotal = BigDecimal.ZERO;
+        serviceTwelveMonthTotal = BigDecimal.ZERO;
+        grandTwelveMonthTotal = BigDecimal.ZERO;
     }
 
     private void populateDailyInputTable(MonthlyFuelExpenseBean monthlyFuelExpenseBean, int counter) {
@@ -75,7 +78,7 @@ public class MonthlyFuelExpenseTable extends Table {
             df.format(Double.parseDouble(monthlyFuelExpenseBean.getServiceTrucksFuelTotal().toString())),
             df.format(Double.parseDouble(monthlyFuelExpenseBean.getAllTrucksFuelTotal().toString())), //                operatingCost.getOilCost() == null ? "" : df.format(Double.parseDouble(operatingCost.getOilCost().toString()))
         }, counter);
-        //  Totals
+        //  Totalings
         nonOperationalTwelveMonthTotal = nonOperationalTwelveMonthTotal.add(monthlyFuelExpenseBean.getNonOperationalTrucksFuelTotal());
         operationalTwelveMonthTotal = operationalTwelveMonthTotal.add(monthlyFuelExpenseBean.getOperationalTrucksFuelTotal());
         serviceTwelveMonthTotal = serviceTwelveMonthTotal.add(monthlyFuelExpenseBean.getServiceTrucksFuelTotal());
@@ -101,11 +104,11 @@ public class MonthlyFuelExpenseTable extends Table {
 //                }
                 int row = ((Integer) itemId).intValue();
                 if (row == 0) {
-                    return "yellowrow";
+                    return "monthTotalBold"; // yellowrow
                 } else if (row % 2 == 0) {
-                    return "blueCellHeight";
+                    return "blue";
                 } else {//if (row % 2 != 0)
-                    return "whiteCellHeight";
+                    return "white";
                 }
             }
         });

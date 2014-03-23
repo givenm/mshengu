@@ -19,12 +19,13 @@ public class MonthlyFuelExpenseUI extends HorizontalLayout {
     public VerticalLayout chartVerticalLayout = new VerticalLayout();
 
     public MonthlyFuelExpenseUI(MshenguMain main) {
-        setMargin(true);
-        setSpacing(true);
-        setSizeUndefined();
-
+        tableVerticalLayout.setMargin(true);
+        tableVerticalLayout.setSpacing(true);
         tableVerticalLayout.setSizeUndefined();
+        chartVerticalLayout.setMargin(true);
+        chartVerticalLayout.setSpacing(true);
         chartVerticalLayout.setSizeUndefined();
+
         addComponent(tableVerticalLayout);
         addComponent(chartVerticalLayout);
     }

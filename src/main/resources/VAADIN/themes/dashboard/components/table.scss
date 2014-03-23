@@ -278,7 +278,7 @@
          padding-top: 8px;
      }
 
-/* ANNUAL DATA MaintenanceCost and Mileage Tables*/
+/* ===== ANNUAL DATA MaintenanceCost and Mileage Tables  STARTS ===== */
 
     /* All cells. */
     .annualDataTable .v-table-cell-wrapper {
@@ -311,5 +311,41 @@
         background: rgb(255, 175, 175);
         color: black;
     }
+/* ===== ANNUAL DATA MaintenanceCost and Mileage Tables  ENDS ===== */
+
+/* ===== FUEL EXPENSE TABLE - Fleet Fuel Menu > Monthly Fuel Expense Tab - STARTS ===== */
+
+    /* All cells. */
+    .monthlyFuelExpenseTable .v-table-cell-wrapper {
+        font-size: 12px;
+    }
+
+    .monthlyFuelExpenseTable .v-table-cell-content-white {
+        background: white;
+        color:      black;
+    }
+
+    .monthlyFuelExpenseTable .v-table-cell-content-blue {
+        background: rgb(195, 215, 247);
+        color:      black;
+    }
+
+    .monthlyFuelExpenseTable .v-table-cell-content-rowheader {
+        background: #d0d0d0;
+    /* USING AN IMAGE AS A BACKGROUND
+            background: #E7EDF3 url(../default/table/img/header-bg.png) repeat-x scroll 0 0;
+    */
+    }
+
+/* Total cells.
+    .monthlyFuelExpenseTable .v-table-cell-content .v-table-cell-wrapper-monthTotalBold {
+        font-weight:bold;
+    }
+*/
+   .monthlyFuelExpenseTable .v-table-cell-content-monthTotalBold {
+        background: rgb(255, 175, 175);
+        color: black;
+    }
+/* ===== FUEL EXPENSE TABLE - Fleet Fuel Menu > Monthly Fuel Expense Tab - ENDS ===== */
 
 }

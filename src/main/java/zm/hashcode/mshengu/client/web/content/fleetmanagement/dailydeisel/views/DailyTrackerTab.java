@@ -11,8 +11,11 @@ import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
@@ -20,6 +23,7 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.DailyD
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.forms.DailyTrackerForm;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.tables.DailyTrackerTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
+import zm.hashcode.mshengu.domain.fleet.OperatingCost;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
@@ -38,6 +42,7 @@ public class DailyTrackerTab extends VerticalLayout implements
     // Format a decimal value for a specific locale
     final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
     private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+    private final TrackerUtil trackerUtil = new TrackerUtil();
 
     public DailyTrackerTab(MshenguMain app) {
         main = app;
@@ -47,6 +52,13 @@ public class DailyTrackerTab extends VerticalLayout implements
         addComponent(form);
         addComponent(table);
         addListeners();
+    }
+
+    public Date calendarTenMonthsBackward(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -10);
+        return calendar.getTime();
     }
 
     @Override
@@ -67,15 +79,19 @@ public class DailyTrackerTab extends VerticalLayout implements
             form.operatingSpec.setReadOnly(false);
             form.MTD.setReadOnly(false);
             form.driverId.setReadOnly(false);
+
+
             //
             try {
                 Truck truck = TruckFacade.getTruckService().findById(form.truckId.getValue().toString());
+                Date transactDate = form.transactionDate.getValue();
+                List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(transactDate), dateTimeFormatHelper.resetTimeAndMonthEnd(transactDate));
+                trackerUtil.setOperatingCostList(truckOperatingCostList);
                 table.removeAllItems();
                 table.loadDailyTrackerData(form.transactionDate.getValue(), truck);
-                Date transactDate = form.transactionDate.getValue();
+
                 form.driverId.setValue(truck.getDriver().getId());
-                TrackerUtil trackerUtil = new TrackerUtil();
-                BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(truck.getOperatingCosts(), transactDate);
+                BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(/*truck.getOperatingCosts(),*/transactDate);
                 if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
                     BigDecimal OperatingSpec = (BigDecimal.valueOf(truck.getManufacturingSpec() / 100)).multiply(RandPerLitre);
                     form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100));
@@ -108,23 +124,25 @@ public class DailyTrackerTab extends VerticalLayout implements
             Truck truck = TruckFacade.getTruckService().findById(form.truckId.getValue().toString());
 
             form.driverId.setValue(truck.getDriverId());
-
-            Date transactDate = form.transactionDate.getValue();
-            TrackerUtil trackerUtil = new TrackerUtil();
-            BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(truck.getOperatingCosts(), transactDate);
-            BigDecimal OperatingSpec = (BigDecimal.valueOf(truck.getManufacturingSpec() / 100)).multiply(RandPerLitre);
-            BigDecimal operatingAllowance = BigDecimal.ZERO;
-            if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
-                form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100)); // ?????????????????????????????????????????
-                form.operatingSpec.setValue(OperatingSpec.setScale(2, BigDecimal.ROUND_HALF_UP).toString()); // ?????????????????????????????????????????// ?????????????????????????????????????????
-                operatingAllowance = trackerUtil.getOperationalAllowance();
-                form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-            } else {
-                form.manufacturerSpec.setValue("0.00");
-                form.operatingSpec.setValue("0.00");
-                form.targetSpec.setValue("0.00");
-            }
             try {
+                Date transactDate = form.transactionDate.getValue();
+
+                List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(transactDate), dateTimeFormatHelper.resetTimeAndMonthEnd(transactDate));
+                trackerUtil.setOperatingCostList(truckOperatingCostList);
+                BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(/*truck.getOperatingCosts(), */transactDate);
+                BigDecimal OperatingSpec = (BigDecimal.valueOf(truck.getManufacturingSpec() / 100)).multiply(RandPerLitre);
+                BigDecimal operatingAllowance = BigDecimal.ZERO;
+                if (!(truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV"))) {
+                    form.manufacturerSpec.setValue("" + (truck.getManufacturingSpec() / 100)); // ?????????????????????????????????????????
+                    form.operatingSpec.setValue(OperatingSpec.setScale(2, BigDecimal.ROUND_HALF_UP).toString()); // ?????????????????????????????????????????// ?????????????????????????????????????????
+                    operatingAllowance = trackerUtil.getOperationalAllowance();
+                    form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+                } else {
+                    form.manufacturerSpec.setValue("0.00");
+                    form.operatingSpec.setValue("0.00");
+                    form.targetSpec.setValue("0.00");
+                }
+
                 table.removeAllItems();
                 table.loadDailyTrackerData(transactDate, truck);
 //                form.targetSpec.setValue(OperatingSpec.add(operatingAllowance).setScale(2, BigDecimal.ROUND_HALF_UP).toString());

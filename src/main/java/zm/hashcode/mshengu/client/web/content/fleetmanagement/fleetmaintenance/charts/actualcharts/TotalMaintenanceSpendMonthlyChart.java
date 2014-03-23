@@ -6,6 +6,8 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -42,7 +44,9 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.m
 public class TotalMaintenanceSpendMonthlyChart implements Serializable {
 
     public DCharts createChart(List<TotalMaintenanceSpendMonthly> spendMonthlyChartDataList, BigDecimal grandTotalMaintenanceSpend) {
-
+        final Locale locale = new Locale("za", "ZA");
+        // Format a decimal value for a specific locale
+        final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
         List<Object> totalList = new ArrayList<>();
         List<Object> monthYearList = new ArrayList<>();
@@ -145,7 +149,7 @@ public class TotalMaintenanceSpendMonthlyChart implements Serializable {
                 .setTooltipLocation(TooltipLocations.NORTH)
                 .setTooltipAxes(TooltipAxes.XY_BAR);
 
-        Title title = new Title("Total Maintenance Cost: R " + grandTotalMaintenanceSpend);
+        Title title = new Title("Total Maintenance Cost: R " + df.format(Double.parseDouble(grandTotalMaintenanceSpend.toString())));
         title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
 

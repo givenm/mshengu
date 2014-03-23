@@ -18,7 +18,7 @@ import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.AnnualDataTablesUI;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.AnnualDataForm;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.MaintenanceAnnualDataForm;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlyMileageData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.AnnualMaintenanceCostHeadingTable;
@@ -36,7 +36,7 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.ClickListener, Table.ColumnResizeListener {
 
     private final MshenguMain main;
-    private final AnnualDataForm form;
+    private final MaintenanceAnnualDataForm form;
     private final AnnualDataTablesUI annualDataTablesUI;
     private final AnnualMaintenanceCostHeadingTable annualMaintenanceCostHeadingTable;
     private final AnnualMaintenanceCostTable annualMaintenanceCostTable;
@@ -55,7 +55,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
 
     public MaintenanceAnnualDataTab(MshenguMain app) {
         main = app;
-        form = new AnnualDataForm();
+        form = new MaintenanceAnnualDataForm();
         annualDataTablesUI = new AnnualDataTablesUI();
         annualMaintenanceCostHeadingTable = new AnnualMaintenanceCostHeadingTable(main);
         annualMaintenanceCostTable = new AnnualMaintenanceCostTable(main);
@@ -72,6 +72,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
         if (source == form.generateButton) {
+            fleetMaintenanceUtil.findServiceTrucks();
             generateData();
         }
     }
@@ -90,12 +91,8 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
 
     public void generateData() {
         findServiceTrucks();
-//        Date endDate = new Date();
-        int year = Integer.parseInt(dateTimeFormatHelper.getYearNumber(new Date()));
-
-//        Date endDate = dateTimeFormatHelper.getDate(1, 1, year); // Start of Year after Current Year i.e. 1st January ???? counter begins from month before
         fleetMaintenanceUtil.determineDateRange(new Date(), annualDataMonthCount);
-//        fleetMaintenanceUtil.determineDateRange(getDate(1, 10, 2013), annualDataMonthCount); Testing the for months with DATA
+
         annualMaintenanceCostList = getMaintenanceCostList();
         annualMileageList = getMaintenanceMileageList();
 
@@ -130,7 +127,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     }
 
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
+        return fleetMaintenanceUtil.findMileagesBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     public void createMaintenanceCostAndHeadingTable() {
