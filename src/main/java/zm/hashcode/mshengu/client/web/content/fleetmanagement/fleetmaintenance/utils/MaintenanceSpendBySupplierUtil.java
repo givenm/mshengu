@@ -6,8 +6,6 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -17,7 +15,6 @@ import zm.hashcode.mshengu.app.facade.procurement.MaintenanceSpendBySupplierFaca
 import zm.hashcode.mshengu.app.facade.procurement.RequestFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendBySupplier;
 import zm.hashcode.mshengu.domain.procurement.MaintenanceSpendBySupplier;
 import zm.hashcode.mshengu.domain.procurement.Request;
@@ -30,7 +27,6 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProvider;
 public class MaintenanceSpendBySupplierUtil implements Serializable {
 
     private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-//    private TrackerUtil trackerUtil = new TrackerUtil();
     private static Date startDate = null;
     private static Date endDate = null;
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
@@ -234,10 +230,10 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
 
     public BigDecimal getTotalExcludingVAT(BigDecimal totalWithVAT) {
         BigDecimal VATValue = new BigDecimal("0.14").multiply(totalWithVAT);
-        VATValue.setScale(2, BigDecimal.ROUND_UP);
+        VATValue = VATValue.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         totalWithVAT = totalWithVAT.subtract(VATValue);
-        return totalWithVAT.setScale(2, BigDecimal.ROUND_UP);
+        return totalWithVAT.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public List<TotalMaintenanceSpendBySupplier> buildTotalMaintenanceSpendBySupplier(List<MaintenanceSpendBySupplier> maintenanceSpendBySupplierList) {
@@ -271,7 +267,7 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
 
     private void performSubTotal(BigDecimal total, List<MaintenanceSpendBySupplier> maintenanceSpendBySupplierList, MaintenanceSpendBySupplier maintenanceSpendBySupplier, int counter) {
         // Subtotal
-        total.setScale(2, BigDecimal.ROUND_UP);
+        total = total.setScale(2, BigDecimal.ROUND_HALF_UP);
         grandTotalMaintenanceSpend = grandTotalMaintenanceSpend.add(total);
         // Build TotalMaintenanceSpendBySupplier and add to ArrayList
         int currentIndex = maintenanceSpendBySupplierList.indexOf(maintenanceSpendBySupplier);
@@ -300,7 +296,7 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
     private void calculatePercentage() {
         grandTotalMaintenanceSpend = roundBigDecimal(grandTotalMaintenanceSpend, 2);
         for (TotalMaintenanceSpendBySupplier totalMaintenanceSpendBySupplier : totalMaintenanceSpendBySupplierList) {
-            BigDecimal percentage = totalMaintenanceSpendBySupplier.getTotal().divide(grandTotalMaintenanceSpend, 2, RoundingMode.HALF_UP); // BigDecimal.ROUND_UP
+            BigDecimal percentage = totalMaintenanceSpendBySupplier.getTotal().divide(grandTotalMaintenanceSpend, 2, BigDecimal.ROUND_HALF_UP); // BigDecimal.ROUND_HALF_UP
             percentage = percentage.multiply(new BigDecimal("100"));
             percentage = roundBigDecimal(percentage, 0);
             //

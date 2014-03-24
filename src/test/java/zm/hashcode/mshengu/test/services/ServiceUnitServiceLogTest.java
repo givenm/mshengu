@@ -40,12 +40,22 @@ public class ServiceUnitServiceLogTest extends AppTest {
 //    @Test
     public void testVistDateQuery() {
         siteServiceLogService = ctx.getBean(SiteServiceLogService.class);
-//        serviceUnit = ctx.getBean(ServiceUnit.class);
 
+        Date date = dtfwh.getDate(05, 02, 2014);
+        dtfwh.setDate(date);
+//        serviceUnit = ctx.getBean(ServiceUnit.class);
+        System.out.println("Date " + dtfwh.getTodaysDate_No_HTMSM());
         Date serviceDateStart = dtfwh.getTodaysDate_No_HTMSM();
         Date serviceDateEnd = dtfwh.getTomorrowsDate_No_HTMSM();
-        long count = siteServiceLogService.getTotalUnitsServiced("Du Noon - Doornbach", "WITHIN", serviceDateStart, serviceDateEnd);
-        System.out.println("testVistDateQuery ==== > \n Count  = " + count);
+        String message = "WITHIN";//User Away From UNIT"; //WITHIN
+        long countBaySidePTI = siteServiceLogService.getTotalUnitsServiced("Bay Side PTI", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Bay Side PTI logs Count ==== >Count  = " + countBaySidePTI);
+        long countBarcelona = siteServiceLogService.getTotalUnitsServiced("Barcelona", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Barcelona logs Count ==== >Count  = " + countBarcelona);
+        long countVygekraal = siteServiceLogService.getTotalUnitsServiced("Vygekraal", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Vygekraal logs Count ==== >Count  = " + countVygekraal);
+        long countJoeSlovo = siteServiceLogService.getTotalUnitsServiced("Joe Slovo", message, serviceDateStart, serviceDateEnd);
+        System.out.println(" \n Joe Slovo logs Count ==== >Count  = " + countJoeSlovo);
 //        return calendar;
     }
 
@@ -279,71 +289,71 @@ public class ServiceUnitServiceLogTest extends AppTest {
         siteServiceLogService = ctx.getBean(SiteServiceLogService.class);
         //        serviceUnit = ctx.getBean(ServiceUnit.class);
         System.out.println("=======================================\nEreyesterday\n");
-        System.out.println(dtfwh.getDateEreyesterday()+"\n");
-        System.out.println(dtfwh.getDateEreyesterdayStr()+"\n");
-        System.out.println(dtfwh.getDayOfWeekEreyesterday()+"\n");
-        System.out.println(dtfwh.getDayOfWeekEreyesterdayStr()+"\n");
-        
+        System.out.println(dtfwh.getDateEreyesterday() + "\n");
+        System.out.println(dtfwh.getDateEreyesterdayStr() + "\n");
+        System.out.println(dtfwh.getDayOfWeekEreyesterday() + "\n");
+        System.out.println(dtfwh.getDayOfWeekEreyesterdayStr() + "\n");
+
         System.out.println("=======================================\nYesterday\n");
-        System.out.println(dtfwh.getDateYesterday()+"\n");
-        System.out.println(dtfwh.getDateYesterdayStr()+"\n");
-        System.out.println(dtfwh.getDayOfWeekYesterday()+"\n");
-        System.out.println(dtfwh.getDayOfWeekYesterdayStr()+"\n");
-        
+        System.out.println(dtfwh.getDateYesterday() + "\n");
+        System.out.println(dtfwh.getDateYesterdayStr() + "\n");
+        System.out.println(dtfwh.getDayOfWeekYesterday() + "\n");
+        System.out.println(dtfwh.getDayOfWeekYesterdayStr() + "\n");
+
         System.out.println("=======================================\nToday\n");
-        System.out.println(dtfwh.getDateToday()+"\n");
-         System.out.println(dtfwh.getDateTodayStr() +"\n");
-        System.out.println(dtfwh.getDayOfWeekToday()+"\n");
-        System.out.println(dtfwh.getDayOfWeekTodayStr()+"\n");
-        
+        System.out.println(dtfwh.getDateToday() + "\n");
+        System.out.println(dtfwh.getDateTodayStr() + "\n");
+        System.out.println(dtfwh.getDayOfWeekToday() + "\n");
+        System.out.println(dtfwh.getDayOfWeekTodayStr() + "\n");
+
         System.out.println("=======================================\nYesterday\n");
-        System.out.println(dtfwh.getDateYesterday()+"\n");
-        System.out.println(dtfwh.getDateYesterdayStr()+"\n");
-        System.out.println(dtfwh.getDayOfWeekYesterday()+"\n");
-        System.out.println(dtfwh.getDayOfWeekYesterdayStr()+"\n");
-        System.out.println(dtfwh.getYesterdayDateFull()+"\n");
-        System.out.println(dtfwh.getYesterdayDateYYMMDD()+"\n");
-        System.out.println(dtfwh.getYesterdayssDate_No_HTMSM()+"\n");
-        
+        System.out.println(dtfwh.getDateYesterday() + "\n");
+        System.out.println(dtfwh.getDateYesterdayStr() + "\n");
+        System.out.println(dtfwh.getDayOfWeekYesterday() + "\n");
+        System.out.println(dtfwh.getDayOfWeekYesterdayStr() + "\n");
+        System.out.println(dtfwh.getYesterdayDateFull() + "\n");
+        System.out.println(dtfwh.getYesterdayDateYYMMDD() + "\n");
+        System.out.println(dtfwh.getYesterdayssDate_No_HTMSM() + "\n");
+
         System.out.println("=======================================\nToday\n");
-        System.out.println(dtfwh.getDateToday()+"\n");
-         System.out.println(dtfwh.getDateTodayStr() +"\n");
-        System.out.println(dtfwh.getDayOfWeekToday()+"\n");
-        System.out.println(dtfwh.getDayOfWeekTodayStr()+"\n");
-        System.out.println(dtfwh.getTodaysDateFull()+"\n");
-        System.out.println(dtfwh.getTodaysDateYYMMDD()+"\n");
-        System.out.println(dtfwh.getTodaysDate_No_HTMSM()+"\n");
-        
-        
-         System.out.println("=======================================\nTomorrow\n");
-        System.out.println(dtfwh.getTomorrowDateFull()+"\n");
-         System.out.println(dtfwh.getTomorrowDateYYMMDD() +"\n");
-        System.out.println(dtfwh.getTomorrowsDate_No_HTMSM()+"\n");
-        
-        
+        System.out.println(dtfwh.getDateToday() + "\n");
+        System.out.println(dtfwh.getDateTodayStr() + "\n");
+        System.out.println(dtfwh.getDayOfWeekToday() + "\n");
+        System.out.println(dtfwh.getDayOfWeekTodayStr() + "\n");
+        System.out.println(dtfwh.getTodaysDateFull() + "\n");
+        System.out.println(dtfwh.getTodaysDateYYMMDD() + "\n");
+        System.out.println(dtfwh.getTodaysDate_No_HTMSM() + "\n");
+
+
+        System.out.println("=======================================\nTomorrow\n");
+        System.out.println(dtfwh.getTomorrowDateFull() + "\n");
+        System.out.println(dtfwh.getTomorrowDateYYMMDD() + "\n");
+        System.out.println(dtfwh.getTomorrowsDate_No_HTMSM() + "\n");
+
+
         System.out.println("=======================================\nThursday");
-        System.out.println(dtfwh.getThursdayDateFull()+"\n");
-        System.out.println(dtfwh.getThursdayDateYYMMDD()+"\n");
-        
+        System.out.println(dtfwh.getThursdayDateFull() + "\n");
+        System.out.println(dtfwh.getThursdayDateYYMMDD() + "\n");
+
         System.out.println("=======================================\nFriday\n");
-        System.out.println(dtfwh.getFridayDateFull()+"\n");
-        System.out.println(dtfwh.getFridayDateYYMMDD()+"\n");
-        
-        
-        
+        System.out.println(dtfwh.getFridayDateFull() + "\n");
+        System.out.println(dtfwh.getFridayDateYYMMDD() + "\n");
+
+
+
         System.out.println("=======================================\nFriday\n");
-        System.out.println(dtfwh.getSaturdayDateFull()+"\n");
-        System.out.println(dtfwh.getSaturdayDateYYMMDD()+"\n");
-        
-        
+        System.out.println(dtfwh.getSaturdayDateFull() + "\n");
+        System.out.println(dtfwh.getSaturdayDateYYMMDD() + "\n");
+
+
         System.out.println("=======================================\nCalendar\n");
         System.out.println("DAY_OF_WEEK " + Calendar.DAY_OF_WEEK + "\n");
         System.out.println("DAY_OF_WEEK_IN_MONTH " + Calendar.DAY_OF_WEEK_IN_MONTH + "\n");
         System.out.println("DAY_OF_MONTH " + Calendar.DAY_OF_MONTH + "\n");
         System.out.println("DAY_OF_YEAR " + Calendar.DAY_OF_YEAR + "\n");
         System.out.println("DATE " + Calendar.DATE + "\n");
-        System.out.println(Calendar.getInstance().getTime()+"\n");
-        
+        System.out.println(Calendar.getInstance().getTime() + "\n");
+
 //        siteServiceLogService.runLogTodaysSiteServices();
     }
 }

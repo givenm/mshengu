@@ -15,11 +15,11 @@ import com.vaadin.ui.Label;
  *
  * @author Colin
  */
-public class AnnualDataForm extends FormLayout {
+public class MaintenanceAnnualDataForm extends FormLayout {
 
     public Button generateButton = new Button("Show Annual Data");
 
-    public AnnualDataForm() {
+    public MaintenanceAnnualDataForm() {
         HorizontalLayout buttons = getButtons();
         buttons.setSizeFull();
 

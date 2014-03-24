@@ -141,7 +141,7 @@ public class Setup_DailyInputSheetThree extends AppTest {
                             litres = Double.parseDouble("0.00");
                             randPerLitre = new BigDecimal("0.00");
                         } else {
-                            randPerLitre = amount.divide(new BigDecimal(litres), 2, RoundingMode.HALF_UP); // amount.divide by litres // Row 5 Column E is a Calculation
+                            randPerLitre = amount.divide(new BigDecimal(litres), 2, BigDecimal.ROUND_HALF_UP); // amount.divide by litres // Row 5 Column E is a Calculation
                         }
 
                         String mileageToken = worksheet.getRow(i).getCell(5).toString().trim();

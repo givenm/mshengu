@@ -111,7 +111,7 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                     .setMin(0)
                     .setTickInterval(tickInterval)
                     .setTickOptions(
-                    new AxisTickRenderer().setFormatString("R %.2f")));
+                    new AxisTickRenderer().setFormatString("R %'.2f")));
 //        }
         } else {
             series.addSeries(
@@ -140,7 +140,7 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                     .setMin(0)
                     .setTickInterval(tickInterval)
                     .setTickOptions(
-                    new AxisTickRenderer().setFormatString("R %.2f"))); // 	.setFormatString("$%d") // .setFormatString("R %.1f") // .setFormatString("R %.0f")
+                    new AxisTickRenderer().setFormatString("R %'.2f"))); // 	.setFormatString("$%d") // .setFormatString("R %.1f") // .setFormatString("R %.0f")
         }
 
         //

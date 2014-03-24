@@ -39,7 +39,7 @@ public class Header extends VerticalLayout implements Button.ClickListener {
         button.setStyleName(Reindeer.BUTTON_LINK);
         final Label loggedInUser = new Label(" Welcome: " + user.getFirstname() + " " + user.getLastname());
         final Label line = new Label("<HR height=\"50% color=\"#0072BB\" />", ContentMode.HTML);
-
+        logo.setSizeFull();
 
         bannerLayout.addComponent(logo);
         bannerLayout.setComponentAlignment(logo, Alignment.TOP_LEFT);

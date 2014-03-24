@@ -56,7 +56,6 @@ public class TotalFleetFuelSpendBarChart implements Serializable {
             totalList.add(fuelSpendMonthlyCostBean.getMonthlyAmountSpend());
             // Truncate the Names
             monthList.add(fuelSpendMonthlyCostBean.getMonth());
-            // Add Percentage for PIE
         }
         Object[] totalListArray = totalList.toArray(new Object[totalList.size()]);
         Object[] monthListArray = monthList.toArray(new Object[monthList.size()]);

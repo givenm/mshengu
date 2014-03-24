@@ -6,44 +6,49 @@ package zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.v
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
+import java.util.List;
+import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.products.SiteFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.forms.CustomerSiteFiledServicesForm;
-import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.SiteServiceLogTable;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.tables.VehicleServiceLogTable;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.ServiceSchedulingMenu;
 import zm.hashcode.mshengu.client.web.content.fieldservices.site.forms.SiteDetailsForm;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.products.Site;
 
 /**
  *
  * @author Ferox
  */
-public class SiteSiteServiceLogTab extends VerticalLayout implements
+public class VehicleServiceLogsTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
     private final SiteDetailsForm form;
-    private final SiteServiceLogTable table;
+    private final VehicleServiceLogTable table;
     private String parentId = null;
     private final DateTimeFormatWeeklyHelper dtfwh;
     private final Label lblFrom;
     private final Label lblTo;
-    private final CustomerSiteFiledServicesForm selectCustomerSite;
     Date date;
+    public CustomerSiteFiledServicesForm fieldServicesForm;
 
-    public SiteSiteServiceLogTab(MshenguMain app, CustomerSiteFiledServicesForm selectCustomerSite) {
+    public VehicleServiceLogsTab(MshenguMain app, CustomerSiteFiledServicesForm fieldServicesForm) {
+        this.fieldServicesForm = fieldServicesForm;
         main = app;
         this.dtfwh = new DateTimeFormatWeeklyHelper();
         date = new Date();
         dtfwh.setDate(date);
         form = new SiteDetailsForm();
-        this.selectCustomerSite = selectCustomerSite;
-        table = new SiteServiceLogTable(main);
+
+        table = new VehicleServiceLogTable(main);
         Label topleft = new Label("");
         topleft.setSizeUndefined();
         topleft.addStyleName("h4");
@@ -78,7 +83,8 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     }
 
     @Override
-    public void buttonClick(Button.ClickEvent event) {
+    public void buttonClick(Button.ClickEvent event
+    ) {
         final Button source = event.getButton();
         if (source == form.save) {
 //            saveForm(form.binder);
@@ -94,7 +100,8 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     }
 
     @Override
-    public void valueChange(Property.ValueChangeEvent event) {
+    public void valueChange(Property.ValueChangeEvent event
+    ) {
         final Property property = event.getProperty();
         if (property == table) {
             final Site site = SiteFacade.getSiteService().findById(table.getValue().toString());
@@ -167,9 +174,6 @@ public class SiteSiteServiceLogTab extends VerticalLayout implements
     public void loadServiceLogDetails(String siteId, Date startDate, Date endDate) {
         setServiceLogRange(startDate, endDate);
         table.loadServiceLogDetails(siteId, startDate, endDate);
-        if (siteId != null && !siteId.equals("")) {
-            selectCustomerSite.displayTotals(siteId, startDate, endDate, siteId);
-        }
     }
 
     private void setServiceLogRange(Date startDate, Date endDate) {

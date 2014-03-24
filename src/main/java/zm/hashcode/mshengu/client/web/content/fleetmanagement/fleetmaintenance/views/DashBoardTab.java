@@ -15,9 +15,12 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.chemicals.DashboardChemicalsMenu;
@@ -173,7 +176,7 @@ public class DashBoardTab extends VerticalLayout implements
 
         if (monthCount > 0) {
             maintenanceCostList = fleetMaintenanceUtil.findMaintenanceCostBetweenTwoDates(startDate, endDate);
-            maintenanceMileageList = fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(startDate, endDate);
+            maintenanceMileageList = fleetMaintenanceUtil.findMileagesBetweenTwoDates(startDate, endDate);
             maintenanceSpendBySupplierList = maintenanceSpendBySupplierUtil.findMaintenanceSpendBySupplierBetweenTwoDates(startDate, endDate);
 
             if (!maintenanceCostList.isEmpty()) {
@@ -199,7 +202,7 @@ public class DashBoardTab extends VerticalLayout implements
     }
 
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
+        return fleetMaintenanceUtil.findMileagesBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     private List<MaintenanceSpendBySupplier> getMaintenanceSpendBySupplier() {
@@ -374,7 +377,7 @@ public class DashBoardTab extends VerticalLayout implements
         Label totalFleetLabel = new Label("Total spend in Maintenance for the last " + chartPeriodCount + " months for every Km travelled");
         totalFleetLabel.setWidth(360, Sizeable.Unit.PIXELS);
 
-        BigDecimal totalMaintenanceSpendPerKm = grandTotalMaintenanceSpend.divide(grandTotalMaintenanceMileage, 2, RoundingMode.HALF_UP);
+        BigDecimal totalMaintenanceSpendPerKm = grandTotalMaintenanceSpend.divide(grandTotalMaintenanceMileage, 2, BigDecimal.ROUND_HALF_UP);
         Label totalPerKmLabel = new Label("<b style=\"color:red; font-size:25px;\">R " + totalMaintenanceSpendPerKm + "</b>", Label.CONTENT_XHTML);
         totalPerKmLabel.setWidth(100, Sizeable.Unit.PIXELS);
         totalPerKmLabel.setHeight(25, Sizeable.Unit.PIXELS);
@@ -437,6 +440,9 @@ public class DashBoardTab extends VerticalLayout implements
 
     public DCharts createTotalMaintenanceCostMOnthlySpendChart() {
         TotalMaintenanceSpendMonthlyChart TotalMaintenanceSpendMonthlyChart = new TotalMaintenanceSpendMonthlyChart();
+        final Locale locale = new Locale("za", "ZA");
+        // Format a decimal value for a specific locale
+        final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
         return TotalMaintenanceSpendMonthlyChart.createChart(spendMonthlyChartDataList, grandTotalMaintenanceSpend);
     }
 

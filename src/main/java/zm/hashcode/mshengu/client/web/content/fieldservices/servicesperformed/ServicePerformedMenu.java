@@ -10,10 +10,12 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
+import zm.hashcode.mshengu.app.facade.products.SiteFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.forms.CustomerSiteFiledServicesForm;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views.ServiceLogsNotServicedReportTab;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views.ServiceLogsPendingReportTab;
+import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views.VehicleServiceLogsTab;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views.SiteSiteServiceLogTab;
 import zm.hashcode.mshengu.client.web.content.fieldservices.servicesperformed.views.SiteSiteUnitTab;
 
@@ -29,38 +31,47 @@ public class ServicePerformedMenu extends VerticalLayout implements
 //    private TabSheet tab;
     private CustomerSiteFiledServicesForm selectCustomerSite;
     ServiceLogsPendingReportTab serviceLogsPendingReportTab;
-    SiteSiteServiceLogTab siteServiceLogTab;
+    SiteSiteServiceLogTab siteSiteServiceLogTab;
+    VehicleServiceLogsTab vehicleServiceLogsTab;
     ServiceLogsNotServicedReportTab serviceLogsNotServicedReportTab;
     SiteSiteUnitTab siteSiteUnitTab;
     private String selectedCustomerId;
-    private String selectedSiteId;
+    private String selectedSiteId = "";
     private String selectedSiteName;
     private Date startDate;
     private Date endDate;
+    private boolean isClicked = false;
 
     public ServicePerformedMenu(MshenguMain app, String selectedTab) {
         main = app;
 
         selectCustomerSite = new CustomerSiteFiledServicesForm();
         serviceLogsPendingReportTab = new ServiceLogsPendingReportTab(main);
+        vehicleServiceLogsTab = new VehicleServiceLogsTab(main, selectCustomerSite);
         serviceLogsNotServicedReportTab = new ServiceLogsNotServicedReportTab(main);
         siteSiteUnitTab = new SiteSiteUnitTab(main, "LANDING");
-        siteServiceLogTab = new SiteSiteServiceLogTab(main);
+        siteSiteServiceLogTab = new SiteSiteServiceLogTab(main, selectCustomerSite);
 
         tab = new TabSheet();
         tab.setHeight("100%");
         tab.setWidth("100%");
         tab.addTab(serviceLogsPendingReportTab, "Site Service Pending");
         tab.addTab(serviceLogsNotServicedReportTab, "Site Services Missed");
-        tab.addTab(siteServiceLogTab, "Site Service Logs");
+        tab.addTab(siteSiteServiceLogTab, "Site Service Logs");
+        tab.addTab(vehicleServiceLogsTab, "Vehicle Service Logs");
         tab.addTab(siteSiteUnitTab, "Site Toilets List");
         if (selectedCustomerId != null) {
             if (selectedTab.equals("LANDING")) {
                 tab.setSelectedTab(serviceLogsPendingReportTab);
             } else if (selectedTab.equals("NOT_SERVICED")) {
                 tab.setSelectedTab(serviceLogsNotServicedReportTab);
+            } else if (selectedTab.equals("VEHICLE_SERVICE_LOGS")) {
+                tab.setSelectedTab(vehicleServiceLogsTab);
+                //change the combobox of site to vehicle 
+                selectCustomerSite.grid.replaceComponent(selectCustomerSite.comboBoxSelectSite, selectCustomerSite.comboBoxSelectVehicle);
+
             } else if (selectedTab.equals("SERVICE_LOGS")) {
-                tab.setSelectedTab(siteServiceLogTab);
+                tab.setSelectedTab(siteSiteServiceLogTab);
             } else if (selectedTab.equals("SITE_UNITS")) {
                 tab.setSelectedTab(siteSiteUnitTab);
             }
@@ -74,6 +85,7 @@ public class ServicePerformedMenu extends VerticalLayout implements
         selectCustomerSite.comboBoxSelectContractType.addValueChangeListener((Property.ValueChangeListener) this);
         selectCustomerSite.comboBoxSelectCustomer.addValueChangeListener((Property.ValueChangeListener) this);
         selectCustomerSite.comboBoxSelectSite.addValueChangeListener((Property.ValueChangeListener) this);
+        selectCustomerSite.comboBoxSelectVehicle.addValueChangeListener((Property.ValueChangeListener) this);
         selectCustomerSite.btnLoadLogs.addClickListener((Button.ClickListener) this);
     }
 
@@ -89,20 +101,41 @@ public class ServicePerformedMenu extends VerticalLayout implements
                 selectCustomerSite.comboBoxSelectCustomer.addValueChangeListener((Property.ValueChangeListener) this);
             }
         } else if (property == selectCustomerSite.comboBoxSelectCustomer) {
-            if (selectCustomerSite.comboBoxSelectCustomer.getValue().toString() != null) {
+            String custId = selectCustomerSite.comboBoxSelectCustomer.getValue().toString();
+//            if (custId != null && !selectCustomerSite.comboBoxSelectVehicle.isVisible()) {
+            if (custId != null) {
+
                 setSelectedCustomerId(selectCustomerSite.comboBoxSelectCustomer.getValue().toString());
                 selectCustomerSite.comboBoxSelectSite.removeValueChangeListener((Property.ValueChangeListener) this);
                 selectCustomerSite.loadCustomerSites(getSelectedCustomerId());
                 selectCustomerSite.comboBoxSelectSite.addValueChangeListener((Property.ValueChangeListener) this);
 
+            } else { //if the vehicle combobox is showing
+//                selectCustomerSite.loadVehiclesOnCombobox(custId);
+                selectCustomerSite.loadVehiclesOnComboboxTemp(custId);
             }
         } else if (property == selectCustomerSite.comboBoxSelectSite) {
-            if (selectCustomerSite.comboBoxSelectSite.getValue().toString() != null) {
+            String siteId = selectCustomerSite.comboBoxSelectSite.getValue().toString();
+            if (siteId != null) {
                 setSelectedSiteId(selectCustomerSite.comboBoxSelectSite.getValue().toString());
+                setSelectedCustomerId(selectCustomerSite.comboBoxSelectCustomer.getValue().toString());
                 loadServiceLogs();
-//                setSelectedSiteInTabs(getSelectedCustomerId());
-//                selectCustomerSite.loadCustomerSites(getSelectedCustomerId());
 
+                if (selectedSiteId.equals("All")) {
+                    Date sDate = selectCustomerSite.startDate.getValue();
+                    Date eDate = selectCustomerSite.endDate.getValue();
+                    selectCustomerSite.displayTotals(selectedSiteId, sDate, eDate, getSelectedCustomerId());
+                } else {
+                    Date sDate = selectCustomerSite.startDate.getValue();
+                    Date eDate = selectCustomerSite.endDate.getValue();
+                    setSelectedSiteName(selectCustomerSite.comboBoxSelectSite.getItemCaption(getSelectedSiteId()));
+                    selectCustomerSite.displayTotals(getSelectedSiteName(), sDate, eDate, getSelectedCustomerId());
+                }
+            }
+        } else if (property == selectCustomerSite.comboBoxSelectVehicle) {
+            String vehicleId = selectCustomerSite.comboBoxSelectVehicle.getValue().toString();
+            if (vehicleId != null) {
+                
             }
         }
         /*else if (property == selectCustomerSite.startDate) {
@@ -177,7 +210,7 @@ public class ServicePerformedMenu extends VerticalLayout implements
 
     private void loadLogTables() {
 //        serviceLogsPendingReportTab.loadServiceLogDetails(selectedSiteId, getStartDate(), getStartDate());
-        siteServiceLogTab.loadServiceLogDetails(selectedSiteId, getStartDate(), getStartDate());
+        siteSiteServiceLogTab.loadServiceLogDetails(selectedSiteId, getStartDate(), getStartDate());
 //siteServiceLogTab.   
 
     }
@@ -214,6 +247,7 @@ public class ServicePerformedMenu extends VerticalLayout implements
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
         if (source == selectCustomerSite.btnLoadLogs) {
+            isClicked = true;
             loadServiceLogs();
         }
 //        } else if (source == form.edit) {
@@ -228,7 +262,8 @@ public class ServicePerformedMenu extends VerticalLayout implements
     }
 
     private void loadServiceLogs() {
-        if (getSelectedSiteId() != null) {//              
+
+        if (getSelectedSiteId() != null || getSelectedSiteId().equals("All")) {//              
             setStartDate(selectCustomerSite.startDate.getValue());
             setEndDate(selectCustomerSite.endDate.getValue());
 
@@ -239,9 +274,17 @@ public class ServicePerformedMenu extends VerticalLayout implements
                 Notification.show("End date cannot be posterior to start date!", Notification.Type.TRAY_NOTIFICATION);
 
             } else {
-
-                setSelectedSiteName(selectCustomerSite.comboBoxSelectSite.getItemCaption(getSelectedSiteId()));
-                siteServiceLogTab.loadServiceLogDetails(getSelectedSiteName(), getStartDate(), getEndDate());
+                if (isClicked) {
+                    if (getSelectedSiteId().equals("All")) {
+                        Date sDate = selectCustomerSite.startDate.getValue();
+                        Date eDate = selectCustomerSite.endDate.getValue();
+                        selectCustomerSite.displayTotals(getSelectedSiteId(), sDate, eDate, getSelectedCustomerId());
+                    } else {
+                        setSelectedSiteName(selectCustomerSite.comboBoxSelectSite.getItemCaption(getSelectedSiteId()));
+                        siteSiteServiceLogTab.loadServiceLogDetails(getSelectedSiteName(), getStartDate(), getEndDate());
+                    }
+                }
+                isClicked = false;
             }
 
         } else {

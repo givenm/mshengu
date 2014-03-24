@@ -10,6 +10,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
+import zm.hashcode.mshengu.app.util.panel.PanelEfficiency;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFuelMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.MonthlyFuelExpenseUI;
@@ -43,6 +45,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
     private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private final FleetFuelUtil fleetFuelUtil = new FleetFuelUtil();
     private final MonthlyFuelExpenseUI monthlyFuelExpenseUI;
+    MonthlyFuelExpenseTable fuelExpenseTable;
     public static Date startDate = null;
     public static Date endDate = null;
     //
@@ -59,17 +62,15 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
     private static BigDecimal serviceFleetGrandTotal = BigDecimal.ZERO;
     private static BigDecimal grandTotal = BigDecimal.ZERO;
     //
-    private final NonServiceVehiclesTwelveMonthChart nonServiceVehiclesTwelveMonthChart;
-    private final ServiceVehiclesTwelveMonthChart serviceVehiclesTwelveMonthChart;
-    private final MonthlyFuelExpenseTable monthlyFuelExpenseTable;
+//    private final NonServiceVehiclesTwelveMonthChart nonServiceVehiclesTwelveMonthChart;
+//    private final ServiceVehiclesTwelveMonthChart serviceVehiclesTwelveMonthChart;
+//    private final MonthlyFuelExpenseTable monthlyFuelExpenseTable;
 
     public MonthlyFuelExpenseTab(MshenguMain app) {
         main = app;
         form = new MonthlyFuelExpenseForm();
-        nonServiceVehiclesTwelveMonthChart = new NonServiceVehiclesTwelveMonthChart();
-        serviceVehiclesTwelveMonthChart = new ServiceVehiclesTwelveMonthChart();
-        monthlyFuelExpenseTable = new MonthlyFuelExpenseTable(app);
         monthlyFuelExpenseUI = new MonthlyFuelExpenseUI(app);
+        fuelExpenseTable = new MonthlyFuelExpenseTable(app);
 
         addListeners();
         addComponent(form);
@@ -159,7 +160,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
         List<OperatingCost> monthsOperatingCostList = new ArrayList<>();
         for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
             // Omit ZERO OBJECTS
-            if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
+            if (!(operatingCost.getSpeedometer() == 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0 && operatingCost.getSlipNo().equals("0000") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) == 0)) {
                 if (operatingCost.getTransactionDate().compareTo(startDate) == 0
                         || (operatingCost.getTransactionDate().after(startDate) && operatingCost.getTransactionDate().before(endDate))
                         || operatingCost.getTransactionDate().compareTo(endDate) == 0) {
@@ -209,12 +210,15 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
             BigDecimal allTruckTotal = new BigDecimal(nonOperationalFuelCostTotal.toString());
             allTruckTotal = allTruckTotal.add(operationalFuelCostTotal);
             allTruckTotal = allTruckTotal.add(serviceFleetFuelCostTotal);
+            allTruckTotal = allTruckTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
             //
             grandTotal = grandTotal.add(allTruckTotal);
 
             buildMonthlyFuelExpenseBeanObject(counter, calendar.getTime(), nonOperationalFuelCostTotal, operationalFuelCostTotal, serviceFleetFuelCostTotal, allTruckTotal);
             counter++;
         }
+        grandTotal = grandTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
+
     }
 
     private BigDecimal getFuelCostTotalForMonth(List<OperatingCost> truckOperatingCostList, Date date) {
@@ -302,7 +306,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
     }
 
     private void buildServiceVehiclesTwelveMonthBeanList() {
-        nonServiceVehiclesTwelveMonthBeanList.clear();
+        serviceVehiclesTwelveMonthBeanList.clear();
         List<OperatingCost> serviceTrucksOperatingCostList = new ArrayList<>();
 
         for (OperatingCost operatingCost : operatingCostTwelveMonthsList) {
@@ -347,14 +351,27 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
         String chartPeriod = serviceVehiclesTwelveMonthBeanList.get(0).getMonth() + " - " + serviceVehiclesTwelveMonthBeanList.get(serviceVehiclesTwelveMonthBeanList.size() - 1).getMonth();
 
         // Assuming it is sorted by Date in Asc Order
-        Table dMonthlyFuelExpenseTable = createMonthlyFuelExpenseTable();
-//        DCharts dServiceTrucksTwelveMonthFuelSpendChart = createServiceTrucksTwelveMonthFuelSpendChart();
-//        DCharts dNonServiceTrucksTwelveMonthFuelSpendChart = createNonServiceTrucksTwelveMonthFuelSpendChart();
+        createMonthlyFuelExpenseTable();
+//        fuelExpenseTable.setPageLength(fuelExpenseTable.size());
+        DCharts dServiceTrucksTwelveMonthFuelSpendChart = createServiceTrucksTwelveMonthFuelSpendChart();
+        DCharts dNonServiceTrucksTwelveMonthFuelSpendChart = createNonServiceTrucksTwelveMonthFuelSpendChart();
 
+        // TO DO
+//        Create Panel and add Table and 2 Charts to Panel
+        PanelEfficiency monthFuelExpensePanel = new PanelEfficiency("Monthly Fuel Expense: " + tablePeriod);
+        PanelEfficiency serviceTrucksTwelveMonthFuelSpendPanel = new PanelEfficiency("Service Vehicles 12M Fuel Spend: " + chartPeriod);
+        PanelEfficiency nonServiceTrucksTwelveMonthFuelSpendPanel = new PanelEfficiency("Non-Service Vehicles 12M Fuel Spend: " + chartPeriod);
 
-//        monthlyFuelExpenseUI.tableVerticalLayout.addComponent(dMonthlyFuelExpenseTable);
-//         monthlyFuelExpenseUI.chartVerticalLayout.addComponent();
-//         monthlyFuelExpenseUI.chartVerticalLayout.addComponent();
+        monthFuelExpensePanel.setContent(fuelExpenseTable);
+        serviceTrucksTwelveMonthFuelSpendPanel.setContent(dServiceTrucksTwelveMonthFuelSpendChart);
+        nonServiceTrucksTwelveMonthFuelSpendPanel.setContent(dNonServiceTrucksTwelveMonthFuelSpendChart);
+
+        monthlyFuelExpenseUI.tableVerticalLayout.removeAllComponents();
+        monthlyFuelExpenseUI.chartVerticalLayout.removeAllComponents();
+        // Add Panels to UI
+        monthlyFuelExpenseUI.tableVerticalLayout.addComponent(monthFuelExpensePanel);
+        monthlyFuelExpenseUI.chartVerticalLayout.addComponent(serviceTrucksTwelveMonthFuelSpendPanel);
+        monthlyFuelExpenseUI.chartVerticalLayout.addComponent(nonServiceTrucksTwelveMonthFuelSpendPanel);
 
         // House Keeping
         startDate = null;
@@ -369,9 +386,18 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
         serviceFleetGrandTotal = BigDecimal.ZERO;
     }
 
-    private Table createMonthlyFuelExpenseTable() {
-        MonthlyFuelExpenseTable fuelExpenseTable = new MonthlyFuelExpenseTable(main);
-        return fuelExpenseTable.createTable(monthlyFuelExpenseBeanList);
+    private void createMonthlyFuelExpenseTable() {
+        fuelExpenseTable.createTable(monthlyFuelExpenseBeanList);
+    }
+
+    private DCharts createServiceTrucksTwelveMonthFuelSpendChart() {
+        ServiceVehiclesTwelveMonthChart serviceVehiclesTwelveMonthChart = new ServiceVehiclesTwelveMonthChart();
+        return serviceVehiclesTwelveMonthChart.createChart(serviceVehiclesTwelveMonthBeanList);
+    }
+
+    private DCharts createNonServiceTrucksTwelveMonthFuelSpendChart() {
+        NonServiceVehiclesTwelveMonthChart nonServiceVehiclesTwelveMonthChart = new NonServiceVehiclesTwelveMonthChart();
+        return nonServiceVehiclesTwelveMonthChart.createChart(nonServiceVehiclesTwelveMonthBeanList);
     }
 
     private void addListeners() {

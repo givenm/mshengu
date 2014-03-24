@@ -115,7 +115,7 @@ public class LineChart implements Serializable {
         Series series = new Series()
                 .addSeries(
                 new XYseries()
-                .setLineWidth(5)
+                .setLineWidth(2)
                 .setMarkerOptions(
                 new MarkerRenderer()
                 .setStyle(MarkerStyles.FILLED_SQUARE)
@@ -134,12 +134,13 @@ public class LineChart implements Serializable {
                 .setTickOptions(
                 new CanvasAxisTickRenderer()
                 .setAngle(-45)
-                .setFontSize("10pt")
+                .setFontSize("8pt")
                 .setShowMark(true)
                 .setShowGridline(true)) //
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%b-%Y"))
+                .setFontSize("8pt")
+                .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
                 .setNumberTicks(monthListArray.length) //
                 )
                 //
@@ -149,7 +150,7 @@ public class LineChart implements Serializable {
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%.2f")) // .setFormatString("R%.2f")
+                .setFormatString("%'.2f")) // .setFormatString("R%.2f")
                 );
 
         Highlighter highlighter = new Highlighter()
@@ -179,7 +180,7 @@ public class LineChart implements Serializable {
         seriesDefaults.setRenderer(SeriesRenderers.LINE)
                 .setPointLabels(
                 new PointLabels()
-                .setFormatString("%.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
+                .setFormatString("%'.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
                 .setShow(true)
                 .setLocation(PointLabelLocations.NORTH)
                 .setEdgeTolerance(-15))

@@ -153,6 +153,23 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
             return ((compareOne == 0) ? compareTwo : compareOne);
         }
     };
+    public static Comparator<OperatingCost> AscOrderDateAscOrderTruckIdComparator = new Comparator<OperatingCost>() {
+        @Override
+        public int compare(OperatingCost operatingCost1, OperatingCost operatingCost2) {
+
+            //Ascending order by Date
+            int compareOne = operatingCost1.getTransactionDate().compareTo(operatingCost2.getTransactionDate());
+//            System.out.println("(1)"
+//                    + " TruckId= " + operatingCost1.getTruckId()
+//                    + ", Date= " + operatingCost1.getTransactionDate()
+//                    + " VS (2) TruckId= " + operatingCost2.getTruckId()
+//                    + ", Date= " + operatingCost2.getTransactionDate());
+            // Ascending Order by TruckId
+            int compareTwo = operatingCost1.getTruckId().compareTo(operatingCost2.getTruckId());
+
+            return ((compareOne == 0) ? compareTwo : compareOne);
+        }
+    };
 
     @Override
     public int hashCode() {

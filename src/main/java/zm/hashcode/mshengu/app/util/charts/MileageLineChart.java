@@ -115,7 +115,7 @@ public class MileageLineChart implements Serializable {
         Series series = new Series()
                 .addSeries(
                 new XYseries()
-                .setLineWidth(5)
+                .setLineWidth(2)
                 .setMarkerOptions(
                 new MarkerRenderer()
                 .setStyle(MarkerStyles.FILLED_SQUARE)
@@ -139,7 +139,8 @@ public class MileageLineChart implements Serializable {
                 .setShowGridline(true)) //
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%b-%Y"))
+                .setFontSize("8pt")
+                .setFormatString("%b-%y"))// Aug-14 // "%b-%Y" with caps Aug-2014
                 .setNumberTicks(monthListArray.length) //
                 )
                 //
@@ -149,7 +150,7 @@ public class MileageLineChart implements Serializable {
                 .setTickInterval(tickInterval)
                 .setTickOptions(
                 new AxisTickRenderer()
-                .setFormatString("%.0f")) // .setFormatString("R%.2f")
+                .setFormatString("%'.0f")) // .setFormatString("R%'.2f")
                 );
 
         Highlighter highlighter = new Highlighter()
@@ -158,7 +159,7 @@ public class MileageLineChart implements Serializable {
                 .setTooltipLocation(TooltipLocations.NORTH)
                 .setTooltipAxes(TooltipAxes.XY) //                .setTooltipFormatString("<b><i><span style='color:red;'>Mileage:</span></i></b> %.0f")
                 //                .setUseAxesFormatters(false)
-                ;
+                .setTooltipFormatString("%'.0f");
 
 //        Cursor cursor = new Cursor()
 //                .setShow(true);
@@ -179,7 +180,7 @@ public class MileageLineChart implements Serializable {
         seriesDefaults.setRenderer(SeriesRenderers.LINE)
                 .setPointLabels(
                 new PointLabels()
-                .setFormatString("%.2f") //  .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
+                .setFormatString("%.0f") // "%'.0f" .setFormatString("R%'.2f") Currency Symbol, thousand Seperator
                 .setShow(true)
                 .setLocation(PointLabelLocations.NORTH)
                 .setEdgeTolerance(-15))

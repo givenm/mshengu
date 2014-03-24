@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import zm.hashcode.mshengu.domain.people.Person;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
  *
@@ -22,7 +22,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
     private String id;
     private Date serviceDate;
     private Date serviceTime;
-    private Person servicedBy;
+    private Truck servicedBy;
     private String statusMessage;
     private boolean pumpOut;
     private boolean washBucket;
@@ -134,7 +134,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
         private String id;
         private final Date serviceDate;
         private Date serviceTime;
-        private Person servicedBy;
+        private Truck servicedBy;
         //  private Set<UnitCleaningActivities> unitCleaningActivities;
         private String statusMessage;
         private String parentId;
@@ -190,7 +190,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
             return this;
         }
 
-        public Builder servicedBy(Person value) {
+        public Builder servicedBy(Truck value) {
             this.servicedBy = value;
             return this;
         }
@@ -282,7 +282,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
         return serviceTime;
     }
 
-    public Person getServicedBy() {
+    public Truck getServicedBy() {
         return servicedBy;
     }
 //    public Set<UnitCleaningActivities> getUnitCleaningActivities() {
@@ -310,7 +310,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
 
     public String getDriverName() {
         if (!isNullObject(servicedBy)) {
-            return servicedBy.getFirstname() + " " + servicedBy.getLastname();
+            return servicedBy.getDriverName();
         } else {
             return null;
         }

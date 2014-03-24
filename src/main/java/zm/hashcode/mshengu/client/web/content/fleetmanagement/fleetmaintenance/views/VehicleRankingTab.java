@@ -114,7 +114,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     }
 
     private List<AnnualDataFleetMaintenanceMileage> getMaintenanceMileageList() {
-        return fleetMaintenanceUtil.findMaintenanceMileageBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
+        return fleetMaintenanceUtil.findMileagesBetweenTwoDates(FleetMaintenanceUtil.getStartDate(), FleetMaintenanceUtil.getEndDate());
     }
 
     private void performSpendMonthlyChart(List<AnnualDataFleetMaintenanceCost> maintenanceCostList, Date date, Integer period) {

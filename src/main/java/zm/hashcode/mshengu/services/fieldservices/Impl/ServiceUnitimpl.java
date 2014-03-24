@@ -11,9 +11,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitServiceResource;
+import zm.hashcode.mshengu.domain.fleet.Truck;
 import zm.hashcode.mshengu.domain.products.SiteUnit;
 import zm.hashcode.mshengu.domain.products.UnitServiceLog;
 import zm.hashcode.mshengu.services.fieldservices.ServiceUnit;
+import zm.hashcode.mshengu.services.fleet.TruckService;
 import zm.hashcode.mshengu.services.products.SiteUnitService;
 import zm.hashcode.mshengu.services.products.UnitServiceLogService;
 
@@ -28,6 +30,8 @@ public class ServiceUnitimpl implements ServiceUnit {
     private SiteUnitService siteUnitService;
     @Autowired
     private UnitServiceLogService unitServiceLogService;
+    @Autowired 
+    private TruckService  truckService;
 
     @Override
     public void serviceunit(UnitServiceResource unitService, SiteUnit unit, String statusMessasge) {
@@ -51,6 +55,7 @@ public class ServiceUnitimpl implements ServiceUnit {
                 .statusMessage(statusMessasge)
                 .incident(incidents)
                 .siteName(unit.getSiteName())
+                .servicedBy(getTruck(unitService.getTruckId()))
                 .build();
         unitServiceLogService.persist(unitServiceLog);
         addServiceLogToSite(unit, unitServiceLog);
@@ -66,5 +71,10 @@ public class ServiceUnitimpl implements ServiceUnit {
                 .unityLogs(newUnitServiceLogs)
                 .build();
         siteUnitService.merge(updatedUniteSite);
+    }
+    
+    private Truck getTruck(String truckId){
+        Truck truck = truckService.findById(truckId);
+        return truck;        
     }
 }

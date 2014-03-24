@@ -52,7 +52,8 @@ public class BarChart implements Serializable {
                 .setTooltipAlwaysVisible(true)
                 .setKeepTooltipInsideChart(true)
                 .setTooltipLocation(TooltipLocations.NORTH) //                .setTooltipAxes(TooltipAxes.XY_BAR) // NB FLIP the display in the tooltip
-                ;
+                // .setFormatString("%'.2f") // "R %'.2f" // $%'d.2f
+                .setTooltipFormatString("%'.2f");
 
         series.addSeries(
                 new XYseries().setLabel(label));
@@ -86,7 +87,7 @@ public class BarChart implements Serializable {
                 .setMin(minTickValue)
                 .setTickInterval(tickInterval)
                 .setTickOptions(
-                new AxisTickRenderer().setFormatString("R %.2f")));
+                new AxisTickRenderer().setFormatString("R %'.2f")));
 
         //
         SeriesDefaults seriesDefaults = new SeriesDefaults();

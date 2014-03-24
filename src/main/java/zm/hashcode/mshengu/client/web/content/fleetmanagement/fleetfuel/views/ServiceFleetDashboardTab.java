@@ -62,7 +62,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     //
     public static List<ServiceFleetOneMonthlyEfficiencyBean> serviceFleetOneMonthlyEfficiencyBeanList = new ArrayList<>();
     public static List<ServiceFleetThreeMonthlyEfficiencyBean> serviceFleetThreeMonthlyEfficiencyBeanList = new ArrayList<>();
-    public static List<ServiceFleetThreeMonthlyEfficiencyBean> serviceFleetDriverEfficiencyBeanList = new ArrayList<>();
     public static List<DriverEfficiencyBean> driverEfficiencyBeanList = new ArrayList<>();
     //
     public static BigDecimal grandTotalFuelSpend = BigDecimal.ZERO;
@@ -141,8 +140,15 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         if (!dateRangeOperatingCostList.isEmpty()) {
             buildFuelSpendMonthlyCostBeanList(); // used for Bar Chart
             buildMonthlyMileageTotalBeanList(); // used for Line Chart
+            Collections.sort(monthlyMileageTotalBeanList);
+
+
+
+
             buildServiceFleetOneMonthEfficiencyBeanList();
+            Collections.sort(serviceFleetOneMonthlyEfficiencyBeanList);
             buildServiceFleetThreeMonthEfficiencyBeanList();
+            Collections.sort(serviceFleetThreeMonthlyEfficiencyBeanList);
             buildDriverEfficiencyBeanList();
             Collections.sort(driverEfficiencyBeanList, DriverEfficiencyBean.DescendingEfficiencyComparator);
             //
@@ -153,6 +159,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     }
 
     public void buildFuelSpendMonthlyCostBeanList() {
+
         BigDecimal randPerLitre = BigDecimal.ZERO;
 //        DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
         // SORT THE LIST BY DATE ASC
@@ -162,27 +169,36 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         BigDecimal monthTotal = BigDecimal.ZERO;
         Date transactionDate = fleetFuelUtil.resetMonthToFirstDay(dateRangeOperatingCostList.get(0).getTransactionDate());
         int counter = 0;
+        List<OperatingCost> serviceTruckOperatingCostList = new ArrayList<>();
         for (OperatingCost operatingCost : dateRangeOperatingCostList) {
+            Truck truck = fleetFuelUtil.findTruckFromAllTruckListById(operatingCost.getTruckId());
+            if (truck != null) {
+                if (FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV") || FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
+                    serviceTruckOperatingCostList.add(operatingCost);
+                }
+            }
+        }
+        for (OperatingCost operatingCost : serviceTruckOperatingCostList) {
             if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).equals(transactionDate)) {
                 monthTotal = monthTotal.add(operatingCost.getFuelCost());
-                for (Truck truck : FleetFuelUtil.serviceTrucks) {
-                    if (truck.getId().equals(operatingCost.getTruckId())) {
-                        if (FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) > 0) {
+                for (Truck truckk : FleetFuelUtil.serviceTrucks) {
+                    if (truckk.getId().equals(operatingCost.getTruckId())) {
+                        if (FleetFuelUtil.truncate(truckk.getVehicleNumber(), 3).equalsIgnoreCase("MSV") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) > 0) {
                             randPerLitre = operatingCost.getRandPerLitre();
                         }
                         break;
                     }
                 }
                 // Test for Last item in List and SubTotal
-                if (dateRangeOperatingCostList.indexOf(operatingCost) == dateRangeOperatingCostList.size() - 1) {
+                if (serviceTruckOperatingCostList.indexOf(operatingCost) == serviceTruckOperatingCostList.size() - 1) {
                     counter++;
-                    performFleetFuelSpendSubTotal(monthTotal, dateRangeOperatingCostList, operatingCost, randPerLitre, counter);
+                    performFleetFuelSpendSubTotal(monthTotal, serviceTruckOperatingCostList, operatingCost, randPerLitre, counter);
                 }
 
             } else {
                 // Subtotal
                 counter++;
-                performFleetFuelSpendSubTotal(monthTotal, dateRangeOperatingCostList, operatingCost, randPerLitre, counter);
+                performFleetFuelSpendSubTotal(monthTotal, serviceTruckOperatingCostList, operatingCost, randPerLitre, counter);
                 //Reset
                 monthTotal = operatingCost.getFuelCost();
                 transactionDate = fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate());
@@ -190,13 +206,13 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         }
     }
 
-    private void performFleetFuelSpendSubTotal(BigDecimal monthTotal, List<OperatingCost> dateRangeOperatingCostList, OperatingCost operatingCost, BigDecimal randPerLitre, int counter) {
+    private void performFleetFuelSpendSubTotal(BigDecimal monthTotal, List<OperatingCost> serviceTruckOperatingCostList, OperatingCost operatingCost, BigDecimal randPerLitre, int counter) {
         // Subtotal
-        monthTotal.setScale(2, BigDecimal.ROUND_UP);
+        monthTotal = monthTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
         grandTotalFuelSpend = grandTotalFuelSpend.add(monthTotal);
         // Build FuelSpendMonthlyCostBean and add to ArrayList
-        int currentIndex = dateRangeOperatingCostList.indexOf(operatingCost);
-        fuelSpendMonthlyCostBeanList.add(buildFuelSpendMonthlyCostBeanObject(counter, monthTotal, dateRangeOperatingCostList.get(currentIndex - 1), randPerLitre));
+        int currentIndex = serviceTruckOperatingCostList.indexOf(operatingCost);
+        fuelSpendMonthlyCostBeanList.add(buildFuelSpendMonthlyCostBeanObject(counter, monthTotal, serviceTruckOperatingCostList.get(currentIndex - 1), randPerLitre));
     }
 
     private FuelSpendMonthlyCostBean buildFuelSpendMonthlyCostBeanObject(int counter, BigDecimal monthTotal, OperatingCost operatingCost, BigDecimal randPerLitre) {
@@ -222,7 +238,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         //
         Calendar calendar = Calendar.getInstance();
         for (calendar.setTime(endDatee); calendar.getTime().after(startDatee) || calendar.getTime().compareTo(startDatee) == 0; calendar.add(Calendar.MONTH, -1)) {
-            for (Truck truck : FleetFuelUtil.serviceTrucks) { // this TAB for Service/Utility Trucks Only
+            for (Truck truck : FleetFuelUtil.serviceTrucks) { // this TAB for Service/Utility Trucks Only // msvTrucks, serviceTrucks
                 truckMonthOperatingCostList.clear();
                 truckMonthOperatingCostList.addAll(getOneMonthOperatingCostForTruck(dateRangeOperatingCostList, calendar.getTime(), truck));
 
@@ -232,7 +248,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
                     monthlyMileageTotal += fleetFuelUtil.calculateMonthMileageTotal(truckMonthOperatingCostList, truck);
                 }
 //                //======= DELETE =========
-//                System.out.println("Truck Monthly Mileage Total: Truck= " + truck.getVehicleNumber() + " " + truckMonthOperatingCostList.get(0).getTruckId() + " Month= " + calendar.getTime() + " Mileage Total= " + monthMileageSum);
+//                System.out.println("Truck Monthly Mileage Total: Truck= " + truck.getVehicleNumber() + " " + truckMonthOperatingCostList.get(0).getTruckId() + " Month= " + calendar.getTime() + " Mileage Total= " + fleetFuelUtil.calculateMonthMileageTotal(truckMonthOperatingCostList, truck));
 //                // ======= DELETE =========
             }
 
@@ -264,17 +280,15 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     }
 
     public List<OperatingCost> getOneMonthOperatingCostForTruck(List<OperatingCost> dateRangeOperatingCostList, Date date, Truck truck) {
-        boolean found = false;
         List<OperatingCost> truckMonthOperatingCostList = new ArrayList<>();
-        truckMonthOperatingCostList.clear();
+//        truckMonthOperatingCostList.clear();
         for (OperatingCost operatingCost : dateRangeOperatingCostList) {
             if (operatingCost.getTruckId().equals(truck.getId())
                     && date.compareTo(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
                 truckMonthOperatingCostList.add(operatingCost);
-                found = true;
             }
             // if Date changes, then it is no longer End Date as we sorted in Desc Order
-            if (found && date.after(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
+            if (date.after(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
                 break;
             }
         }
@@ -291,46 +305,17 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         int counter = 0;
         //
         Calendar calendar = Calendar.getInstance();
+        int listIndex = 1;
         for (calendar.setTime(endDatee); calendar.getTime().after(startDatee) || calendar.getTime().compareTo(startDatee) == 0; calendar.add(Calendar.MONTH, -1)) {
-            BigDecimal efficiencyValue = getOneMonthServiceFleetEfficiency(calendar.getTime());
+            BigDecimal monthlyFuelCost = fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - listIndex).getMonthlyAmountSpend();
+            Integer monthlyMileage = monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - listIndex).getMonthlyMileageTotal();
+            listIndex++;
+
+            System.out.println(calendar.getTime() + " : 1M Fuel Efficiency: FUEL COST SUM= " + monthlyFuelCost + " / 1M Fuel Efficiency: MILEAGE SUM= " + monthlyMileage + " ANS - " + (monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP)));
+            BigDecimal efficiencyValue = monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP);// getOneMonthServiceFleetEfficiency(calendar.getTime());
             serviceFleetOneMonthlyEfficiencyBeanList.add(buildServiceFleetOneMonthlyEfficiencyBeanObject(calendar.getTime(), efficiencyValue, counter));
             counter++;
         }
-    }
-
-    private BigDecimal getOneMonthServiceFleetEfficiency(Date monthDate) { // monthDate has been reset to 1st of month from calling method
-        boolean found = false;
-        BigDecimal mtdActTotal = BigDecimal.ZERO;
-        List<OperatingCost> truckMonthOperatingCostList = new ArrayList<>();
-//        Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
-        int counter = 0; // counter for Number of Truck with operating Cost data for the period specified
-
-        for (Truck truck : FleetFuelUtil.serviceTrucks) { //  This Tab is for Service/Utility Trucks ONLY
-            truckMonthOperatingCostList.clear();
-            for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
-                if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0
-                        && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
-                    if (operatingCost.getTruckId().equals(truck.getId())
-                            && monthDate.compareTo(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate())) == 0) {
-                        truckMonthOperatingCostList.add(operatingCost);
-                        found = true;
-                    }
-                }
-                // if Date changes, then it is no longer End Date as we sorted in Desc Order
-                if (found && monthDate.after(fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
-                    break;
-                }
-            }
-            // getMTDAct for Truck
-            if (truckMonthOperatingCostList.size() > 0) {
-                mtdActTotal = mtdActTotal.add(fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
-//                System.out.println("Month= " + truckMonthOperatingCostList.get(0).getTransactionDate() + ", Truck= " + truck.getVehicleNumber() + ", MTDAct= " + fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
-                counter++; // Counter should increment per truck with Data for specified period
-            }
-        }
-//        System.out.println("MTDAct for all service Trucks for 1M Efficiency= " + mtdActTotal + ", No of Service Trucks with Data for last month in range= " + counter);
-        // getMTDAct for ALL Truck
-        return fleetFuelUtil.performMtdActAverageCalc(mtdActTotal, counter);
     }
 
     public ServiceFleetOneMonthlyEfficiencyBean buildServiceFleetOneMonthlyEfficiencyBeanObject(Date date, BigDecimal efficiencyValue, int counter) {
@@ -348,51 +333,33 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         Date startDatee = fleetFuelUtil.determineStartDate(endDatee, 12);
         serviceFleetThreeMonthlyEfficiencyBeanList.clear();
         int counter = 0;
+        int listIndex = 1;
         Calendar calendar = Calendar.getInstance();
         for (calendar.setTime(endDatee); calendar.getTime().after(startDatee) || calendar.getTime().compareTo(startDatee) == 0; calendar.add(Calendar.MONTH, -1)) {
-            BigDecimal efficiencyValue = getThreeMonthServiceFleetEfficiency(calendar.getTime());
-            serviceFleetThreeMonthlyEfficiencyBeanList.add(buildServiceFleetThreeMonthlyEfficiencyBeanObject(counter, calendar.getTime(), efficiencyValue));
-            counter++;
-        }
-    }
+            BigDecimal monthlyFuelCost = BigDecimal.ZERO;
+            Integer monthlyMileage = new Integer("0");
+            boolean monthNotFound = false;
+            monthlyFuelCost = monthlyFuelCost.add(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - listIndex).getMonthlyAmountSpend());
+            monthlyMileage += monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - listIndex).getMonthlyMileageTotal();
 
-    private BigDecimal getThreeMonthServiceFleetEfficiency(Date monthDate) { // monthDate has been reset to 1st of month from calling method
-        Date threeMonthStartDate = fleetFuelUtil.determineStartDate(monthDate, 3);
-        BigDecimal allTruckFuelCostTotal = BigDecimal.ZERO;
-        Integer allTruckMileageSum = new Integer("0");
-        for (Truck truck : FleetFuelUtil.serviceTrucks) { //  This Tab is for Service/Utility Trucks ONLY
-            List<OperatingCost> truckThreeMonthsOperatingCostList = getOperatingCostForTruckforMonthsList(truck, operatingCostTwentyFiveMonthsList, monthDate, threeMonthStartDate);
-            if (!truckThreeMonthsOperatingCostList.isEmpty()) {
-                Date currentTransactionDate = fleetFuelUtil.resetMonthToFirstDay(truckThreeMonthsOperatingCostList.get(0).getTransactionDate());
-                //
-                List<OperatingCost> truckCurrentMonthsOperatingCostList = new ArrayList<>();
-                for (OperatingCost operatingCost : truckThreeMonthsOperatingCostList) {
-                    if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).equals(currentTransactionDate)) {
-                        truckCurrentMonthsOperatingCostList.add(operatingCost);
-                        // Test for Last item in List and SubTotal
-                        if (truckThreeMonthsOperatingCostList.indexOf(operatingCost) == truckThreeMonthsOperatingCostList.size() - 1) {
-                            allTruckMileageSum += fleetFuelUtil.calculateMonthMileageTotal(truckCurrentMonthsOperatingCostList, truck);
-                        }
-                    } else {
-                        // Subtotal
-                        allTruckMileageSum += fleetFuelUtil.calculateMonthMileageTotal(truckCurrentMonthsOperatingCostList, truck);
-                        //Reset
-                        truckCurrentMonthsOperatingCostList.clear();
-                        truckCurrentMonthsOperatingCostList.add(operatingCost);
-                        currentTransactionDate = fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate());
-                    }
+            for (int i = 1; i < 3; i++) {
+                try {
+                    monthlyFuelCost = monthlyFuelCost.add(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - (listIndex + i)).getMonthlyAmountSpend());
+                    monthlyMileage += monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - (listIndex + i)).getMonthlyMileageTotal();
+                } catch (Exception ex) {
+                    monthNotFound = true;
                 }
-                // SUM the FuelCostS for truck for these 3 months and increment the totalFuelCostAllTrucks value
-                allTruckFuelCostTotal = allTruckFuelCostTotal.add(fleetFuelUtil.sumOfFuelCostCalculation(truckThreeMonthsOperatingCostList));
             }
-        }
-        try {
-//            System.out.println(monthDate + " - " + threeMonthStartDate + ": 3M Fuel Efficiency: FUEL COST SUM= " + allTruckFuelCostTotal + " / 3M Fuel Efficiency: MILEAGE SUM= " + allTruckMileageSum + " ANS - " + (allTruckFuelCostTotal.divide(new BigDecimal(allTruckMileageSum + ""), 2, RoundingMode.HALF_UP)));
-            return allTruckFuelCostTotal.divide(new BigDecimal(allTruckMileageSum + ""), 2, RoundingMode.HALF_UP);
-        } catch (ArithmeticException a) {
-            System.out.println("All Truck Fuel Cost Total (" + allTruckFuelCostTotal + ") / All Truck Mileage Sum (" + allTruckMileageSum + ") | A Divide By Zero exception (ArithmeticException) caught");
-//            Notification.show("Error. A Calculation is trying to divide by ZERO. Reason for 0.00 per KM.", Notification.Type.TRAY_NOTIFICATION);
-            return BigDecimal.ZERO;
+            listIndex++;
+
+            if (monthNotFound) {
+                serviceFleetThreeMonthlyEfficiencyBeanList.add(buildServiceFleetThreeMonthlyEfficiencyBeanObject(counter, calendar.getTime(), new BigDecimal("0.00")));
+            } else {
+                System.out.println(calendar.getTime() + " : 3M Fuel Efficiency: FUEL COST SUM= " + monthlyFuelCost + " / 3M Fuel Efficiency: MILEAGE SUM= " + monthlyMileage + " ANS - " + (monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP)));
+                BigDecimal efficiencyValue = monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP);// ; // getThreeMonthServiceFleetEfficiency(calendar.getTime());
+                serviceFleetThreeMonthlyEfficiencyBeanList.add(buildServiceFleetThreeMonthlyEfficiencyBeanObject(counter, calendar.getTime(), efficiencyValue));
+            }
+            counter++;
         }
     }
 
@@ -496,32 +463,27 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     }
 
     private void addListeners() {
-//        //Register Button Listeners
-//        form.save.addClickListener((Button.ClickListener) this);
-//        form.edit.addClickListener((Button.ClickListener) this);
-//        form.cancel.addClickListener((Button.ClickListener) this);
-//        form.update.addClickListener((Button.ClickListener) this);
-//        form.delete.addClickListener((Button.ClickListener) this);
-        //
         form.startDate.addValueChangeListener((Property.ValueChangeListener) this);
         form.endDate.addValueChangeListener((Property.ValueChangeListener) this);
     }
 
     public List<OperatingCost> getOperatingCostForTruckforMonthsList(Truck truck, List<OperatingCost> operatingCostTwentyFiveMonthsList, Date endDate, Date startDate) {
         List<OperatingCost> monthsOperatingCostList = new ArrayList<>();
+        Date nuStartDate = fleetFuelUtil.resetMonthToFirstDay(startDate);
+        Date nuEndDate = fleetFuelUtil.resetMonthToLastDay(endDate);
         for (OperatingCost operatingCost : operatingCostTwentyFiveMonthsList) {
             // Omit ZERO OBJECTS
-            if (!(operatingCost.getSpeedometer() <= 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0)) {
+            if (!(operatingCost.getSpeedometer() == 0 && operatingCost.getFuelCost().compareTo(BigDecimal.ZERO) == 0 && operatingCost.getFuelLitres().compareTo(Double.parseDouble("0.0")) == 0 && operatingCost.getSlipNo().equals("0000") && operatingCost.getRandPerLitre().compareTo(BigDecimal.ZERO) == 0)) {
                 if (truck.getId().equals(operatingCost.getTruckId())
-                        && (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).compareTo(startDate) == 0
-                        || (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).after(startDate)
-                        && fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).before(endDate))
-                        || fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).compareTo(endDate) == 0)) {
+                        && (operatingCost.getTransactionDate().compareTo(nuStartDate) == 0
+                        || (operatingCost.getTransactionDate().after(nuStartDate)
+                        && operatingCost.getTransactionDate().before(nuEndDate))
+                        || operatingCost.getTransactionDate().compareTo(nuEndDate) == 0)) {
                     monthsOperatingCostList.add(operatingCost);
                 }
             }
             // if Date is before startDate, then looping stops as we sorted operatingCostTwentyFiveMonthsList in Desc Order
-            if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).before(startDate)) {
+            if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).before(nuStartDate)) {
                 break;
             }
         }
@@ -584,7 +546,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
                 counter++;
             }
         }
-
     }
 
     private void buildDriverEfficiencyBean(Truck truck, BigDecimal mtdAct, Date date, int counter) {

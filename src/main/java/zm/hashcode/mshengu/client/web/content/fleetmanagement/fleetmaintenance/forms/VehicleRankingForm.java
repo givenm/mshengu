@@ -17,7 +17,7 @@ import com.vaadin.ui.Label;
  */
 public class VehicleRankingForm extends FormLayout {
 
-    public Button generateButton = new Button("Generate Current 12-Monthly Vehicle Ranking Data");
+    public Button generateButton = new Button("Show Current 12-Monthly Vehicle Ranking");
 
     public VehicleRankingForm() {
         HorizontalLayout buttons = getButtons();
