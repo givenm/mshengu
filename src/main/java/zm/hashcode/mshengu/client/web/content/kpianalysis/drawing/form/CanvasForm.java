@@ -8,17 +8,20 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import java.util.Random;
 import org.vaadin.hezamu.canvas.Canvas;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.models.LoadResultsBean;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.models.ChemicalUsageService;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.models.FieldServicesContractService;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.models.FieldServicesPrivateService;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.models.FuelManagementService;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.models.MaintenanceService;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.models.SmallPentagonTextService;
 import zm.hashcode.mshengu.client.web.content.procurement.invoices.models.InvoiceBean;
 
 /**
@@ -35,19 +38,13 @@ public class CanvasForm extends FormLayout {
     public ComboBox month = new ComboBox();
     public ComboBox year = new ComboBox();
     private final MshenguMain main;
-    private Canvas canvas = new Canvas();
-    //Big Pentagon
-    private String topRightRectangleColorBigPentagon;
-    private String topLeftRectangleColorBigPentagon;
-    private String bottomRightRectangleColorBigPentagon;
-    private String bottomLeftRectangleColorBigPentagon;
-    private String bottomRectangleColorBigPentagon;
-    //Component
-    private String topCircleColorComponent;
-    private String topRightCircleColorComponent;
-    private String topLeftCircleColorComponent;
-    private String bottomLeftCircleColorComponent;
-    private String bottomRightCircleColorComponent;
+    public Canvas canvas = new Canvas();
+    private FieldServicesContractService contractService = new FieldServicesContractService();
+    private FieldServicesPrivateService privateService = new FieldServicesPrivateService();
+    private FuelManagementService managementService = new FuelManagementService();
+    private MaintenanceService maintenanceService = new MaintenanceService();
+    private ChemicalUsageService chemicalUsageService = new ChemicalUsageService();
+    private SmallPentagonTextService textService = new SmallPentagonTextService();
 
     public CanvasForm(MshenguMain main) {
         this.main = main;
@@ -63,8 +60,6 @@ public class CanvasForm extends FormLayout {
 
         canvas.setSizeFull();
         canvas.setGlobalAlpha(0.9);
-
-        insertAllcanvasComponents();
 
         HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
@@ -97,7 +92,11 @@ public class CanvasForm extends FormLayout {
         canvas.lineTo(493, 260);
         canvas.lineTo(473, 269);
         canvas.lineTo(402, 228);
-        canvas.setFillStyle(topRightRectangleColorBigPentagon);
+        try {
+            canvas.setFillStyle(contractService.computeRectangleColorInBigPentagon(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(contractService.computeRectangleColorInBigPentagon("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
@@ -109,7 +108,11 @@ public class CanvasForm extends FormLayout {
         canvas.lineTo(306, 260);
         canvas.lineTo(326, 269);
         canvas.lineTo(398, 228);
-        canvas.setFillStyle(topLeftRectangleColorBigPentagon);
+        try {
+            canvas.setFillStyle(privateService.computeRectangleColorInBigPentagon(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(privateService.computeRectangleColorInBigPentagon("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
@@ -121,7 +124,11 @@ public class CanvasForm extends FormLayout {
         canvas.lineTo(458, 356);
         canvas.lineTo(446, 341);
         canvas.lineTo(472.5, 274);
-        canvas.setFillStyle(bottomRightRectangleColorBigPentagon);
+        try {
+            canvas.setFillStyle(managementService.computeRectangleColorInBigPentagon(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(managementService.computeRectangleColorInBigPentagon("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
@@ -133,7 +140,11 @@ public class CanvasForm extends FormLayout {
         canvas.lineTo(342, 356);
         canvas.lineTo(354, 341);
         canvas.lineTo(329, 274);
-        canvas.setFillStyle(bottomLeftRectangleColorBigPentagon);
+        try {
+            canvas.setFillStyle(chemicalUsageService.computeRectangleColorInBigPentagon(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(chemicalUsageService.computeRectangleColorInBigPentagon("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
@@ -145,7 +156,11 @@ public class CanvasForm extends FormLayout {
         canvas.lineTo(444, 343);
         canvas.lineTo(454, 357);
         canvas.lineTo(346, 357);
-        canvas.setFillStyle(bottomRectangleColorBigPentagon);
+        try {
+            canvas.setFillStyle(maintenanceService.computeRectangleColorInBigPentagon(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(maintenanceService.computeRectangleColorInBigPentagon("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
@@ -208,72 +223,60 @@ public class CanvasForm extends FormLayout {
 
     //Component 1 - Field Services
     private void drawComponent1Items() {
-        //Top circle - No Services Completed
-        canvas.beginPath();
-        canvas.arc(255, 27, 12, 0, 2 * Math.PI, false);
-        canvas.setFillStyle(topCircleColorComponent);
-        canvas.fill();
-        canvas.closePath();
-        canvas.stroke();
-
-        //No Services Completed Joining Lines
-        //Left
+        //No Services Completed - Line
         canvas.beginPath();
         canvas.moveTo(200, 24);
-        canvas.lineTo(244, 24);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Right
-        canvas.beginPath();
-        canvas.moveTo(266, 24);
         canvas.lineTo(310, 24);
         canvas.closePath();
         canvas.stroke();
 
-        //Top right circle - Productivity
+        //Top circle
         canvas.beginPath();
-        canvas.arc(330, 80, 12, 0, 2 * Math.PI, false);
-        canvas.setFillStyle(topRightCircleColorComponent);
+        canvas.arc(255, 27, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(contractService.computeNoServicesCompleted(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(contractService.computeNoServicesCompleted("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Productivity Joining Lines
-        //Below
+        //Completed Percentage Line
         canvas.beginPath();
         canvas.moveTo(346, 130);
-        canvas.lineTo(333, 91);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(325, 69);
         canvas.lineTo(310, 24);
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom right circle - No. Services Not Completed
+        //Top right circle 
         canvas.beginPath();
-        canvas.arc(295, 165, 12, 0, 2 * Math.PI, false);
-        canvas.setFillStyle(bottomRightCircleColorComponent);
+        canvas.arc(330, 80, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(contractService.computeCompletedPercentage(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(contractService.computeCompletedPercentage("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //No. Services Not Completed Joining Lines
-        //Below
+        //No. Services Not Completed - Line
         canvas.beginPath();
         canvas.moveTo(252, 202);
-        canvas.lineTo(288, 174);
+        canvas.lineTo(346, 130);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Bottom right circle
         canvas.beginPath();
-        canvas.moveTo(307, 160);
-        canvas.lineTo(346, 130);
+        canvas.arc(295, 165, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(contractService.computeNoServicesNotCompleted(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(contractService.computeNoServicesNotCompleted("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
@@ -293,136 +296,123 @@ public class CanvasForm extends FormLayout {
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom left circle - Uncompleted Services
+        //Uncompleted Percentage - Line
         canvas.beginPath();
-        canvas.arc(200, 165, 12, 0, 2 * Math.PI, false);
-        canvas.setFillStyle(bottomLeftCircleColorComponent);
-        canvas.fill();
-        canvas.closePath();
-        canvas.stroke();
-
-        //Uncompleted Services Joining Lines
-        //Below
-        canvas.beginPath();
-        canvas.moveTo(209, 174);
+        canvas.moveTo(145, 130);
         canvas.lineTo(252, 202);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Bottom left circle
         canvas.beginPath();
-        canvas.moveTo(189, 160);
-        canvas.lineTo(145, 130);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Top left circle - Services per Vehicle
-        canvas.beginPath();
-        canvas.arc(170, 80, 12, 0, 2 * Math.PI, false);
-        canvas.setFillStyle(topLeftCircleColorComponent);
+        canvas.arc(200, 165, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(contractService.computeUncompletedPercentage(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(contractService.computeUncompletedPercentage("", ""));
+        }
         canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Services per Vehicle Joining Lines
-        //Below
+        //Unit Deployment - Lines
         canvas.beginPath();
         canvas.moveTo(145, 130);
-        canvas.lineTo(166, 91);
+        canvas.lineTo(200, 24);
         canvas.closePath();
         canvas.stroke();
 
-        //Above
+        //Top left circle
         canvas.beginPath();
-        canvas.moveTo(176, 70);
-        canvas.lineTo(200, 24);
+        canvas.arc(170, 80, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(contractService.computeUnitDeployment(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(contractService.computeUnitDeployment("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
     }
 
     //Component 2 - Fleet Management
     private void drawComponent2Items() {
-        //Top circle - Fuel Efficiency
-        canvas.beginPath();
-        canvas.arc(555, 27, 12, 0, 2 * Math.PI, false);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Fuel Efficiency Joining Lines
-        //Left
+        //No Services Completed - Lines
         canvas.beginPath();
         canvas.moveTo(499, 24);
-        canvas.lineTo(543, 24);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Right
-        canvas.beginPath();
-        canvas.moveTo(566, 24);
         canvas.lineTo(610, 24);
         canvas.closePath();
         canvas.stroke();
-
-        //Top right circle - Fuel per Toilet Serviced
+        
+        //Top circle 
         canvas.beginPath();
-        canvas.arc(630, 80, 12, 0, 2 * Math.PI, false);
+        canvas.arc(555, 27, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(privateService.computeNoServicesCompleted(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(privateService.computeNoServicesCompleted("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Fuel per Toilet Serviced Joining Lines
+        //Completed Percentage - Lines
         //Below
         canvas.beginPath();
         canvas.moveTo(646, 130);
-        canvas.lineTo(633, 91);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(626, 69);
         canvas.lineTo(610, 24);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom right circle - Fleet Maintenance
+        
+        //Top right circle
         canvas.beginPath();
-        canvas.arc(595, 165, 12, 0, 2 * Math.PI, false);
+        canvas.arc(630, 80, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(privateService.computeCompletedPercentage(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(privateService.computeCompletedPercentage("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Fleet Maintenance Joining Lines
+        
+        //No Services Not Completed - Lines
         //Below
         canvas.beginPath();
         canvas.moveTo(552, 202);
-        canvas.lineTo(588, 174);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(607, 160);
         canvas.lineTo(646, 130);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom left circle - Maintenance per Toilet Serviced
+        
+        //Bottom right circle
         canvas.beginPath();
-        canvas.arc(500, 165, 12, 0, 2 * Math.PI, false);
+        canvas.arc(595, 165, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(privateService.computeNoServicesNotCompleted(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(privateService.computeNoServicesNotCompleted("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Maintenance per Toilet Serviced Joining Lines
-        //Below
+        //Uncompleted Percentage - Lines
         canvas.beginPath();
         canvas.moveTo(552, 202);
-        canvas.lineTo(509, 174);
+        canvas.lineTo(445, 130);
         canvas.closePath();
         canvas.stroke();
 
-        //Above
+        //Bottom left circle - 
         canvas.beginPath();
-        canvas.moveTo(490, 160);
-        canvas.lineTo(445, 130);
+        canvas.arc(500, 165, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(privateService.computeUncompletedPercentage(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(privateService.computeUncompletedPercentage("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
@@ -442,132 +432,123 @@ public class CanvasForm extends FormLayout {
         canvas.closePath();
         canvas.stroke();
 
-        //Top left circle - Combined Efficiency
-        canvas.beginPath();
-        canvas.arc(470, 80, 12, 0, 2 * Math.PI, false);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Combined Efficiency Joining Lines
+        
+        //Private Contribution - Lines
         //Below
         canvas.beginPath();
         canvas.moveTo(445, 130);
-        canvas.lineTo(465, 91);
+        canvas.lineTo(499, 24);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Top left circle
         canvas.beginPath();
-        canvas.moveTo(476, 70);
-        canvas.lineTo(499, 24);
+        canvas.arc(470, 80, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(privateService.computePrivateContribution(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(privateService.computePrivateContribution("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
     }
 
-    //Component 3 - Chemical Usage
+    //Component 3 - Fuel Management
     private void drawComponent3Items() {
-        //Top circle in chemical usage
-        canvas.beginPath();
-        canvas.arc(660, 272, 12, 0, 2 * Math.PI, false);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Top  circle in chemical usage Joining Lines
+        //Fuel Efficiency - Line
         //Left
         canvas.beginPath();
         canvas.moveTo(601, 274);
-        canvas.lineTo(649, 274);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Right
-        canvas.beginPath();
-        canvas.moveTo(672, 274);
         canvas.lineTo(719, 274);
         canvas.closePath();
         canvas.stroke();
-
-        //Top right circle in chemical usage
+        
+        //Top circle
         canvas.beginPath();
-        canvas.arc(735, 332, 12, 0, 2 * Math.PI, false);
+        canvas.arc(660, 272, 12, 0, 2 * Math.PI, false);  
+        try {
+            canvas.setFillStyle(managementService.computeFuelEfficiency(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(managementService.computeFuelEfficiency("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Top right circle in chemical usage Joining Lines
-        //Below
+        //Spend per service - Line
         canvas.beginPath();
         canvas.moveTo(747, 385);
-        canvas.lineTo(736, 344);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(731, 322);
         canvas.lineTo(719, 274);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom right circle in chemical usage
+        
+        //Top right circle
         canvas.beginPath();
-        canvas.arc(695, 425, 12, 0, 2 * Math.PI, false);
+        canvas.arc(735, 332, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(managementService.computeSpendPerService(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(managementService.computeSpendPerService("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom right circle in chemical usage Joining Lines
-        //Below
+        //Spend per unit - Line
         canvas.beginPath();
         canvas.moveTo(649, 462);
-        canvas.lineTo(686, 434);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(705, 420);
         canvas.lineTo(747, 385);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom left circle in chemical usage
+        
+        //Bottom right circle
         canvas.beginPath();
-        canvas.arc(600, 425, 12, 0, 2 * Math.PI, false);
+        canvas.arc(695, 425, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(managementService.computeSpendPerUnit(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(managementService.computeSpendPerUnit("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom left circle in chemical usage Joining Lines
-        //Below
+        //Vehicles aboe specifications - Lines
         canvas.beginPath();
         canvas.moveTo(649, 462);
-        canvas.lineTo(609, 434);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(590, 420);
         canvas.lineTo(540, 385);
         canvas.closePath();
         canvas.stroke();
-
-        //Top left circle in chemical usage
+        
+        //Bottom left circle
         canvas.beginPath();
-        canvas.arc(567, 332, 12, 0, 2 * Math.PI, false);
+        canvas.arc(600, 425, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(managementService.computeVehiclesAboveSpecifications(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(managementService.computeVehiclesAboveSpecifications("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Top left circle in chemical usage Joining Lines
-        //Below
+        //Fuel Spend - Lines
         canvas.beginPath();
         canvas.moveTo(540, 385);
-        canvas.lineTo(563, 344);
+        canvas.lineTo(601, 274);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Top left circle
         canvas.beginPath();
-        canvas.moveTo(575, 322);
-        canvas.lineTo(601, 274);
+        canvas.arc(567, 332, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(managementService.computeFuelSpend(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(managementService.computeFuelSpend("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
@@ -588,11 +569,24 @@ public class CanvasForm extends FormLayout {
         canvas.stroke();
     }
 
-    //Component 4 - Inventory Management
+    //Component 4 - Maintenance Management
     private void drawComponent4Items() {
-        //Top circle in Inventory Management
+        //Maintenance Efficiency - Lines
+        canvas.beginPath();
+        canvas.moveTo(345, 440);
+        canvas.lineTo(469, 440);
+        canvas.closePath();
+        canvas.stroke();
+        
+        //Top circle
         canvas.beginPath();
         canvas.arc(402, 437, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(maintenanceService.computeMaintenanceEfficiency(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(maintenanceService.computeMaintenanceEfficiency("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
@@ -612,147 +606,122 @@ public class CanvasForm extends FormLayout {
         canvas.closePath();
         canvas.stroke();
 
-        //Top circle in Inventory Management Joining Lines
-        //Left
-        canvas.beginPath();
-        canvas.moveTo(345, 440);
-        canvas.lineTo(390, 440);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Right
-        canvas.beginPath();
-        canvas.moveTo(413, 440);
-        canvas.lineTo(469, 440);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Top right circle in Inventory Management
-        canvas.beginPath();
-        canvas.arc(485, 500, 12, 0, 2 * Math.PI, false);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Top right circle in Inventory Management Joining Lines
-        //Below
+        
+        //Spend per service Lines
         canvas.beginPath();
         canvas.moveTo(503, 554);
-        canvas.lineTo(489, 512);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(483, 489);
         canvas.lineTo(469, 440);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom right circle in Inventory Management
+        
+        //Top right circle
         canvas.beginPath();
-        canvas.arc(445, 593, 12, 0, 2 * Math.PI, false);
+        canvas.arc(485, 500, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(maintenanceService.computeSpendPerService(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(maintenanceService.computeSpendPerService("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom right circle in Inventory Management Joining Lines
-        //Below
+        //Spend per unit - Lines
         canvas.beginPath();
         canvas.moveTo(397, 631);
-        canvas.lineTo(438, 603);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(458, 589);
         canvas.lineTo(503, 554);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom left circle in Inventory Management
+        
+        //Bottom right circle
         canvas.beginPath();
-        canvas.arc(350, 595, 12, 0, 2 * Math.PI, false);
+        canvas.arc(445, 593, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(maintenanceService.computeSpendPerUnit(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(maintenanceService.computeSpendPerUnit("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
-        canvas.stroke();
+        canvas.stroke();;
 
-        //Bottom left circle in Inventory Management Joining Lines
-        //Below
+        //Vehicles above specifications - Line
         canvas.beginPath();
         canvas.moveTo(397, 631);
-        canvas.lineTo(358, 604);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(338, 589);
         canvas.lineTo(283, 553);
         canvas.closePath();
         canvas.stroke();
-
-        //Top left circle in Inventory Management
+        
+        //Bottom left circle
         canvas.beginPath();
-        canvas.arc(315, 500, 12, 0, 2 * Math.PI, false);
+        canvas.arc(350, 595, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(maintenanceService.computeVehiclesAboveSpecifications(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(maintenanceService.computeVehiclesAboveSpecifications("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Top left circle in Inventory Management Joining Lines
-        //Below
+        //Maintenance Spend - Line
         canvas.beginPath();
         canvas.moveTo(283, 553);
-        canvas.lineTo(307, 511);
+        canvas.lineTo(345, 440);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Top left circle
         canvas.beginPath();
-        canvas.moveTo(317, 490);
-        canvas.lineTo(345, 440);
+        canvas.arc(315, 500, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(maintenanceService.computeMaintenanceSpend(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(maintenanceService.computeMaintenanceSpend("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
     }
 
-    //Component 5 - Procurement
+    //Component 5 - Chemical Usage
     private void drawComponent5Items() {
-        //Top circle in procurement
-        canvas.beginPath();
-        canvas.arc(155, 272, 12, 0, 2 * Math.PI, false);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Top  circle in procurement Joining Lines
-        //Left
+        //Cost per service - Lines
         canvas.beginPath();
         canvas.moveTo(101, 274);
-        canvas.lineTo(142, 274);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Right
-        canvas.beginPath();
-        canvas.moveTo(167, 274);
         canvas.lineTo(219, 274);
         canvas.closePath();
-        canvas.stroke();
-
-        //Top right circle in procurement
+        canvas.stroke();  
+        
+        //Top circle
         canvas.beginPath();
-        canvas.arc(234, 332, 12, 0, 2 * Math.PI, false);
+        canvas.arc(155, 272, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(chemicalUsageService.computeCostPerService(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(chemicalUsageService.computeCostPerService("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Top right circle in procurement Joining Lines
-        //Below
+        
+        //Sanitizer per service Lines
         canvas.beginPath();
         canvas.moveTo(247, 385);
-        canvas.lineTo(236, 344);
+        canvas.lineTo(219, 274);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Top right circle
         canvas.beginPath();
-        canvas.moveTo(231, 322);
-        canvas.lineTo(219, 274);
+        canvas.arc(234, 332, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(chemicalUsageService.computeSanitizerPerService(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(chemicalUsageService.computeSanitizerPerService("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
@@ -772,66 +741,63 @@ public class CanvasForm extends FormLayout {
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom right circle in procurement
-        canvas.beginPath();
-        canvas.arc(195, 425, 12, 0, 2 * Math.PI, false);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Bottom right circle in procurement Joining Lines
-        //Below
+        
+        //Deodorizer per unit - Lines
         canvas.beginPath();
         canvas.moveTo(151, 462);
-        canvas.lineTo(188, 434);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(205, 420);
         canvas.lineTo(247, 385);
         canvas.closePath();
         canvas.stroke();
-
-        //Bottom left circle in procurement
+        
+        //Bottom right circle
         canvas.beginPath();
-        canvas.arc(102, 425, 12, 0, 2 * Math.PI, false);
+        canvas.arc(195, 425, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(chemicalUsageService.computeDeodirizePerUnit(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(chemicalUsageService.computeDeodirizePerUnit("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Bottom left circle in procurement Joining Lines
-        //Below
+        
+        //Spend per unit - Lines
         canvas.beginPath();
         canvas.moveTo(151, 462);
-        canvas.lineTo(111, 434);
-        canvas.closePath();
-        canvas.stroke();
-
-        //Above
-        canvas.beginPath();
-        canvas.moveTo(90, 420);
         canvas.lineTo(40, 385);
         canvas.closePath();
         canvas.stroke();
-
-        //Top left circle in procurement
+        
+        //Bottom left circle
         canvas.beginPath();
-        canvas.arc(68, 332, 12, 0, 2 * Math.PI, false);
+        canvas.arc(102, 425, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(chemicalUsageService.computeSpendPerUnit(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(chemicalUsageService.computeSpendPerUnit("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
 
-        //Top left circle in procurement Joining Lines
-        //Below
+        
+        //Chemical spend - Line
         canvas.beginPath();
         canvas.moveTo(40, 385);
-        canvas.lineTo(63, 344);
+        canvas.lineTo(101, 274);
         canvas.closePath();
         canvas.stroke();
-
-        //Above
+        
+        //Top left circle
         canvas.beginPath();
-        canvas.moveTo(75, 322);
-        canvas.lineTo(101, 274);
+        canvas.arc(68, 332, 12, 0, 2 * Math.PI, false);
+        try {
+            canvas.setFillStyle(chemicalUsageService.computeChemicalSpend(month.getValue().toString(), year.getValue().toString()));
+        } catch (NullPointerException exception) {
+            canvas.setFillStyle(chemicalUsageService.computeChemicalSpend("", ""));
+        }
+        canvas.fill();
         canvas.closePath();
         canvas.stroke();
     }
@@ -965,23 +931,13 @@ public class CanvasForm extends FormLayout {
 
     //Small Pentagon
     private void addTextToSmallPentagon() {
-        Random random = new Random();
-        int value = random.nextInt(5);
-        String text = "Z";
-        if (value == 1) {
-            text = "A";
-        } else if (value == 2) {
-            text = "B";
-        } else if (value == 3) {
-            text = "C";
-        } else if (value == 4) {
-            text = "D";
-        } else if (value == 5) {
-            text = "E";
-        }
         canvas.setFont("normal bold 55px sans-serif");
         canvas.setFillStyle("black");
-        canvas.fillText(text, 380, 310, 100);
+        try {
+            canvas.fillText(textService.addText(month.getValue().toString(), year.getValue().toString()), 380, 310, 100);
+        } catch (NullPointerException exception) {
+            canvas.fillText(textService.addText("", ""), 380, 310, 100);
+        }
     }
 
     private void setTextFont() {
@@ -994,92 +950,7 @@ public class CanvasForm extends FormLayout {
         canvas.setFillStyle("black");
     }
 
-    private void addColorToItemsInBigPentagon() {
-        Random random = new Random();
-        int value = random.nextInt(5);
-        if (value == 1) {
-            topRightRectangleColorBigPentagon = "green";
-            topLeftRectangleColorBigPentagon = "red";
-            bottomRightRectangleColorBigPentagon = "yellow";
-            bottomLeftRectangleColorBigPentagon = "green";
-            bottomRectangleColorBigPentagon = "green";
-        } else if (value == 2) {
-            topRightRectangleColorBigPentagon = "red";
-            topLeftRectangleColorBigPentagon = "green";
-            bottomRightRectangleColorBigPentagon = "green";
-            bottomLeftRectangleColorBigPentagon = "red";
-            bottomRectangleColorBigPentagon = "yellow";
-        } else if (value == 3) {
-            topRightRectangleColorBigPentagon = "yellow";
-            topLeftRectangleColorBigPentagon = "red";
-            bottomRightRectangleColorBigPentagon = "green";
-            bottomLeftRectangleColorBigPentagon = "red";
-            bottomRectangleColorBigPentagon = "yellow";
-        } else if (value == 4) {
-            topRightRectangleColorBigPentagon = "red";
-            topLeftRectangleColorBigPentagon = "green";
-            bottomRightRectangleColorBigPentagon = "yellow";
-            bottomLeftRectangleColorBigPentagon = "yellow";
-            bottomRectangleColorBigPentagon = "red";
-        } else if (value == 5) {
-            topRightRectangleColorBigPentagon = "green";
-            topLeftRectangleColorBigPentagon = "yellow";
-            bottomRightRectangleColorBigPentagon = "green";
-            bottomLeftRectangleColorBigPentagon = "red";
-            bottomRectangleColorBigPentagon = "green";
-        } else if (value == 0) {
-            topRightRectangleColorBigPentagon = "yellow";
-            topLeftRectangleColorBigPentagon = "red";
-            bottomRightRectangleColorBigPentagon = "green";
-            bottomLeftRectangleColorBigPentagon = "yellow";
-            bottomRectangleColorBigPentagon = "green";
-        }
-    }
-
-    private void addColorToItemsComponent() {
-        Random random = new Random();
-        int value = random.nextInt(5);
-        if (value == 1) {
-            topCircleColorComponent = "green";
-            topRightCircleColorComponent = "red";
-            topLeftCircleColorComponent = "green";
-            bottomLeftCircleColorComponent = "red";
-            bottomRightCircleColorComponent = "green";
-        } else if (value == 2) {
-            topCircleColorComponent = "red";
-            topRightCircleColorComponent = "green";
-            topLeftCircleColorComponent = "red";
-            bottomLeftCircleColorComponent = "green";
-            bottomRightCircleColorComponent = "red";
-        } else if (value == 3) {
-            topCircleColorComponent = "red";
-            topRightCircleColorComponent = "red";
-            topLeftCircleColorComponent = "green";
-            bottomLeftCircleColorComponent = "green";
-            bottomRightCircleColorComponent = "red";
-        } else if (value == 4) {
-            topCircleColorComponent = "green";
-            topRightCircleColorComponent = "green";
-            topLeftCircleColorComponent = "green";
-            bottomLeftCircleColorComponent = "green";
-            bottomRightCircleColorComponent = "green";
-        } else if (value == 5) {
-            topCircleColorComponent = "red";
-            topRightCircleColorComponent = "red";
-            topLeftCircleColorComponent = "red";
-            bottomLeftCircleColorComponent = "red";
-            bottomRightCircleColorComponent = "red";
-        } else if (value == 0) {
-            topCircleColorComponent = "red";
-            topRightCircleColorComponent = "red";
-            topLeftCircleColorComponent = "green";
-            bottomLeftCircleColorComponent = "red";
-            bottomRightCircleColorComponent = "red";
-        }
-    }
-
-    private void insertAllcanvasComponents() {
-        addColorToItemsInBigPentagon();
+    public void insertAllcanvasComponents() {
         drawBigPentagonItems();
 
         drawSmallPentagonItems();
@@ -1087,7 +958,6 @@ public class CanvasForm extends FormLayout {
 
         drawComponentCircles();
 
-        addColorToItemsComponent();
         drawComponent1Items();
         addTextToComponent1();
 
