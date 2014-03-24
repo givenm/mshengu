@@ -35,9 +35,9 @@ public class QuoteControl {
             Quote quote = new Quote();
             quote.setRfqNumber(request.getRfqNumber());
             quote.setDate(getDate(request.getDeliveryDate()));
-            quote.setFirstName(request.getPerson().getFirstname());
-            quote.setLastName(request.getPerson().getLastname());
-            quote.setInstructions(request.getDeliveryInstructions());
+            quote.setFirstName(removeSpecialCharacters(request.getPerson().getFirstname()));
+            quote.setLastName(removeSpecialCharacters(request.getPerson().getLastname()));
+            quote.setInstructions(removeSpecialCharacters(request.getDeliveryInstructions()));
             quote.setMshengu(request.getAccount());
             quote.setClosingDate(getDate(request.getClosingDate()));
 
@@ -46,15 +46,15 @@ public class QuoteControl {
             for (RequestPurchaseItem item : request.getItems()) {
                 QuoteItem quoteItem = new QuoteItem();
                 if (item.getItemDescription() != null) {
-                    quoteItem.setDescription(item.getItemDescription());
-                    quoteItem.setQuantity(item.getQuantity());
+                    quoteItem.setDescription(removeSpecialCharacters(item.getItemDescription()));
+                    quoteItem.setQuantity(removeSpecialCharacters(item.getQuantity()));
                     if (item.getVolume() != null) {
-                        quoteItem.setVolume(item.getVolume());
+                        quoteItem.setVolume(removeSpecialCharacters(item.getVolume()));
                     } else {
                         quoteItem.setVolume("");
                     }
                     if (item.getUnit() != null) {
-                        quoteItem.setUnit(item.getUnit());
+                        quoteItem.setUnit(removeSpecialCharacters(item.getUnit()));
                     } else {
                         quoteItem.setUnit("");
                     }
@@ -103,5 +103,9 @@ public class QuoteControl {
             return new DateTimeFormatHelper().getDayMonthYear(date);
         }
         return null;
+    }
+    
+    private String removeSpecialCharacters(String remove){
+        return remove.replaceAll("[^\\w\\s\\-_]", "");
     }
 }

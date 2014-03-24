@@ -118,7 +118,7 @@ public class GoodsReceivedForm extends FormLayout implements
             public void handleAction(Object sender, Object target) {
                 if (target == orderNumber) {
                     if (orderNumber.getValue() != null) {
-                        String order = orderNumber.getValue();
+                        String order = removeSpecialCharacters(orderNumber.getValue());
                         try {
                             Request request = RequestFacade.getRequestService().findByOrderNumber(order);
                             if (request != null) {
@@ -173,6 +173,10 @@ public class GoodsReceivedForm extends FormLayout implements
                 }
             }
         });
+    }
+    
+     private String removeSpecialCharacters(String remove) {
+        return remove.replaceAll("[^\\w\\s\\-_]", "");
     }
 
     private String getDelivery(Date date) {
