@@ -26,7 +26,7 @@ public class CacheConfig {
     @Bean
     public SimpleCacheManager cacheManager() {
 
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
+        SimpleCacheManager cacheManager = new SimpleCacheManager();  
         List<Cache> caches = new ArrayList<>();
         caches.add(defaultBean().getObject());
         caches.add(persons().getObject());
@@ -36,6 +36,23 @@ public class CacheConfig {
         caches.add(drivers().getObject());
         caches.add(requestors().getObject());
         caches.add(unitLocationLifeCycle().getObject());
+
+        //request objects
+        caches.add(requests().getObject());
+        caches.add(pendingRequests().getObject());
+        caches.add(disApprovedRequests().getObject());
+        caches.add(approvedRequests().getObject());
+        caches.add(approvedRequestsBySupplier().getObject());
+        caches.add(misMatchStatus().getObject());
+        caches.add(processedRequestsWithInvoiceNumber().getObject());
+        caches.add(serviceProviderProcessedRequestsWithInvoiceNumber().getObject());
+        caches.add(processedRequestsWithPaymentDate().getObject());
+        caches.add(serviceProviderProcessedRequestsWithPaymentDate().getObject());
+        caches.add(processedRequestsByCostCentreType().getObject());
+        
+        //request for quote objects
+        caches.add(requestForQuotes().getObject());
+
         cacheManager.setCaches(caches);
 
         return cacheManager;
@@ -49,6 +66,7 @@ public class CacheConfig {
 
     }
 
+    //person beans
     @Bean
     public ConcurrentMapCacheFactoryBean persons() {
         ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
@@ -77,6 +95,7 @@ public class CacheConfig {
         return cacheFactoryBean;
     }
 
+    //sites beans
     @Bean
     public ConcurrentMapCacheFactoryBean sites() {
         ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
@@ -90,12 +109,87 @@ public class CacheConfig {
         cacheFactoryBean.setName("siteUnits");
         return cacheFactoryBean;
     }
-    
-    
+
     @Bean
     public ConcurrentMapCacheFactoryBean unitLocationLifeCycle() {
         ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
         cacheFactoryBean.setName("unitLocationLifeCycle");
+        return cacheFactoryBean;
+    }
+
+    //requests beans
+    @Bean
+    public ConcurrentMapCacheFactoryBean requests() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("requests");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean pendingRequests() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("pendingRequests");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean disApprovedRequests() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("disApprovedRequests");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean approvedRequests() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("approvedRequests");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean approvedRequestsBySupplier() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("approvedRequestsBySupplier");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean misMatchStatus() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("misMatchStatus");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean processedRequestsWithInvoiceNumber() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("processedRequestsWithInvoiceNumber");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean serviceProviderProcessedRequestsWithInvoiceNumber() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("serviceProviderProcessedRequestsWithInvoiceNumber");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean processedRequestsWithPaymentDate() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("processedRequestsWithPaymentDate");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean serviceProviderProcessedRequestsWithPaymentDate() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("serviceProviderProcessedRequestsWithPaymentDate");
+        return cacheFactoryBean;
+    }
+    @Bean
+    public ConcurrentMapCacheFactoryBean processedRequestsByCostCentreType() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("processedRequestsByCostCentreType");
+        return cacheFactoryBean;
+    }
+
+    //request for quote
+    @Bean
+    public ConcurrentMapCacheFactoryBean requestForQuotes() {
+        ConcurrentMapCacheFactoryBean cacheFactoryBean = new ConcurrentMapCacheFactoryBean();
+        cacheFactoryBean.setName("requestForQuotes");
         return cacheFactoryBean;
     }
 }

@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.views;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.CanvasMenu;
@@ -15,31 +16,43 @@ import zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.form.CanvasFor
  *
  * @author Luckbliss
  */
-public class CanvasTab extends VerticalLayout implements
-        Button.ClickListener, Property.ValueChangeListener {
+public class CanvasTab extends VerticalLayout implements Property.ValueChangeListener {
 
     private final MshenguMain main;
-    private final CanvasForm form;
-    
+    private CanvasForm form;
+
     public CanvasTab(MshenguMain app) {
         main = app;
         form = new CanvasForm(app);
+        form.insertAllcanvasComponents();
         setSizeFull();
         addComponent(form);
-    }
-
-    private void getHome() {
-        main.content.setSecondComponent(new CanvasMenu(main, "LANDING"));
-    }
-    
-    @Override
-    public void buttonClick(Button.ClickEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        addListeners();
     }
 
     @Override
     public void valueChange(Property.ValueChangeEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final Property property = event.getProperty();
+        if (property == form.month) {
+            getValues();
+        } else if (property == form.year) {
+            getValues();
+        }
     }
-    
+
+    private void getValues() {
+        if (form.month.getValue() != null && form.year.getValue() != null) {
+            form.canvas.clear();
+            form.insertAllcanvasComponents();
+        } else {
+            Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
+
+        }
+    }
+
+    private void addListeners() {
+        //Register Button Listeners
+        form.month.addValueChangeListener((Property.ValueChangeListener) this);
+        form.year.addValueChangeListener((Property.ValueChangeListener) this);
+    }
 }

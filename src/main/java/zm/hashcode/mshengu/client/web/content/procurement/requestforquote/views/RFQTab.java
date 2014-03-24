@@ -113,13 +113,13 @@ public class RFQTab extends VerticalLayout implements
         form.volume.setValue("");
     }
 
-    private RequestPurchaseItem getEntity(FieldGroup binder) {
+    private RequestPurchaseItem getEntity(FieldGroup binder) {    
         RequestPurchaseItem requestPurchaseItem;
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
-        requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
-                .itemDescription(bean.getItemDescription())
-                .unit(bean.getUnit())
-                .volume(bean.getVolume())
+        requestPurchaseItem = new RequestPurchaseItem.Builder(removeSpecialCharacters(bean.getQuantity() + ""))
+                .itemDescription(removeSpecialCharacters(bean.getItemDescription()))
+                .unit(removeSpecialCharacters(bean.getUnit()))
+                .volume(removeSpecialCharacters(bean.getVolume()))
                 .build();
 
         return requestPurchaseItem;
@@ -134,14 +134,18 @@ public class RFQTab extends VerticalLayout implements
         }
         Person person = PersonFacade.getPersonService().findById(bean.getRequestingPerson());
         RequestForQuote request = new RequestForQuote.Builder(person)
-                .account(bean.getCompanyName())
+                .account(removeSpecialCharacters(bean.getCompanyName()))
                 .items(items)
-                .deliveryInstructions(bean.getDeliveryInstructions())
+                .deliveryInstructions(removeSpecialCharacters(bean.getDeliveryInstructions()))
                 .rfqNumber(bean.getRfqNumber())
                 .deliveryDate(bean.getDeliveryDate())
                 .closingDate(bean.getClosingDate())
                 .build();
         return request;
+    }
+    
+    private String removeSpecialCharacters(String remove) {
+        return remove.replaceAll("[^\\w\\s\\-_]", "");
     }
 
     private void setReadOnlyFalse() {

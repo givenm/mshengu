@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.services.people;
 
 import java.util.List;
-import java.util.Set;
 import zm.hashcode.mshengu.domain.people.Person;
 
 /**
