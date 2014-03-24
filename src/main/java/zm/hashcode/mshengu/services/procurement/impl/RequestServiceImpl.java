@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.util.SequenceHelper;
@@ -31,17 +34,42 @@ public class RequestServiceImpl implements RequestService {
     private SequenceHelper helper = new SequenceHelper();
 
     @Override
+    @Cacheable("requests")
     public List<Request> findAll() {
         return ImmutableList.copyOf(repository.findAll(sortByOrderNumber()));
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "requests", allEntries = true),
+        @CacheEvict(value = "pendingRequests", allEntries = true),
+        @CacheEvict(value = "disApprovedRequests", allEntries = true),
+        @CacheEvict(value = "approvedRequestsBySupplier", allEntries = true),
+        @CacheEvict(value = "misMatchStatus", allEntries = true),
+        @CacheEvict(value = "processedRequestsWithInvoiceNumber", allEntries = true),
+        @CacheEvict(value = "serviceProviderProcessedRequestsWithInvoiceNumber", allEntries = true),
+        @CacheEvict(value = "processedRequestsWithPaymentDate", allEntries = true),
+        @CacheEvict(value = "processedRequestsByCostCentreType", allEntries = true),
+        @CacheEvict(value = "serviceProviderProcessedRequestsWithPaymentDate", allEntries = true),
+        @CacheEvict(value = "approvedRequests", allEntries = true)})
     public void persist(Request request) {
         repository.save(request);
 
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "requests", allEntries = true),
+        @CacheEvict(value = "pendingRequests", allEntries = true),
+        @CacheEvict(value = "disApprovedRequests", allEntries = true),
+        @CacheEvict(value = "approvedRequestsBySupplier", allEntries = true),
+        @CacheEvict(value = "misMatchStatus", allEntries = true),
+        @CacheEvict(value = "processedRequestsWithInvoiceNumber", allEntries = true),
+        @CacheEvict(value = "serviceProviderProcessedRequestsWithInvoiceNumber", allEntries = true),
+        @CacheEvict(value = "processedRequestsWithPaymentDate", allEntries = true),
+        @CacheEvict(value = "processedRequestsByCostCentreType", allEntries = true),
+        @CacheEvict(value = "serviceProviderProcessedRequestsWithPaymentDate", allEntries = true),
+        @CacheEvict(value = "approvedRequests", allEntries = true)})
     public void merge(Request request) {
         if (request.getId() != null) {
             repository.save(request);
@@ -58,6 +86,18 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "requests", allEntries = true),
+        @CacheEvict(value = "pendingRequests", allEntries = true),
+        @CacheEvict(value = "disApprovedRequests", allEntries = true),
+        @CacheEvict(value = "approvedRequestsBySupplier", allEntries = true),
+        @CacheEvict(value = "misMatchStatus", allEntries = true),
+        @CacheEvict(value = "processedRequestsWithInvoiceNumber", allEntries = true),
+        @CacheEvict(value = "serviceProviderProcessedRequestsWithInvoiceNumber", allEntries = true),
+        @CacheEvict(value = "processedRequestsWithPaymentDate", allEntries = true),
+        @CacheEvict(value = "processedRequestsByCostCentreType", allEntries = true),
+        @CacheEvict(value = "serviceProviderProcessedRequestsWithPaymentDate", allEntries = true),
+        @CacheEvict(value = "approvedRequests", allEntries = true)})
     public void delete(Request request) {
         repository.delete(request);
     }
@@ -74,6 +114,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Cacheable("misMatchStatus")
     public List<Request> findByMisMatchStatus() {
         return repository.findByMisMatchStatus();
     }
@@ -145,46 +186,55 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Cacheable("processedRequestsWithInvoiceNumber")
     public List<Request> getProcessedRequestsWithInvoiceNumber() {
         return repository.getProcessedRequestsWithInvoiceNumber();
     }
 
     @Override
+    @Cacheable("serviceProviderProcessedRequestsWithInvoiceNumber")
     public List<Request> getServiceProviderProcessedRequestsWithInvoiceNumber(String serviceProviderId) {
         return repository.getServiceProviderProcessedRequestsWithInvoiceNumber(serviceProviderId);
     }
 
     @Override
+    @Cacheable("processedRequestsWithPaymentDate")
     public List<Request> getProcessedRequestsWithPaymentDate(Date month) {
         return repository.getProcessedRequestsWithPaymentDate(month);
     }
 
     @Override
+    @Cacheable("serviceProviderProcessedRequestsWithPaymentDate")
     public List<Request> getServiceProviderProcessedRequestsWithPaymentDate(String serviceProviderId, Date month) {
         return repository.getServiceProviderProcessedRequestsWithPaymentDate(serviceProviderId, month);
     }
 
     @Override
+    @Cacheable("processedRequestsByCostCentreType")
     public List<Request> getProcessedRequestsByCostCentreType(CostCentreType costCentreType, Date month) {
         return repository.getProcessedRequestsByCostCentreType(costCentreType, month);
     }
 
     @Override
+    @Cacheable("pendingRequests")
     public List<Request> getPendingRequests() {
         return repository.getPendingRequests();
     }
 
     @Override
+    @Cacheable("disApprovedRequests")
     public List<Request> getDisApprovedRequests() {
         return repository.getDisApprovedRequests();
     }
 
     @Override
+    @Cacheable("approvedRequests")
     public List<Request> getApprovedRequests(Date month) {
         return repository.getApprovedRequests(month);
     }
 
     @Override
+    @Cacheable("approvedRequestsBySupplier")
     public List<Request> getApprovedRequestsBySupplier(String serviceProviderId, Date month) {
         return repository.getApprovedRequestsBySupplier(serviceProviderId, month);
     }

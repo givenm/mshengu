@@ -46,26 +46,24 @@ public class DisapproveRequestsTable extends Table {
         List<Request> requests = RequestFacade.getRequestService().getDisApprovedRequests();
         if (requests != null) {
             for (Request request : requests) {
-                if (request.getReasonForDisapproval() != null) {
-                    Button showDetails = new Button("More Details");
-                    showDetails.setData(request.getId());
-                    showDetails.setStyleName(Reindeer.BUTTON_LINK);
-                    showDetails.addClickListener(new Button.ClickListener() {
-                        @Override
-                        public void buttonClick(Button.ClickEvent event) {
-                            String itemId = event.getButton().getData().toString();
-                            DisapprovedRequestsForm form = new DisapprovedRequestsForm(itemId, tab);
-                            tab.removeAllComponents();
-                            tab.addComponent(form);
-                        }
-                    });
-                    addItem(new Object[]{
-                        request.getApprover(),
-                        request.getPersonName(),
-                        request.getServiceProviderName(),
-                        request.getTotal(),
-                        showDetails,}, request.getId());
-                }
+                Button showDetails = new Button("More Details");
+                showDetails.setData(request.getId());
+                showDetails.setStyleName(Reindeer.BUTTON_LINK);
+                showDetails.addClickListener(new Button.ClickListener() {
+                    @Override
+                    public void buttonClick(Button.ClickEvent event) {
+                        String itemId = event.getButton().getData().toString();
+                        DisapprovedRequestsForm form = new DisapprovedRequestsForm(itemId, tab);
+                        tab.removeAllComponents();
+                        tab.addComponent(form);
+                    }
+                });
+                addItem(new Object[]{
+                    request.getApprover(),
+                    request.getPersonName(),
+                    request.getServiceProviderName(),
+                    request.getTotal(),
+                    showDetails,}, request.getId());
             }
         }
     }

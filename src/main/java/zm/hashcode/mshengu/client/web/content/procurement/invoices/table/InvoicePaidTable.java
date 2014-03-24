@@ -53,9 +53,9 @@ public class InvoicePaidTable extends Table {
     public final void loadTable(List<Request> requests) {
         grandTotal = new BigDecimal("0.00");
         if (requests != null) {
-            for (int i = requests.size() - 1; i >= 0; i--) {
+            for (Request request: requests) {
                 Button update = new Button("Effect Payment");
-                update.setData(requests.get(i).getId());
+                update.setData(request.getId());
                 update.setStyleName(Reindeer.BUTTON_LINK);
                 update.addClickListener(new Button.ClickListener() {
                     @Override
@@ -68,16 +68,16 @@ public class InvoicePaidTable extends Table {
                     }
                 });
                 addItem(new Object[]{
-                    getDelivery(requests.get(i).getOrderDate()),
-                    getDelivery(requests.get(i).getDeliveryDate()),
-                    requests.get(i).getOrderNumber(),
-                    requests.get(i).getServiceProviderName(),
-                    requests.get(i).getInvoiceNumber(),
-                    f.format(requests.get(i).getTotal()),
-                    getDelivery(requests.get(i).getPaymentDate()),
-                    requests.get(i).getPaymentAmount(),
-                    update,}, requests.get(i).getId());
-                grandTotal = grandTotal.add(requests.get(i).getPaymentAmount());
+                    getDelivery(request.getOrderDate()),
+                    getDelivery(request.getDeliveryDate()),
+                    request.getOrderNumber(),
+                    request.getServiceProviderName(),
+                    request.getInvoiceNumber(),
+                    f.format(request.getTotal()),
+                    getDelivery(request.getPaymentDate()),
+                    request.getPaymentAmount(),
+                    update,}, request.getId());
+                grandTotal = grandTotal.add(request.getPaymentAmount());
             }
         }
     }

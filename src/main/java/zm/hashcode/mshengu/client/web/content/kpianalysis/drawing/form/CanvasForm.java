@@ -4,12 +4,22 @@
  */
 package zm.hashcode.mshengu.client.web.content.kpianalysis.drawing.form;
 
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import java.util.Random;
-import javax.swing.JOptionPane;
 import org.vaadin.hezamu.canvas.Canvas;
+import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
+import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
+import zm.hashcode.mshengu.client.web.content.kpianalysis.loadkpiresults.models.LoadResultsBean;
+import zm.hashcode.mshengu.client.web.content.procurement.invoices.models.InvoiceBean;
 
 /**
  *
@@ -17,8 +27,15 @@ import zm.hashcode.mshengu.client.web.MshenguMain;
  */
 public class CanvasForm extends FormLayout {
 
+    public UIComboBoxHelper UICombobox = new UIComboBoxHelper();
+    public UIComponentHelper UIComponent = new UIComponentHelper();
+    public final InvoiceBean bean = new InvoiceBean();
+    public final BeanItem<InvoiceBean> item = new BeanItem<>(bean);
+    public final FieldGroup binder = new FieldGroup(item);
+    public ComboBox month = new ComboBox();
+    public ComboBox year = new ComboBox();
     private final MshenguMain main;
-    private Canvas canvas = new Canvas();;
+    private Canvas canvas = new Canvas();
     //Big Pentagon
     private String topRightRectangleColorBigPentagon;
     private String topLeftRectangleColorBigPentagon;
@@ -33,7 +50,16 @@ public class CanvasForm extends FormLayout {
     private String bottomRightCircleColorComponent;
 
     public CanvasForm(MshenguMain main) {
-        this.main = main;        
+        this.main = main;
+
+        GridLayout gridlayout = new GridLayout(3, 10);
+        gridlayout.setSizeFull();
+
+        month = UICombobox.getMonthComboBox("Month: ", "month", InvoiceBean.class, binder);
+        year = UICombobox.getYearComboBox("Year: ", "year", InvoiceBean.class, binder);
+
+        gridlayout.addComponent(month, 0, 0);
+        gridlayout.addComponent(year, 1, 0);
 
         canvas.setSizeFull();
         canvas.setGlobalAlpha(0.9);
@@ -45,6 +71,9 @@ public class CanvasForm extends FormLayout {
         layout.setHeight("700");
         layout.addComponent(canvas);
 
+        addComponent(gridlayout);
+        addComponent(new Label("<br>", ContentMode.HTML));
+        addComponent(new Label("<br>", ContentMode.HTML));
         addComponent(layout);
     }
 
@@ -881,7 +910,7 @@ public class CanvasForm extends FormLayout {
         canvas.fillText("Specifications", 507, 445, 100);
 
         canvas.fillText("Fuel", 540, 302, 100);
-        canvas.fillText("Spend", 540, 317, 100); 
+        canvas.fillText("Spend", 540, 317, 100);
     }
 
     //Component 4

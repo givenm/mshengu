@@ -256,7 +256,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 Criteria.where("PaymentDate").exists(true)
                 .andOperator(Criteria.where("DeliveryDate").gte(from),
                 Criteria.where("DeliveryDate").lte(to)));
-        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
@@ -282,7 +282,7 @@ public class RequestRepositoryImpl implements RequestRepositoryCustom {
                 Criteria.where("serviceProviderSupplierId").is(serviceProviderId)
                 .andOperator(Criteria.where("PaymentDate").exists(true), Criteria.where("DeliveryDate").gte(from),
                 Criteria.where("DeliveryDate").lte(to)));
-        transactedRequestListQuery.with(new Sort(Sort.Direction.ASC, "orderNumber"));
+        transactedRequestListQuery.with(new Sort(Sort.Direction.DESC, "orderNumber"));
         return mongoOperation.find(transactedRequestListQuery, Request.class);
     }
 
