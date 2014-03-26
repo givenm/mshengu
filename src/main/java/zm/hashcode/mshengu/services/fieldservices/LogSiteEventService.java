@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.services.fieldservices;
 
+import java.util.List;
 import zm.hashcode.mshengu.domain.products.LogSiteEvents;
 
 /**
@@ -11,6 +12,8 @@ import zm.hashcode.mshengu.domain.products.LogSiteEvents;
  * @author boniface
  */
 public interface LogSiteEventService {
+    
+    public List<LogSiteEvents> findAll();
 
     public boolean areLogsEven(String siteId);
 

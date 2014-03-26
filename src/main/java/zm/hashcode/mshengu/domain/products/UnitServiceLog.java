@@ -315,4 +315,11 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "UnitServiceLog{" + "id=" + id + ", serviceDate=" + serviceDate + ", serviceTime=" + serviceTime + ", servicedBy=" + servicedBy + ", statusMessage=" + statusMessage + ", pumpOut=" + pumpOut + ", washBucket=" + washBucket + ", suctionOut=" + suctionOut + ", scrubFloor=" + scrubFloor + ", rechargeBacket=" + rechargeBacket + ", cleanPerimeter=" + cleanPerimeter + ", siteName=" + siteName + ", incident=" + incident + ", parentId=" + parentId + '}';
+    }
+    
+    
 }
