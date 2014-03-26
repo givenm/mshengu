@@ -10,6 +10,7 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import zm.hashcode.mshengu.domain.fleet.Truck;
+import zm.hashcode.mshengu.domain.people.Person;
 
 /**
  *
@@ -22,7 +23,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
     private String id;
     private Date serviceDate;
     private Date serviceTime;
-    private Truck servicedBy;
+    private Person servicedBy;
     private String statusMessage;
     private boolean pumpOut;
     private boolean washBucket;
@@ -134,7 +135,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
         private String id;
         private final Date serviceDate;
         private Date serviceTime;
-        private Truck servicedBy;
+        private Person servicedBy;
         //  private Set<UnitCleaningActivities> unitCleaningActivities;
         private String statusMessage;
         private String parentId;
@@ -190,7 +191,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
             return this;
         }
 
-        public Builder servicedBy(Truck value) {
+        public Builder servicedBy(Person value) {
             this.servicedBy = value;
             return this;
         }
@@ -282,7 +283,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
         return serviceTime;
     }
 
-    public Truck getServicedBy() {
+    public Person getServicedBy() {
         return servicedBy;
     }
 //    public Set<UnitCleaningActivities> getUnitCleaningActivities() {
@@ -310,7 +311,7 @@ public final class UnitServiceLog implements Serializable, Comparable<UnitServic
 
     public String getDriverName() {
         if (!isNullObject(servicedBy)) {
-            return servicedBy.getDriverName();
+            return servicedBy.getFirstname() + " " + servicedBy.getLastname(); 
         } else {
             return null;
         }
