@@ -401,7 +401,6 @@ public class UIComboBoxHelper<T> implements Serializable {
         ComboBox comboBox = new ComboBox(fieldText);
         List<TruckCategory> truckCategoryList = TruckCategoryFacade.getTruckCategoryService().findAll();
 
-        //  Collection<Location> cities = Collections2.filter(locations, new CityPredicate());
         for (TruckCategory truckCategory : truckCategoryList) {
             comboBox.addItem(truckCategory.getId());
             comboBox.setItemCaption(truckCategory.getId(), truckCategory.getCategoryName());
@@ -418,7 +417,6 @@ public class UIComboBoxHelper<T> implements Serializable {
         ComboBox comboBox = new ComboBox(fieldText);
         List<Truck> truckList = TruckFacade.getTruckService().findAll();
 
-        //  Collection<Location> cities = Collections2.filter(locations, new CityPredicate());
         for (Truck truck : truckList) {
             String truckName = truck.getVehicleNumber() + " (" + truck.getNumberPlate() + ")";
             comboBox.addItem(truck.getId());
@@ -929,7 +927,6 @@ public class UIComboBoxHelper<T> implements Serializable {
         ComboBox comboBox = new ComboBox(fieldText);
         List<Truck> truckList = TruckFacade.getTruckService().findAll();
 
-        //  Collection<Location> cities = Collections2.filter(locations, new CityPredicate());
         for (Truck truck : truckList) {
             String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
             comboBox.addItem(truck.getId());
