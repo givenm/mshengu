@@ -5,12 +5,9 @@
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.views;
 
 import com.vaadin.data.Property;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -20,12 +17,10 @@ import org.dussan.vaadin.dcharts.DCharts;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.panel.PanelEfficiency;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFuelMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.MonthlyFuelExpenseUI;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.monthlyfuelexpense.NonServiceVehiclesTwelveMonthChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.monthlyfuelexpense.ServiceVehiclesTwelveMonthChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.forms.MonthlyFuelExpenseForm;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.executivedashboard.FuelSpendMonthlyCostBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.MonthlyFuelExpenseBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.NonServiceVehiclesTwelveMonthBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.monthlyfuelexpense.ServiceVehiclesTwelveMonthBean;

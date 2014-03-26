@@ -4,6 +4,7 @@
  */
 package zm.hashcode.mshengu.services.fieldservices.Impl;
 
+import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -27,6 +28,16 @@ public class LogSiteEventServiceImpl implements LogSiteEventService {
     private LogSiteEventsRepository repository;
     @Autowired
     private MongoTemplate mongoTemplate;
+    
+    @Override
+    public List<LogSiteEvents> findAll() {
+        return ImmutableList.copyOf(repository.findAll(sortByServiceDate()));
+    }
+    
+    private Sort sortByServiceDate() {
+        return new Sort(
+                new Sort.Order(Sort.Direction.DESC, "date"));
+    }
 
     @Override
     public boolean areLogsEven(String siteId) {

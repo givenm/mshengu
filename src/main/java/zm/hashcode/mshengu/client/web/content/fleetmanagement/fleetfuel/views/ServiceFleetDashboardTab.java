@@ -11,7 +11,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,7 +21,6 @@ import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
 import zm.hashcode.mshengu.app.util.panel.PanelEfficiency;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFuelMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.ServiceFleetDashboardChartUI;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.servicefleetdashboard.DriverEfficiencyChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.servicefleetdashboard.OneMonthEfficiencyLineChart;
@@ -35,7 +33,6 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.ex
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.MonthlyMileageTotalBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.ServiceFleetOneMonthlyEfficiencyBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.ServiceFleetThreeMonthlyEfficiencyBean;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.EfficiencylLayout;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.FleetFuelUtil;
 import zm.hashcode.mshengu.domain.fleet.OperatingCost;
 import zm.hashcode.mshengu.domain.fleet.Truck;
@@ -150,8 +147,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             Collections.sort(monthlyMileageTotalBeanList);
 
 
-
-
             buildServiceFleetOneMonthEfficiencyBeanList();
             Collections.sort(serviceFleetOneMonthlyEfficiencyBeanList);
             buildServiceFleetThreeMonthEfficiencyBeanList();
@@ -216,10 +211,8 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     private void performFleetFuelSpendSubTotal(BigDecimal monthTotal, List<OperatingCost> serviceTruckOperatingCostList, OperatingCost operatingCost, BigDecimal randPerLitre, int counter) {
         // Subtotal
         monthTotal = monthTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
-
         // Build FuelSpendMonthlyCostBean and add to ArrayList
         int currentIndex = serviceTruckOperatingCostList.indexOf(operatingCost);
-
 
         // ////////////////////////////////////////// NEW ADDITION IF STATEMENT
         if ((serviceTruckOperatingCostList.get(currentIndex - 1).getTransactionDate().compareTo(startDate) == 0
@@ -229,7 +222,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             grandTotalFuelSpend = grandTotalFuelSpend.add(monthTotal); // OLD, NOT NEW ADDITION
         }
         //=========================================== NEW ADDITION
-
 
         fuelSpendMonthlyCostBeanList.add(buildFuelSpendMonthlyCostBeanObject(counter, monthTotal, serviceTruckOperatingCostList.get(currentIndex - 1), randPerLitre));
     }
