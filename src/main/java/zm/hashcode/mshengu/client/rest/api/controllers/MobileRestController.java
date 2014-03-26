@@ -75,6 +75,8 @@ public class MobileRestController {
     public List<TruckResources> getTrucks() {
 
         List<TruckResources> trucksResources = new ArrayList<>();
+        System.out.println("Test truckService: " + truckService);
+
         List<Truck> trucks = truckService.findAll();
 
         for (Truck truck : trucks) {

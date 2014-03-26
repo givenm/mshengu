@@ -4,10 +4,8 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util;
 
-import com.vaadin.ui.Notification;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;

@@ -11,7 +11,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,7 +21,6 @@ import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
 import zm.hashcode.mshengu.app.util.panel.PanelEfficiency;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.FleetFuelMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.ServiceFleetDashboardChartUI;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.servicefleetdashboard.DriverEfficiencyChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.charts.actualcharts.servicefleetdashboard.OneMonthEfficiencyLineChart;
@@ -35,7 +33,6 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.ex
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.MonthlyMileageTotalBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.ServiceFleetOneMonthlyEfficiencyBean;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.model.servicefleetdashboard.ServiceFleetThreeMonthlyEfficiencyBean;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.EfficiencylLayout;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util.FleetFuelUtil;
 import zm.hashcode.mshengu.domain.fleet.OperatingCost;
 import zm.hashcode.mshengu.domain.fleet.Truck;
@@ -68,6 +65,8 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     public static Integer grandTotalMileage = new Integer("0");
     public static String chartPeriod = null;
     public static Integer chartPeriodCount = null;
+    //
+    public static Calendar chartDataStartDate = Calendar.getInstance();
 
     public ServiceFleetDashboardTab(MshenguMain app) {
         main = app;
@@ -136,13 +135,16 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         operatingCostTwentyFiveMonthsList.addAll(fleetFuelUtil.getOperatingCostByTruckBetweenTwoDates(FleetFuelUtil.startDate, FleetFuelUtil.endDate));
         Collections.sort(operatingCostTwentyFiveMonthsList, OperatingCost.DescOrderDateAscOrderTruckIdComparator);
         // Extract date Range for Charts only
-        dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForDateRange(startDate, endDate, operatingCostTwentyFiveMonthsList));
+        //============================  NEW ADDITION
+        chartDataStartDate.setTime(startDate);
+        chartDataStartDate.add(Calendar.MONTH, -2);
+        //============================  NEW ADDITION
+
+        dateRangeOperatingCostList.addAll(fleetFuelUtil.getOperatingCostsForDateRange(chartDataStartDate.getTime(), endDate, operatingCostTwentyFiveMonthsList));
         if (!dateRangeOperatingCostList.isEmpty()) {
             buildFuelSpendMonthlyCostBeanList(); // used for Bar Chart
             buildMonthlyMileageTotalBeanList(); // used for Line Chart
             Collections.sort(monthlyMileageTotalBeanList);
-
-
 
 
             buildServiceFleetOneMonthEfficiencyBeanList();
@@ -209,9 +211,18 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     private void performFleetFuelSpendSubTotal(BigDecimal monthTotal, List<OperatingCost> serviceTruckOperatingCostList, OperatingCost operatingCost, BigDecimal randPerLitre, int counter) {
         // Subtotal
         monthTotal = monthTotal.setScale(2, BigDecimal.ROUND_HALF_UP);
-        grandTotalFuelSpend = grandTotalFuelSpend.add(monthTotal);
         // Build FuelSpendMonthlyCostBean and add to ArrayList
         int currentIndex = serviceTruckOperatingCostList.indexOf(operatingCost);
+
+        // ////////////////////////////////////////// NEW ADDITION IF STATEMENT
+        if ((serviceTruckOperatingCostList.get(currentIndex - 1).getTransactionDate().compareTo(startDate) == 0
+                || (serviceTruckOperatingCostList.get(currentIndex - 1).getTransactionDate().after(startDate)
+                && serviceTruckOperatingCostList.get(currentIndex - 1).getTransactionDate().before(endDate))
+                || serviceTruckOperatingCostList.get(currentIndex - 1).getTransactionDate().compareTo(endDate) == 0)) {
+            grandTotalFuelSpend = grandTotalFuelSpend.add(monthTotal); // OLD, NOT NEW ADDITION
+        }
+        //=========================================== NEW ADDITION
+
         fuelSpendMonthlyCostBeanList.add(buildFuelSpendMonthlyCostBeanObject(counter, monthTotal, serviceTruckOperatingCostList.get(currentIndex - 1), randPerLitre));
     }
 
@@ -237,7 +248,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         int counter = 0;
         //
         Calendar calendar = Calendar.getInstance();
-        for (calendar.setTime(endDatee); calendar.getTime().after(startDatee) || calendar.getTime().compareTo(startDatee) == 0; calendar.add(Calendar.MONTH, -1)) {
+        for (calendar.setTime(endDatee); calendar.getTime().after(chartDataStartDate.getTime()) || calendar.getTime().compareTo(chartDataStartDate.getTime()) == 0; calendar.add(Calendar.MONTH, -1)) { // startDatee
             for (Truck truck : FleetFuelUtil.serviceTrucks) { // this TAB for Service/Utility Trucks Only // msvTrucks, serviceTrucks
                 truckMonthOperatingCostList.clear();
                 truckMonthOperatingCostList.addAll(getOneMonthOperatingCostForTruck(dateRangeOperatingCostList, calendar.getTime(), truck));
@@ -265,7 +276,15 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     }
 
     private void performMonthlyMileageSubTotal(Integer monthlyMileageTotal, Date mileageTotalMonth, int counter) {
-        grandTotalMileage += monthlyMileageTotal;
+        // NEW ADDITION
+        if ((mileageTotalMonth.compareTo(startDate) == 0
+                || (mileageTotalMonth.after(startDate)
+                && mileageTotalMonth.before(endDate))
+                || mileageTotalMonth.compareTo(endDate) == 0)) {
+            grandTotalMileage += monthlyMileageTotal;
+        }
+
+        // NEW ADDITION
         monthlyMileageTotalBeanList.add(buildMonthlyMileageTotalBeanBeanObject(monthlyMileageTotal, mileageTotalMonth, counter));
     }
 
@@ -310,10 +329,15 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
             BigDecimal monthlyFuelCost = fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - listIndex).getMonthlyAmountSpend();
             Integer monthlyMileage = monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - listIndex).getMonthlyMileageTotal();
             listIndex++;
+            try {
+                System.out.println(calendar.getTime() + " : 1M Fuel Efficiency: FUEL COST SUM= " + monthlyFuelCost + " / 1M Fuel Efficiency: MILEAGE SUM= " + monthlyMileage + " ANS - " + (monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP)));
+                BigDecimal efficiencyValue = monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP);// getOneMonthServiceFleetEfficiency(calendar.getTime());
+                serviceFleetOneMonthlyEfficiencyBeanList.add(buildServiceFleetOneMonthlyEfficiencyBeanObject(calendar.getTime(), efficiencyValue, counter));
+            } catch (java.lang.ArithmeticException ex) {
+                System.out.println(calendar.getTime() + " : 1M Fuel Efficiency: FUEL COST SUM= " + monthlyFuelCost + " / 1M Fuel Efficiency: MILEAGE SUM= " + monthlyMileage + " ANS - java.lang.ArithmeticException: / by zero");
+                serviceFleetOneMonthlyEfficiencyBeanList.add(buildServiceFleetOneMonthlyEfficiencyBeanObject(calendar.getTime(), new BigDecimal("0.00"), counter));
+            }
 
-            System.out.println(calendar.getTime() + " : 1M Fuel Efficiency: FUEL COST SUM= " + monthlyFuelCost + " / 1M Fuel Efficiency: MILEAGE SUM= " + monthlyMileage + " ANS - " + (monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP)));
-            BigDecimal efficiencyValue = monthlyFuelCost.divide(new BigDecimal(monthlyMileage + ""), 2, BigDecimal.ROUND_HALF_UP);// getOneMonthServiceFleetEfficiency(calendar.getTime());
-            serviceFleetOneMonthlyEfficiencyBeanList.add(buildServiceFleetOneMonthlyEfficiencyBeanObject(calendar.getTime(), efficiencyValue, counter));
             counter++;
         }
     }
@@ -344,8 +368,13 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
 
             for (int i = 1; i < 3; i++) {
                 try {
-                    monthlyFuelCost = monthlyFuelCost.add(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - (listIndex + i)).getMonthlyAmountSpend());
-                    monthlyMileage += monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - (listIndex + i)).getMonthlyMileageTotal();
+                    if (fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - (listIndex + i)).getMonthlyAmountSpend().compareTo(BigDecimal.ZERO) == 0
+                            || monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - (listIndex + i)).getMonthlyMileageTotal() == 0) {
+                        monthNotFound = true;
+                    } else {
+                        monthlyFuelCost = monthlyFuelCost.add(fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - (listIndex + i)).getMonthlyAmountSpend());
+                        monthlyMileage += monthlyMileageTotalBeanList.get(monthlyMileageTotalBeanList.size() - (listIndex + i)).getMonthlyMileageTotal();
+                    }
                 } catch (Exception ex) {
                     monthNotFound = true;
                 }
@@ -373,8 +402,9 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
     }
 
     public void displayCharts() {
-        chartPeriod = fuelSpendMonthlyCostBeanList.get(0).getMonth() + " - " + fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - 1).getMonth();
-        chartPeriodCount = fuelSpendMonthlyCostBeanList.size();
+        // I ADDED 2 EXTRA MONTH IN FOR dateRangeOperatingCost List 3 MONTHLY EFFICIENCY CALCULATIONS
+        chartPeriod = fuelSpendMonthlyCostBeanList.get(0 + 2).getMonth() + " - " + fuelSpendMonthlyCostBeanList.get(fuelSpendMonthlyCostBeanList.size() - 1).getMonth();
+        chartPeriodCount = fuelSpendMonthlyCostBeanList.size() - 2;
 
         // Assuming it is sorted by Date in Asc Order
         DCharts dTotalFleetFuelSpendChart = createTotalFleetFuelSpendChart();
@@ -439,12 +469,36 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
 
     public DCharts createTotalFleetFuelSpendChart() {
         TotalFleetFuelSpendBarChart totalFleetFuelSpendChart = new TotalFleetFuelSpendBarChart();
-        return totalFleetFuelSpendChart.createChart(fuelSpendMonthlyCostBeanList, grandTotalFuelSpend);
+        // NEW ADDITION
+        List<FuelSpendMonthlyCostBean> FuelSpendMonthlyCostBeanList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        for (calendar.setTime(startDate); calendar.getTime().before(endDate) || calendar.getTime().compareTo(endDate) == 0; calendar.add(Calendar.MONTH, 1)) {
+            for (FuelSpendMonthlyCostBean fuelSpendMonthlyCostBean : fuelSpendMonthlyCostBeanList) {
+                System.out.println(fuelSpendMonthlyCostBean.getMonth() + "========" + fuelSpendMonthlyCostBean.getTransactionMonth());
+                if (dateTimeFormatHelper.resetTimeAndMonthStart(fuelSpendMonthlyCostBean.getTransactionMonth()).compareTo(calendar.getTime()) == 0) {
+                    FuelSpendMonthlyCostBeanList.add(fuelSpendMonthlyCostBean);
+                }
+            }
+        }
+        // NEW ADDITION
+        return totalFleetFuelSpendChart.createChart(FuelSpendMonthlyCostBeanList, grandTotalFuelSpend); // I HAVE rEPLACED fuelSpendMonthlyCostBeanList WITH FuelSpendMonthlyCostBeanList
     }
 
     public DCharts createTotalMonthlyMileageChart() {
         TotalMonthlyMileageLineChart totalMonthlyMileageLineChart = new TotalMonthlyMileageLineChart();
-        return totalMonthlyMileageLineChart.createChart(monthlyMileageTotalBeanList, grandTotalMileage);
+        // NEW ADDITION
+        List<MonthlyMileageTotalBean> MonthlyMileageTotalBeanList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        for (calendar.setTime(startDate); calendar.getTime().before(endDate) || calendar.getTime().compareTo(endDate) == 0; calendar.add(Calendar.MONTH, 1)) {
+            for (MonthlyMileageTotalBean MonthlyMileageTotalBean : monthlyMileageTotalBeanList) {
+                System.out.println(MonthlyMileageTotalBean.getMonth() + "========" + MonthlyMileageTotalBean.getTransactionMonth());
+                if (dateTimeFormatHelper.resetTimeAndMonthStart(MonthlyMileageTotalBean.getTransactionMonth()).compareTo(calendar.getTime()) == 0) {
+                    MonthlyMileageTotalBeanList.add(MonthlyMileageTotalBean);
+                }
+            }
+        }
+        // NEW ADDITION
+        return totalMonthlyMileageLineChart.createChart(MonthlyMileageTotalBeanList, grandTotalMileage);
     }
 
     public DCharts createOneMonthEfficiencyChart() {

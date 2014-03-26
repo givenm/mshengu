@@ -279,14 +279,12 @@ public class MaintenanceSpendBySupplierUtil implements Serializable {
         ServiceProvider currentServiceProvider = null;
         for (ServiceProvider serviceProvder : fleetServiceProviderList) {
             if (serviceProvder.getId().equals(maintenanceSpendBySupplier.getSupplierId())) {
-                currentServiceProvider = serviceProvder;  //serviceProvder.isVehicleMaintenance()
+                currentServiceProvider = serviceProvder;
                 break;
             }
         }
         TotalMaintenanceSpendBySupplier totalMaintenanceSpendBySupplier = new TotalMaintenanceSpendBySupplier();
         totalMaintenanceSpendBySupplier.setId(counter + "");
-//        totalMaintenanceSpendBySupplier.setMonth();
-//        totalMaintenanceSpendBySupplier.setSpendPercentage();
         totalMaintenanceSpendBySupplier.setSupplierName(currentServiceProvider.getName());
         totalMaintenanceSpendBySupplier.setTotal(total);
         totalMaintenanceSpendBySupplier.setVendorNumber(currentServiceProvider.getVendorNumber());
