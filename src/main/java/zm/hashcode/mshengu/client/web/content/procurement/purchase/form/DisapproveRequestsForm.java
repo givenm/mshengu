@@ -98,7 +98,7 @@ public class DisapproveRequestsForm extends VerticalLayout implements
             Person user = new GetUserCredentials().getLoggedInPerson();
             Request newRequest = new Request.Builder(request.getPerson())
                     .request(request)
-                    .reasonForDisapproval(requestBean.getReason())
+                    .reasonForDisapproval(removeSpecialCharacters(requestBean.getReason()))
                     .approver(user.getFirstname() + " " + user.getLastname())
                     .build();
             RequestFacade.getRequestService().merge(newRequest);
@@ -108,5 +108,9 @@ public class DisapproveRequestsForm extends VerticalLayout implements
             e.printStackTrace();
             Notification.show("Values MISSING!", Notification.Type.TRAY_NOTIFICATION);
         }
+    }
+    
+     private String removeSpecialCharacters(String remove) {
+        return remove.replaceAll("[^\\w\\s\\-_]", "");
     }
 }

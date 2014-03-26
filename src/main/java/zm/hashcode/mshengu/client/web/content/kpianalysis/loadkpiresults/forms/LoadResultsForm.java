@@ -28,8 +28,6 @@ public class LoadResultsForm extends FormLayout {
     public final FieldGroup binder = new FieldGroup(item);
     public DateField fromdate = new DateField();
     public DateField todate = new DateField();
-    public Label from = new Label("From:");
-    public Label to = new Label("To:");
 
     public LoadResultsForm() {
         setSizeFull();
@@ -38,14 +36,9 @@ public class LoadResultsForm extends FormLayout {
         fromdate = UIComponent.getDateField("Enter Start Date: ", "fromdate", LoadResultsBean.class, binder);
         todate = UIComponent.getDateField("Enter End Date: ", "todate", LoadResultsBean.class, binder);
 
-        gridlayout.addComponent(from, 0, 0);
-        gridlayout.addComponent(fromdate, 1, 0);
+        gridlayout.addComponent(fromdate, 0, 0);
+        gridlayout.addComponent(todate, 1, 0);
 
-        gridlayout.addComponent(new Label("<br>", ContentMode.HTML), 0, 1);
-
-        gridlayout.addComponent(to, 0, 2);
-        gridlayout.addComponent(todate, 1, 2);
-        
         addComponent(gridlayout);
     }
 }

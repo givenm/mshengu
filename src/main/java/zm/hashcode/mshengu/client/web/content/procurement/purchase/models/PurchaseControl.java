@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 import fr.opensagres.xdocreport.converter.Options;
 import java.io.ByteArrayOutputStream;
-import javax.swing.JOptionPane;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.facade.serviceproviders.ServiceProviderProductFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
@@ -45,7 +44,7 @@ public class PurchaseControl {
                 if (truck != null) {
                     String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
                     purchase.setCostCentre(returnCostCentre(request.getCostCentreType()) + " " + truckName);
-                } else{
+                } else {
                     purchase.setCostCentre(returnCostCentre(request.getCostCentreType()));
                 }
             } else {
@@ -53,32 +52,32 @@ public class PurchaseControl {
             }
             purchase.setPodate(getDate(request.getOrderDate()));
             purchase.setDate(getDate(request.getDeliveryDate()));
-            purchase.setFirstName(request.getPerson().getFirstname());
-            purchase.setLastName(request.getPerson().getLastname());
+            purchase.setFirstName(removeSpecialCharacters(request.getPerson().getFirstname()));
+            purchase.setLastName(removeSpecialCharacters(request.getPerson().getLastname()));
             purchase.setOrderNumber(request.getOrderNumber());
             purchase.setTotal(request.getTotal());
-            purchase.setVendor(request.getServiceProviderName());
-            purchase.setInstructions(request.getDeliveryInstructions());
+            purchase.setVendor(removeSpecialCharacters(request.getServiceProviderName()));
+            purchase.setInstructions(removeSpecialCharacters(request.getDeliveryInstructions()));
 
             List<PurchaseItem> items = new ArrayList<>();
 
             for (RequestPurchaseItem item : request.getRequestPurchaseItems()) {
                 PurchaseItem purchaseItem = new PurchaseItem();
                 if (item.getItemDescription() != null) {
-                    purchaseItem.setDescription(item.getItemDescription());
-                    purchaseItem.setNumber(item.getItemNumber());
+                    purchaseItem.setDescription(removeSpecialCharacters(item.getItemDescription()));
+                    purchaseItem.setNumber(removeSpecialCharacters(item.getItemNumber()));
                     purchaseItem.setPrice(item.getUnitPrice().toString());
-                    purchaseItem.setQuantity(item.getQuantity());
-                    purchaseItem.setUnit(item.getUnit());
+                    purchaseItem.setQuantity(removeSpecialCharacters(item.getQuantity()));
+                    purchaseItem.setUnit(removeSpecialCharacters(item.getUnit()));
 
                 } else {
                     ServiceProviderProduct product = ServiceProviderProductFacade.getServiceProviderProductService().findById(item.getServiceProviderProductId());
-                    purchaseItem.setDescription(product.getProductName());
+                    purchaseItem.setDescription(removeSpecialCharacters(product.getProductName()));
                     purchaseItem.setNumber(product.getItemNumber());
                     DecimalFormat f = new DecimalFormat("### ###.00");
                     purchaseItem.setPrice(f.format(product.getPrice()));
-                    purchaseItem.setQuantity(item.getQuantity());
-                    purchaseItem.setUnit(product.getUnit());
+                    purchaseItem.setQuantity(removeSpecialCharacters(item.getQuantity()));
+                    purchaseItem.setUnit(removeSpecialCharacters(product.getUnit()));
                 }
                 items.add(purchaseItem);
             }
@@ -117,6 +116,10 @@ public class PurchaseControl {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String removeSpecialCharacters(String remove) {
+        return remove.replaceAll("[^\\w\\s\\-_]", "");
     }
 
     private String getDate(Date date) {

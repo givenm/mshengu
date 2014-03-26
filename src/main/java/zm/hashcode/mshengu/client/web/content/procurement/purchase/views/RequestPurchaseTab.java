@@ -285,17 +285,17 @@ public class RequestPurchaseTab extends VerticalLayout implements
         RequestBean bean = ((BeanItem<RequestBean>) binder.getItemDataSource()).getBean();
         if (productId != null) {
             ServiceProviderProduct product = ServiceProviderProductFacade.getServiceProviderProductService().findById(productId);
-            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
+            requestPurchaseItem = new RequestPurchaseItem.Builder(removeSpecialCharacters(bean.getQuantity() + ""))
                     .product(product)
                     .subTotal(bean.getTotal())
                     .build();
         } else {
-            requestPurchaseItem = new RequestPurchaseItem.Builder(bean.getQuantity() + "")
-                    .itemDescription(bean.getDescription())
-                    .itemNumber(bean.getItemNumber())
-                    .unit(bean.getUnit())
+            requestPurchaseItem = new RequestPurchaseItem.Builder(removeSpecialCharacters(bean.getQuantity() + ""))
+                    .itemDescription(removeSpecialCharacters(bean.getDescription()))
+                    .itemNumber(removeSpecialCharacters(bean.getItemNumber()))
+                    .unit(removeSpecialCharacters(bean.getUnit()))
                     .unitPrice(bean.getUnitPrice())
-                    .volume(bean.getVolume())
+                    .volume(removeSpecialCharacters(bean.getVolume()))
                     .subTotal(bean.getTotal())
                     .build();
         }
@@ -380,7 +380,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                         .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                         .costCentreType(costCentreType)
                         .itemCategoryType(itemCategoryType)
-                        .deliveryInstructions(bean.getDeliveryInstructions())
+                        .deliveryInstructions(removeSpecialCharacters(bean.getDeliveryInstructions()))
                         .orderDate(new Date())
                         .deliveryDate(bean.getOrderDate())
                         .serviceProviderSupplierId(provider.getId())
@@ -396,7 +396,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .truck(TruckFacade.getTruckService().findById(bean.getCostCategory()))
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
-                    .deliveryInstructions(bean.getDeliveryInstructions())
+                    .deliveryInstructions(removeSpecialCharacters(bean.getDeliveryInstructions()))
                     .orderDate(new Date())
                     .deliveryDate(bean.getOrderDate())
                     .serviceProviderSupplierId(provider.getId())
@@ -412,7 +412,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
-                    .deliveryInstructions(bean.getDeliveryInstructions())
+                    .deliveryInstructions(removeSpecialCharacters(bean.getDeliveryInstructions()))
                     .orderDate(new Date())
                     .deliveryDate(bean.getOrderDate())
                     .serviceProviderSupplierId(provider.getId())
@@ -427,7 +427,7 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .categoryType(costCentreCategoryType)
                     .costCentreType(costCentreType)
                     .itemCategoryType(itemCategoryType)
-                    .deliveryInstructions(bean.getDeliveryInstructions())
+                    .deliveryInstructions(removeSpecialCharacters(bean.getDeliveryInstructions()))
                     .orderDate(new Date())
                     .deliveryDate(bean.getOrderDate())
                     .serviceProviderSupplierId(provider.getId())
@@ -435,5 +435,9 @@ public class RequestPurchaseTab extends VerticalLayout implements
                     .build();
             return request;
         }
+    }
+    
+    private String removeSpecialCharacters(String remove) {
+        return remove.replaceAll("[^\\w\\s\\-_]", "");
     }
 }
