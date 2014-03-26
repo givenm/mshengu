@@ -36,9 +36,7 @@ public class TruckServiceImpl implements TruckService {
 
     @Override
     public void persist(Truck truck) {
-
         repository.save(truck);
-
     }
 
     @Override
@@ -93,8 +91,8 @@ public class TruckServiceImpl implements TruckService {
         List<Truck> truckList = (List<Truck>) repository.findAll();
         List<Truck> truckFilteredList = convertCollectionToList(Collections2.filter(truckList, new SiteNameTruckPredicate(siteName)));
         if ((truckFilteredList != null) && (!truckFilteredList.isEmpty())) {
-          return  truckFilteredList.get(0);
-        }else{
+            return truckFilteredList.get(0);
+        } else {
             return null;
         }
 //        Iterator<Truck> truckIterator = truckFilteredList.iterator();
@@ -114,4 +112,3 @@ public class TruckServiceImpl implements TruckService {
         return truckList;
     }
 }
-

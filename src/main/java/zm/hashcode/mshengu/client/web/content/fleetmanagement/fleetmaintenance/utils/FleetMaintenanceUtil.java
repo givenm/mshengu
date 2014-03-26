@@ -109,9 +109,9 @@ public class FleetMaintenanceUtil implements Serializable {
                     truckId = annualDataFleetMaintenanceCost.getTruckId();
                 }
             }
-            grandTotalMaintenanceSpend = grandTotalMaintenanceSpend.add(total);
-            maintenanceSpendMonthlyList.add(getTotalMaintenanceSpendMonthly(total, j, month, startCalendar.getTime(), truckId));
 
+                grandTotalMaintenanceSpend = grandTotalMaintenanceSpend.add(total);
+                maintenanceSpendMonthlyList.add(getTotalMaintenanceSpendMonthly(total, j, month, startCalendar.getTime(), truckId));
             //increment the month by 1
             startCalendar.add(Calendar.MONTH, 1);
             total = BigDecimal.ZERO;
@@ -122,6 +122,7 @@ public class FleetMaintenanceUtil implements Serializable {
     }
 
     public TotalMaintenanceSpendMonthly getTotalMaintenanceSpendMonthly(BigDecimal total, int j, String month, Date date, String truckId) {
+
         String newMonth = month;
         if (total.compareTo(BigDecimal.ZERO) == 0) {
             newMonth = dateTimeFormatHelper.getMonthYearMonthAsMediumString(date.toString());
@@ -148,6 +149,7 @@ public class FleetMaintenanceUtil implements Serializable {
 //        System.out.println("Grand Total is: " + grandTotalMaintenanceSpend);
 
         return totalMaintenanceSpendMonthly;
+
     }
 
     public int countMonthsInRange(Date startDate, Date endDate) {
@@ -179,14 +181,14 @@ public class FleetMaintenanceUtil implements Serializable {
 
         BigDecimal total = BigDecimal.ZERO;
         String truckId = null;
-        Truck truck = null;
+//        Truck truck = null;
         String numberPlate = null;
         int counter = 0;
 
         final List<TotalMaintenanceSpendByVehicle> maintenanceSpendByVehicleList = new ArrayList<>();
 
 
-        for (Truck truckk : getServiceTrucks()) {
+        for (Truck truckk : serviceTrucks) {
             truckId = truckk.getId();
             numberPlate = truckk.getNumberPlate();
 

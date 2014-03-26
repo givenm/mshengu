@@ -144,7 +144,6 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         annualMileageTable.populateAnnualMileageTable(mileageList, annualDataMonthCount, FleetMaintenanceUtil.getStartDate(), serviceTrucks);
         // Size the table Height to the number of Rows u want or to autofit the rows in it
         annualMileageTable.setPageLength(annualMileageTable.size()); // Adjust the table height a bit
-
     }
 
     public void showTables() {
@@ -168,9 +167,9 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         Collections.sort(annualDataFleetMaintenanceCostList, AnnualDataFleetMaintenanceCost.AscOrderTruckAscOrderDateComparator);
         for (AnnualDataFleetMaintenanceCost annualDataFleetMaintenanceCost : annualDataFleetMaintenanceCostList) {
             month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceCost.getTransactionMonth().toString());
-            monthlySpendDataList.add(createTotalMonthlySpendList(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost(), month, annualDataFleetMaintenanceCost.getTransactionMonth(), annualDataFleetMaintenanceCost.getTruckId(), iD, serviceTrucks));
-            iD++;
-        }
+                monthlySpendDataList.add(createTotalMonthlySpendList(annualDataFleetMaintenanceCost.getMonthlyMaintenanceCost(), month, annualDataFleetMaintenanceCost.getTransactionMonth(), annualDataFleetMaintenanceCost.getTruckId(), iD, serviceTrucks));
+                iD++;
+          }
         return monthlySpendDataList;
     }
 
@@ -182,6 +181,7 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
                 break;
             }
         }
+
         MonthlySpendData monthlySpendData = new MonthlySpendData();
         monthlySpendData.setVehicleNumber(truck.getVehicleNumber());
         monthlySpendData.setNumberPlate(truck.getNumberPlate());
@@ -199,9 +199,9 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
         final List<MonthlyMileageData> monthlyMileageDataList = new ArrayList<>();
         Collections.sort(annualDataFleetMaintenanceMileageList, AnnualDataFleetMaintenanceMileage.AscOrderTruckAscOrderDateComparator);
         for (AnnualDataFleetMaintenanceMileage annualDataFleetMaintenanceMileage : annualDataFleetMaintenanceMileageList) {
-            month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceMileage.getTransactionMonth().toString());
-            monthlyMileageDataList.add(createMonthlyMileageList(annualDataFleetMaintenanceMileage.getMonthlyMileage(), month, annualDataFleetMaintenanceMileage.getTransactionMonth(), annualDataFleetMaintenanceMileage.getTruckId(), iD, serviceTrucks));
-            iD++;
+                month = dateTimeFormatHelper.getMonthYearMonthAsMediumString(annualDataFleetMaintenanceMileage.getTransactionMonth().toString());
+                monthlyMileageDataList.add(createMonthlyMileageList(annualDataFleetMaintenanceMileage.getMonthlyMileage(), month, annualDataFleetMaintenanceMileage.getTransactionMonth(), annualDataFleetMaintenanceMileage.getTruckId(), iD, serviceTrucks));
+                iD++;
         }
         return monthlyMileageDataList;
     }

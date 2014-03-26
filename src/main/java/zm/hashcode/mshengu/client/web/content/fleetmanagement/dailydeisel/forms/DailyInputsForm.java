@@ -31,8 +31,8 @@ import zm.hashcode.mshengu.domain.fleet.Truck;
  */
 public class DailyInputsForm extends FormLayout {
 
-    private UIComponentHelper UIComponent = new UIComponentHelper();
-    private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
+    private final UIComponentHelper UIComponent = new UIComponentHelper();
+    private final UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
     private final DailyInputsBean bean;
     public final BeanItem<DailyInputsBean> item;
     public final FieldGroup binder;
@@ -152,7 +152,6 @@ public class DailyInputsForm extends FormLayout {
         ComboBox comboBox = new ComboBox(fieldText);
         List<Truck> truckList = TruckFacade.getTruckService().findAll();
 
-        //  Collection<Location> cities = Collections2.filter(locations, new CityPredicate());
         for (Truck truck : truckList) {
             String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
             comboBox.addItem(truck.getId());

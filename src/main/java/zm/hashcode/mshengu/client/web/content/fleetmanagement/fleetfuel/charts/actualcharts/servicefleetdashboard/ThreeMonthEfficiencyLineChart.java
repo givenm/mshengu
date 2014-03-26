@@ -67,15 +67,15 @@ public class ThreeMonthEfficiencyLineChart implements Serializable {
         serviceFleetThreeMonthlyEfficiencyBeann.setTransactionMonth(calendar.getTime());
         serviceFleetThreeMonthlyEfficiencyBeanList.add(0, serviceFleetThreeMonthlyEfficiencyBeann);
         //
-        calendar.setTime(resetMonthToFirstDay(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getTransactionMonth()));
-        calendar.add(Calendar.MONTH, 1);
-        //
-        ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBeann1 = new ServiceFleetThreeMonthlyEfficiencyBean();
-        serviceFleetThreeMonthlyEfficiencyBeann1.setId(new Integer(serviceFleetThreeMonthlyEfficiencyBeanList.size() + "") + "");
-        serviceFleetThreeMonthlyEfficiencyBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
-        serviceFleetThreeMonthlyEfficiencyBeann1.setMonthlyEfficiencyValue(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getMonthlyEfficiencyValue());
-        serviceFleetThreeMonthlyEfficiencyBeann1.setTransactionMonth(calendar.getTime());
-        serviceFleetThreeMonthlyEfficiencyBeanList.add(serviceFleetThreeMonthlyEfficiencyBeann1);
+////        calendar.setTime(resetMonthToFirstDay(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getTransactionMonth()));
+////        calendar.add(Calendar.MONTH, 1);
+////        //
+////        ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBeann1 = new ServiceFleetThreeMonthlyEfficiencyBean();
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setId(new Integer(serviceFleetThreeMonthlyEfficiencyBeanList.size() + "") + "");
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setMonth(dateTimeFormatHelper.getMonthYearMonthAsMediumString(calendar.getTime().toString()));
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setMonthlyEfficiencyValue(serviceFleetThreeMonthlyEfficiencyBeanList.get(serviceFleetThreeMonthlyEfficiencyBeanList.size() - 1).getMonthlyEfficiencyValue());
+////        serviceFleetThreeMonthlyEfficiencyBeann1.setTransactionMonth(calendar.getTime());
+////        serviceFleetThreeMonthlyEfficiencyBeanList.add(serviceFleetThreeMonthlyEfficiencyBeann1);
 
         // Get Objects of Data
         for (ServiceFleetThreeMonthlyEfficiencyBean serviceFleetThreeMonthlyEfficiencyBean : serviceFleetThreeMonthlyEfficiencyBeanList) {
