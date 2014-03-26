@@ -41,8 +41,8 @@ public class PKILoadKPIResultsTab extends VerticalLayout implements
 
     private void getValues() {
         if (form.fromdate.getValue() != null && form.todate.getValue() != null) {
-            LoadAllKPIResults results = new LoadAllKPIResults(form.fromdate.getValue(), form.todate.getValue());
-            results.getAllKPIItems();
+//            LoadAllKPIResults results = new LoadAllKPIResults(form.fromdate.getValue(), form.todate.getValue());
+//            results.getAllKPIItems();
         } else {
             Notification.show("Enter all values", Notification.Type.TRAY_NOTIFICATION);
         }

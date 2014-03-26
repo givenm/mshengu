@@ -58,6 +58,6 @@ public class UnitServiceLogServiceImpl implements UnitServiceLogService {
 
     private Sort sortByServiceDate() {
         return new Sort(
-                new Sort.Order(Sort.Direction.ASC, "serviceDate"));
+                new Sort.Order(Sort.Direction.DESC, "serviceDate"));
     }
 }

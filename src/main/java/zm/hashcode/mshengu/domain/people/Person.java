@@ -385,4 +385,11 @@ public final class Person implements Serializable, Comparable<Person> {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Person{" + "id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", othername=" + othername + ", dateofbirth=" + dateofbirth + ", password=" + password + ", role=" + role + ", username=" + username + ", institutionId=" + institutionId + ", enable=" + enable + ", user=" + user + ", requestor=" + requestor + ", initials=" + initials + ", address=" + address + ", contact=" + contact + ", employeeDetails=" + employeeDetails + ", contactPerson=" + contactPerson + '}';
+    }
+    
+    
 }

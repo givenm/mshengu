@@ -10,7 +10,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
-import zm.hashcode.mshengu.app.facade.ui.util.StatusFacade;
+import zm.hashcode.mshengu.app.facade.ui.util.StatusFacade; 
 import zm.hashcode.mshengu.app.facade.ui.util.StatusTypeFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.setup.officeutils.OfficeUtilsMenu;
