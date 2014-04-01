@@ -7,6 +7,7 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.views
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -19,7 +20,6 @@ import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.DailyDieselTrackerMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.forms.DailyTrackerForm;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.tables.DailyTrackerTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util.TrackerUtil;
@@ -35,7 +35,7 @@ public class DailyTrackerTab extends VerticalLayout implements
 
     private final MshenguMain main;
     public final DailyTrackerForm form;
-    private DailyTrackerTable table;
+    private final DailyTrackerTable table;
     private static String trucKiD;
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
@@ -80,11 +80,10 @@ public class DailyTrackerTab extends VerticalLayout implements
             form.MTD.setReadOnly(false);
             form.driverId.setReadOnly(false);
 
-
             //
             try {
-                Truck truck = TruckFacade.getTruckService().findById(form.truckId.getValue().toString());
                 Date transactDate = form.transactionDate.getValue();
+                Truck truck = TruckFacade.getTruckService().findById(form.truckId.getValue().toString());
                 List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(transactDate), dateTimeFormatHelper.resetTimeAndMonthEnd(transactDate));
                 trackerUtil.setOperatingCostList(truckOperatingCostList);
                 table.removeAllItems();
@@ -103,7 +102,8 @@ public class DailyTrackerTab extends VerticalLayout implements
                     form.grid.addComponent(DailyTrackerTable.monthRatingFlagImage, 2, 2);
                     form.MTD.setValue(df.format(Double.parseDouble(DailyTrackerTable.randsPerKilometreCalc.toString())));
                 }
-            } catch (Exception ex) {
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Filter Transaction Date.", Notification.Type.ERROR_MESSAGE);
             }
 
             form.targetSpec.setReadOnly(true);
@@ -126,7 +126,6 @@ public class DailyTrackerTab extends VerticalLayout implements
             form.driverId.setValue(truck.getDriverId());
             try {
                 Date transactDate = form.transactionDate.getValue();
-
                 List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(transactDate), dateTimeFormatHelper.resetTimeAndMonthEnd(transactDate));
                 trackerUtil.setOperatingCostList(truckOperatingCostList);
                 BigDecimal RandPerLitre = trackerUtil.getHighestRandPerLiter(/*truck.getOperatingCosts(), */transactDate);
@@ -150,7 +149,8 @@ public class DailyTrackerTab extends VerticalLayout implements
 //                form.monthlyFlag.setValue(" <img src=\"" + DailyTrackerTable.monthRatingFlag + "\"/>");
                 form.grid.removeComponent(2, 2);
                 form.grid.addComponent(DailyTrackerTable.monthRatingFlagImage, 2, 2);
-            } catch (Exception ex) {
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Filter Transaction Date.", Notification.Type.ERROR_MESSAGE);
             }
 
             form.targetSpec.setReadOnly(true);

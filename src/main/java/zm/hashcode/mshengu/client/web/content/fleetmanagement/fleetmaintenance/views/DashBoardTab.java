@@ -14,31 +14,27 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import org.dussan.vaadin.dcharts.DCharts;
+import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.chemicals.DashboardChemicalsMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.FleetMaintenanceMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.DashBoardChartUI;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.DashBoardForm;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
-import zm.hashcode.mshengu.app.util.flagImages.FlagImage;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendByKmTravelledChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendBySupplierBarChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendBySupplierPieChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.TotalMaintenanceSpendMonthlyChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.TotalMaintenanceSpendPerVehicleChart;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.DashBoardForm;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendBySupplier;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.MaintenanceSpendBySupplierUtil;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
@@ -54,8 +50,8 @@ public class DashBoardTab extends VerticalLayout implements
     private final MshenguMain main;
     private final DashBoardForm form;
     private final DashBoardChartUI chart;
-    private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
-    private MaintenanceSpendBySupplierUtil maintenanceSpendBySupplierUtil = new MaintenanceSpendBySupplierUtil();
+    private final FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
+    private final MaintenanceSpendBySupplierUtil maintenanceSpendBySupplierUtil = new MaintenanceSpendBySupplierUtil();
     public static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
     public static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
     public static List<MaintenanceSpendBySupplier> maintenanceSpendBySupplierList = null;
@@ -96,7 +92,11 @@ public class DashBoardTab extends VerticalLayout implements
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
         if (property == form.startDate) {
-            startDate = fleetMaintenanceUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            try {
+                startDate = fleetMaintenanceUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Start Date.", Notification.Type.ERROR_MESSAGE);
+            }
             try {
                 endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
             } catch (java.lang.NullPointerException ex) {
@@ -106,7 +106,11 @@ public class DashBoardTab extends VerticalLayout implements
                 getDataAndPerformCharts();
             }
         } else if (property == form.endDate) {
-            endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
+            try {
+                endDate = fleetMaintenanceUtil.resetMonthToLastDay(form.endDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for End Date.", Notification.Type.ERROR_MESSAGE);
+            }
             try {
                 startDate = fleetMaintenanceUtil.resetMonthToLastDay(form.startDate.getValue());
             } catch (java.lang.NullPointerException ex) {
@@ -325,7 +329,6 @@ public class DashBoardTab extends VerticalLayout implements
 //        totalSpendBySupplierPieChartPanel.setHeight("100%");
 //        totalSpendBySupplierPieChartPanel.setStyleName("bubble");
 //        totalSpendBySupplierPieChartPanel.setSizeUndefined(); // Shrink to fit content
-
         // Create a Panel
         Panel maintenanceSpendByKmTravelledPanel = new Panel("Maintenance Spend Km Travelled(R/Km): " + spendMonthlyChartDataList.get(0).getMonthYear() + " - " + spendMonthlyChartDataList.get(spendMonthlyChartDataList.size() - 1).getMonthYear()); //
         maintenanceSpendByKmTravelledPanel.setWidth("100%");
@@ -340,7 +343,6 @@ public class DashBoardTab extends VerticalLayout implements
         totalFleetMaintenanceSpendLayout.addComponent(dTotalMaintenanceCostMOnthlySpendChart);
         // Add item to the Panel
         totalFleetMaintenanceSpendPanel.setContent(totalFleetMaintenanceSpendLayout);
-
 
         // =============================================================================================================================
         HorizontalLayout totalSpendBySupplierBarLayout = new HorizontalLayout();
@@ -358,7 +360,6 @@ public class DashBoardTab extends VerticalLayout implements
 //        totalSpendBySupplierPieLayout.addComponent(dTotalSpendBySupplierPieChart);
 //        // Add item to the Panel
 //        totalSpendBySupplierPieChartPanel.setContent(totalSpendBySupplierPieLayout);
-
         // =============================================================================================================================
         HorizontalLayout totalMaintenanceSpendPerVehiclePanelLayout = new HorizontalLayout();
         totalMaintenanceSpendPerVehiclePanelLayout.setMargin(true); //
@@ -368,7 +369,6 @@ public class DashBoardTab extends VerticalLayout implements
         totalMaintenanceSpendPerVehiclePanel.setContent(totalMaintenanceSpendPerVehiclePanelLayout);
 
         // ==========
-
 //        Label totalFleetCaption = new Label ("<i>This</i> is an <b>HTML</b> formatted label", Label.CONTENT_XHTML);
         Label totalFleetCaption = new Label("<b style=\"color:brown; font-size:25px;\">Total FLeet</b>", Label.CONTENT_XHTML);
         totalFleetCaption.setWidth(360, Sizeable.Unit.PIXELS);
@@ -381,7 +381,6 @@ public class DashBoardTab extends VerticalLayout implements
         Label totalPerKmLabel = new Label("<b style=\"color:red; font-size:25px;\">R " + totalMaintenanceSpendPerKm + "</b>", Label.CONTENT_XHTML);
         totalPerKmLabel.setWidth(100, Sizeable.Unit.PIXELS);
         totalPerKmLabel.setHeight(25, Sizeable.Unit.PIXELS);
-
 
         Label perKmLabel = new Label("<b style=\"color:red;\">per Km</b>", Label.CONTENT_XHTML);
         perKmLabel.setWidth(50, Sizeable.Unit.PIXELS);
@@ -424,7 +423,6 @@ public class DashBoardTab extends VerticalLayout implements
         maintenanceSpendByKmTravelledPanel.setContent(maintenanceSpendByKmTravelledPanelLayout);
 
         //=======================================================================================================================
-
         chart.chartVerticalLayout.removeAllComponents();
         chart.chartVerticalLayout.addComponent(totalFleetMaintenanceSpendPanel);
         chart.chartVerticalLayout.addComponent(totalMaintenanceSpendPerVehiclePanel);
@@ -440,9 +438,6 @@ public class DashBoardTab extends VerticalLayout implements
 
     public DCharts createTotalMaintenanceCostMOnthlySpendChart() {
         TotalMaintenanceSpendMonthlyChart TotalMaintenanceSpendMonthlyChart = new TotalMaintenanceSpendMonthlyChart();
-        final Locale locale = new Locale("za", "ZA");
-        // Format a decimal value for a specific locale
-        final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
         return TotalMaintenanceSpendMonthlyChart.createChart(spendMonthlyChartDataList, grandTotalMaintenanceSpend);
     }
 

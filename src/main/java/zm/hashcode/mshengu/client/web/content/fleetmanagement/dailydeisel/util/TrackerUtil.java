@@ -4,20 +4,14 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.util;
 
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.Image;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import zm.hashcode.mshengu.app.facade.fleet.OperationalAllowanceFacade;
-import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.DateTimeFormatHelper;
 import zm.hashcode.mshengu.domain.fleet.OperatingCost;
 import zm.hashcode.mshengu.domain.fleet.OperationalAllowance;
@@ -31,7 +25,7 @@ public class TrackerUtil implements Serializable {
 
     private static List<OperatingCost> operatingCostList = new ArrayList<>();
     private static Date queriedDate;
-    private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     /**
      * Retrieves the Rands per Liter (R/Ltr) value by dividing Fuel Cost over
@@ -105,9 +99,8 @@ public class TrackerUtil implements Serializable {
     /**
      * Retrieves a List of queried month's Operating Costs for each Truck
      *
-     * @param operatingCostList List OperatingCost
      * @param date Date
-     * @return List<OperatingCost>
+     * @return List OperatingCost
      */
     public List<OperatingCost> getQueriedMonthOperatingCostList(/*List<OperatingCost> operatingCostList,*/Date date) {
         List<OperatingCost> queriedOperatingCostList = new ArrayList<>();
@@ -183,6 +176,7 @@ public class TrackerUtil implements Serializable {
      *
      * @param monthOperatingCostList List OperatingCost
      * @param operatingCost OperatingCost
+     * @param truck
      * @return Integer
      */
     public Integer calculateOperatingCostTrip(List<OperatingCost> monthOperatingCostList, OperatingCost operatingCost, Truck truck) {
@@ -203,7 +197,7 @@ public class TrackerUtil implements Serializable {
         if (previousClosingMileage != 0) {
             currentClosingMileage = operatingCost.getSpeedometer();
             if (currentClosingMileage != 0) {
-                if (currentClosingMileage == previousClosingMileage) {
+                if (Objects.equals(currentClosingMileage, previousClosingMileage)) {
                     return currentClosingMileage;
                 } else {
                     return currentClosingMileage - previousClosingMileage;
@@ -222,8 +216,9 @@ public class TrackerUtil implements Serializable {
      * in Calculation. Else retrieve previous day's closing mileage and subtract
      * from current operatingCost closingMileage
      *
-     * @param monthOperatingCostList List OperatingCost
+     * @param dailyTrackerTableDataList
      * @param dailyTrackerTableData OperatingCost
+     * @param truck
      * @return Integer
      */
     public Integer calculateTrip(List<DailyTrackerTableData> dailyTrackerTableDataList, DailyTrackerTableData dailyTrackerTableData, Truck truck) {
@@ -265,7 +260,7 @@ public class TrackerUtil implements Serializable {
      * mileage from the last entry for previous month or the start Mileage of
      * the Vehicle if no record exist for previous month
      *
-     * @param value Truck
+     * @param truck Truck
      * @return Integer
      */
     public Integer calculatePreviousMonthClosingMileage(Truck truck) {
@@ -300,7 +295,7 @@ public class TrackerUtil implements Serializable {
      * month. (4) If no record exist for previous month it retrieves vehicle's
      * start mileage
      *
-     * @param value Truck
+     * @param truck Truck
      * @param date Date
      * @param transactionDate Date
      * @return mileage Integer
@@ -329,7 +324,6 @@ public class TrackerUtil implements Serializable {
 //            System.out.println("Previous Mileage before this is: " + mileage);
             return mileage;
         }
-
 
         // 01. Check if record being entered was for date that was missed and currently records exist after said date
         Date lastDateEntry = new Date();
@@ -397,7 +391,6 @@ public class TrackerUtil implements Serializable {
 
     public List<OperatingCost> getPreviousMonthOperatingCostListForMileage(Date date) {
         List<OperatingCost> queriedOperatingCostList = new ArrayList<>();
-        Truck truck = TruckFacade.getTruckService().findById(operatingCostList.get(0).getTruckId());
         Calendar previousCalendar = Calendar.getInstance();
         previousCalendar.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
 
@@ -416,8 +409,6 @@ public class TrackerUtil implements Serializable {
         }
 //        System.out.println("==============///////////////////////////////////////////////");
 
-
-
         if (queriedOperatingCostList.isEmpty()) {
 
 //////            //=========================== DELETE =======================//
@@ -429,7 +420,6 @@ public class TrackerUtil implements Serializable {
 //////                System.out.println("==============///////////////////////////////////////////////");
 //////            }
 //////            //=========================== DELETE =======================//
-
 //            System.out.println(truck.getVehicleNumber() + " Previous month " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(previousCalendar.getTime().toString()) + " has no Records");
             for (int i = 0; i < 10; i++) { // try 10 more loops into the Past Operating costs for Truck
 //                System.out.println(truck.getVehicleNumber() + " Previous month " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(previousCalendar.getTime().toString()) + " has no Records");
@@ -462,7 +452,8 @@ public class TrackerUtil implements Serializable {
      * IF current entry is the first entry for the month. If no record exist for
      * previous month the retrieve vehicle's start mileage
      *
-     * @param value Truck
+     * @param truck Truck
+     * @param date Date
      * @return Integer
      */
     public boolean isThereDuplicateDailyInput(Truck truck, Date date) {
@@ -482,7 +473,6 @@ public class TrackerUtil implements Serializable {
      * Determines and retrieves the highest Fuel Price i.e. in Rands Per Litre
      * for the queried month
      *
-     * @param operatingCosts List OperatingCost
      * @param date Date
      * @return BigDecimal
      */
@@ -505,7 +495,6 @@ public class TrackerUtil implements Serializable {
             }
             return randPerLitre;
         }
-
 
         return randPerLitre;
     }

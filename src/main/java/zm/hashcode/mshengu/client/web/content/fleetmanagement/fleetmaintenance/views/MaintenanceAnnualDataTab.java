@@ -43,8 +43,8 @@ public class MaintenanceAnnualDataTab extends VerticalLayout implements Button.C
     private final AnnualMileageTable annualMileageTable;
     private static List<Truck> serviceTrucks = new ArrayList<>();
     //
-    private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
-    private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+    private final FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
     private static List<AnnualDataFleetMaintenanceCost> annualMaintenanceCostList = null;
     private static List<AnnualDataFleetMaintenanceMileage> annualMileageList = null;
     private static List<MonthlySpendData> maintenanceCostDataList = null;
