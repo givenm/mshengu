@@ -84,7 +84,12 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
         if (property == form.startDate) {
-            startDate = fleetFuelUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            try {
+
+                startDate = fleetFuelUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Start Date.", Notification.Type.ERROR_MESSAGE);
+            }
             try {
                 endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
             } catch (java.lang.NullPointerException ex) {
@@ -102,7 +107,11 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
                 }
             }
         } else if (property == form.endDate) {
-            endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
+            try {
+                endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for End Date.", Notification.Type.ERROR_MESSAGE);
+            }
             try {
                 startDate = fleetFuelUtil.resetMonthToFirstDay(form.startDate.getValue());
             } catch (java.lang.NullPointerException ex) {
@@ -177,7 +186,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
 
         for (OperatingCost operatingCost : dateRangeOperatingCostList) {
             if (operatingCost.getTruckId() == null) {
-                System.out.println("Operating Cost with Transaction Date= " + operatingCost.getTransactionDate() + ", ID= " + operatingCost.getId() + ", Mileage= " + operatingCost.getSpeedometer() + " and Driver= " + operatingCost.getDriverName() + " does not have a TruckId");
+//                System.out.println("Operating Cost with Transaction Date= " + operatingCost.getTransactionDate() + ", ID= " + operatingCost.getId() + ", Mileage= " + operatingCost.getSpeedometer() + " and Driver= " + operatingCost.getDriverName() + " does not have a TruckId");
             } else {
                 Truck truck = fleetFuelUtil.findTruckFromAllTruckListById(operatingCost.getTruckId());
                 if (truck != null) {
@@ -262,7 +271,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
 
         for (OperatingCost operatingCost : operatingCostTwelveMonthsList) {
             if (operatingCost.getTruckId() == null) {
-                System.out.println("Operating Cost with Transaction Date= " + operatingCost.getTransactionDate() + ", ID= " + operatingCost.getId() + ", Mileage= " + operatingCost.getSpeedometer() + " and Driver= " + operatingCost.getDriverName() + " does not have a TruckId");
+//                System.out.println("Operating Cost with Transaction Date= " + operatingCost.getTransactionDate() + ", ID= " + operatingCost.getId() + ", Mileage= " + operatingCost.getSpeedometer() + " and Driver= " + operatingCost.getDriverName() + " does not have a TruckId");
             } else {
                 Truck truck = fleetFuelUtil.findTruckFromAllTruckListById(operatingCost.getTruckId());
                 if (truck != null) {
@@ -306,7 +315,7 @@ public class MonthlyFuelExpenseTab extends VerticalLayout implements Property.Va
 
         for (OperatingCost operatingCost : operatingCostTwelveMonthsList) {
             if (operatingCost.getTruckId() == null) {
-                System.out.println("Operating Cost with Transaction Date= " + operatingCost.getTransactionDate() + ", ID= " + operatingCost.getId() + ", Mileage= " + operatingCost.getSpeedometer() + " and Driver= " + operatingCost.getDriverName() + " does not have a TruckId");
+//                System.out.println("Operating Cost with Transaction Date= " + operatingCost.getTransactionDate() + ", ID= " + operatingCost.getId() + ", Mileage= " + operatingCost.getSpeedometer() + " and Driver= " + operatingCost.getDriverName() + " does not have a TruckId");
             } else {
                 Truck truck = fleetFuelUtil.findTruckFromAllTruckListById(operatingCost.getTruckId());
                 if (truck != null) {

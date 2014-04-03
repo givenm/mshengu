@@ -107,7 +107,11 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
         if (property == form.startDate) {
-            startDate = fleetFuelUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            try {
+                startDate = fleetFuelUtil.resetMonthToFirstDay(form.startDate.getValue()); // reset the choosen start date to 1st day
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Start Date.", Notification.Type.ERROR_MESSAGE);
+            }
             try {
                 endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
             } catch (java.lang.NullPointerException ex) {
@@ -125,7 +129,11 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
                 }
             }
         } else if (property == form.endDate) {
-            endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
+            try {
+                endDate = fleetFuelUtil.resetMonthToLastDay(form.endDate.getValue());
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for End Date.", Notification.Type.ERROR_MESSAGE);
+            }
             try {
                 startDate = fleetFuelUtil.resetMonthToFirstDay(form.startDate.getValue());
             } catch (java.lang.NullPointerException ex) {
@@ -187,7 +195,6 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
         } else {
             Notification.show("No Daily input Found for Specified Date Range!", Notification.Type.TRAY_NOTIFICATION);
         }
-
 
     }
 
@@ -313,8 +320,6 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 ////            System.out.println("SUM OF 3 Months Mileage SUM for " + truck.getVehicleNumber() + " = " + truck3MonthMileageSum);
 ////            //========== DELETE ==============
 ////            //
-
-
             // SUM the FuelCostS for truck for these 3 months and increment the totalFuelCostAllTrucks value
             BigDecimal truckThreeMonthFuelTotal = fleetFuelUtil.sumOfFuelCostCalculation(selectedThreeMonthsOperatingCostList);
             totalFuelCostAllTrucks = totalFuelCostAllTrucks.add(truckThreeMonthFuelTotal);
@@ -326,10 +331,7 @@ public class ExecutiveDashboardTab extends VerticalLayout implements
 ////            //========== DELETE ==============
         }
 
-
-
 ////        System.out.println("3 M Efficiency: FUEL COST SUM= " + totalFuelCostAllTrucks + " / 3 M Efficiency: MILEAGE SUM= " + allTrucksTotalMileageSum + " ANS - " + (totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, BigDecimal.ROUND_HALF_UP)));
-
         try {
             return totalFuelCostAllTrucks.divide(new BigDecimal(allTrucksTotalMileageSum + ""), 2, BigDecimal.ROUND_HALF_UP);
         } catch (ArithmeticException a) {

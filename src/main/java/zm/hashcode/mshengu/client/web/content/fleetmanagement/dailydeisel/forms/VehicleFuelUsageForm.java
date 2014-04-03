@@ -4,9 +4,6 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.forms;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.ComboBox;
@@ -17,8 +14,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
-import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
-import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.domain.fleet.Truck;
 
 /**
@@ -28,8 +23,6 @@ import zm.hashcode.mshengu.domain.fleet.Truck;
 public class VehicleFuelUsageForm extends FormLayout {
 
     public DateField transactionDate;
-    private UIComponentHelper UIComponent = new UIComponentHelper();
-    private UIComboBoxHelper UIComboBox = new UIComboBoxHelper();
     public ComboBox truckId;
     public TextField mtdActAverage;
 

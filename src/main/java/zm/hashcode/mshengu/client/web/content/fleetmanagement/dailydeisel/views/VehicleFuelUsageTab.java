@@ -6,9 +6,8 @@ package zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.views
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.DailyDieselTrackerMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.dailydeisel.forms.VehicleFuelUsageForm;
@@ -23,8 +22,7 @@ public class VehicleFuelUsageTab extends VerticalLayout implements
 
     private final MshenguMain main;
     public final VehicleFuelUsageForm form;
-    private VehicleFuelUsageTable table;
-    private static String trucKiD;
+    private final VehicleFuelUsageTable table;
 
     public VehicleFuelUsageTab(MshenguMain app) {
         main = app;
@@ -57,26 +55,29 @@ public class VehicleFuelUsageTab extends VerticalLayout implements
         final Property property = event.getProperty();
         if (property == table) {
         } else if (property == form.transactionDate) {
-            table.removeAllItems();
-            if (form.truckId.getValue().equals("all")) {
-                table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
-                form.mtdActAverage.setReadOnly(false);
-                form.mtdActAverage.setValue(table.mtdActAverageCalc.setScale(2, BigDecimal.ROUND_HALF_UP) + "");
-                form.mtdActAverage.setReadOnly(true);
-            } else {
-                table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());
-                form.mtdActAverage.setReadOnly(false);
-                form.mtdActAverage.setValue("");
-                form.mtdActAverage.setReadOnly(true);
+            try {
+                table.removeAllItems();
+                if (form.truckId.getValue().equals("all")) {
+                    table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
+                    form.mtdActAverage.setReadOnly(false);
+                    form.mtdActAverage.setValue(table.mtdActAverageCalc.toString());
+                    form.mtdActAverage.setReadOnly(true);
+                } else {
+                    table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());
+                    form.mtdActAverage.setReadOnly(false);
+                    form.mtdActAverage.setValue("");
+                    form.mtdActAverage.setReadOnly(true);
+                }
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Filter Transaction Date.", Notification.Type.ERROR_MESSAGE);
             }
-
         } else if (property == form.truckId) {
             if (form.transactionDate.getValue() != null) {
                 table.removeAllItems();
                 if (form.truckId.getValue().equals("all")) {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
                     form.mtdActAverage.setReadOnly(false);
-                    form.mtdActAverage.setValue(table.mtdActAverageCalc.setScale(2, BigDecimal.ROUND_HALF_UP) + "");
+                    form.mtdActAverage.setValue(table.mtdActAverageCalc.toString());
                     form.mtdActAverage.setReadOnly(true);
                 } else {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());

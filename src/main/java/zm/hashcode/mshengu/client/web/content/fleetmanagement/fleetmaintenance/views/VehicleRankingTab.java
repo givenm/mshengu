@@ -11,16 +11,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.dussan.vaadin.dcharts.DCharts;
+import zm.hashcode.mshengu.app.util.panel.PanelStyled;
 import zm.hashcode.mshengu.client.web.MshenguMain;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.FleetMaintenanceMenu;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.VehicleRankingChartUI;
+import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendByKmTravelledChart;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.forms.VehicleRankingForm;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.MonthlySpendData;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceMileage;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendByVehicle;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendKmTraveled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.models.TotalMaintenanceSpendMonthly;
-import zm.hashcode.mshengu.app.util.panel.PanelStyled;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.MonthSpendTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.RandPerKmTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.RatingTable;
@@ -28,7 +29,6 @@ import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.t
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.TotalMileageTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.tables.VehicleNumberTable;
 import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.utils.FleetMaintenanceUtil;
-import zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetmaintenance.charts.actualcharts.MaintenanceSpendByKmTravelledChart;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceCost;
 import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
 
@@ -47,7 +47,7 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
     private final MonthSpendTable monthSpendTable;
     private final VehicleRankingForm form;
     private final VehicleRankingChartUI chart;
-    private FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
+    private final FleetMaintenanceUtil fleetMaintenanceUtil = new FleetMaintenanceUtil();
     private static List<AnnualDataFleetMaintenanceCost> maintenanceCostList = null;
     private static List<AnnualDataFleetMaintenanceMileage> maintenanceMileageList = null;
     private static List<MonthlySpendData> monthlySpendDataList = null; // 6th PANEL 5th Table
@@ -181,7 +181,6 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Create a vehicleNumberTable table AND pass spendByKmTravelledChartDataList
-
         vehicleNumberTable.populateVehicleNumberTable(spendByKmTravelledChartDataList);
         vehicleNumberTable.performTableCellStyling();
         vehicleNumberTable.setPageLength(vehicleNumberTable.size()); // Adjust the table height a bit
@@ -213,7 +212,6 @@ public class VehicleRankingTab extends VerticalLayout implements Button.ClickLis
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ADD Charts and (Layout &) Tables to Panels
-
         kmTravelledVehicleChartPanel.setContent(dKmTravelledVehicleMenuChart); // prev. kmTravelledVehicleMenuPanelLayout
 
         // Add vehicleNumberTable to Layout then to the Panel

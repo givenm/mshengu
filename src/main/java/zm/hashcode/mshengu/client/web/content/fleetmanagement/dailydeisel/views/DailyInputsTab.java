@@ -12,11 +12,10 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.fleet.OperatingCostFacade;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
@@ -121,29 +120,38 @@ public class DailyInputsTab extends VerticalLayout implements
             } catch (Exception ex) {
             }
         } else if (property == form.filterTransactionDate) {
-            filteredTransactionDate = form.filterTransactionDate.getValue();
+
             try {
+                filteredTransactionDate = form.filterTransactionDate.getValue();
                 filteredTruckId = form.filterTruckId.getValue().toString();
+                if (filteredTruckId != null) {
+                    getPopulateTableAndReset();
+                }
             } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Filter Transaction Date.", Notification.Type.ERROR_MESSAGE);
             }
-            if (filteredTruckId != null) {
-                getPopulateTableAndReset();
-            }
+
         } else if (property == form.filterTruckId) {
             filteredTruckId = form.filterTruckId.getValue().toString();
             try {
                 filteredTransactionDate = form.filterTransactionDate.getValue();
+                getPopulateTableAndReset();
+                if (filteredTransactionDate != null) {
+                    getPopulateTableAndReset();
+                }
             } catch (java.lang.NullPointerException ex) {
             }
-            if (filteredTransactionDate != null) {
-                getPopulateTableAndReset();
-            }
+
         } else if (property == form.transactionDate) {
-            formTransactionDate = form.transactionDate.getValue();
-            if (formTransactionDate != null) {
-                if (!(formTransactionDate.before(resetToDayEnd(new Date())) || formTransactionDate.compareTo(resetToDayEnd(new Date())) == 0)) {
-                    Notification.show("Error. Select any date before Current date. No future entries allowed", Notification.Type.ERROR_MESSAGE);
+            try {
+                formTransactionDate = form.transactionDate.getValue();
+                if (formTransactionDate != null) {
+                    if (!(formTransactionDate.before(resetToDayEnd(new Date())) || formTransactionDate.compareTo(resetToDayEnd(new Date())) == 0)) {
+                        Notification.show("Error. Select any date before Current date. No future entries allowed", Notification.Type.ERROR_MESSAGE);
+                    }
                 }
+            } catch (java.lang.NullPointerException ex) {
+                Notification.show("Error. Enter a Valid Date for Transaction Date.", Notification.Type.ERROR_MESSAGE);
             }
         }
     }
@@ -461,7 +469,6 @@ public class DailyInputsTab extends VerticalLayout implements
         bean.setSpeedometer(operatingCosts.getSpeedometer());
         bean.setTransactionDate(operatingCosts.getTransactionDate());
         bean.setTruckId(operatingCosts.getTruckId());// not trucKiD;
-
 
         return bean;
     }

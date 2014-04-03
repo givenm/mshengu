@@ -28,7 +28,7 @@ import zm.hashcode.mshengu.domain.procurement.AnnualDataFleetMaintenanceMileage;
  */
 public class FleetMaintenanceUtil implements Serializable {
 
-    private DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
+    private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
     private static Date startDate = new Date();
     private static Date endDate = new Date();
     public static BigDecimal grandTotalMaintenanceSpend = BigDecimal.ZERO;
@@ -146,7 +146,6 @@ public class FleetMaintenanceUtil implements Serializable {
 
 //        System.out.println("Id is: " + j + ". Month: " + newMonth + ", Total: " + total);
 //        System.out.println("Grand Total is: " + grandTotalMaintenanceSpend);
-
         return totalMaintenanceSpendMonthly;
     }
 
@@ -185,7 +184,6 @@ public class FleetMaintenanceUtil implements Serializable {
 
         final List<TotalMaintenanceSpendByVehicle> maintenanceSpendByVehicleList = new ArrayList<>();
 
-
         for (Truck truckk : getServiceTrucks()) {
             truckId = truckk.getId();
             numberPlate = truckk.getNumberPlate();
@@ -218,7 +216,6 @@ public class FleetMaintenanceUtil implements Serializable {
         int counter = 0;
 
         final List<TotalMaintenanceMileage> totalMaintenanceMileageList = new ArrayList<>();
-
 
         for (Truck truckk : serviceTrucks) {
             truckId = truckk.getId();
@@ -255,7 +252,15 @@ public class FleetMaintenanceUtil implements Serializable {
      * over corresponding "truckMileagetotal"
      */
     public List<TotalMaintenanceSpendKmTraveled> getMaintenanceMileageChartData(List<TotalMaintenanceMileage> spendMaintenanceMileageList, List<TotalMaintenanceSpendByVehicle> spendByVehicleChartDataList) {
-        final List<TotalMaintenanceSpendKmTraveled> spendByKmTravelledChartDataList = new ArrayList<>();
+//        for (TotalMaintenanceMileage totalMaintenanceMileage : spendMaintenanceMileageList) {
+//            System.out.println("id= " + totalMaintenanceMileage.getId() + ", Plate= " + totalMaintenanceMileage.getNumberPlate() + ", Vehicle Num= " + totalMaintenanceMileage.getVehicleNumber() + ", Mileage= " + totalMaintenanceMileage.getTruckMileagetotal());
+//        }
+//        System.out.println("--====================================--");
+//        for (TotalMaintenanceSpendByVehicle totalMaintenanceSpendByVehicle : spendByVehicleChartDataList) {
+//            System.out.println("id= " + totalMaintenanceSpendByVehicle.getId() + ", Plate= " + totalMaintenanceSpendByVehicle.getNumberPlate() + ", Vehicle Num= " + totalMaintenanceSpendByVehicle.getVehicleNumber() + ", Total= " + totalMaintenanceSpendByVehicle.getTotal());
+//        }
+        /////////////////////////////////////////////////////////////
+        final List<TotalMaintenanceSpendKmTraveled> totalMaintenanceSpendKmTraveledList = new ArrayList<>();
         int counter = 0;
 
         for (TotalMaintenanceMileage totalMaintenanceMileage : spendMaintenanceMileageList) {
@@ -268,7 +273,7 @@ public class FleetMaintenanceUtil implements Serializable {
                     try {
                         randPerKilometre = totalMaintenanceSpendByVehicle.getTotal().divide(new BigDecimal(truckMileageTotal.toString()), 2, BigDecimal.ROUND_HALF_UP);
                     } catch (java.lang.ArithmeticException ex) {
-                        // Trying to divide by Zero for Trucks that have no entry
+                        // a you is Trying to divide by Zero for Trucks that have no entry
                     }
                     TotalMaintenanceSpendKmTraveled totalMaintenanceSpendKmTraveled = new TotalMaintenanceSpendKmTraveled();
                     totalMaintenanceSpendKmTraveled.setId(counter + "");
@@ -276,13 +281,14 @@ public class FleetMaintenanceUtil implements Serializable {
                     totalMaintenanceSpendKmTraveled.setVehicleNumber(totalMaintenanceMileage.getVehicleNumber());
                     totalMaintenanceSpendKmTraveled.setRandPerKilometre(randPerKilometre);
 
-                    spendByKmTravelledChartDataList.add(totalMaintenanceSpendKmTraveled);
+                    totalMaintenanceSpendKmTraveledList.add(totalMaintenanceSpendKmTraveled);
+                    break;
                 }
             }
         }
 
-        Collections.sort(spendByKmTravelledChartDataList); /// Sort by Total Ascending for CHARTS
-        return spendByKmTravelledChartDataList;
+        Collections.sort(totalMaintenanceSpendKmTraveledList); /// Sort by Total Ascending for CHARTS
+        return totalMaintenanceSpendKmTraveledList;
     }
 
     public Date resetMonthToFirstDay(Date date) {

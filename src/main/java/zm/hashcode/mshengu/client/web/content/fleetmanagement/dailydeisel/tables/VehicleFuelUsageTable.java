@@ -10,7 +10,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.Reindeer;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -90,6 +89,7 @@ public class VehicleFuelUsageTable extends Table {
     }
 
     public void loadVehiclceFuelUsageData(Date date) {
+        mtdActAverageCalc = BigDecimal.ZERO;
         trackerUtil.setQueriedDate(date);
         // Add Data Columns
         List<Truck> truckList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
@@ -138,6 +138,7 @@ public class VehicleFuelUsageTable extends Table {
     }
 
     public void loadVehiclceFuelUsageData(Date date, String truckId) {
+        mtdActAverageCalc = BigDecimal.ZERO;
         trackerUtil.setQueriedDate(date);
         // Add Data Columns
         List<Truck> truckList = TruckFacade.getTruckService().findAll();
@@ -153,7 +154,7 @@ public class VehicleFuelUsageTable extends Table {
                     vehicleFuelUsageData = new VehicleFuelUsageData();
                     BigDecimal lastRandPerLitre = trackerUtil.getHighestRandPerLiter(/*truck.getOperatingCosts(),*/date);
 
-                    final Button truckNumberButton = new Button(truck.getVehicleNumber().toString());
+                    final Button truckNumberButton = new Button(truck.getVehicleNumber());
                     truckNumberButton.setData(truck.getId() + "#" + date);
                     truckNumberButton.setStyleName(Reindeer.BUTTON_LINK);
                     truckNumberButton.addClickListener(new Button.ClickListener() {
@@ -200,7 +201,6 @@ public class VehicleFuelUsageTable extends Table {
             dailyDieselTrackerMenu.getDailyTrackerTab().form.transactionDate.setValue(datee);
             dailyDieselTrackerMenu.getVehicleFuelUsage().form.transactionDate.setValue(datee);
             dailyDieselTrackerMenu.getDailyTrackerTab().form.truckId.setValue(truckId);
-
 
         } catch (ParseException ex) {
             Logger.getLogger(DailyTrackerTab.class

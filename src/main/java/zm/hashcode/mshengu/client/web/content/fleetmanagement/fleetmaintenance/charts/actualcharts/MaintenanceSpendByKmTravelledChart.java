@@ -51,12 +51,11 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
             }
         }
 
-        if (highestRandPerKm.compareTo(new BigDecimal("0.50")) < 0) {
-            tickInterval = Float.parseFloat("0.25");
-        } else if (highestRandPerKm.compareTo(BigDecimal.ONE) < 0) {
-            tickInterval = Float.parseFloat("0.5");
+        if (highestRandPerKm.compareTo(new BigDecimal("5.00")) < 0) {
+            tickInterval = Float.parseFloat("1.00");
+        } else { //if (highestRandPerKm.compareTo(new BigDecimal("3.50")) < 0) {
+            tickInterval = Float.parseFloat("2.00");
         }
-
 
         List<Object> randPerKilometreList = new ArrayList<>();
         List<Object> numberPlateList = new ArrayList<>();
@@ -87,7 +86,6 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                 .setTooltipLocation(TooltipLocations.NORTH) //                .setTooltipAxes(TooltipAxes.XY_BAR) // NB FLIP the display in the tooltip
                 ;
 
-
         if (chartType.equalsIgnoreCase("dashboard")) {
             series.addSeries(
                     new XYseries().setLabel("Spend/Km Travelled"));
@@ -111,7 +109,7 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                     .setMin(0)
                     .setTickInterval(tickInterval)
                     .setTickOptions(
-                    new AxisTickRenderer().setFormatString("R %'.2f")));
+                            new AxisTickRenderer().setFormatString("R %'.2f")));
 //        }
         } else {
             series.addSeries(
@@ -140,7 +138,7 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
                     .setMin(0)
                     .setTickInterval(tickInterval)
                     .setTickOptions(
-                    new AxisTickRenderer().setFormatString("R %'.2f"))); // 	.setFormatString("$%d") // .setFormatString("R %.1f") // .setFormatString("R %.0f")
+                            new AxisTickRenderer().setFormatString("R %'.2f"))); // 	.setFormatString("$%d") // .setFormatString("R %.1f") // .setFormatString("R %.0f")
         }
 
         //
@@ -152,21 +150,20 @@ public class MaintenanceSpendByKmTravelledChart implements Serializable {
 
             seriesDefaults.setRenderer(SeriesRenderers.BAR)
                     .setPointLabels(
-                    new PointLabels()
-                    .setFormatString("R %'.2f")
-                    .setShow(true)
-                    .setLocation(PointLabelLocations.EAST)
-                    .setEdgeTolerance(-15))
+                            new PointLabels()
+                            .setFormatString("R %'.2f")
+                            .setShow(true)
+                            .setLocation(PointLabelLocations.EAST)
+                            .setEdgeTolerance(-15))
                     .setShadowAngle(135)
                     .setRendererOptions(
-                    new BarRenderer()
-                    .setBarDirection(BarDirections.HOTIZONTAL));
+                            new BarRenderer()
+                            .setBarDirection(BarDirections.HOTIZONTAL));
         }
 
 //        Legend legend = new Legend()
 //                .setShow(true)
 //                .setPlacement(LegendPlacements.OUTSIDE_GRID);
-
         Title title = new Title("Maintenance Spend per Km Travelled(R/Km): " + chartPeriod);
         title.setFontSize("13pt");
         title.setTextAlign(TextAligns.LEFT);
