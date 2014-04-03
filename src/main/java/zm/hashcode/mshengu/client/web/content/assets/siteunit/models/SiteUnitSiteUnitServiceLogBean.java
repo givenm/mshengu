@@ -16,7 +16,7 @@ public final class SiteUnitSiteUnitServiceLogBean implements Serializable {
     private String id;
     private Date serviceDate;
     private Date serviceTime;
-    private Person servicedBy;
+    private String servicedBy;
    
     private String statusMessage;
     private String  incident;
@@ -70,14 +70,14 @@ public final class SiteUnitSiteUnitServiceLogBean implements Serializable {
     /**
      * @return the servicedBy
      */
-    public Person getServicedBy() {
+    public String getServicedBy() {
         return servicedBy;
     }
 
     /**
      * @param servicedBy the servicedBy to set
      */
-    public void setServicedBy(Person servicedBy) {
+    public void setServicedBy(String servicedBy) {
         this.servicedBy = servicedBy;
     }
 

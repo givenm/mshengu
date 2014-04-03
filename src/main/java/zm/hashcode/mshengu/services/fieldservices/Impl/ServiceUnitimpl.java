@@ -51,6 +51,7 @@ public class ServiceUnitimpl implements ServiceUnit {
                 .statusMessage(statusMessasge)
                 .incident(incidents)
                 .siteName(unit.getSiteName())
+                .servicedBy(unitService.getTruckId())
                 .build();
         unitServiceLogService.persist(unitServiceLog);
         addServiceLogToSite(unit, unitServiceLog);

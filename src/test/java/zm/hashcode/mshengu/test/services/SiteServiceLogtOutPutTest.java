@@ -110,7 +110,7 @@ public class SiteServiceLogtOutPutTest extends AppTest {
                 .comment("")
                 .numberOfUnitsNotServiced(totalNumberOfUnitsNotServiced)
                 .numberOfUnitsServiced(totalNumberOfUnitsServiced)
-                .servicedBy(servicedBy)
+//                .servicedBy(servicedBy)
                 .completionStatus(statusHelper.getCompletionStatus())
                 .serviceStatus(statusHelper.getServiceStatus())
                 .status(statusHelper.getStatus())
@@ -122,7 +122,7 @@ public class SiteServiceLogtOutPutTest extends AppTest {
         System.out.println("totalNumberOfUnits Not Serviced " + newSiteServiceLog.getNumberOfUnitsNotServiced());
         System.out.println("totalNumberOfUnits Serviced " + newSiteServiceLog.getNumberOfUnitsServiced());
         System.out.println("totalNumberOfUnits " + totalNumberOfUnits);
-        System.out.println("servicedBy " + getVehicleNumber(newSiteServiceLog.getServicedBy()));
+//        System.out.println("servicedBy " + getVehicleNumber(newSiteServiceLog.getServicedBy()));
         System.out.println("completionStatus " + newSiteServiceLog.getCompletionStatus());
         System.out.println("serviceStatus " + newSiteServiceLog.getServiceStatus());
         System.out.println("status " + newSiteServiceLog.getStatus());

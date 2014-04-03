@@ -141,6 +141,21 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
         return siteServiceLog;
 
     }
+    
+     @Override
+    public String  getServiceByTruckId(String siteName, String statusMessage, Date startDate, Date endDate)  {
+        dtfwh.setDate(endDate);
+         Query query = new Query(Criteria
+                .where("parentId").is(siteName)
+                .andOperator(
+                        Criteria.where("serviceDate").gte(startDate),
+                        Criteria.where("serviceDate").lte(endDate),
+                        Criteria.where("statusMessage").is(statusMessage)));
+//         query.limit(1);
+        SiteServiceLog siteServiceLog = mongoTemplate.findOne(query, SiteServiceLog.class, "siteServiceLog");
+        return siteServiceLog.getServiceStatus();
+
+    }
 
     @Override
     public List<SiteServiceLog> getAllServiceLogsException(Date startDate, Date endDate, String serviceStatus) {

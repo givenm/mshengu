@@ -94,6 +94,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
         int totalNumberOfUnitsServiced = (int) siteServiceLogService.getTotalUnitsServiced(site.getName(), "WITHIN", visitDate, dtfwh.getTomorrowsDate_No_HTMSM());
         int totalNumberOfUnits = site.getNumberOfTotalUnits();
         int totalNumberOfUnitsNotServiced = totalNumberOfUnits - totalNumberOfUnitsServiced;
+        String  servicedByTruckId = siteServiceLogService.getServiceByTruckId(site.getName(), "WITHIN", visitDate, dtfwh.getTomorrowsDate_No_HTMSM());
 
         statusHelper.setServiceLogsStatus(isNextDayVisitDate, totalNumberOfUnits, totalNumberOfUnitsServiced);
 
@@ -103,6 +104,7 @@ public class CreateSiteServiceLogsServiceImpl implements CreateSiteServiceLogsSe
                 .numberOfUnitsServiced(totalNumberOfUnitsServiced)
                 .completionStatus(statusHelper.getCompletionStatus())
                 .serviceStatus(statusHelper.getServiceStatus())
+                .servicedBy(servicedByTruckId)
                 .status(statusHelper.getStatus())
                 .build();
 
