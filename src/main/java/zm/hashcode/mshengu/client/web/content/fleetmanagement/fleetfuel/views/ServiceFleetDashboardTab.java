@@ -576,7 +576,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         return truckMonthOperatingCostList;
     }
 
-    private void buildDriverEfficiencyBeanList() { // This method is for End Month ONLY
+    private void buildDriverEfficiencyBeanList() { // This method is for End(Last) Month in selected date range ONLY
         // endDate has been reset to 1st of month from calling method
         Date newEndDate = fleetFuelUtil.resetMonthToFirstDay(endDate);
         driverEfficiencyBeanList.clear();
@@ -600,11 +600,12 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
                     break;
                 }
             }
-            // getMTDAct for Truck
+            // getMTDAct (Efficiency) for Truck
             if (truckMonthOperatingCostList.size() > 0) {
-                BigDecimal mtdAct = fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck);
-//                System.out.println("Month= " + truckMonthOperatingCostList.get(0).getTransactionDate() + ", Truck= " + truck.getVehicleNumber() + ", MTDAct= " + fleetFuelUtil.getMtdAct(truckMonthOperatingCostList, truck));
-                buildDriverEfficiencyBean(truck, mtdAct, newEndDate, counter);
+                Integer mileageSumForTruck = fleetFuelUtil.calculateMonthMileageTotal(truckMonthOperatingCostList, truck);
+                BigDecimal fuelSumForTruck = fleetFuelUtil.sumOfFuelCostCalculation(truckMonthOperatingCostList);
+                BigDecimal efficiency = fleetFuelUtil.performMtdActAverageCalc(fuelSumForTruck, mileageSumForTruck);
+                buildDriverEfficiencyBean(truck, efficiency, newEndDate, counter);
                 counter++; // Counter should increment per truck with Data for specified period
             } else {
                 // build Zero object for Truck
