@@ -40,18 +40,30 @@ public interface SiteServiceLogService {
     /**
      *
      * @param date
-     * @return 
+     * @return
      * @returns all open service logs that have been logged before Monday of the
      * current week (according to the date passed)
      */
+    /**
+     *
+     * @param siteName
+     * @param statusMessage
+     * @param startDate
+     * @param endDate
+     * @return
+     * @returns all open service logs that have been logged before Monday of the
+     * current week (according to the date passed)
+     */
+    public String getServiceByTruckId(String siteName, String statusMessage, Date startDate, Date endDate);
+
     public List<SiteServiceLog> getOutdatedOpenLogs(Date date);
 
     public List<SiteServiceLog> getSiteServiceLogsException(String siteName, Date startDate, Date endDate, String serviceStatus);
 
     public List<SiteServiceLog> getAllSiteServiceLogs(String siteName, Date startDate, Date endDate);
-    
+
     public List<SiteServiceLog> getAllServiceLogsException(Date startDate, Date endDate, String serviceStatus);
-    
+
     public List<SiteServiceLog> getAllServiceLogs(Date startDate, Date endDate);
 
 }

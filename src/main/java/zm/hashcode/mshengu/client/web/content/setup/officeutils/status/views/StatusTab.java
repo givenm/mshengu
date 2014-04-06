@@ -33,6 +33,7 @@ public class StatusTab extends VerticalLayout implements
 
     public StatusTab(MshenguMain app) {
         main = app;
+        
         form = new StatusForm();
         table = new StatusTable(main);
         setSizeFull();

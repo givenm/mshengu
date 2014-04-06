@@ -28,7 +28,6 @@ import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.app.util.UIComboBoxHelper;
 import zm.hashcode.mshengu.app.util.UIComponentHelper;
 import zm.hashcode.mshengu.app.util.validation.UIValidatorHelper;
-import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.models.AssignDriversBean;
 import zm.hashcode.mshengu.client.web.content.setup.user.util.CustomerSiteUnitBean;
 import zm.hashcode.mshengu.domain.customer.Customer;
 import zm.hashcode.mshengu.domain.fleet.Truck;
@@ -225,9 +224,12 @@ public class CustomerSiteFiledServicesForm extends FormLayout {
             Set<SiteServiceLog> siteServiceLogs = site.getSiteServiceLog();
             for (SiteServiceLog siteServiceLog : siteServiceLogs) {
                 if (siteServiceLog.getServicedBy() != null) { //serviced by always giving an error
-                    String truckName = siteServiceLog.getServicedBy().getVehicleNumber() + " - (" + siteServiceLog.getServicedBy().getNumberPlate() + ")";
-                    comboBoxSelectVehicle.addItem(siteServiceLog.getTruckId());
-                    comboBoxSelectVehicle.setItemCaption(siteServiceLog.getTruckId(), truckName);
+                    Truck truck = TruckFacade.getTruckService().findById(siteServiceLog.getServicedBy());
+                    if (truck != null) {
+                        String truckName = truck.getVehicleNumber() + " - (" + truck.getNumberPlate() + ")";
+                        comboBoxSelectVehicle.addItem(truck.getId());
+                        comboBoxSelectVehicle.setItemCaption(truck.getId(), truckName);
+                    }
                 }
             }
         }

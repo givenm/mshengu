@@ -23,8 +23,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
     private String id;
     private Date serviceDate;
     private Date serviceTime;
-    @DBRef
-    private Truck servicedBy;
+    private String servicedBy;
     private String status;
     private String serviceStatus;
     private String completionStatus;
@@ -112,7 +111,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         private String id;
         private final Date serviceDate;
         private Date serviceTime;
-        private Truck servicedBy;
+        private String servicedBy;
         private String status;
         private String serviceStatus;
         private String completionStatus;
@@ -158,7 +157,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
             return this;
         }
 
-        public Builder servicedBy(Truck value) {
+        public Builder servicedBy(String value) {
             this.servicedBy = value;
             return this;
         }
@@ -215,7 +214,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         return serviceTime;
     }
 
-    public Truck getServicedBy() {
+    public String getServicedBy() {
         return servicedBy;
     }
 
@@ -243,7 +242,7 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         }
     }
 
-    public String getVehicleNumber() {
+    /*public String getVehicleNumber() {
         if (!isNullObject(servicedBy)) {
             return servicedBy.getVehicleNumber();
         } else {
@@ -265,5 +264,5 @@ public final class SiteServiceLog implements Serializable, Comparable<SiteServic
         } else {
             return null;
         }
-    }
+    }*/
 }
