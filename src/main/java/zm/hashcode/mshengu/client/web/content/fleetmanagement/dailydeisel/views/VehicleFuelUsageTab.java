@@ -60,7 +60,7 @@ public class VehicleFuelUsageTab extends VerticalLayout implements
                 if (form.truckId.getValue().equals("all")) {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
                     form.mtdActAverage.setReadOnly(false);
-                    form.mtdActAverage.setValue(table.mtdActAverageCalc.toString());
+                    form.mtdActAverage.setValue(VehicleFuelUsageTable.mtdActAverageCalc.toString());
                     form.mtdActAverage.setReadOnly(true);
                 } else {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());
@@ -77,7 +77,7 @@ public class VehicleFuelUsageTab extends VerticalLayout implements
                 if (form.truckId.getValue().equals("all")) {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue());
                     form.mtdActAverage.setReadOnly(false);
-                    form.mtdActAverage.setValue(table.mtdActAverageCalc.toString());
+                    form.mtdActAverage.setValue(VehicleFuelUsageTable.mtdActAverageCalc.toString());
                     form.mtdActAverage.setReadOnly(true);
                 } else {
                     table.loadVehiclceFuelUsageData(form.transactionDate.getValue(), form.truckId.getValue().toString());

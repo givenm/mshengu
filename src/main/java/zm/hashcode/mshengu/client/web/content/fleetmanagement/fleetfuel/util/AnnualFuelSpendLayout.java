@@ -4,8 +4,6 @@
  */
 package zm.hashcode.mshengu.client.web.content.fleetmanagement.fleetfuel.util;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -24,12 +22,11 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
     // Format a decimal value for a specific locale
     final DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
 
-    public VerticalLayout getFuelSpendLayout(BigDecimal annualTotalFuelSpend, BigDecimal serviceTotalFuelSpend,
-            BigDecimal operationalTotalFuelSpend, BigDecimal nonOperationalTotalFuelSpend,
-            BigDecimal serviceFuelSpendPercentage, BigDecimal operationalFuelSpendPercentage, BigDecimal nonOperationalFuelSpendPercentage) {
+    public VerticalLayout getFuelSpendLayout(BigDecimal annualTotalFuelSpend, BigDecimal serviceTotalFuelSpend, BigDecimal utilityTotalFuelSpend,
+            BigDecimal operationalTotalFuelSpend, BigDecimal nonOperationalTotalFuelSpend, BigDecimal serviceFuelSpendPercentage, BigDecimal utilityFuelSpendPercentage,
+            BigDecimal operationalFuelSpendPercentage, BigDecimal nonOperationalFuelSpendPercentage) {
+
         //=====================
-        HorizontalLayout annualTotalHorizontalLayout = new HorizontalLayout();
-//        annualTotalHorizontalLayout.setSizeFull();
         Label totalLabel = new Label("Total");
         totalLabel.setWidth(115, Unit.PIXELS);
 //        totalLabel.setStyleName("dashboardLabel");
@@ -38,14 +35,14 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
         totalAmountLabel.setWidth(100, Unit.PIXELS);
         totalAmountLabel.setStyleName("dashboardLabel");
 
+        HorizontalLayout annualTotalHorizontalLayout = new HorizontalLayout();
+//        annualTotalHorizontalLayout.setSizeFull();
         annualTotalHorizontalLayout.addComponent(totalLabel);
         annualTotalHorizontalLayout.addComponent(totalAmountLabel);
         //        annualTotalHorizontalLayout.setComponentAlignment(totalLabel, Alignment.MIDDLE_LEFT);
         annualTotalHorizontalLayout.setSizeUndefined();
-        //=====================
-        HorizontalLayout serviceTotalHorizontalLayout = new HorizontalLayout();
-//        serviceTotalHorizontalLayout.setSizeFull();
 
+        //=====================
         Label serviceTotalLabel = new Label("Service");
         serviceTotalLabel.setWidth(115, Unit.PIXELS);
 //        serviceTotalLabel.setStyleName("dashboardLabel");
@@ -58,6 +55,8 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
         servicePercentageLabel.setWidth(55, Unit.PIXELS);
         servicePercentageLabel.setStyleName("dashboardPercentageLabel");
 
+        HorizontalLayout serviceTotalHorizontalLayout = new HorizontalLayout();
+//        serviceTotalHorizontalLayout.setSizeFull();
         serviceTotalHorizontalLayout.addComponent(serviceTotalLabel);
         serviceTotalHorizontalLayout.addComponent(serviceAmountLabel);
         serviceTotalHorizontalLayout.addComponent(servicePercentageLabel);
@@ -65,9 +64,31 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
 //        serviceTotalHorizontalLayout.setComponentAlignment(serviceAmountLabel, Alignment.MIDDLE_CENTER);
 //        serviceTotalHorizontalLayout.setComponentAlignment(servicePercentageLabel, Alignment.MIDDLE_RIGHT);
         serviceTotalHorizontalLayout.setSizeUndefined();
-        //=====================
-        HorizontalLayout operationalTotalHorizontalLayout = new HorizontalLayout();
 
+//============================================================================================================
+        Label utilityTotalLabel = new Label("Utility");
+        utilityTotalLabel.setWidth(115, Unit.PIXELS);
+//        serviceTotalLabel.setStyleName("dashboardLabel");
+
+        Label utilityAmountLabel = new Label(df.format(Double.parseDouble(utilityTotalFuelSpend.toString())));
+        utilityAmountLabel.setWidth(100, Unit.PIXELS);
+        utilityAmountLabel.setStyleName("dashboardLabel");
+
+        Label utilityPercentageLabel = new Label(utilityFuelSpendPercentage + "%");
+        utilityPercentageLabel.setWidth(55, Unit.PIXELS);
+        utilityPercentageLabel.setStyleName("dashboardPercentageLabel");
+
+        HorizontalLayout utilityTotalHorizontalLayout = new HorizontalLayout();
+//        serviceTotalHorizontalLayout.setSizeFull();
+        utilityTotalHorizontalLayout.addComponent(utilityTotalLabel);
+        utilityTotalHorizontalLayout.addComponent(utilityAmountLabel);
+        utilityTotalHorizontalLayout.addComponent(utilityPercentageLabel);
+//        utilityTotalHorizontalLayout.setComponentAlignment(serviceTotalLabel, Alignment.MIDDLE_LEFT);
+//        utilityTotalHorizontalLayout.setComponentAlignment(serviceAmountLabel, Alignment.MIDDLE_CENTER);
+//        utilityTotalHorizontalLayout.setComponentAlignment(servicePercentageLabel, Alignment.MIDDLE_RIGHT);
+        utilityTotalHorizontalLayout.setSizeUndefined();
+
+//============================================================================================================
         Label operationalTotalLabel = new Label("Operational");
         operationalTotalLabel.setWidth(115, Unit.PIXELS);
 //        totalLabel.setStyleName("dashboardLabel");
@@ -80,6 +101,7 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
         operationalPercentageLabel.setWidth(55, Unit.PIXELS);
         operationalPercentageLabel.setStyleName("dashboardPercentageLabel");
 
+        HorizontalLayout operationalTotalHorizontalLayout = new HorizontalLayout();
         operationalTotalHorizontalLayout.addComponent(operationalTotalLabel);
         operationalTotalHorizontalLayout.addComponent(operationalAmountLabel);
         operationalTotalHorizontalLayout.addComponent(operationalPercentageLabel);
@@ -107,9 +129,11 @@ public class AnnualFuelSpendLayout extends VerticalLayout {
 //        serviceTotalHorizontalLayout.setComponentAlignment(serviceAmountLabel, Alignment.MIDDLE_CENTER);
 //        serviceTotalHorizontalLayout.setComponentAlignment(servicePercentageLabel, Alignment.MIDDLE_RIGHT);
         nonOperationalTotalHorizontalLayout.setSizeUndefined();
-        //====================
+
+        //=========================================================================================================
         addComponent(annualTotalHorizontalLayout);
         addComponent(serviceTotalHorizontalLayout);
+        addComponent(utilityTotalHorizontalLayout);
         addComponent(operationalTotalHorizontalLayout);
         addComponent(nonOperationalTotalHorizontalLayout);
         // These are IMPORTANT, else Panels will have Scrollbars
