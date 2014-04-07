@@ -28,9 +28,10 @@ public class FleetFuelUtil implements Serializable {
     public static Date endDate = new Date();
     public static List<Truck> allTrucks = new ArrayList<>();
     public static List<Truck> serviceTrucks = new ArrayList<>();
-//    public static List<Truck> movTrucks = new ArrayList<>();
-//    public static List<Truck> mmvTrucks = new ArrayList<>();
+    public static List<Truck> movTrucks = new ArrayList<>();
+    public static List<Truck> mmvTrucks = new ArrayList<>();
     public static List<Truck> msvTrucks = new ArrayList<>();
+    public static List<Truck> muvTrucks = new ArrayList<>();
     public static List<OperatingCost> operatingCostList = new ArrayList<>();
 
     public void getTrucks() {
@@ -39,19 +40,23 @@ public class FleetFuelUtil implements Serializable {
             //        serviceTrucks = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
             serviceTrucks.clear();
             msvTrucks.clear();
-//            movTrucks.clear();
-//            mmvTrucks.clear();
+            movTrucks.clear();
+            mmvTrucks.clear();
+            muvTrucks.clear();
             for (Truck truck : allTrucks) {
-//            if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV")) {
-//                movTrucks.add(truck);
-//            } else if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV")) {
-//                mmvTrucks.add(truck);
-//            }
+                if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MOV")) {
+                    movTrucks.add(truck);
+                } else if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MMV")) {
+                    mmvTrucks.add(truck);
+                }
                 if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV") || truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
                     serviceTrucks.add(truck);
                 }
                 if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV")) {
                     msvTrucks.add(truck);
+                }
+                if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
+                    muvTrucks.add(truck);
                 }
             }
         }

@@ -180,16 +180,16 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         BigDecimal monthTotal = BigDecimal.ZERO;
         Date transactionDate = fleetFuelUtil.resetMonthToFirstDay(dateRangeOperatingCostList.get(0).getTransactionDate());
         int counter = 0;
-        List<OperatingCost> serviceTruckOperatingCostList = new ArrayList<>();
+        List<OperatingCost> msvTruckOperatingCostList = new ArrayList<>();
         for (OperatingCost operatingCost : dateRangeOperatingCostList) {
             Truck truck = fleetFuelUtil.findTruckFromAllTruckListById(operatingCost.getTruckId());
             if (truck != null) {
-                if (FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV") || FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
-                    serviceTruckOperatingCostList.add(operatingCost);
+                if (FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV")) { // || FleetFuelUtil.truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MUV")) {
+                    msvTruckOperatingCostList.add(operatingCost);
                 }
             }
         }
-        for (OperatingCost operatingCost : serviceTruckOperatingCostList) {
+        for (OperatingCost operatingCost : msvTruckOperatingCostList) {
             if (fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate()).equals(transactionDate)) {
 //                System.out.println(dateTimeFormatHelper.getMonthYearMonthAsMediumString(operatingCost.getTransactionDate().toString()) + "==" + operatingCost.getTransactionDate() + ", Fuel Cost= " + operatingCost.getFuelCost() + ", Driver= " + operatingCost.getDriverName() + ", TruckId= " + operatingCost.getTruckId());
                 monthTotal = monthTotal.add(operatingCost.getFuelCost());
@@ -202,16 +202,16 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
                     }
                 }
                 // Test for Last item in List and SubTotal
-                if (serviceTruckOperatingCostList.indexOf(operatingCost) == serviceTruckOperatingCostList.size() - 1) {
+                if (msvTruckOperatingCostList.indexOf(operatingCost) == msvTruckOperatingCostList.size() - 1) {
                     counter++;
-                    performFleetFuelSpendSubTotal(monthTotal, serviceTruckOperatingCostList, operatingCost, randPerLitre, counter);
+                    performFleetFuelSpendSubTotal(monthTotal, msvTruckOperatingCostList, operatingCost, randPerLitre, counter);
                 }
 
             } else {
 //                System.out.println(dateTimeFormatHelper.getMonthYearMonthAsMediumString(operatingCost.getTransactionDate().toString()) + "==" + operatingCost.getTransactionDate() + ", Fuel Cost= " + operatingCost.getFuelCost() + ", Driver= " + operatingCost.getDriverName() + ", TruckId= " + operatingCost.getTruckId());
                 // Subtotal
                 counter++;
-                performFleetFuelSpendSubTotal(monthTotal, serviceTruckOperatingCostList, operatingCost, randPerLitre, counter);
+                performFleetFuelSpendSubTotal(monthTotal, msvTruckOperatingCostList, operatingCost, randPerLitre, counter);
                 //Reset
                 monthTotal = operatingCost.getFuelCost();
                 transactionDate = fleetFuelUtil.resetMonthToFirstDay(operatingCost.getTransactionDate());
@@ -259,7 +259,7 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
         //
         Calendar calendar = Calendar.getInstance();
         for (calendar.setTime(endDatee); calendar.getTime().after(chartDataStartDate.getTime()) || calendar.getTime().compareTo(chartDataStartDate.getTime()) == 0; calendar.add(Calendar.MONTH, -1)) { // startDatee
-            for (Truck truck : FleetFuelUtil.serviceTrucks) { // this TAB for Service/Utility Trucks Only // msvTrucks, serviceTrucks
+            for (Truck truck : FleetFuelUtil.msvTrucks) { // this TAB for Service/Utility Trucks Only // msvTrucks, serviceTrucks
                 truckMonthOperatingCostList.clear();
                 truckMonthOperatingCostList.addAll(getOneMonthOperatingCostForTruck(dateRangeOperatingCostList, calendar.getTime(), truck));
 
@@ -320,7 +320,6 @@ public class ServiceFleetDashboardTab extends VerticalLayout implements
                 break;
             }
         }
-
         return truckMonthOperatingCostList;
     }
 
