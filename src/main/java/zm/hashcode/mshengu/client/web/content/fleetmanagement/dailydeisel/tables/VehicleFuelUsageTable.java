@@ -48,7 +48,10 @@ public class VehicleFuelUsageTable extends Table {
     private final FlagImage flagImage = new FlagImage();
     private VehicleFuelUsageData vehicleFuelUsageData;
     public static List<VehicleFuelUsageData> vehicleFuelUsageDataList = new ArrayList<>();
-    public BigDecimal mtdActAverageCalc = new BigDecimal("0.00");
+    public static BigDecimal mtdActAverageCalc = new BigDecimal("0.00");
+//    public static int msvTrucksCounter = 0;
+    private static Integer monthMileageTotal = 0; //  += fleetFuelUtil.calculateMonthMileageTotal(truckMonthOperatingCostList, truck);
+    private static BigDecimal monthFuelCostTotal = BigDecimal.ZERO; //  = monthTotal.add(operatingCost.getFuelCost());
     // Use a specific locale for formatting decimal numbers
     final Locale locale = new Locale("za", "ZA");
     DecimalFormat df = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(locale));
@@ -56,7 +59,6 @@ public class VehicleFuelUsageTable extends Table {
     public VehicleFuelUsageTable(MshenguMain main) {
         this.main = main;
         setSizeFull();
-
         addContainerProperty("Month/Year", String.class, null);
         addContainerProperty("Truck", Button.class, null);
         addContainerProperty("Number Plate", String.class, null);
@@ -68,7 +70,6 @@ public class VehicleFuelUsageTable extends Table {
         addContainerProperty("Rating", Embedded.class, null); // FOR Flagging
         // Allow selecting items from the table.
         setNullSelectionAllowed(false);
-
         setSelectable(true);
         // Send changes in selection immediately to server.
         setImmediate(true);
@@ -97,12 +98,12 @@ public class VehicleFuelUsageTable extends Table {
         for (Truck truck : truckList) {
             List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(date), dateTimeFormatHelper.resetTimeAndMonthEnd(date));
             Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
-            trackerUtil.setOperatingCostList(truckOperatingCostList); // PREV truck.getOperatingCosts()
-            List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(/*truck.getOperatingCosts(),*/date);
+            trackerUtil.setOperatingCostList(truckOperatingCostList, date);
+            List<OperatingCost> truckCurrentMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(date);
 
-            if (!queriedMonthOperatingCostList.isEmpty()) {
-                BigDecimal lastRandPerLitre = trackerUtil.getHighestRandPerLiter(/*truck.getOperatingCosts(),*/date);
-                final Button truckNumberButton = new Button(truck.getVehicleNumber().toString());
+            if (!truckCurrentMonthOperatingCostList.isEmpty()) {
+                BigDecimal lastRandPerLitre = trackerUtil.getHighestRandPerLiter(date);
+                final Button truckNumberButton = new Button(truck.getVehicleNumber());
                 truckNumberButton.setData(truck.getId() + "#" + date);
                 truckNumberButton.setStyleName(Reindeer.BUTTON_LINK);
                 truckNumberButton.addClickListener(new Button.ClickListener() {
@@ -112,19 +113,26 @@ public class VehicleFuelUsageTable extends Table {
                     }
                 });
 
-                addToVehicleFuelUsageList(date, truck, queriedMonthOperatingCostList, lastRandPerLitre);
+                addToVehicleFuelUsageList(date, truck, truckCurrentMonthOperatingCostList, lastRandPerLitre);
 
                 addItem(new Object[]{
                     dateTimeFormatHelper.getMonthYearMonthAsMediumString(date.toString()),
                     truckNumberButton,
                     truck.getNumberPlate(),
                     truck.getDriver().getFirstname() + " " + truck.getDriver().getLastname(),
-                    df.format(Double.parseDouble(trackerUtil.sumOfFuelCostCalculation(queriedMonthOperatingCostList).toString())),
-                    trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck),
+                    df.format(Double.parseDouble(trackerUtil.sumOfFuelCostCalculation(truckCurrentMonthOperatingCostList).toString())),
+                    trackerUtil.doMileageCalculation(truckCurrentMonthOperatingCostList, truck),
                     df.format(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString())),
-                    df.format(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString())),
-                    flagImage.determineFuelUsageFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
+                    df.format(Double.parseDouble(trackerUtil.getMtdAct(truckCurrentMonthOperatingCostList, truck).toString())),
+                    flagImage.determineFuelUsageFlag(trackerUtil.getMtdAct(truckCurrentMonthOperatingCostList, truck))
                 }, truck.getId());
+                // BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW
+                if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV")) {
+                    monthMileageTotal += trackerUtil.doMileageCalculation(truckCurrentMonthOperatingCostList, truck);
+                    monthFuelCostTotal = monthFuelCostTotal.add(trackerUtil.sumOfFuelCostCalculation(truckCurrentMonthOperatingCostList));
+//                    System.out.println("Truck= " + truck.getVehicleNumber() + " MonthLY mILEage= " + trackerUtil.doMileageCalculation(truckCurrentMonthOperatingCostList, truck) + ", FUEL SUM= " + trackerUtil.sumOfFuelCostCalculation(truckCurrentMonthOperatingCostList));
+                }
+                // BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW
             }
         }
         performMtdActAverageCalc();
@@ -141,19 +149,17 @@ public class VehicleFuelUsageTable extends Table {
         mtdActAverageCalc = BigDecimal.ZERO;
         trackerUtil.setQueriedDate(date);
         // Add Data Columns
-        List<Truck> truckList = TruckFacade.getTruckService().findAll();
+        List<Truck> truckList = TruckFacade.getTruckService().findAllServiceAndUtilityVehicles();
         vehicleFuelUsageDataList.clear();
         for (Truck truck : truckList) {
             if (truck.getId().equals(truckId)) {
                 List<OperatingCost> truckOperatingCostList = OperatingCostFacade.getOperatingCostService().getOperatingCostByTruckBetweenTwoDates(truck, calendarTenMonthsBackward(date), dateTimeFormatHelper.resetTimeAndMonthEnd(date));
                 Collections.sort(truckOperatingCostList, OperatingCost.AscOrderDateAscOrderTruckIdComparator);
-                trackerUtil.setOperatingCostList(truckOperatingCostList); // previously truck.getOperatingCosts()
-                List<OperatingCost> queriedMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(/*truck.getOperatingCosts(),*/date);
+                trackerUtil.setOperatingCostList(truckOperatingCostList, date);
+                List<OperatingCost> truckCurrentMonthOperatingCostList = trackerUtil.getQueriedMonthOperatingCostList(date);
 
-                if (!queriedMonthOperatingCostList.isEmpty()) {
-                    vehicleFuelUsageData = new VehicleFuelUsageData();
-                    BigDecimal lastRandPerLitre = trackerUtil.getHighestRandPerLiter(/*truck.getOperatingCosts(),*/date);
-
+                if (!truckCurrentMonthOperatingCostList.isEmpty()) {
+                    BigDecimal lastRandPerLitre = trackerUtil.getHighestRandPerLiter(date);
                     final Button truckNumberButton = new Button(truck.getVehicleNumber());
                     truckNumberButton.setData(truck.getId() + "#" + date);
                     truckNumberButton.setStyleName(Reindeer.BUTTON_LINK);
@@ -164,19 +170,27 @@ public class VehicleFuelUsageTable extends Table {
                         }
                     });
 
-                    addToVehicleFuelUsageList(date, truck, queriedMonthOperatingCostList, lastRandPerLitre);
+                    addToVehicleFuelUsageList(date, truck, truckCurrentMonthOperatingCostList, lastRandPerLitre);
 
                     addItem(new Object[]{
                         dateTimeFormatHelper.getMonthYearMonthAsMediumString(date.toString()),
                         truckNumberButton,
                         truck.getNumberPlate(),
                         truck.getDriver().getFirstname() + " " + truck.getDriver().getLastname(),
-                        df.format(Double.parseDouble(trackerUtil.sumOfFuelCostCalculation(queriedMonthOperatingCostList).toString())),
-                        trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck),
+                        df.format(Double.parseDouble(trackerUtil.sumOfFuelCostCalculation(truckCurrentMonthOperatingCostList).toString())),
+                        trackerUtil.doMileageCalculation(truckCurrentMonthOperatingCostList, truck),
                         df.format(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString())),
-                        df.format(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString())),
-                        flagImage.determineFuelUsageFlag(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck))
+                        df.format(Double.parseDouble(trackerUtil.getMtdAct(truckCurrentMonthOperatingCostList, truck).toString())),
+                        flagImage.determineFuelUsageFlag(trackerUtil.getMtdAct(truckCurrentMonthOperatingCostList, truck))
                     }, truck.getId());
+
+                    // BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW
+                    if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV")) {
+                        monthMileageTotal += trackerUtil.doMileageCalculation(truckCurrentMonthOperatingCostList, truck);
+                        monthFuelCostTotal = monthFuelCostTotal.add(trackerUtil.sumOfFuelCostCalculation(truckCurrentMonthOperatingCostList));
+                    }
+                    // BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW BRAND NEW
+
                 } else {
                     Notification.show("No records were found matching specified Date and Truck!", Notification.Type.TRAY_NOTIFICATION);
                 }
@@ -203,8 +217,7 @@ public class VehicleFuelUsageTable extends Table {
             dailyDieselTrackerMenu.getDailyTrackerTab().form.truckId.setValue(truckId);
 
         } catch (ParseException ex) {
-            Logger.getLogger(DailyTrackerTab.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DailyTrackerTab.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -216,7 +229,10 @@ public class VehicleFuelUsageTable extends Table {
         vehicleFuelUsageData.setTotalFuelCost(trackerUtil.sumOfFuelCostCalculation(queriedMonthOperatingCostList));
         vehicleFuelUsageData.setTotalMileage(trackerUtil.doMileageCalculation(queriedMonthOperatingCostList, truck));
         vehicleFuelUsageData.setMtdAct(Double.parseDouble(trackerUtil.getMtdAct(queriedMonthOperatingCostList, truck).toString()));
-        mtdActAverageCalc = mtdActAverageCalc.add(new BigDecimal(vehicleFuelUsageData.getMtdAct().toString()));
+//        if (truncate(truck.getVehicleNumber(), 3).equalsIgnoreCase("MSV")) {
+//            msvTrucksCounter++;...
+//            mtdActAverageCalc = mtdActAverageCalc.add(new BigDecimal(vehicleFuelUsageData.getMtdAct().toString()));
+//        }
 //        vehicleFuelUsageData.setOperationalAllowance(Double.parseDouble(trackerUtil.getOperationalAllowance().toString()));
         vehicleFuelUsageData.setTarget(Double.parseDouble(trackerUtil.getTarget(trackerUtil.getFuelSpecRandPerKilometre(BigDecimal.valueOf(truck.getManufacturingSpec()), lastRandPerLitre), trackerUtil.getOperationalAllowance()).toString()));
         vehicleFuelUsageData.setTruckId(truck.getId());
@@ -229,11 +245,17 @@ public class VehicleFuelUsageTable extends Table {
     private void performMtdActAverageCalc() {
         try {
             if (!vehicleFuelUsageDataList.isEmpty()) {
-                mtdActAverageCalc = mtdActAverageCalc.divide(new BigDecimal(vehicleFuelUsageDataList.size() + ""), 2, BigDecimal.ROUND_HALF_UP);
+                System.out.println("monthFuelCostTotal (" + monthFuelCostTotal + ") / monthMileageTotal (" + monthMileageTotal + ")");
+                mtdActAverageCalc = monthFuelCostTotal.divide(new BigDecimal(monthMileageTotal + ""), 2, BigDecimal.ROUND_HALF_UP);
             }
         } catch (ArithmeticException a) {
-            System.out.println("mtdActAverageCalc (" + mtdActAverageCalc + ") / vehicleFuelUsageDataList Size (" + vehicleFuelUsageDataList.size() + ")");
+            System.out.println("monthMileageTotal (" + monthMileageTotal + ") / monthFuelCostTotal (" + monthFuelCostTotal + ") = Attemping to DIVIDE by ZERO Exception Caught");
+            monthMileageTotal = 0;
+            monthFuelCostTotal = BigDecimal.ZERO;
         }
+
+        monthMileageTotal = 0;
+        monthFuelCostTotal = BigDecimal.ZERO;
     }
 
     public static String truncate(String value, int length) {
@@ -242,5 +264,5 @@ public class VehicleFuelUsageTable extends Table {
         }
         return value;
     }
-    //
+
 }

@@ -25,6 +25,7 @@ public class TrackerUtil implements Serializable {
 
     private static List<OperatingCost> operatingCostList = new ArrayList<>();
     private static Date queriedDate;
+    private static Date startDate = null;
     private final DateTimeFormatHelper dateTimeFormatHelper = new DateTimeFormatHelper();
 
     /**
@@ -40,7 +41,6 @@ public class TrackerUtil implements Serializable {
             return new BigDecimal("0.00");
         }
         fuelCost = fuelCost.divide(new BigDecimal(litres.toString()), 2, BigDecimal.ROUND_HALF_UP);
-//        fuelCost.setScale(2, BigDecimal.ROUND_HALF_UP);
         return fuelCost.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
@@ -79,7 +79,6 @@ public class TrackerUtil implements Serializable {
     public BigDecimal getFuelSpecRandPerKilometre(BigDecimal fuelSpec, BigDecimal randPerLiter) {
         BigDecimal percentageCalc = fuelSpec.divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
 //        System.out.println("\n\nFuel Spec Percent is: " + percentageCalc + ". Highest petrol price for month : " + randPerLiter + "\n\n");
-
         randPerLiter = randPerLiter.multiply(percentageCalc);
         return randPerLiter.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
@@ -104,19 +103,21 @@ public class TrackerUtil implements Serializable {
      */
     public List<OperatingCost> getQueriedMonthOperatingCostList(/*List<OperatingCost> operatingCostList,*/Date date) {
         List<OperatingCost> queriedOperatingCostList = new ArrayList<>();
-
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
+        calendar.setTime(this.resetMonthToFirstDay(date));
 
         for (OperatingCost operatingCost : operatingCostList) {
-//            System.out.println("truck.getOperatingCost() Date=" + operatingCost.getTransactionDate() + "| " + operatingCost.getSpeedometer() + "| " + operatingCost.getFuelCost()); // DEBUG FIX // Operating Cost List is in Ascending Order
-            if ((Integer.parseInt(dateTimeFormatHelper.getMonthNumber(date)) == Integer.parseInt(dateTimeFormatHelper.getMonthNumber(operatingCost.getTransactionDate())))
-                    && (Integer.parseInt(dateTimeFormatHelper.getYearNumber(date)) == Integer.parseInt(dateTimeFormatHelper.getYearNumber(operatingCost.getTransactionDate())))) {
+            if (this.resetMonthToFirstDay(operatingCost.getTransactionDate()).equals(calendar.getTime())) {
                 queriedOperatingCostList.add(operatingCost);
             }
+////            System.out.println(&quot;truck.getOperatingCost() Date=&quot; + operatingCost.getTransactionDate() + &quot;| &quot; + operatingCost.getSpeedometer() + &quot;| &quot; + operatingCost.getFuelCost()); // DEBUG FIX // Operating Cost List is in Ascending Order
+//            if ((Integer.parseInt(dateTimeFormatHelper.getMonthNumber(date)) == Integer.parseInt(dateTimeFormatHelper.getMonthNumber(operatingCost.getTransactionDate())))
+//                   &&(Integer.parseInt(dateTimeFormatHelper.getYearNumber(date)) == Integer.parseInt(dateTimeFormatHelper.getYearNumber(operatingCost.getTransactionDate())))) {
+//                queriedOperatingCostList.add(operatingCost);
+//            }
 
             // Operating Cost List is in Ascending Order // FIX
-            if (calendar.getTime().before(dateTimeFormatHelper.resetTimeAndMonthStart(operatingCost.getTransactionDate()))) { // FIX decide how to break
+            if (calendar.getTime().before(this.resetMonthToFirstDay(operatingCost.getTransactionDate()))) { // FIX decide how to break
                 break;
             }
         }
@@ -144,7 +145,7 @@ public class TrackerUtil implements Serializable {
             fuelCostSum = fuelCostSum.add(operatingCost.getFuelCost());
             // System.out.println("\n\nFuel Cost Sum is Now: " + fuelCostSum + "  " + operatingCost.getDriver().getFirstname() + "===" + operatingCost.getTransactionDate() + "\n\n");
         }
-        return fuelCostSum;
+        return fuelCostSum.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public Integer doMileageCalculation(List<OperatingCost> queriedMonthOperatingCostList, Truck truck) {
@@ -265,7 +266,7 @@ public class TrackerUtil implements Serializable {
      */
     public Integer calculatePreviousMonthClosingMileage(Truck truck) {
         Calendar previousCalendar = Calendar.getInstance();
-        previousCalendar.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(queriedDate));
+        previousCalendar.setTime(this.resetMonthToFirstDay(queriedDate));
         previousCalendar.add(Calendar.MONTH, -1);
         // Get the last Closing Mileage for previous Month
 //        System.out.println("Call From calculatePreviousMonthClosingMileage method");
@@ -392,47 +393,29 @@ public class TrackerUtil implements Serializable {
     public List<OperatingCost> getPreviousMonthOperatingCostListForMileage(Date date) {
         List<OperatingCost> queriedOperatingCostList = new ArrayList<>();
         Calendar previousCalendar = Calendar.getInstance();
-        previousCalendar.setTime(dateTimeFormatHelper.resetTimeAndMonthStart(date));
+        previousCalendar.setTime(this.resetMonthToFirstDay(date));
 
         for (OperatingCost operatingCost : operatingCostList) {
-//            if (truck.getVehicleNumber().equalsIgnoreCase("msv-07") && (Calendar.JULY == previousCalendar.get(Calendar.MONTH))) {
-//                System.out.println("Current Problem Month= " + previousCalendar.getTime() + " - " + truck.getVehicleNumber() + " Date=" + operatingCost.getTransactionDate() + "| Mileage= " + operatingCost.getSpeedometer() + "| Fuel Cost" + operatingCost.getFuelCost() + " | Fuel Litres= " + operatingCost.getFuelLitres()); // DEBUG FIX // Operating Cost List is in Ascending Order
-//            }
             if ((Integer.parseInt(dateTimeFormatHelper.getMonthNumber(date)) == Integer.parseInt(dateTimeFormatHelper.getMonthNumber(operatingCost.getTransactionDate())))
                     && (Integer.parseInt(dateTimeFormatHelper.getYearNumber(date)) == Integer.parseInt(dateTimeFormatHelper.getYearNumber(operatingCost.getTransactionDate())))) {
                 queriedOperatingCostList.add(operatingCost);
             }
             // Operating Cost List is in Ascending Order
-            if (date.before(dateTimeFormatHelper.resetTimeAndMonthStart(operatingCost.getTransactionDate()))) {
+            if (date.before(this.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
                 break;
             }
         }
-//        System.out.println("==============///////////////////////////////////////////////");
 
         if (queriedOperatingCostList.isEmpty()) {
-
-//////            //=========================== DELETE =======================//
-//////            if (truck.getVehicleNumber().equalsIgnoreCase("msv-07") && (Calendar.JULY == previousCalendar.get(Calendar.MONTH))) {
-//////                List<OperatingCost> msv07Costs = truck.getOperatingCosts();
-//////                for (OperatingCost ops : msv07Costs) {
-//////                    System.out.println("Current Problem Month= " + previousCalendar.getTime() + " - " + truck.getVehicleNumber() + " Date=" + ops.getTransactionDate() + "| Mileage= " + ops.getSpeedometer() + "| Fuel Cost" + ops.getFuelCost() + " | Fuel Litres= " + ops.getFuelLitres()); // DEBUG FIX // Operating Cost List is in Ascending Order
-//////                }
-//////                System.out.println("==============///////////////////////////////////////////////");
-//////            }
-//////            //=========================== DELETE =======================//
-//            System.out.println(truck.getVehicleNumber() + " Previous month " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(previousCalendar.getTime().toString()) + " has no Records");
             for (int i = 0; i < 10; i++) { // try 10 more loops into the Past Operating costs for Truck
-//                System.out.println(truck.getVehicleNumber() + " Previous month " + dateTimeFormatHelper.getMonthYearMonthAsMediumString(previousCalendar.getTime().toString()) + " has no Records");
                 previousCalendar.add(Calendar.MONTH, -1); //
                 for (OperatingCost operatingCost : operatingCostList) {
-//                    System.out.println("Current Problem Month= " + previousCalendar.getTime() + " - " + truck.getVehicleNumber() + " Date=" + operatingCost.getTransactionDate() + "| Mileage= " + operatingCost.getSpeedometer() + "| Fuel Cost" + operatingCost.getFuelCost() + " | Fuel Litres= " + operatingCost.getFuelLitres()); // DEBUG FIX // Operating Cost List is in Ascending Order
                     if ((Integer.parseInt(dateTimeFormatHelper.getMonthNumber(previousCalendar.getTime())) == Integer.parseInt(dateTimeFormatHelper.getMonthNumber(operatingCost.getTransactionDate())))
                             && (Integer.parseInt(dateTimeFormatHelper.getYearNumber(previousCalendar.getTime())) == Integer.parseInt(dateTimeFormatHelper.getYearNumber(operatingCost.getTransactionDate())))) {
-//                        System.out.println(truck.getVehicleNumber() + "-" + dateTimeFormatHelper.getMonthYearMonthAsMediumString(previousCalendar.getTime().toString()) + " PREVIOUS MILEAGE SEARCH: truck.getOperatingCost() Date=" + operatingCost.getTransactionDate() + "| " + operatingCost.getSpeedometer() + "| " + operatingCost.getFuelCost()); // DEBUG FIX // Operating Cost List is in Ascending Order
                         queriedOperatingCostList.add(operatingCost);
                     }
                     // Operating Cost List is in Ascending Order
-                    if (previousCalendar.getTime().before(dateTimeFormatHelper.resetTimeAndMonthStart(operatingCost.getTransactionDate()))) {
+                    if (previousCalendar.getTime().before(this.resetMonthToFirstDay(operatingCost.getTransactionDate()))) {
                         break;
                     }
                 }
@@ -536,11 +519,28 @@ public class TrackerUtil implements Serializable {
         return operatingCostList;
     }
 
-    /**
-     * @param operatingCostList the operatingCostList to set
-     */
     public void setOperatingCostList(List<OperatingCost> operatingCostList) {
         TrackerUtil.operatingCostList = operatingCostList;
+//        try {
+//            startDate = operatingCostList.get(0).getTransactionDate();
+//        } catch (java.lang.IndexOutOfBoundsException ex) {
+//            startDate = endDate;
+//        }
+//        System.out.println("--===============================--\nStart Date in Vehicle Fuel Usage Tab OperatingCost List is= " + startDate + "\n--===============================--");
+    }
+
+    /**
+     * @param operatingCostList the operatingCostList to set
+     * @param endDate Date
+     */
+    public void setOperatingCostList(List<OperatingCost> operatingCostList, Date endDate) {
+        TrackerUtil.operatingCostList = operatingCostList;
+        try {
+            startDate = this.resetMonthToFirstDay(operatingCostList.get(0).getTransactionDate());
+        } catch (java.lang.IndexOutOfBoundsException ex) {
+            startDate = this.resetMonthToFirstDay(endDate);
+        }
+        System.out.println("--===============================--\nStart Date in Vehicle Fuel Usage Tab OperatingCost List is= " + startDate + "\n--===============================--");
     }
 
     /**
@@ -556,4 +556,13 @@ public class TrackerUtil implements Serializable {
     public void setQueriedDate(Date aQueriedDate) {
         queriedDate = aQueriedDate;
     }
+
+    public Date resetMonthToFirstDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthStart(date);
+    }
+
+    public Date resetMonthToLastDay(Date date) {
+        return dateTimeFormatHelper.resetTimeAndMonthEnd(date);
+    }
+
 }
