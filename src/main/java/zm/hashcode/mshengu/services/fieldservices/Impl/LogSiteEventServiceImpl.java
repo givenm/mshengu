@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.domain.products.LogEventsEnum;
 import zm.hashcode.mshengu.domain.products.LogSiteEvents;
+import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.repository.products.LogSiteEventsRepository;
 import zm.hashcode.mshengu.services.fieldservices.LogSiteEventService;
 
@@ -33,6 +34,18 @@ public class LogSiteEventServiceImpl implements LogSiteEventService {
     public List<LogSiteEvents> findAll() {
         return ImmutableList.copyOf(repository.findAll(sortByServiceDate()));
     }
+    
+    
+
+//    @Override
+//    public Site findBySiteId(String SiteId) {
+//        return repository.findBySiteId(SiteId);
+//    }
+    
+//    @Override
+//     public Site findBySiteName(String siteName){
+//         return repository.findBySiteName(siteName);
+//     }
     
     private Sort sortByServiceDate() {
         return new Sort(

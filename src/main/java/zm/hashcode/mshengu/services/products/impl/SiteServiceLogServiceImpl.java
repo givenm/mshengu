@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import zm.hashcode.mshengu.app.util.DateTimeFormatWeeklyHelper;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
 import zm.hashcode.mshengu.domain.products.SiteServiceLogStatusEnum;
+import zm.hashcode.mshengu.domain.products.UnitServiceLog;
 import zm.hashcode.mshengu.repository.products.SiteServiceLogRepository;
 import zm.hashcode.mshengu.services.products.SiteServiceLogService;
 
@@ -129,7 +130,7 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
     @Override
     public List<SiteServiceLog> getAllSiteServiceLogs(String siteName, Date startDate, Date endDate) {
         dtfwh.setDate(endDate);
-         Query query = new Query(Criteria
+        Query query = new Query(Criteria
                 .where("parentId").is(siteName)
                 .andOperator(
                         Criteria.where("serviceDate").gte(startDate),
@@ -141,19 +142,23 @@ public class SiteServiceLogServiceImpl implements SiteServiceLogService {
         return siteServiceLog;
 
     }
-    
-     @Override
-    public String  getServiceByTruckId(String siteName, String statusMessage, Date startDate, Date endDate)  {
+
+    @Override
+    public String getServiceByTruckId(String siteName, String statusMessage, Date startDate, Date endDate) {
         dtfwh.setDate(endDate);
-         Query query = new Query(Criteria
+        Query query = new Query(Criteria
                 .where("parentId").is(siteName)
                 .andOperator(
                         Criteria.where("serviceDate").gte(startDate),
                         Criteria.where("serviceDate").lte(endDate),
                         Criteria.where("statusMessage").is(statusMessage)));
 //         query.limit(1);
-        SiteServiceLog siteServiceLog = mongoTemplate.findOne(query, SiteServiceLog.class, "siteServiceLog");
-        return siteServiceLog.getServiceStatus();
+        UnitServiceLog siteUnitServiceLog = mongoTemplate.findOne(query, UnitServiceLog.class, "unitServiceLog");
+        String truckId = "N/A";
+        if (siteUnitServiceLog != null) {
+            truckId = siteUnitServiceLog.getServicedBy();
+        }
+        return truckId;
 
     }
 

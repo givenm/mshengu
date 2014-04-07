@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.test.services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,9 +14,11 @@ import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.domain.products.Site;
 import zm.hashcode.mshengu.domain.products.SiteServiceLog;
-import zm.hashcode.mshengu.services.fieldservices.ServiceUnit;
+import zm.hashcode.mshengu.domain.products.SiteUnit;
+import zm.hashcode.mshengu.domain.products.UnitServiceLog;
 import zm.hashcode.mshengu.services.procurement.RequestService;
 import zm.hashcode.mshengu.services.products.SiteService;
+import zm.hashcode.mshengu.services.products.SiteUnitService;
 import zm.hashcode.mshengu.test.AppTest;
 import static zm.hashcode.mshengu.test.AppTest.ctx;
 
@@ -27,8 +30,12 @@ public class RemoveSiteServiceLogsTest extends AppTest {
 
      @Autowired
     private SiteService siteService;
+     @Autowired
+    private SiteUnitService siteUnitService;
     @Autowired
     private RequestService requestService;
+//    @Autowired
+//    private LogSiteEventService logSiteEventService;
 
 //    @Test
     public void deleteSiteServiceLogs() {
@@ -47,7 +54,7 @@ public class RemoveSiteServiceLogsTest extends AppTest {
                     .siteServiceLog(siteServiceLogList)
                     .build();
 
-//            siteService.merge(newSite);
+            siteService.merge(newSite);
             
             totalAfter += newSite.getSiteServiceLog().size();
 
@@ -55,6 +62,75 @@ public class RemoveSiteServiceLogsTest extends AppTest {
         System.out.println("\nTotal Site Sevice logs before " +  totalBefore);
         System.out.println("\n");
         System.out.println("\nTotal Site Sevice logs after " + totalAfter);
+    }
+    
+//      @Test
+    public void deleteSiteUnitServiceLogs() {
+
+        siteUnitService = ctx.getBean(SiteUnitService.class);
+        List<SiteUnit> siteUnitList = siteUnitService.findAll();
+       int totalBefore = 0;
+       int totalAfter = 0;
+       
+        System.out.println("\n\nsite unit count " + siteUnitList.size());
+        for (SiteUnit siteUnit : siteUnitList) {
+//            if(siteUnit.getUnityLogs() != null){
+//               totalBefore += siteUnit.getUnityLogs().size();
+//            }
+            List<UnitServiceLog> siteUnitServiceLogList = new ArrayList<>();
+            SiteUnit newSiteUnit = new SiteUnit.Builder(siteUnit.getUnitType())
+                    .siteUnit(siteUnit)
+                    .unityLogs(siteUnitServiceLogList)
+                    .build();
+
+            siteUnitService.merge(newSiteUnit);
+            
+            totalAfter += newSiteUnit.getUnityLogs().size();
+
+        }
+        System.out.println("\nTotal Site Unit Sevice logs before " +  totalBefore);
+        System.out.println("\n");
+        System.out.println("\nTotal Site Unit Sevice logs after " + totalAfter);
+    }
+    
+//          @Test
+    public void countSiteUnitServiceLogs() {
+
+        siteUnitService = ctx.getBean(SiteUnitService.class);
+        List<SiteUnit> siteUnitList = siteUnitService.findAll();
+       int totalBefore = 0;
+       int totalAfter = 0;
+       int totalAfter2 = 0;
+       
+        System.out.println("\n\nsite unit count " + siteUnitList.size());
+        for (SiteUnit siteUnit : siteUnitList) {
+//            if(siteUnit.getUnityLogs() != null){
+               totalBefore += siteUnit.getUnityLogs().size();
+//            }
+            List<UnitServiceLog> siteUnitServiceLogList = new ArrayList<>();
+            SiteUnit newSiteUnit = new SiteUnit.Builder(siteUnit.getUnitType())
+                    .siteUnit(siteUnit)
+                    .unityLogs(siteUnitServiceLogList)
+                    .build();
+
+//            siteUnitService.merge(newSiteUnit);
+            
+            totalAfter += newSiteUnit.getUnityLogs().size();
+
+        }
+        
+        
+        List<SiteUnit> siteUnitList2 = siteUnitService.findAll();
+        
+        for(SiteUnit siteUnit2 : siteUnitList2) {
+            
+               totalAfter2 += siteUnit2.getUnityLogs().size();
+        }
+        System.out.println("\nTotal Site Unit Sevice logs before " +  totalBefore);
+        System.out.println("\n");
+        System.out.println("\nTotal Site Unit Sevice logs after " + totalAfter);
+        System.out.println("\n");
+        System.out.println("\nTotal Site Unit Sevice logs after " + totalAfter2);
     }
 
 //    @Test
@@ -82,4 +158,37 @@ public class RemoveSiteServiceLogsTest extends AppTest {
 
     }
 
+
+        public void getLogSiteEvents() {
+
+//        siteService = ctx.getBean(SiteService.class);
+//        logSiteEventService = ctx.getBean(LogSiteEventService.class);
+        
+        
+        Site site = siteService.findByName("Alpha Farm");
+//        List<LogSiteEvent> logSiteEventList = get
+        
+       int totalBefore = 0;
+       int totalAfter = 0;
+       
+//        System.out.println("\n\nsite count " + siteList.size());
+       /* for (Site site : siteList) {
+            totalBefore += site.getSiteServiceLog().size();
+            Set<SiteServiceLog> siteServiceLogList = new HashSet<>();
+            Site newSite = new Site.Builder(site.getName())
+                    .site(site)
+                    .siteServiceLog(siteServiceLogList)
+                    .build();
+
+//            siteService.merge(newSite);
+            
+            totalAfter += newSite.getSiteServiceLog().size();
+
+        }*/
+        System.out.println("\nTotal Site Sevice logs before " +  totalBefore);
+        System.out.println("\n");
+        System.out.println("\nTotal Site Sevice logs after " + totalAfter);
+    }
+
+    
 }

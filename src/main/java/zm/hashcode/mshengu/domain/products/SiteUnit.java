@@ -237,6 +237,7 @@ public final class SiteUnit implements Serializable, Comparable<SiteUnit> {
     public List<UnitServiceLog> getUnityLogs() {
         if (unitLocationLifeCycle != null) {
             return ImmutableList.copyOf(sortUnitServiceLog());
+//            return ImmutableList.copyOf(unityLogs);
         } else {
             return ImmutableList.copyOf(unityLogs);
         }
