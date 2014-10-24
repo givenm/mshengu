@@ -35,13 +35,13 @@ import zm.hashcode.mshengu.domain.ui.util.Sequence;
 public class ApproveRequestsForm extends FormLayout implements
         Button.ClickListener {
 
-    private Button approve = new Button("Approve");
-    private Button disapprove = new Button("Disapprove");
-    private Button back = new Button("Back");
-    private Button delete = new Button("Delete");
-    private ApproveRequestsTab tab;
-    private String requestId;
-    private SequenceHelper helper = new SequenceHelper();
+    private final Button approve = new Button("Approve");
+    private final Button disapprove = new Button("Disapprove");
+    private final Button back = new Button("Back");
+    private final Button delete = new Button("Delete");
+    private final ApproveRequestsTab tab;
+    private final String requestId;
+    private final SequenceHelper helper = new SequenceHelper();
     private MshenguMain main;
 
     public ApproveRequestsForm(String itemId, ApproveRequestsTab tab, MshenguMain main) {
@@ -128,52 +128,82 @@ public class ApproveRequestsForm extends FormLayout implements
     @Override
     public void buttonClick(Button.ClickEvent event) {
         final Button source = event.getButton();
-        if (source == approve) {
-            Request request = RequestFacade.getRequestService().findById(requestId);
-            Person user = new GetUserCredentials().getLoggedInPerson();
-            if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
-                if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
-                    if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
-                        approve(request, user.getFirstname() + " " + user.getLastname());
+        Request request = RequestFacade.getRequestService().findById(requestId);
+        Person user = new GetUserCredentials().getLoggedInPerson();
+        if (request != null && user != null) {
+            if (source == approve) {
+                if (getDetail(request.getPerson()) != null) {
+                    if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
+                        if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
+                            if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
+                                approve(request, user.getFirstname() + " " + user.getLastname());
+                            } else {
+                                Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                            }
+                        } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
+                            if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
+                                approve(request, user.getFirstname() + " " + user.getLastname());
+                            } else {
+                                Notification.show("User not allowed to approve more than R3000!", Notification.Type.TRAY_NOTIFICATION);
+                            }
+                        }
                     } else {
-                        Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
+                        Notification.show("You cannot approve your own request!", Notification.Type.TRAY_NOTIFICATION);
                     }
-                } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
-                    if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
-                        approve(request, user.getFirstname() + " " + user.getLastname());
+                } else {
+                    Notification.show("This request was does not have the information of the person who created it hence cannot be approved!", Notification.Type.TRAY_NOTIFICATION);
+                }
+            } else if (source == disapprove) {
+                if (getDetail(request.getPerson()) != null) {
+                    if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
+                        if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
+                            if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
+                                disapprove();
+                            } else {
+                                Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                            }
+                        } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
+                            if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
+                                disapprove();
+                            } else {
+                                Notification.show("User not allowed to disapprove  more than R3000!", Notification.Type.TRAY_NOTIFICATION);
+                            }
+                        }
                     } else {
-                        Notification.show("User not allowed to approve more than R3000!", Notification.Type.TRAY_NOTIFICATION);
+                        Notification.show("You cannot disapprove your own request!", Notification.Type.TRAY_NOTIFICATION);
                     }
+                } else {
+                    Notification.show("This request was does not have the information of the person who created it hence cannot be disapproved!", Notification.Type.TRAY_NOTIFICATION);
+                }
+
+            } else if (source == back) {
+                main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
+            } else if (source == delete) {
+                if (getDetail(request.getPerson()) != null) {
+                    if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
+                        if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
+                            if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
+                                RequestFacade.getRequestService().delete(request);
+                                main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
+                            } else {
+                                Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
+                            }
+                        } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
+                            if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
+                                disapprove();
+                            } else {
+                                Notification.show("User not allowed to disapprove  more than R3000!", Notification.Type.TRAY_NOTIFICATION);
+                            }
+                        }
+                    } else {
+                        Notification.show("You cannot disapprove your own request!", Notification.Type.TRAY_NOTIFICATION);
+                    }
+                } else {
+                    Notification.show("This request was does not have the information of the person who created it hence cannot be deleted!", Notification.Type.TRAY_NOTIFICATION);
                 }
             } else {
-                Notification.show("You cannot approve your own request!", Notification.Type.TRAY_NOTIFICATION);
+                Notification.show("Request does not exist!", Notification.Type.TRAY_NOTIFICATION);
             }
-        } else if (source == disapprove) {
-            Request request = RequestFacade.getRequestService().findById(requestId);
-            Person user = new GetUserCredentials().getLoggedInPerson();
-            if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
-                if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
-                    if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
-                        disapprove();
-                    } else {
-                        Notification.show("User not allowed to disapprove!", Notification.Type.TRAY_NOTIFICATION);
-                    }
-                } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
-                    if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
-                        disapprove();
-                    } else {
-                        Notification.show("User not allowed to disapprove  more than R3000!", Notification.Type.TRAY_NOTIFICATION);
-                    }
-                }
-            } else {
-                Notification.show("You cannot disapprove your own request!", Notification.Type.TRAY_NOTIFICATION);
-            }
-        } else if (source == back) {
-            main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
-        } else if (source == delete) {
-            Request request = RequestFacade.getRequestService().findById(requestId);
-            RequestFacade.getRequestService().delete(request);
-            main.content.setSecondComponent(new PurchaseMenu(main, "APPROVE_REQUESTS"));
         }
     }
 
@@ -206,6 +236,6 @@ public class ApproveRequestsForm extends FormLayout implements
         if (detail != null) {
             return detail.getEmail();
         }
-        return null;
+        return "";
     }
 }
