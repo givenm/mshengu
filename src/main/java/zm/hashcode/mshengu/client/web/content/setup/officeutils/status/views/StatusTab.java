@@ -58,6 +58,7 @@ public class StatusTab extends VerticalLayout implements
         }
     }
 
+    
     @Override
     public void valueChange(Property.ValueChangeEvent event) {
         final Property property = event.getProperty();
@@ -92,7 +93,6 @@ public class StatusTab extends VerticalLayout implements
         }
     }
 
-    
     private void deleteForm(FieldGroup binder) {
         StatusFacade.getStatusService().delete(getEntity(binder));
         getHome();

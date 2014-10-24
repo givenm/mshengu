@@ -34,7 +34,7 @@ public class GetSitesTest {
 
     }
 
-    @Test
+    @Test(enabled = false)
     private void TestReadSites() {
         final String url = URL + "sites" + "/" + 1;
         List<SiteReource> sites = new ArrayList<>();

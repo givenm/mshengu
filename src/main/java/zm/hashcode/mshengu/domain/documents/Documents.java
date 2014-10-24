@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 public class Documents implements Serializable, Comparable<Documents> {
-
     @Id
     private String id;
     private String name;

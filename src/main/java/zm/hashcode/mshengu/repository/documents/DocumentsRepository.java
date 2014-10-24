@@ -5,12 +5,14 @@
 package zm.hashcode.mshengu.repository.documents;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 import zm.hashcode.mshengu.domain.documents.Documents;
 
 /**
  *
  * @author Luckbliss
  */
-public interface DocumentsRepository extends PagingAndSortingRepository<Documents , String>{
+@Repository
+public interface DocumentsRepository extends PagingAndSortingRepository<Documents, String>{
     
 }

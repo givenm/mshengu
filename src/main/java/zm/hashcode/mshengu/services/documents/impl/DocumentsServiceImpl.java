@@ -4,7 +4,7 @@
  */
 package zm.hashcode.mshengu.services.documents.impl;
 
-import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
