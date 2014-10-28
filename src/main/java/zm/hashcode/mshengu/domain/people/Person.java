@@ -31,7 +31,7 @@ public final class Person implements Serializable, Comparable<Person> {
     private String othername;
     private Date dateofbirth;
     private String password;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<Role> role = new HashSet<>();
     @Indexed(unique = true)
     private String username;
@@ -40,13 +40,13 @@ public final class Person implements Serializable, Comparable<Person> {
     private boolean user;
     private boolean requestor;
     private String initials;
-    @DBRef
+    @DBRef(lazy = true)
     private Address address;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<Contact> contact = new HashSet<>();
-    @DBRef
+    @DBRef(lazy = true)
     private EmployeeDetail employeeDetails;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<ContactPerson> contactPerson = new HashSet<>();
 
     private Person() {
@@ -377,7 +377,7 @@ public final class Person implements Serializable, Comparable<Person> {
             return null;
         }
     }
-    
+
     public String getEmployeeDetailsIdNumber() {
         if (!isNullObject(employeeDetails)) {
             return employeeDetails.getIdNumber();
@@ -390,6 +390,5 @@ public final class Person implements Serializable, Comparable<Person> {
     public String toString() {
         return "Person{" + "id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", othername=" + othername + ", dateofbirth=" + dateofbirth + ", password=" + password + ", role=" + role + ", username=" + username + ", institutionId=" + institutionId + ", enable=" + enable + ", user=" + user + ", requestor=" + requestor + ", initials=" + initials + ", address=" + address + ", contact=" + contact + ", employeeDetails=" + employeeDetails + ", contactPerson=" + contactPerson + '}';
     }
-    
-    
+
 }

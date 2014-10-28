@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.app.conf;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,7 +31,7 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
 
     @Override
     public Mongo mongo() throws Exception {
-        Mongo mongo = new Mongo();
+        Mongo mongo = new MongoClient();
         mongo.setWriteConcern(WriteConcern.SAFE);
         return mongo;
     }

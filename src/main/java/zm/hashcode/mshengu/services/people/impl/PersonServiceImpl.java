@@ -6,6 +6,7 @@ package zm.hashcode.mshengu.services.people.impl;
 
 import com.google.common.collect.Collections2;
 import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,14 +116,14 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<Person> findAllUsers() {
-        personList = (List<Person>) repository.findAll();
+        personList = (List<Person>) repository.findAll();                
         Collection<Person> persons = Collections2.filter(personList, new PersonUserPredicates());
         return ImmutableList.copyOf(persons);
     }
 
     @Override
     public List<Person> findAllDrivingCompanyCars() {
-        personList = (List<Person>) repository.findAll();
+        personList = (List<Person>) repository.findAll();        
         Collection<Person> persons = Collections2.filter(personList, new PersonDrivesCompanyCarPredicate());
         return ImmutableList.copyOf(persons);
     }
