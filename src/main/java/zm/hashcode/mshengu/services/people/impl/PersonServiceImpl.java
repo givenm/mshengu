@@ -9,6 +9,7 @@ import com.google.gwt.thirdparty.guava.common.collect.ImmutableList;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.Collection;
 import java.util.List;
+import static java.util.stream.Collectors.toList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -116,8 +117,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<Person> findAllUsers() {
-        personList = (List<Person>) repository.findAll();                
-        Collection<Person> persons = Collections2.filter(personList, new PersonUserPredicates());
+        personList = (List<Person>) repository.findAll();      
+        Collection<Person> persons =personList.parallelStream().filter((Person p) -> p.isEnable()).collect(toList());
         return ImmutableList.copyOf(persons);
     }
 
