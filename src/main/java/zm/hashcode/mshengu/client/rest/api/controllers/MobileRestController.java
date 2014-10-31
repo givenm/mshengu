@@ -104,6 +104,7 @@ public class MobileRestController {
     public MobileResponseMessage submitService(@RequestBody UnitServiceResource unitService) {
         final MobileResponseMessage mobileResponseMessage = new MobileResponseMessage();
         String isValid = mobileAppServices.checkCoordinates(unitService);
+        System.out.println("THE DISTANCE IS !!!!!! "+isValid);
         String message;
         if ("WITHIN".equalsIgnoreCase(isValid)) {
             unitService.setStatusMessage(isValid);

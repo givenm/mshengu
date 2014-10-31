@@ -129,6 +129,9 @@ public class SiteUnitServiceImpl implements SiteUnitService {
 
             Distance distance = new Distance(0.2, Metrics.KILOMETERS);
             Distance dist = new Distance(distance(point1, point2) / 10, Metrics.KILOMETERS);
+            
+            System.out.println("LUCKY CAN YOU TEST THIS!!! The Distance is  We Want ???" +distance.getValue());
+             System.out.println(" LUCKY AND THIS Real The Distance is " +dist.getValue());
 
             if (distance.getValue() > dist.getValue()) {
                 message = "WITHIN";
@@ -136,7 +139,7 @@ public class SiteUnitServiceImpl implements SiteUnitService {
                 message = "OUT";
             }
         } catch (Exception exception) {
-            message = "EXCEPTION";
+            message = "ERROR OCCURED!! NO RECORD CAPTURED";
         }
 
 

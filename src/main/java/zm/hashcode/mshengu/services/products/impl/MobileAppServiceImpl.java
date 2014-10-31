@@ -13,7 +13,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import zm.hashcode.mshengu.app.facade.customer.CustomerFacade;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitDeliveryResource;
 import zm.hashcode.mshengu.client.rest.api.resources.UnitServiceResource;
 import zm.hashcode.mshengu.domain.customer.Customer;
@@ -25,6 +24,7 @@ import zm.hashcode.mshengu.domain.products.UnitServiceLog;
 import zm.hashcode.mshengu.domain.products.UnitType;
 import zm.hashcode.mshengu.domain.ui.util.Sequence;
 import zm.hashcode.mshengu.domain.ui.util.Status;
+import zm.hashcode.mshengu.services.customer.CustomerService;
 import zm.hashcode.mshengu.services.products.MobileAppService;
 import zm.hashcode.mshengu.services.products.SiteService;
 import zm.hashcode.mshengu.services.products.SiteServiceContractLifeCycleService;
@@ -58,6 +58,8 @@ public class MobileAppServiceImpl implements MobileAppService {
     private SequenceService sequenceService;
     @Autowired
     private StatusService statusService;
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public String deployUnitToSite(UnitDeliveryResource unitDelivery) {
@@ -446,7 +448,7 @@ public class MobileAppServiceImpl implements MobileAppService {
         {
             String contractType = "Other";
             if (parentId != null) {
-                Customer customer = CustomerFacade.getCustomerService().findById(parentId);
+                Customer customer = customerService.findById(parentId);
                 if (customer != null) {
                     contractType = customer.getLastContactTypeName();
                 }
