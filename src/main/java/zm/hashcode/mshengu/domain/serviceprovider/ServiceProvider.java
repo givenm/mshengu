@@ -40,7 +40,7 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
     private ServiceProviderCategory serviceProviderCategory;
     @DBRef
     private ContactPerson contactPerson;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<ServiceProviderProduct> serviceProviderProduct = new HashSet<>();
     private boolean active;
     private boolean vehicleMaintenance;

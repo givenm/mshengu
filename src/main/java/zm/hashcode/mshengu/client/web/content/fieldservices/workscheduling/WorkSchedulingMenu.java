@@ -16,7 +16,7 @@ import zm.hashcode.mshengu.client.web.content.fieldservices.workscheduling.view.
  *
  * @author Ferox
  */
-public class WorkSchedulingMenu extends VerticalLayout {
+public class WorkSchedulingMenu extends VerticalLayout implements TabSheet.SelectedTabChangeListener {
 
     private MshenguMain main;
     private TabSheet tab;
@@ -33,28 +33,53 @@ public class WorkSchedulingMenu extends VerticalLayout {
         workSchedulingTab = new WorkSchedulingTab(main);
         vehicleSchedulingTab = new VehicleSchedulingTab(main);
 
-
         tab = new TabSheet();
         tab.setHeight("100%");
         tab.setWidth("100%");
-        
+
         tab.addTab(workSchedulingTab, "Scheduled Routes", null);
         tab.addTab(assignDriversTab, "Assign Driver to Vehicle", null);
         tab.addTab(manageRoutesTab, "Manage Routes", null);
         tab.addTab(vehicleSchedulingTab, "Fleet Weekly Work Schedule", null);
 
-
-            if (selectedTab.equals("DRIVERS")) {
+        switch (selectedTab) {
+            case "DRIVERS":
                 tab.setSelectedTab(assignDriversTab);
-            } else if (selectedTab.equals("ROUTES")) {
+
+                break;
+            case "ROUTES":
                 tab.setSelectedTab(manageRoutesTab);
-            } else if (selectedTab.equals("LANDING")) {
+
+                break;
+            case "LANDING":
                 tab.setSelectedTab(workSchedulingTab);
-            } else if (selectedTab.equals("VEHICLE_SCHEDULING")) {
+                break;
+            case "VEHICLE_SCHEDULING":
                 tab.setSelectedTab(vehicleSchedulingTab);
-            } 
-        
+                break;
+        }
+
         addComponent(tab);
+        tab.addSelectedTabChangeListener(this);
+    }
+
+    @Override
+    public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
+        TabSheet tabSheet = event.getTabSheet();
+        if (tabSheet.getSelectedTab() == assignDriversTab) {
+            if (assignDriversTab.getTable() == null) {
+                assignDriversTab.createAndLoadComponents();
+            }
+        } else if (tabSheet.getSelectedTab() == manageRoutesTab) {
+            if (manageRoutesTab.getTable() == null) {
+                manageRoutesTab.createAndLoadComponents();
+            }
+        } else if (tabSheet.getSelectedTab() == workSchedulingTab) {
+        } else if (tabSheet.getSelectedTab() == vehicleSchedulingTab) {
+            if (vehicleSchedulingTab.getTable() == null) {
+                vehicleSchedulingTab.createAndLoadComponents();
+            }
+        }
     }
 
 }
