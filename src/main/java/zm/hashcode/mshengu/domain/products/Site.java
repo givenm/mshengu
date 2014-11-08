@@ -40,9 +40,9 @@ public final class Site implements Serializable, Comparable<Site> {
     private ContactPerson contactPerson;
     @DBRef
     private ServiceProvider serviceProvider;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<SiteServiceContractLifeCycle> siteServiceContractLifeCycle = new HashSet<>();
-    @DBRef
+    @DBRef(lazy = true)
     private Set<SiteServiceLog> siteServiceLog = new HashSet<>();
     private String parentId;
     private String status;

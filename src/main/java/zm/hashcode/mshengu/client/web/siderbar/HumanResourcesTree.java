@@ -7,7 +7,6 @@ package zm.hashcode.mshengu.client.web.siderbar;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Tree;
 import zm.hashcode.mshengu.client.web.MshenguMain;
-import zm.hashcode.mshengu.client.web.content.humanresources.documents.HSEQMenu;
 import zm.hashcode.mshengu.client.web.content.humanresources.policies.PoliciesRegulationsMenu;
 import zm.hashcode.mshengu.client.web.content.humanresources.staff.HRMenu;
 import zm.hashcode.mshengu.client.web.content.setup.users.UsersMenu;
@@ -48,8 +47,6 @@ public class HumanResourcesTree extends Tree implements ItemClickEvent.ItemClick
                 manageUsersView();
             } else if (HR_MANAGEMENT.equals(itemId)) {
                 manageStaff();
-            } else if (HSEQ.equals(itemId)) {
-                manageHSEG();
             } else if (POLICIES_REGULATIONS.equals(itemId)) {
                 managePolicies();
             } 
@@ -65,10 +62,6 @@ public class HumanResourcesTree extends Tree implements ItemClickEvent.ItemClick
 
     }
 
-    private void manageHSEG() {
-        main.content.setSecondComponent(new HSEQMenu(main, LANDING_TAB));
-
-    }
 
     private void managePolicies() {
         main.content.setSecondComponent(new PoliciesRegulationsMenu(main, LANDING_TAB));

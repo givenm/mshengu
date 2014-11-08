@@ -13,7 +13,6 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.Collection;
 import org.springframework.util.StringUtils;
 import org.vaadin.haijian.ExcelExporter;
-import org.vaadin.haijian.PdfExporter;
 import zm.hashcode.mshengu.app.facade.fleet.TruckFacade;
 import zm.hashcode.mshengu.app.util.validation.OnSubmitValidationHelper;
 import zm.hashcode.mshengu.client.web.MshenguMain;
@@ -30,14 +29,17 @@ import zm.hashcode.mshengu.domain.fleet.Truck;
 public class VehicleSchedulingTab extends VerticalLayout implements Property.ValueChangeListener {
 
     private final MshenguMain main;
-    private final VehicleSheduleForm form;
+    private VehicleSheduleForm form;
 //    private final VehicleInfoForm vehicleInfoForm;
-    private final VehicleSchedulingTable table;
-    private final ExcelExporter export;
-    private final Button exportPdf;
+    private VehicleSchedulingTable table;
+    private ExcelExporter export;
+    private Button exportPdf;
 
     public VehicleSchedulingTab(MshenguMain app) {
         main = app;
+    }
+
+    public void createAndLoadComponents() {
         form = new VehicleSheduleForm();
         table = new VehicleSchedulingTable(main);
 //        vehicleInfoForm = new VehicleInfoForm();
@@ -62,12 +64,16 @@ public class VehicleSchedulingTab extends VerticalLayout implements Property.Val
                     Collection<Field<?>> fields = form.binder.getFields();
                     OnSubmitValidationHelper helper = new OnSubmitValidationHelper(fields, form.errorMessage);
                     helper.doValidation();
-                    Notification.show("Please Correct Red Colored Inputs\nThen try again.", Notification.Type.TRAY_NOTIFICATION);                    
+                    Notification.show("Please Correct Red Colored Inputs\nThen try again.", Notification.Type.TRAY_NOTIFICATION);
                 }
             }
         });
 
         form.vehicleNumber.addValueChangeListener((Property.ValueChangeListener) this);
+    }
+    
+    public VehicleSchedulingTable getTable() {
+        return table;
     }
 
     @Override

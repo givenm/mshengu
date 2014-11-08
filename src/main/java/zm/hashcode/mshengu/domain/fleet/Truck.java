@@ -56,9 +56,9 @@ public class Truck implements Serializable, Comparable<Truck> {
     private Person driver;
     @DBRef
     private List<Site> routes;
-    @DBRef
+    @DBRef(lazy = true)
     private List<OperatingCost> operatingCosts = new ArrayList<>();
-    @DBRef
+    @DBRef(lazy = true)
     private List<ServiceCost> serviceCosts = new ArrayList<>();
     // NEW Attributes
     private Double operatingSpec; // in R/km

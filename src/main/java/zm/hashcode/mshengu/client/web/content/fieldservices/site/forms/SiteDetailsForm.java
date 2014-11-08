@@ -142,7 +142,7 @@ public class SiteDetailsForm extends FormLayout {
         update.setSizeFull();
         delete.setSizeFull();
         
-         save.setStyleName("default");
+        save.setStyleName("default");
         edit.setStyleName("default");
         cancel.setStyleName("default");
         update.setStyleName("default");
@@ -152,7 +152,7 @@ public class SiteDetailsForm extends FormLayout {
         buttons.addComponent(edit);
         buttons.addComponent(cancel);
         buttons.addComponent(update);
-        buttons.addComponent(delete);
+//        buttons.addComponent(delete);
         return buttons;
     }
 

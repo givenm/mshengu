@@ -33,22 +33,32 @@ public class AssignDriversTab extends VerticalLayout implements
         Button.ClickListener, Property.ValueChangeListener {
 
     private final MshenguMain main;
-    private final AssignDriverForm form;
-    private final VehicleInfoForm vehicleInfoForm;
-    private final AssignedDriversTable table;
+    private AssignDriverForm form;
+    private VehicleInfoForm vehicleInfoForm;
+    private AssignedDriversTable table;
 
     public AssignDriversTab(MshenguMain app) {
-        main = app;
+        main = app;        
+    }
+
+    public void createAndLoadComponents() {
         form = new AssignDriverForm();
-        table = new AssignedDriversTable(main);
         vehicleInfoForm = new VehicleInfoForm();
+
         setSizeFull();
         addComponent(vehicleInfoForm);
         addComponent(form);
-        addComponent(table);
 
         vehicleInfoForm.binder.setReadOnly(true);
+        
+        table = new AssignedDriversTable(main);
+        addComponent(table);
+        table.addValueChangeListener((Property.ValueChangeListener) this);
         addListeners();
+    }
+
+    public AssignedDriversTable getTable() {
+        return table;
     }
 
     @Override
@@ -146,8 +156,7 @@ public class AssignDriversTab extends VerticalLayout implements
         form.cancel.addClickListener((Button.ClickListener) this);
         form.update.addClickListener((Button.ClickListener) this);
         form.delete.addClickListener((Button.ClickListener) this);
-        //Register Table Listerners
-        table.addValueChangeListener((Property.ValueChangeListener) this);
+        //Register Table Listerners        
         form.truckId.addValueChangeListener((Property.ValueChangeListener) this);
     }
 

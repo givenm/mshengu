@@ -31,7 +31,7 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
     private final MshenguMain main;
     private Collection<String> siteIds;
     private String trucckId;
-    private final TrucksTable table;
+    private TrucksTable table;
     final TwinColSelect select = new TwinColSelect();
     private final Button assignTrucksButton = new Button("Add Sites");
     private HorizontalLayout assignLayout = new HorizontalLayout();
@@ -40,22 +40,32 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
 
     public ManageRoutesTab(MshenguMain app) {
         main = app;
+        
+
+
+
+
+    }
+    
+    public void createAndLoadComponents() {
         assignLayout.setSizeFull();
         assingPanel.setSizeFull();
         assignTrucksButton.setStyleName("default");
         assignTrucksButton.setSizeFull();
         assignTrucksButton.addClickListener((Button.ClickListener) this);
-        table = new TrucksTable(main);
+        
 
         select.setLeftColumnCaption("Select Sites");
         select.setRightColumnCaption(" Selected Sites");
         select.setSizeFull();
         select.setImmediate(true);
         select.setNewItemsAllowed(false);
-        select.addValueChangeListener((Property.ValueChangeListener) this);
-        table.addValueChangeListener((Property.ValueChangeListener) this);
+        select.addValueChangeListener((Property.ValueChangeListener) this);        
         select.setNullSelectionAllowed(false);
         select.setMultiSelect(true);
+        
+        table = new TrucksTable(main);        
+        table.addValueChangeListener((Property.ValueChangeListener) this);
 
         List<Site> sites = SiteFacade.getSiteService().findAll();
 
@@ -64,17 +74,18 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
             select.addItem(site.getId());
             select.setItemCaption(site.getId(), site.getName() + " " + site.getAddressStreetAddress());
         }
-
-
-        addComponent(table);
+        
         assignLayout.addComponent(select);
         assignLayout.addComponent(assingPanel);
+        this.addComponent(table);
         addComponent(assignTrucksButton);
         addComponent(assignLayout);
+        
+        
+    }
 
-
-
-
+    public TrucksTable getTable() {
+        return table;
     }
 
     @Override

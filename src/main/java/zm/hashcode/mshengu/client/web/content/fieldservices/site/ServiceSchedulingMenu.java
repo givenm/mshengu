@@ -21,14 +21,14 @@ import zm.hashcode.mshengu.client.web.content.fieldservices.site.views.SiteConta
  */
 public class ServiceSchedulingMenu extends VerticalLayout implements Property.ValueChangeListener {
 
-    private MshenguMain main;
-    private TabSheet tab;
+    private final MshenguMain main;
+    private final TabSheet tab;
 //    private TabSheet tab;
-    private CustomerSiteForm selectCustomerSite;
-    CustomerSiteDetailsTab customerSiteDetailsTab;
-    AllSiteDetailsTab allSiteDetailsTab;
-    SiteContactPersonDetailsTab contactPersonDetailsTab;
-    SiteSiteUnitTab siteSiteUnitTab;
+    private final CustomerSiteForm selectCustomerSite;
+    private final CustomerSiteDetailsTab customerSiteDetailsTab;
+    private final AllSiteDetailsTab allSiteDetailsTab;
+    private final SiteContactPersonDetailsTab contactPersonDetailsTab;
+    private final SiteSiteUnitTab siteSiteUnitTab;
     private String selectedCustomerId;
     private String selectedSiteId;
 
