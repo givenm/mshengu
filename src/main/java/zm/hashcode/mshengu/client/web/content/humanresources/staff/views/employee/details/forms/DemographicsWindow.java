@@ -15,6 +15,7 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import zm.hashcode.mshengu.app.facade.customer.EmployeeDetailFacade;
 import zm.hashcode.mshengu.app.facade.documents.FileStorageFacade;
@@ -61,8 +62,13 @@ public class DemographicsWindow extends GridLayout {
         setRows(10);
         setSizeFull();
         StreamResource.StreamSource imageSource = new ProfileImageUtil(person);
-        StreamResource resource = new StreamResource(imageSource, getProfileImage(person.getEmployeeDetails()));
-
+        StreamResource resource = null;
+        if (getProfileImage(person.getEmployeeDetails()) != null) {
+            resource = new StreamResource(imageSource, getProfileImage(person.getEmployeeDetails()));
+        } else {
+            URL url = this.getClass().getResource("/humanresources/noimageicon.jpg");
+            resource = new StreamResource(imageSource, url.getPath());
+        }
         final Image image = new Image(null, resource);
         image.setHeight("150");
         image.setWidth("150");
