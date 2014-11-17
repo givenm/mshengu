@@ -41,7 +41,7 @@ public class WorkSchedulingTable extends Table {
         setSelectable(false);
         setImmediate(false);
 
-
+        removeAllItems();
         for (Site site : customerSites) {
             if (site.getLastSiteServiceContractLifeCycle() != null) {
                 SiteServiceContractLifeCycle contractLifeCycle = site.getLastSiteServiceContractLifeCycle();
