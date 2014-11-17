@@ -48,7 +48,7 @@ public class WorkSchedulingTable extends Table {
                 addItem(new Object[]{site.getName(),
                             site.getLocation().getName(),
                             site.getAddress().getStreetAddress(),
-                            contractLifeCycle.getNumberOfUnits(),
+                            contractLifeCycle.getExpectedNumberOfUnits(),
                             contractLifeCycle.getFrequency(),
                             totalWeeklyServices(contractLifeCycle.getNumberOfUnits(), contractLifeCycle.getFrequency()),
                             contractLifeCycle.visitDays(),}, site.getId());

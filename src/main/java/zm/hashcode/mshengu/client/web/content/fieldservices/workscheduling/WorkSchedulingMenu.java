@@ -67,18 +67,10 @@ public class WorkSchedulingMenu extends VerticalLayout implements TabSheet.Selec
     public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
         TabSheet tabSheet = event.getTabSheet();
         if (tabSheet.getSelectedTab() == assignDriversTab) {
-            if (assignDriversTab.getTable() == null) {
-                assignDriversTab.createAndLoadComponents();
-            }
         } else if (tabSheet.getSelectedTab() == manageRoutesTab) {
-            if (manageRoutesTab.getTable() == null) {
-                manageRoutesTab.createAndLoadComponents();
-            }
+            
         } else if (tabSheet.getSelectedTab() == workSchedulingTab) {
         } else if (tabSheet.getSelectedTab() == vehicleSchedulingTab) {
-            if (vehicleSchedulingTab.getTable() == null) {
-                vehicleSchedulingTab.createAndLoadComponents();
-            }
         }
     }
 

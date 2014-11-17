@@ -37,9 +37,6 @@ public class VehicleSchedulingTab extends VerticalLayout implements Property.Val
 
     public VehicleSchedulingTab(MshenguMain app) {
         main = app;
-    }
-
-    public void createAndLoadComponents() {
         form = new VehicleSheduleForm();
         table = new VehicleSchedulingTable(main);
 //        vehicleInfoForm = new VehicleInfoForm();
