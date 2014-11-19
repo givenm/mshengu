@@ -40,14 +40,6 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
 
     public ManageRoutesTab(MshenguMain app) {
         main = app;
-        
-
-
-
-
-    }
-    
-    public void createAndLoadComponents() {
         assignLayout.setSizeFull();
         assingPanel.setSizeFull();
         assignTrucksButton.setStyleName("default");
@@ -60,8 +52,7 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
         select.setSizeFull();
         select.setImmediate(true);
         select.setNewItemsAllowed(false);
-        select.addValueChangeListener((Property.ValueChangeListener) this);        
-        select.setNullSelectionAllowed(false);
+        select.addValueChangeListener((Property.ValueChangeListener) this); 
         select.setMultiSelect(true);
         
         table = new TrucksTable(main);        
@@ -80,10 +71,9 @@ public class ManageRoutesTab extends VerticalLayout implements Button.ClickListe
         this.addComponent(table);
         addComponent(assignTrucksButton);
         addComponent(assignLayout);
-        
-        
-    }
 
+    }
+    
     public TrucksTable getTable() {
         return table;
     }

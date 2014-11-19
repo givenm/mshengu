@@ -38,10 +38,7 @@ public class AssignDriversTab extends VerticalLayout implements
     private AssignedDriversTable table;
 
     public AssignDriversTab(MshenguMain app) {
-        main = app;        
-    }
-
-    public void createAndLoadComponents() {
+        main = app;
         form = new AssignDriverForm();
         vehicleInfoForm = new VehicleInfoForm();
 
@@ -50,7 +47,7 @@ public class AssignDriversTab extends VerticalLayout implements
         addComponent(form);
 
         vehicleInfoForm.binder.setReadOnly(true);
-        
+
         table = new AssignedDriversTable(main);
         addComponent(table);
         table.addValueChangeListener((Property.ValueChangeListener) this);
