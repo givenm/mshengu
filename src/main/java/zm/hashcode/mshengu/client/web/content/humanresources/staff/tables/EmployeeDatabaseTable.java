@@ -85,6 +85,7 @@ public class EmployeeDatabaseTable extends Table {
                 public void buttonClick(Button.ClickEvent event) {
 
                     Person person = PersonFacade.getPersonService().findById((String) event.getButton().getData());
+                    System.out.println("person: " + person.getUsername() + " employeeDetail: " + person.getEmployeeDetails().getEmail());
                     tab.contentPanel.removeAllComponents();
                     tab.headerBar.removeAllComponents();
                     tab.contentPanel.addComponent(new EmployeeDetails(main, person));

@@ -130,6 +130,7 @@ public class ApproveRequestsForm extends FormLayout implements
         final Button source = event.getButton();
         Request request = RequestFacade.getRequestService().findById(requestId);
         Person user = new GetUserCredentials().getLoggedInPerson();
+        
         if (request != null && user != null) {
             if (source == approve) {
                 if (getDetail(request.getPerson()) != null) {
@@ -141,7 +142,7 @@ public class ApproveRequestsForm extends FormLayout implements
                                 Notification.show("User not allowed to approve!", Notification.Type.TRAY_NOTIFICATION);
                             }
                         } else if (request.getTotal().compareTo(new BigDecimal("3000.00")) > 0) {
-                            if ((user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
+                            if (("sydney@mshengutoilethire.co.za".equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com"))) {
                                 approve(request, user.getFirstname() + " " + user.getLastname());
                             } else {
                                 Notification.show("User not allowed to approve more than R3000!", Notification.Type.TRAY_NOTIFICATION);
@@ -154,7 +155,7 @@ public class ApproveRequestsForm extends FormLayout implements
                     Notification.show("This request was does not have the information of the person who created it hence cannot be approved!", Notification.Type.TRAY_NOTIFICATION);
                 }
             } else if (source == disapprove) {
-                if (getDetail(request.getPerson()) != null) {
+                if (getDetail(request.getPerson()) != null || getEmail(getDetail(request.getPerson())).equals("")) {
                     if (!getEmail(getDetail(request.getPerson())).equals(user.getUsername())) {
                         if (request.getTotal().compareTo(new BigDecimal("3000.00")) <= 0) {
                             if (user.getUsername().equals("sydney@mshengutoilethire.co.za") || user.getUsername().equals("haroldmanus@iafrica.com") || user.getUsername().equals("hiltonjc@iafrica.com")) {
@@ -234,6 +235,9 @@ public class ApproveRequestsForm extends FormLayout implements
 
     private String getEmail(EmployeeDetail detail) {
         if (detail != null) {
+            if(detail.getEmail() == null){
+                return "";
+            }
             return detail.getEmail();
         }
         return "";

@@ -127,19 +127,15 @@ public class SiteUnitServiceImpl implements SiteUnitService {
             Point point1 = new Point(Double.parseDouble(unitService.getLatitude()), Double.parseDouble(unitService.getLongitude()));
             Point point2 = new Point(Double.parseDouble(cycle.getLatitude()), Double.parseDouble(cycle.getLongitude()));
 
-            Distance distance = new Distance(0.2, Metrics.KILOMETERS);
-            Distance dist = new Distance(distance(point1, point2) / 10, Metrics.KILOMETERS);
-            
-            System.out.println("LUCKY CAN YOU TEST THIS!!! The Distance is  We Want ???" +distance.getValue());
-             System.out.println(" LUCKY AND THIS Real The Distance is " +dist.getValue());
+            double distance = 5.0;
 
-            if (distance.getValue() > dist.getValue()) {
+            if (distance > distance(point1, point2)) {
                 message = "WITHIN";
             } else {
                 message = "OUT";
             }
         } catch (Exception exception) {
-            message = "ERROR OCCURED!! NO RECORD CAPTURED";
+            message = "EXCEPTION";
         }
 
 
@@ -151,14 +147,15 @@ public class SiteUnitServiceImpl implements SiteUnitService {
         double lng1 = p.getY();
         double lat2 = point.getX();
         double lng2 = point.getY();
-        double earthRadius = 3958.75;
+        int r = 6371; // average radius of the earth in km
         double dLat = Math.toRadians(lat2 - lat1);
-        double dLng = Math.toRadians(lng2 - lng1);
+        double dLon = Math.toRadians(lng2 - lng1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return earthRadius * c;
+        double d = r * c;
+        return d;
     }
 
     @Override
