@@ -41,7 +41,7 @@ public final class Incident implements Serializable, Comparable<Incident> {
     private boolean closed;
     @DBRef
     private IncidentType incidentType;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<UserAction> userAction = new HashSet<>();
     @DBRef
     private ServiceProvider serviceProvider;

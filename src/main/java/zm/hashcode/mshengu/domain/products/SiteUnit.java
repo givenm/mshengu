@@ -32,9 +32,9 @@ public final class SiteUnit implements Serializable, Comparable<SiteUnit> {
     private Status operationalStatus; // OUT ORDER
     @DBRef
     private UnitType unitType;
-    @DBRef
+    @DBRef(lazy = true)
     private List<UnitServiceLog> unityLogs = new ArrayList<>();
-    @DBRef
+    @DBRef(lazy = true)
     private List<UnitLocationLifeCycle> unitLocationLifeCycle = new ArrayList<>();
     private String parentId;
     private String siteName;

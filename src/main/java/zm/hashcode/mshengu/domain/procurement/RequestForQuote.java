@@ -27,13 +27,13 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
     @DBRef
     private Person person;
     private String account;
-    @DBRef
+    @DBRef (lazy = true)
     private Set<RequestPurchaseItem> items;
     private Date deliveryDate;
     private Date closingDate;
     private String total;
     private String deliveryInstructions;
-    @DBRef
+    @DBRef(lazy = true)
     private List<ResponseToRFQ> responseToRFQ;
 
     @Override

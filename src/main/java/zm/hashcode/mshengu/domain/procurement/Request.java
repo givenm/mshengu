@@ -42,7 +42,7 @@ public final class Request implements Serializable, Comparable<Request> {
     private ItemCategoryType itemCategoryType;
     @DBRef
     private ServiceProvider serviceProvider;
-    @DBRef
+    @DBRef (lazy = true)
     private Set<RequestPurchaseItem> items;
     private boolean approvalStatus;
     private String reasonForDisapproval;

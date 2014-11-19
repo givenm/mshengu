@@ -38,18 +38,18 @@ public class ServiceRequest implements Serializable, Comparable<ServiceRequest> 
     private String refNumber;
     private boolean indefinitePeriod;
     private boolean closed;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<UserAction> userAction = new HashSet<>();
-    @DBRef
+    @DBRef(lazy = true)
     private ContactPerson contactPerson;
-    @DBRef
+    @DBRef(lazy = true)
     private PaymentMethod paymentMethod;
     private BigDecimal paymentAmout;
-    @DBRef
+    @DBRef(lazy = true)
     private ContractType contractType;
-    @DBRef
+    @DBRef(lazy = true)
     private MailNotifications mailNotifications;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceRequestType serviceRequestType;
     private String customerId;
     private String siteId;

@@ -53,7 +53,7 @@ public class Truck implements Serializable, Comparable<Truck> {
     private boolean isActive;
     @DBRef
     private Person driver;
-    @DBRef
+    @DBRef(lazy = true)
     private List<Site> routes;
     @DBRef(lazy = true)
     private List<OperatingCost> operatingCosts = new ArrayList<>();

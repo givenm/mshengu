@@ -34,13 +34,13 @@ public final class Customer implements Serializable, Comparable<Customer> {
     private boolean isContract;
     @DBRef
     private ContactPerson contactPerson;
-    @DBRef
+    @DBRef(lazy = true)
     Set<Order> orders = new HashSet<>();
-    @DBRef
+    @DBRef(lazy = true)
     private Set<Invoice> invoices = new HashSet<>();
-    @DBRef
+    @DBRef(lazy = true)
     private Set<Site> sites = new HashSet<>();
-    @DBRef
+    @DBRef(lazy = true)
     private Set<Contract> contracts = new HashSet<>();
 
     private Customer() {

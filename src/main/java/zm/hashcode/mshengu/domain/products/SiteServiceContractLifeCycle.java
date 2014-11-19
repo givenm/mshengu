@@ -30,7 +30,7 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
     private Date dateofAction;
     private int expectedNumberOfUnits;
     private int numberOfUnits;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<SiteUnit> siteUnit = new HashSet<>();
     private int frequency;
     private boolean monday;

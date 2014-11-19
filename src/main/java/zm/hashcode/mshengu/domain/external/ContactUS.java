@@ -37,9 +37,9 @@ public class ContactUS implements Serializable, Comparable<ContactUS> {
     private String message;
     private Date dateOfAction;
     private boolean closed;
-    @DBRef
+    @DBRef(lazy = true)
     private MailNotifications mailNotifications;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<UserAction> userAction = new HashSet<>();
 
     /**
