@@ -36,14 +36,14 @@ public final class Incident implements Serializable, Comparable<Incident> {
     private String contactNumber;
     private String site;
     private String suburb;
-    @DBRef(lazy = true)
+    @DBRef
     private UnitType toiletType;
     private boolean closed;
-    @DBRef(lazy = true)
+    @DBRef
     private IncidentType incidentType;
     @DBRef(lazy = true)
     private Set<UserAction> userAction = new HashSet<>();
-    @DBRef(lazy = true)
+    @DBRef
     private ServiceProvider serviceProvider;
     private String comment;
     @DBRef(lazy = true)

@@ -45,11 +45,11 @@ public class ServiceRequest implements Serializable, Comparable<ServiceRequest> 
     @DBRef(lazy = true)
     private PaymentMethod paymentMethod;
     private BigDecimal paymentAmout;
-    @DBRef(lazy = true)
+    @DBRef
     private ContractType contractType;
     @DBRef(lazy = true)
     private MailNotifications mailNotifications;
-    @DBRef(lazy = true)
+    @DBRef
     private ServiceRequestType serviceRequestType;
     private String customerId;
     private String siteId;

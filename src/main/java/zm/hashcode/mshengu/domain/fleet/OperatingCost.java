@@ -31,7 +31,7 @@ public class OperatingCost implements Serializable, Comparable<OperatingCost> {
     private Double oilLitres;
     private BigDecimal oilCost;
     private BigDecimal randPerLitre;
-    @DBRef(lazy = true)
+    @DBRef
     private Person driver;
     private String truckId;
 

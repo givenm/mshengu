@@ -72,7 +72,7 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
 
     @Override
     public List<ServiceRequest> findAllClosed() {
-        List<ServiceRequest> serviceRequestList = ImmutableList.copyOf(repository.findAll(sortByDate()));
+        List<ServiceRequest> serviceRequestList = ( List<ServiceRequest>) repository.findAll(sortByDate());
         Collection<ServiceRequest> serviceRequestsFilteredList = Collections2.filter(serviceRequestList, new ServiceRequestActivationStatusPredicate(true));
         return ImmutableList.copyOf(serviceRequestsFilteredList);
 //        return ImmutableList.copyOf();
@@ -80,7 +80,7 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
 
     @Override
     public List<ServiceRequest> findAllOpen() {
-        List<ServiceRequest> serviceRequestList = ImmutableList.copyOf(repository.findAll(sortByDate()));
+        List<ServiceRequest> serviceRequestList = ( List<ServiceRequest>) repository.findAll(sortByDate());
         Collection<ServiceRequest> serviceRequestsFilteredList = Collections2.filter(serviceRequestList, new ServiceRequestActivationStatusPredicate(false));
         return ImmutableList.copyOf(serviceRequestsFilteredList);
 //        return ImmutableList.copyOf();
@@ -88,7 +88,7 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
 
     @Override
     public List<ServiceRequest> findByStatus(String statusName) {
-        List<ServiceRequest> serviceRequestList = ImmutableList.copyOf(repository.findAll(sortByDate()));
+        List<ServiceRequest> serviceRequestList = ( List<ServiceRequest>) repository.findAll(sortByDate());
         Collection<ServiceRequest> serviceRequestsFilteredList = Collections2.filter(serviceRequestList, new ServiceRequestStatusPredicate(statusName));
         return ImmutableList.copyOf(serviceRequestsFilteredList);
 //        return ImmutableList.copyOf();

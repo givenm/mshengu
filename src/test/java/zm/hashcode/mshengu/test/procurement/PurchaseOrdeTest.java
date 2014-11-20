@@ -7,7 +7,6 @@ package zm.hashcode.mshengu.test.procurement;
 import java.math.BigDecimal;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.testng.annotations.Test;
 import zm.hashcode.mshengu.domain.procurement.Request;
 import zm.hashcode.mshengu.services.procurement.RequestService;
 import zm.hashcode.mshengu.test.AppTest;
@@ -21,7 +20,8 @@ public class PurchaseOrdeTest extends AppTest {
     @Autowired
     private RequestService requestService;
 
-    @Test
+
+//    @Test
     public void getRequests() {
 
         requestService = ctx.getBean(RequestService.class);

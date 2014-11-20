@@ -21,12 +21,12 @@ public final class UserAction implements Serializable, Comparable<UserAction> {
 
     private String id;
     private Date actionDate;
-    @DBRef(lazy = true)
+    @DBRef
     private Status userActionStatus;//(ongoing outstanding, resolved) 
     private String comment;
     private Date resolvedDate;
     private Date qualityAssuranceDate;
-    @DBRef(lazy = true)
+    @DBRef
     private Person staff;
     //date,status (ongoing outstanding, resolved) ,resolved date,qa date, completed date, comments
 

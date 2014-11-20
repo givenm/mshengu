@@ -29,7 +29,7 @@ public final class Request implements Serializable, Comparable<Request> {
 
     @Id
     private String id;
-    @DBRef(lazy = true)
+    @DBRef
     private Person person;
     private String orderNumber;
     @DBRef(lazy = true)
@@ -40,7 +40,7 @@ public final class Request implements Serializable, Comparable<Request> {
     private Truck truck;
     @DBRef(lazy = true)
     private ItemCategoryType itemCategoryType;
-    @DBRef(lazy = true)
+    @DBRef
     private ServiceProvider serviceProvider;
     @DBRef (lazy = true)
     private Set<RequestPurchaseItem> items;

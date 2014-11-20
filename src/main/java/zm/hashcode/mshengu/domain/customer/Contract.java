@@ -28,7 +28,7 @@ public final class Contract implements Serializable, Comparable<Contract> {
     private BigDecimal pricePerUnit;
     private String status;
     private Date dateofAction;
-    @DBRef(lazy = true)
+    @DBRef
     private ContractType contractType;
     private String parentId;
 

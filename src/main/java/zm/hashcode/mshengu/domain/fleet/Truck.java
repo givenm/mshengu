@@ -51,7 +51,7 @@ public class Truck implements Serializable, Comparable<Truck> {
     private int registerYear;
     private Date dateOfExpire;
     private boolean isActive;
-    @DBRef(lazy = true)
+    @DBRef
     private Person driver;
     @DBRef(lazy = true)
     private List<Site> routes;
