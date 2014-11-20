@@ -22,7 +22,7 @@ public class ServiceProviderProduct implements Serializable, Comparable<ServiceP
     private String id;
     private String productName;
     private BigDecimal price;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProviderProductCategory productCategory;
     private String itemNumber;
     private String unit;

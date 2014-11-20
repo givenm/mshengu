@@ -24,7 +24,7 @@ public class ChemicalCost implements Serializable, Comparable<ChemicalCost> {
     private String id;
     private Date transactionDate;
     private String invoiceNumber;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProviderProduct serviceProviderProduct;
     private Integer quantityOrdered;
     private float volume;

@@ -21,7 +21,7 @@ public class KPA implements Serializable, Comparable<KPA> {
     private String id;
     private String name;
     private String tab;
-    @DBRef
+    @DBRef(lazy = true)
     private List<KPIItem> items;
 
     private KPA() {

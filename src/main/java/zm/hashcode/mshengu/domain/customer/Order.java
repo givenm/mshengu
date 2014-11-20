@@ -28,6 +28,7 @@ public final class Order implements Serializable, Comparable<Order> {
     private String status;
     @DBRef(lazy = true)
     private OrderType contractType;
+    
     private Set<Site> sites;
 
     private Order() {

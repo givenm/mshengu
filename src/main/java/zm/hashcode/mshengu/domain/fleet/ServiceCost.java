@@ -27,9 +27,9 @@ public class ServiceCost implements Serializable, Comparable<ServiceCost> {
     private String slipNo;
     private BigDecimal serviceTotalCost;
     private String comment;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProvider serviceProvider;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceCategory serviceCategory;
     
 

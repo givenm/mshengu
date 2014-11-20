@@ -107,14 +107,17 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
      * @return the monthlyServices
      */
     public int getMonthlyServices() {
-        return monthlyServices = frequency * expectedNumberOfUnits * 4;
+         monthlyServices = getWeeklyServices() * 4;
+        
+        return monthlyServices;
     }
 
     /**
      * @return the weeklyServices
      */
     public int getWeeklyServices() {
-        return weeklyServices = frequency * expectedNumberOfUnits;
+        weeklyServices = frequency * expectedNumberOfUnits;
+        return weeklyServices;
     }
 
     /**

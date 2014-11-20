@@ -15,7 +15,7 @@ import zm.hashcode.mshengu.domain.ui.education.Degree;
  */
 public final class PersonEducation implements Serializable {
 
-    @DBRef
+    @DBRef(lazy = true)
     private Degree degree;
     private String institution;
     private Date graduation;

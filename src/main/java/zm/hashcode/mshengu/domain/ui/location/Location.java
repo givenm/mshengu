@@ -25,11 +25,11 @@ public final class Location implements Serializable, Comparable<Location> {
     private String code;
     private String latitude;
     private String longitude;
-    @DBRef
+    @DBRef(lazy = true)
     private LocationType locationType;
     @DBRef(lazy = true)
     private Set<Location> children;
-    @DBRef
+    @DBRef(lazy = true)
     private Location parent;
 
     private Location() {

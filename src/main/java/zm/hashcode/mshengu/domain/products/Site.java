@@ -32,13 +32,13 @@ public final class Site implements Serializable, Comparable<Site> {
     private String id;
     @Indexed(unique = true)
     private String name;
-    @DBRef
+    @DBRef(lazy = true)
     private Address address;
-    @DBRef
+    @DBRef(lazy = true)
     private Location location;
-    @DBRef
+    @DBRef(lazy = true)
     private ContactPerson contactPerson;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProvider serviceProvider;
     @DBRef(lazy = true)
     private Set<SiteServiceContractLifeCycle> siteServiceContractLifeCycle = new HashSet<>();

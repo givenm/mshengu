@@ -32,7 +32,7 @@ public final class Customer implements Serializable, Comparable<Customer> {
     @Indexed(unique = true)
     private String name;
     private boolean isContract;
-    @DBRef
+    @DBRef(lazy = true)
     private ContactPerson contactPerson;
     @DBRef(lazy = true)
     Set<Order> orders = new HashSet<>();

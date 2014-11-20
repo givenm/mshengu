@@ -24,7 +24,7 @@ public class RequestForQuote implements Serializable, Comparable<RequestForQuote
     @Id
     private String id;
     private String rfqNumber;
-    @DBRef
+    @DBRef(lazy = true)
     private Person person;
     private String account;
     @DBRef (lazy = true)

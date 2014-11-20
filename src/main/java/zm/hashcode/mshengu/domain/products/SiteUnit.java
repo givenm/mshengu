@@ -30,7 +30,7 @@ public final class SiteUnit implements Serializable, Comparable<SiteUnit> {
     private String unitId;
     private String description;
     private Status operationalStatus; // OUT ORDER
-    @DBRef
+    @DBRef(lazy = true)
     private UnitType unitType;
     @DBRef(lazy = true)
     private List<UnitServiceLog> unityLogs = new ArrayList<>();
@@ -100,11 +100,12 @@ public final class SiteUnit implements Serializable, Comparable<SiteUnit> {
      * @return the siteName
      */
     public String getSiteName() {
+        siteName = "";
         if (getLatestDeployment() != null) {
             UnitLocationLifeCycle lastLifeCycle = getLatestDeployment();
-            return lastLifeCycle.getSiteName();
+            siteName = lastLifeCycle.getSiteName();
         }
-        return "";
+        return siteName;
     }
 
     /**

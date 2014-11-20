@@ -45,13 +45,13 @@ public class Truck implements Serializable, Comparable<Truck> {
     private String receiptNo;
     private Date paymentDate;
     private BigDecimal vehicleCost;
-    @DBRef
+    @DBRef(lazy = true)
     private PaymentMethod paymentMethod;
     private String description;
     private int registerYear;
     private Date dateOfExpire;
     private boolean isActive;
-    @DBRef
+    @DBRef(lazy = true)
     private Person driver;
     @DBRef(lazy = true)
     private List<Site> routes;

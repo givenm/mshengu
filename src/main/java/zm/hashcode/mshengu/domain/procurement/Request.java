@@ -29,18 +29,18 @@ public final class Request implements Serializable, Comparable<Request> {
 
     @Id
     private String id;
-    @DBRef
+    @DBRef(lazy = true)
     private Person person;
     private String orderNumber;
-    @DBRef
+    @DBRef(lazy = true)
     private CostCentreType costCentreType;
-    @DBRef
+    @DBRef(lazy = true)
     private CostCentreCategoryType categoryType;
-    @DBRef
+    @DBRef(lazy = true)
     private Truck truck;
-    @DBRef
+    @DBRef(lazy = true)
     private ItemCategoryType itemCategoryType;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProvider serviceProvider;
     @DBRef (lazy = true)
     private Set<RequestPurchaseItem> items;
