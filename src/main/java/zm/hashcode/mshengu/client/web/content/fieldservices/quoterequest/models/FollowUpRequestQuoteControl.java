@@ -47,7 +47,7 @@ public class FollowUpRequestQuoteControl {
             requestedQuoteResponse.setDeliveryAddress(i.getDeliveryAddress().replace("\n", ", ").replace("\r", ""));
             requestedQuoteResponse.setCustomerName(i.getCompanyName());
             requestedQuoteResponse.setDaysRental(i.getDaysRental());
-            requestedQuoteResponse.setDeliveryDate(formatHelper.getDayMonthYear(i.getCollectionDate()));
+            requestedQuoteResponse.setDeliveryDate(formatHelper.getDayMonthYear(i.getDeliveryDate()));
             requestedQuoteResponse.setEventDate(formatHelper.getDayMonthYear(i.getEventDate()));
             requestedQuoteResponse.setNumberOfJanitors(i.getNumberOfJanitors());
             requestedQuoteResponse.setNumberOfToiletRolls(i.getNumberOfToiletRolls());
