@@ -5,6 +5,7 @@
 package zm.hashcode.mshengu.client.web.content.setup.users.tables;
 
 import com.vaadin.ui.Table;
+import java.util.ArrayList;
 import java.util.List;
 import zm.hashcode.mshengu.app.facade.people.PersonFacade;
 import zm.hashcode.mshengu.client.web.MshenguMain;
@@ -36,7 +37,7 @@ public class PersonTable extends Table {
                 person.isEnable()
             }, person.getId());
         }
-        // Allow selecting items from the table.
+//         Allow selecting items from the table.
         setNullSelectionAllowed(false);
 //
         setSelectable(true);

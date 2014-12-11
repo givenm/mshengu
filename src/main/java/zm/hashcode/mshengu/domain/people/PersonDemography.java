@@ -21,17 +21,17 @@ import zm.hashcode.mshengu.domain.ui.demographics.Title;
 @Document
 public final class PersonDemography implements Serializable {
 
-    @DBRef
+    @DBRef(lazy = true)
     private Gender gender;
-    @DBRef
+    @DBRef(lazy = true)
     private Language language;
-    @DBRef
+    @DBRef(lazy = true)
     private LanguageProficiency languageProficiency;
-    @DBRef
+    @DBRef(lazy = true)
     private MaritalStatus maritalStatus;
-    @DBRef
+    @DBRef(lazy = true)
     private Title title;
-    @DBRef
+    @DBRef(lazy = true)
     private Race race;
 
     private PersonDemography() {

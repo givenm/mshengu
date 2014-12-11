@@ -30,7 +30,7 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
     private Date dateofAction;
     private int expectedNumberOfUnits;
     private int numberOfUnits;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<SiteUnit> siteUnit = new HashSet<>();
     private int frequency;
     private boolean monday;
@@ -107,14 +107,17 @@ public class SiteServiceContractLifeCycle implements Serializable, Comparable<Si
      * @return the monthlyServices
      */
     public int getMonthlyServices() {
-        return monthlyServices = frequency * expectedNumberOfUnits * 4;
+         monthlyServices = getWeeklyServices() * 4;
+        
+        return monthlyServices;
     }
 
     /**
      * @return the weeklyServices
      */
     public int getWeeklyServices() {
-        return weeklyServices = frequency * expectedNumberOfUnits;
+        weeklyServices = frequency * expectedNumberOfUnits;
+        return weeklyServices;
     }
 
     /**

@@ -4,7 +4,9 @@
  */
 package zm.hashcode.mshengu.domain.products;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,13 +34,13 @@ public final class Site implements Serializable, Comparable<Site> {
     private String id;
     @Indexed(unique = true)
     private String name;
-    @DBRef
+    @DBRef(lazy = true)
     private Address address;
     @DBRef
     private Location location;
-    @DBRef
+    @DBRef(lazy = true)
     private ContactPerson contactPerson;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProvider serviceProvider;
     @DBRef(lazy = true)
     private Set<SiteServiceContractLifeCycle> siteServiceContractLifeCycle = new HashSet<>();
@@ -280,9 +282,19 @@ public final class Site implements Serializable, Comparable<Site> {
         }
     }
 
-    public SiteServiceContractLifeCycle getLastSiteServiceContractLifeCycle() {
-        if (siteServiceContractLifeCycle.size() > 0) {
-            return sortSiteServiceContractLifeCycle().get(0);
+    public SiteServiceContractLifeCycle getLastSiteServiceContractLifeCycle() {     
+        
+         if (siteServiceContractLifeCycle.size() > 0) {
+            Ordering<SiteServiceContractLifeCycle> ordering;
+            ordering = Ordering.natural().nullsLast().onResultOf((SiteServiceContractLifeCycle siteServiceContractLifeCycle1) -> siteServiceContractLifeCycle1.getDateofAction().getTime());
+
+            List<SiteServiceContractLifeCycle> sortedList = ordering.immutableSortedCopy(siteServiceContractLifeCycle).reverse();
+            if (sortedList.isEmpty()) {
+                SiteServiceContractLifeCycle siteServiceContractLifeCycleNull = null;
+                return siteServiceContractLifeCycleNull;
+            } else {
+                return sortedList.get(0);
+            }
         } else {
             return null;
         }

@@ -61,7 +61,7 @@ public class ResetForm extends FormLayout {
 
     private ComboBox getComboBox(String label, String field) {
         ComboBox comboBox = new ComboBox(label);
-        List<Person> users = PersonFacade.getPersonService().findAll();
+        List<Person> users = PersonFacade.getPersonService().findAllUsers();
         for (Person user : users) {
             comboBox.addItem(user.getId());
             comboBox.setItemCaption(user.getId(), user.getLastname() + " " + user.getFirstname() + "  Username : " + user.getUsername());

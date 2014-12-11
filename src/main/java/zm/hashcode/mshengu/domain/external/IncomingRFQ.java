@@ -64,9 +64,9 @@ public class IncomingRFQ implements Serializable, Comparable<IncomingRFQ> {
     private boolean sunday;
     private String faxNumber;
     private String status;
-    @DBRef
+    @DBRef(lazy = true)
     private MailNotifications mailNotifications;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<UserAction> userAction = new HashSet<>();
 
     public IncomingRFQ(Builder builder) {

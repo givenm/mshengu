@@ -20,6 +20,8 @@ import zm.hashcode.mshengu.client.web.content.setup.officeutils.status.tables.St
 import zm.hashcode.mshengu.domain.ui.util.Status;
 import zm.hashcode.mshengu.domain.ui.util.StatusType;
 
+
+
 /**
  *
  * @author Ferox
@@ -92,7 +94,6 @@ public class StatusTab extends VerticalLayout implements
             getHome();
         }
     }
-
     private void deleteForm(FieldGroup binder) {
         StatusFacade.getStatusService().delete(getEntity(binder));
         getHome();

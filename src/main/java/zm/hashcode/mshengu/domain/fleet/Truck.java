@@ -5,7 +5,6 @@
 package zm.hashcode.mshengu.domain.fleet;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -46,7 +45,7 @@ public class Truck implements Serializable, Comparable<Truck> {
     private String receiptNo;
     private Date paymentDate;
     private BigDecimal vehicleCost;
-    @DBRef
+    @DBRef(lazy = true)
     private PaymentMethod paymentMethod;
     private String description;
     private int registerYear;
@@ -54,7 +53,7 @@ public class Truck implements Serializable, Comparable<Truck> {
     private boolean isActive;
     @DBRef
     private Person driver;
-    @DBRef
+    @DBRef(lazy = true)
     private List<Site> routes;
     @DBRef(lazy = true)
     private List<OperatingCost> operatingCosts = new ArrayList<>();

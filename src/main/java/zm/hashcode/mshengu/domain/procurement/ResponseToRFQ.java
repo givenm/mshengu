@@ -32,7 +32,7 @@ public class ResponseToRFQ implements Serializable, Comparable<ResponseToRFQ> {
     private String paymentTerms;
     private String email;
     private String legalForm;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<RequestPurchaseItem> items;
     private String refNumber;
     private boolean accepted;

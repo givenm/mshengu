@@ -41,14 +41,14 @@ public final class Incident implements Serializable, Comparable<Incident> {
     private boolean closed;
     @DBRef
     private IncidentType incidentType;
-    @DBRef
+    @DBRef(lazy = true)
     private Set<UserAction> userAction = new HashSet<>();
     @DBRef
     private ServiceProvider serviceProvider;
     private String comment;
-    @DBRef
+    @DBRef(lazy = true)
     private MailNotifications mailNotifications;
-    @DBRef
+    @DBRef(lazy = true)
     private Status status;
     //Date, client, site, contact details, type, provider
 

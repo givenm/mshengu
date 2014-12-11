@@ -20,7 +20,7 @@ import zm.hashcode.mshengu.domain.serviceprovider.ServiceProviderProduct;
 public class RequestPurchaseItem implements Serializable, Comparable<RequestPurchaseItem> {
 
     private String id;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProviderProduct product;
     private String quantity;
     private BigDecimal subTotal;

@@ -58,6 +58,7 @@ public class UsersMenu extends Menu {
             tab.setSelectedTab(resetTab);
         }
         addComponent(tab);
+        
 //
 //        switch (selectedTab) {
 //            case "LANDING":

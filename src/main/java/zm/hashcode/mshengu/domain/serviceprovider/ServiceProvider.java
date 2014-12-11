@@ -36,9 +36,9 @@ public final class ServiceProvider implements Serializable, Comparable<ServicePr
     private String website;
     private String legalForm;
     private String vatNum;
-    @DBRef
+    @DBRef(lazy = true)
     private ServiceProviderCategory serviceProviderCategory;
-    @DBRef
+    @DBRef(lazy = true)
     private ContactPerson contactPerson;
     @DBRef(lazy = true)
     private Set<ServiceProviderProduct> serviceProviderProduct = new HashSet<>();
